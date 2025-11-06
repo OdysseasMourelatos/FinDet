@@ -1,7 +1,7 @@
 public abstract class BudgetEntry {
     private int code;
     private String description;
-    private String category;
+    private String category;   //kalhspera
     private long amount;
 
     public BudgetEntry(int code, String description, String category, long amount) {
