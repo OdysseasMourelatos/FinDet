@@ -1,7 +1,9 @@
+package com.financial;
+
 public abstract class BudgetEntry {
-    private int code;
+    private final int code;
     private String description;
-    private String category;   //kalhspera
+    private String category;
     private long amount;
 
     public BudgetEntry(int code, String description, String category, long amount) {
@@ -40,5 +42,3 @@ public abstract class BudgetEntry {
         return "Code: " + code + ", Description: " + description + ", Category: " + category + ", Amount: " + amount;
     }
 }
-
-

@@ -1,3 +1,5 @@
+package com.financial;
+
 import java.util.ArrayList;
 
 public class Expense extends BudgetEntry{

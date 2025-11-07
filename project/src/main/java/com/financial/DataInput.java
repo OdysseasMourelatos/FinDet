@@ -1,12 +1,14 @@
+package com.financial;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class DataInput {
 
-    public static void csvReader(){
+public class DataInput {
+    public static void csvReader() {
         Scanner s = new Scanner(System.in);
         System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου: ");
         String filePath = s.nextLine();
@@ -27,7 +29,9 @@ public class DataInput {
                 String description = values[1];
                 String category = values[2];
                 long amount = Long.parseLong(values[3]);
-                if (values[2].equals("ΕΞΟΔΑ")) {
+                if (values[2].equals("ΕΣΟΔΑ")) {
+                    budgetEntry = new Income(code, description, category, amount);
+                } else if (values[2].equals("ΕΞΟΔΑ")) {
                     budgetEntry = new Expense(code, description, category, amount);
                 }
                 budgetEntries.add(budgetEntry);
