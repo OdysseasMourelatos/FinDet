@@ -9,9 +9,10 @@ public class DataInput {
         String line;
         int lineNumber=0;
         BudgetEntry budgetEntry = null;
+        BufferedReader reader = null;
 
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(filePath));
+            reader = new BufferedReader(new FileReader(filePath));
             while ((line = reader.readLine()) != null) {
                 lineNumber++;
                 if (lineNumber == 1) {
@@ -31,6 +32,12 @@ public class DataInput {
             reader.close();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
