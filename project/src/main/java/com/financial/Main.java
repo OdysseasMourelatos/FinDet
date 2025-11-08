@@ -1,8 +1,13 @@
 package com.financial;
+import java.util.Scanner;
 
 public class Main {
     public static void main (String[] args) {
-        DataInput.csvReader();
+        Scanner s = new Scanner(System.in);
+        System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου: ");
+        String filePath = s.nextLine();
+        DataInput.csvReader(filePath);
+
         long totalExpenses = Expense.calculateSum();
         String totalExpensesFormatted = String.format("%,d", totalExpenses);
         System.out.println("ΕΞΟΔΑ: " + totalExpensesFormatted);

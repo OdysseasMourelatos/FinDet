@@ -4,14 +4,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Scanner;
-
 
 public class DataInput {
-    public static void csvReader() {
-        Scanner s = new Scanner(System.in);
-        System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου: ");
-        String filePath = s.nextLine();
+    public static void csvReader(String filePath) {
         String line;
         int lineNumber=0;
         ArrayList<BudgetEntry> budgetEntries = new ArrayList<>();
