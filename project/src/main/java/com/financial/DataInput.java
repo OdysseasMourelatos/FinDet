@@ -3,13 +3,11 @@ package com.financial;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class DataInput {
     public static void csvReader(String filePath) {
         String line;
         int lineNumber=0;
-        ArrayList<BudgetEntry> budgetEntries = new ArrayList<>();
         BudgetEntry budgetEntry = null;
 
         try {
@@ -27,16 +25,12 @@ public class DataInput {
                 if (values[2].equals("ΕΣΟΔΑ")) {
                     budgetEntry = new Income(code, description, category, amount);
                 } else if (values[2].equals("ΕΞΟΔΑ")) {
-                    budgetEntry = new Expense(code, description, category, amount);
+                    budgetEntry = new BudgetExpense(code, description, category, amount);
                 }
-                budgetEntries.add(budgetEntry);
             }
             reader.close();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        for (BudgetEntry entry : budgetEntries) {
-            System.out.println(entry);
         }
     }
 }
