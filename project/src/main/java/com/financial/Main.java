@@ -3,9 +3,14 @@ package com.financial;
 public class Main {
     public static void main (String[] args) {
         DataInput.csvReader();
-        String formatted1 = String.format("%,d", Expense.calculateSum());
-        System.out.println("ΕΞΟΔΑ: " + formatted1);
-        String formatted2 = String.format("%,d", Income.calculateSum());
-        System.out.println("ΕΣΟΔΑ: " + formatted2);
+        long totalExpenses = Expense.calculateSum();
+        String totalExpensesFormatted = String.format("%,d", totalExpenses);
+        System.out.println("ΕΞΟΔΑ: " + totalExpensesFormatted);
+        long totalIncome = Income.calculateSum();
+        String totalIncomeFormatted = String.format("%,d", totalIncome);
+        System.out.println("ΕΣΟΔΑ: " + totalIncomeFormatted);
+        long totalResult = totalIncome - totalExpenses;
+        String totalResultFormatted= String.format("%,d", totalResult);
+        System.out.println("ΑΠΟΤΕΛΕΣΜΑ ΚΡΑΤΙΚΟΥ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ (ΕΣΟΔΑ - ΕΞΟΔΑ): " + totalResultFormatted);
     }
 }
