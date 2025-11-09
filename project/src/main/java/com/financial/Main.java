@@ -9,6 +9,7 @@ public class Main {
         String filePath = s.nextLine();
         DataInput.csvReader(filePath);
         BudgetExpense.printExpenses();
+        BudgetRevenue.printRevenues();
 
         long totalExpenses = BudgetExpense.calculateSum();
         String totalExpensesFormatted = String.format("%,d", totalExpenses);
