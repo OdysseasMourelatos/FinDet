@@ -25,6 +25,15 @@ public class BudgetExpense extends BudgetEntry{
         }
     }
 
+    public static BudgetExpense findExpenseWithCode (int code) {
+        for (BudgetExpense expense : expenses) {
+            if (expense.getCode() == code) {
+                return expense;
+            }
+        }
+        return null;
+    }
+
     @Override
     public String toString () {
         return super.toString();
