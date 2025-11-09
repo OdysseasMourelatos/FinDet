@@ -43,6 +43,6 @@ public abstract class BudgetEntry {
 
     @Override
     public String toString(){
-        return "Code: " + code + ", Description: " + description + ", Category: " + category + ", Amount: " + amount;
+        return "Code: " + code + ", Description: " + description + ", Category: " + category + ", Amount: " + String.format("%,d", amount);
     }
 }
