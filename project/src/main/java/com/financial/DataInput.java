@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class DataInput {
+
     public static void csvReader(String filePath) {
         String line;
         int lineNumber=0;
@@ -19,15 +20,7 @@ public class DataInput {
                     continue;
                 }
                 String[] values = line.split(",");
-                int code = Integer.parseInt(values[0]);
-                String description = values[1];
-                String category = values[2];
-                long amount = Long.parseLong(values[3]);
-                if (values[2].equals("ΕΣΟΔΑ")) {
-                    budgetEntry = new Income(code, description, category, amount);
-                } else if (values[2].equals("ΕΞΟΔΑ")) {
-                    budgetEntry = new BudgetExpense(code, description, category, amount);
-                }
+                createBudgetEntryFromCSV(values);
             }
             reader.close();
         } catch (IOException e) {
@@ -39,5 +32,19 @@ public class DataInput {
                 e.printStackTrace();
             }
         }
+    }
+
+    private static void createBudgetEntryFromCSV(String[] values){
+        BudgetEntry budgetEntry = null;
+        int code = Integer.parseInt(values[0]);
+        String description = values[1];
+        String category = values[2];
+        long amount = Long.parseLong(values[3]);
+        if (values[2].equals("ΕΣΟΔΑ")) {
+            budgetEntry = new Income(code, description, category, amount);
+        } else if (values[2].equals("ΕΞΟΔΑ")) {
+            budgetEntry = new BudgetExpense(code, description, category, amount);
+        }
+
     }
 }
