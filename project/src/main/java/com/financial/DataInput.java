@@ -41,7 +41,7 @@ public class DataInput {
         String category = values[2];
         long amount = Long.parseLong(values[3]);
         if (values[2].equals("ΕΣΟΔΑ")) {
-            budgetEntry = new Income(code, description, category, amount);
+            budgetEntry = new BudgetRevenue(code, description, category, amount);
         } else if (values[2].equals("ΕΞΟΔΑ")) {
             budgetEntry = new BudgetExpense(code, description, category, amount);
         }

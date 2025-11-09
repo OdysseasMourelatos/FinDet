@@ -13,10 +13,10 @@ public class Main {
         long totalExpenses = BudgetExpense.calculateSum();
         String totalExpensesFormatted = String.format("%,d", totalExpenses);
         System.out.println("ΕΞΟΔΑ: " + totalExpensesFormatted);
-        long totalIncome = Income.calculateSum();
-        String totalIncomeFormatted = String.format("%,d", totalIncome);
-        System.out.println("ΕΣΟΔΑ: " + totalIncomeFormatted);
-        long totalResult = totalIncome - totalExpenses;
+        long totalRevenues = BudgetRevenue.calculateSum();
+        String totalRevenuesFormatted = String.format("%,d", totalRevenues);
+        System.out.println("ΕΣΟΔΑ: " + totalRevenuesFormatted);
+        long totalResult = totalRevenues - totalExpenses;
         String totalResultFormatted= String.format("%,d", totalResult);
         System.out.println("ΑΠΟΤΕΛΕΣΜΑ ΚΡΑΤΙΚΟΥ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ (ΕΣΟΔΑ - ΕΞΟΔΑ): " + totalResultFormatted);
 
