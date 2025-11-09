@@ -19,5 +19,7 @@ public class Main {
         long totalResult = totalIncome - totalExpenses;
         String totalResultFormatted= String.format("%,d", totalResult);
         System.out.println("ΑΠΟΤΕΛΕΣΜΑ ΚΡΑΤΙΚΟΥ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ (ΕΣΟΔΑ - ΕΞΟΔΑ): " + totalResultFormatted);
+
+        DataUpdate.csvUpdate();
     }
 }

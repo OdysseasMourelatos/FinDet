@@ -1,16 +1,20 @@
 package com.financial;
 
+import java.util.ArrayList;
+
 public abstract class BudgetEntry {
     private final int code;
     private String description;
     private String category;
     private long amount;
+    protected static ArrayList<BudgetEntry> budgetEntries= new ArrayList<>();
 
     public BudgetEntry(int code, String description, String category, long amount) {
         this.code = code;
         this.description = description;
         this.category = category;
         this.amount = amount;
+        budgetEntries.add(this);
     }
 
     public int getCode() {
