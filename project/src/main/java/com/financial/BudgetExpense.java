@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class BudgetExpense extends BudgetEntry{
 
-    private static ArrayList <BudgetExpense> expenses = new ArrayList<>();
+    protected static ArrayList <BudgetExpense> expenses = new ArrayList<>();
 
     public BudgetExpense(int code, String description, String category, long amount) {
         super(code, description, category, amount);
