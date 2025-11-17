@@ -41,6 +41,13 @@ public abstract class BudgetEntry {
         }
     }
 
+    public static ArrayList<BudgetEntry> mergeLists() {
+        ArrayList<BudgetEntry> merged = new ArrayList<>();
+        merged.addAll(BudgetRevenue.getMainBudgetRevenues());
+        merged.addAll(BudgetExpense.getSumOfEveryCategory());
+        return merged;
+    }
+
     @Override
     public String toString(){
         return "Code: " + code + ", Description: " + description + ", Category: " + category + ", Amount: " + String.format("%,d", amount);
