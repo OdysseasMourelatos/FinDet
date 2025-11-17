@@ -97,4 +97,23 @@ public class DataInput {
             default -> new PublicInvestmentBudgetRevenue(code, description, category, type, amount);
         };
     }
+
+    private static void createRegularBudgetExpenseFromCSV(String[] values) {
+        String entityCode = values[0];
+        String code = values[1];
+        String description = values[2];
+        String category = "ΕΞΟΔΑ";
+        long amount = Long.parseLong(values[3]);
+        BudgetEntry regularBudgetExpense = new RegularBudgetExpense(entityCode, code, description, category, amount);
+    }
+
+    private static void createPublicInvestmentBudgetExpenseFromCSV(String [] values) {
+        String entityCode = values[0];
+        String code = values[1];
+        String description = values[2];
+        String type = values[3];
+        String category = "ΕΞΟΔΑ";
+        long amount = Long.parseLong(values[4]);
+        BudgetEntry regularBudgetExpense = new PublicInvestmentBudgetExpense(entityCode, code, description, type, category, amount);
+    }
 }
