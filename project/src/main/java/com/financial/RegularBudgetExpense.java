@@ -30,4 +30,9 @@ public class RegularBudgetExpense extends BudgetExpense {
         return sum;
     }
 
+    @Override
+    public String toString(){
+        return "Entity Code: " + entityCode + ", Category Code: " + getCode() + ", Description: " + getDescription() + ", Category: " + getCategory() + ", Amount: " + String.format("%,d", getAmount());
+    }
+
 }
