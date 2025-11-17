@@ -1,6 +1,8 @@
 package com.financial;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class BudgetRevenue extends BudgetEntry{
 
@@ -17,6 +19,16 @@ public class BudgetRevenue extends BudgetEntry{
 
     public static void printAllBudgetRevenues(){
         for (BudgetRevenue budgetRevenue : budgetRevenues) {
+            System.out.println(budgetRevenue);
+        }
+    }
+
+    public static List<BudgetRevenue> getMainBudgetRevenues() {
+        return budgetRevenues.stream().filter(r -> r.getCode().length() == 2).collect(Collectors.toList());
+    }
+
+    public static void printMainBudgetRevenues(){
+        for (BudgetRevenue budgetRevenue : getMainBudgetRevenues()) {
             System.out.println(budgetRevenue);
         }
     }
