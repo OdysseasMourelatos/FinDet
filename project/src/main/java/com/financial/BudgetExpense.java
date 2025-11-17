@@ -11,6 +11,14 @@ public class BudgetExpense extends BudgetEntry{
         expenses.add(this);
     }
 
+    public static long calculateSum(){
+        long sum = 0;
+        for (BudgetExpense expense : expenses) {
+            sum += expense.getAmount();
+        }
+        return sum;
+    }
+
     public static ArrayList<BudgetExpense> getSumOfEveryCategory(){
         String[] categoryCodes = expenses.stream()
                 .map(BudgetExpense::getCode)
@@ -35,6 +43,21 @@ public class BudgetExpense extends BudgetEntry{
         for (BudgetExpense expense : categorySums) {
             System.out.println(expense);
         }
+    }
+
+    public static void printExpenses() {
+        for (BudgetExpense expense : expenses) {
+            System.out.println(expense);
+        }
+    }
+
+    public static BudgetExpense findExpenseWithCode (String code) {
+        for (BudgetExpense expense : expenses) {
+            if (expense.getCode().equals(code)) {
+                return expense;
+            }
+        }
+        return null;
     }
 
     @Override
