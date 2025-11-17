@@ -65,7 +65,7 @@ public class DataInput {
 
     private static void createBudgetEntryFromCSV(String[] values){
         BudgetEntry budgetEntry = null;
-        int code = Integer.parseInt(values[0]);
+        String code = values[0];
         String description = values[1];
         String category = values[2];
         long amount = Long.parseLong(values[3]);

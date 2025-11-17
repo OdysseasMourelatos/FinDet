@@ -6,7 +6,7 @@ public class BudgetExpense extends BudgetEntry{
 
     protected static ArrayList <BudgetExpense> expenses = new ArrayList<>();
 
-    public BudgetExpense(int code, String description, String category, long amount) {
+    public BudgetExpense(String code, String description, String category, long amount) {
         super(code, description, category, amount);
         expenses.add(this);
     }
@@ -25,9 +25,9 @@ public class BudgetExpense extends BudgetEntry{
         }
     }
 
-    public static BudgetExpense findExpenseWithCode (int code) {
+    public static BudgetExpense findExpenseWithCode (String code) {
         for (BudgetExpense expense : expenses) {
-            if (expense.getCode() == code) {
+            if (expense.getCode().equals(code)) {
                 return expense;
             }
         }

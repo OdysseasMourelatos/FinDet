@@ -22,14 +22,7 @@ public class BudgetRevenue extends BudgetEntry{
         }
     }
     
-    public static BudgetRevenue findRevenueWithCode (int code) {
-        for (BudgetRevenue revenue : revenues) {
-            if (revenue.getCode() == code) {
-                return revenue;
-            }
-        }
-        return null;
-    }
+
     @Override
     public String toString () {
         return super.toString();

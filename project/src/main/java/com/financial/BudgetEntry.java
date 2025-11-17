@@ -3,13 +3,13 @@ package com.financial;
 import java.util.ArrayList;
 
 public abstract class BudgetEntry {
-    private final int code;
+    private final String code;
     private final String description;
     private final String category;
     private long amount;
     protected static ArrayList<BudgetEntry> budgetEntries= new ArrayList<>();
 
-    public BudgetEntry(int code, String description, String category, long amount) {
+    public BudgetEntry(String code, String description, String category, long amount) {
         this.code = code;
         this.description = description;
         this.category = category;
@@ -17,7 +17,7 @@ public abstract class BudgetEntry {
         budgetEntries.add(this);
     }
 
-    public int getCode() {
+    public String getCode() {
         return this.code;
     }
 
