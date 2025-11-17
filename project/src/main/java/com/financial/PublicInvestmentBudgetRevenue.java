@@ -1,5 +1,7 @@
 package com.financial;
 
+import java.util.ArrayList;
+
 public class PublicInvestmentBudgetRevenue extends BudgetEntry{
     protected static ArrayList<PublicInvestmentBudgetRevenue> publicInvestmentBudgetRevenues = new ArrayList<>();
     private String type;
