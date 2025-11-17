@@ -46,7 +46,19 @@ public class DataInput {
             reader.readNext();
             String[] values;
             while ((values = reader.readNext()) != null) {
-
+                if (values.length == 3) {
+                    createBudgetRevenueFromCSV(values);
+                } else if (values.length == 4) {
+                    if (values[0].length() == 4) {
+                        createRegularBudgetExpenseFromCSV(values);
+                    } else {
+                        createPublicInvestmentBudgetRevenueFromCSV(values);
+                    }
+                } else if (values.length == 5) {
+                    createPublicInvestmentBudgetExpenseFromCSV(values);
+                } else if (values.length > 5) {
+                    System.out.println("Σφάλμα στη γραμμή: " + Arrays.toString(values));
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
