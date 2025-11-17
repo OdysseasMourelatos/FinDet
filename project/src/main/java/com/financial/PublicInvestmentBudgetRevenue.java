@@ -19,8 +19,13 @@ public class PublicInvestmentBudgetRevenue extends BudgetEntry{
             System.out.println(publicInvestmentBudgetRevenue);
         }
     }
-    
+
     public String getType(){
         return type;
+    }
+
+    @Override
+    public String toString(){
+        return "Code: " + getCode() + ", Description: " + getDescription() + ", Category: " + getCategory() + ", Type: " + type + ", Amount: " + String.format("%,d", getAmount());
     }
 }
