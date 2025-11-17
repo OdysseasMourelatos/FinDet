@@ -31,4 +31,9 @@ public class PublicInvestmentBudgetExpense extends BudgetExpense{
         }
         return sum;
     }
+
+    @Override
+    public String toString(){
+        return "Entity Code: " + entityCode + ", Category Code: " + getCode() + ", Description: " + getDescription() + ", Category: " + getCategory() + ", Type: " + type + ", Amount: " + String.format("%,d", getAmount());
+    }
 }
