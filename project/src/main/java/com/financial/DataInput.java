@@ -75,17 +75,26 @@ public class DataInput {
         }
     }
 
-    private static void createBudgetEntryFromCSV(String[] values){
-        BudgetEntry budgetEntry = null;
+    private static void createBudgetRevenueFromCSV(String[] values) {
         String code = values[0];
         String description = values[1];
-        String category = values[2];
-        long amount = Long.parseLong(values[3]);
-        if (values[2].equals("ΕΣΟΔΑ")) {
-            budgetEntry = new BudgetRevenue(code, description, category, amount);
-        } else if (values[2].equals("ΕΞΟΔΑ")) {
-            budgetEntry = new BudgetExpense(code, description, category, amount);
-        }
+        String category = "ΕΣΟΔΑ";
+        long amount = Long.parseLong(values[2]);
+        BudgetEntry budgetRevenue = switch (code.substring(0, 2)) {
+            case "11" -> new TaxRevenue(code, description, category, amount);
+            case "12" -> new SocialContributionsRevenue(code, description, category, amount);
+            default -> new BudgetRevenue(code, description, category, amount);
+        };
+    }
 
+    private static void createPublicInvestmentBudgetRevenueFromCSV(String [] values) {
+        String code = values[0];
+        String description = values[1];
+        String category = "ΕΣΟΔΑ";
+        String type = values[2];
+        long amount = Long.parseLong(values[3]);
+        BudgetEntry publicInvestmentBudgetRevenue = switch (code.substring(0, 2)) {
+            default -> new PublicInvestmentBudgetRevenue(code, description, category, type, amount);
+        };
     }
 }
