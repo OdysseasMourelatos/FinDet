@@ -24,7 +24,3 @@ public class DataUpdate {
         }
     }
 }
-<<<<<<< HEAD
-=======
-// σε γαμαω
->>>>>>> 2396ab41c8d11eb17a228b0bbc1ed93d00ea27ea
