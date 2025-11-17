@@ -6,10 +6,9 @@ import java.io.IOException;
 
 public class DataInput {
 
-    public static void csvReader(String filePath) {
+    public static void simpleCSVReader(String filePath) {
         String line;
         int lineNumber=0;
-        BudgetEntry budgetEntry = null;
         BufferedReader reader = null;
 
         try {
@@ -20,9 +19,12 @@ public class DataInput {
                     continue;
                 }
                 String[] values = line.split(",");
-                createBudgetEntryFromCSV(values);
+                if (values.length > 5) {
+                    System.out.println("Σφάλμα στη γραμμή: " + Arrays.toString(values));
+                } else {
+                    createBudgetRevenueFromCSV(values);
+                }
             }
-            reader.close();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
