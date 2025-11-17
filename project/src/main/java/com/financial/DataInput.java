@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
+
 public class DataInput {
 
     public static void simpleCSVReader(String filePath) {
@@ -26,6 +29,30 @@ public class DataInput {
                 }
             }
         } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void advancedCSVReader(String filePath) {
+        CSVReader reader = null;
+        try {
+            reader = new CSVReader(new FileReader(filePath));
+            reader.readNext();
+            String[] values;
+            while ((values = reader.readNext()) != null) {
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (CsvValidationException e) {
+            throw new RuntimeException(e);
+        } catch (NumberFormatException e) {
             e.printStackTrace();
         } finally {
             try {
