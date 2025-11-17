@@ -23,4 +23,12 @@ public class PublicInvestmentBudgetExpense extends BudgetExpense{
             System.out.println(publicInvestmentBudgetExpense);
         }
     }
+
+    public static long getSumOfPublicInvestmentBudgetExpenses() {
+        long sum = 0;
+        for (PublicInvestmentBudgetExpense publicInvestmentBudgetExpense : publicInvestmentBudgetExpenses) {
+            sum += publicInvestmentBudgetExpense.getAmount();
+        }
+        return sum;
+    }
 }
