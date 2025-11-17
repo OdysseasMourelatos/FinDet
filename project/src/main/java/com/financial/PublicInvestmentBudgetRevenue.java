@@ -10,6 +10,16 @@ public class PublicInvestmentBudgetRevenue extends BudgetEntry{
         publicInvestmentBudgetRevenues.add(this);
     }
 
+    public static ArrayList<PublicInvestmentBudgetRevenue> getAllPublicInvestmentBudgetRevenues() {
+        return publicInvestmentBudgetRevenues;
+    }
+
+    public static void printAllPublicInvestmentBudgetRevenues(){
+        for (PublicInvestmentBudgetRevenue publicInvestmentBudgetRevenue : publicInvestmentBudgetRevenues) {
+            System.out.println(publicInvestmentBudgetRevenue);
+        }
+    }
+    
     public String getType(){
         return type;
     }
