@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public abstract class BudgetEntry {
     private final int code;
-    private String description;
-    private String category;
+    private final String description;
+    private final String category;
     private long amount;
     protected static ArrayList<BudgetEntry> budgetEntries= new ArrayList<>();
 
