@@ -5,25 +5,23 @@ import java.util.ArrayList;
 
 public class BudgetRevenue extends BudgetEntry{
 
-    protected static ArrayList <BudgetRevenue> revenues = new ArrayList<>();
+    protected static ArrayList <BudgetRevenue> budgetRevenues = new ArrayList<>();
 
-    public BudgetRevenue(int code, String description, String category, long amount) {
+    public BudgetRevenue(String code, String description, String category, long amount) {
         super(code, description, category, amount);
-        revenues.add(this);
-    }
-    public static long calculateSum(){
-        long sum = 0;
-        for (BudgetRevenue revenue : revenues) {
-            sum += revenue.getAmount();
-        }
-        return sum;
+        budgetRevenues.add(this);
     }
 
-    public static void printRevenues() {
-        for (BudgetRevenue revenue : revenues) {
-            System.out.println(revenue);
+    public static ArrayList<BudgetRevenue> getAllBudgetRevenues() {
+        return budgetRevenues;
+    }
+
+    public static void printAllBudgetRevenues(){
+        for (BudgetRevenue budgetRevenue : budgetRevenues) {
+            System.out.println(budgetRevenue);
         }
     }
+    
     public static BudgetRevenue findRevenueWithCode (int code) {
         for (BudgetRevenue revenue : revenues) {
             if (revenue.getCode() == code) {
