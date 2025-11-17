@@ -7,8 +7,8 @@ public class RegularBudgetExpense extends BudgetExpense {
     protected static ArrayList<RegularBudgetExpense> regularBudgetExpenses = new ArrayList<>();
 
     RegularBudgetExpense (String entityCode, String code, String description, String category, long amount) {
-        this.entityCode=entityCode;
         super(code,description,category,amount);
+        this.entityCode=entityCode;
         regularBudgetExpenses.add(this);
     }
 

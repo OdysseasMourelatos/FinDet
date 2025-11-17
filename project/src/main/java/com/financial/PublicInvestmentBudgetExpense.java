@@ -8,9 +8,9 @@ public class PublicInvestmentBudgetExpense extends BudgetExpense{
     protected static ArrayList<PublicInvestmentBudgetExpense> publicInvestmentBudgetExpenses = new ArrayList<>();
 
     PublicInvestmentBudgetExpense (String entityCode, String code, String description, String type, String category, long amount) {
+        super(code,description,category,amount);
         this.entityCode=entityCode;
         this.type = type;
-        super(code,description,category,amount);
         publicInvestmentBudgetExpenses.add(this);
     }
 
