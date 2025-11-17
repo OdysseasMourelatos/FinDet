@@ -22,4 +22,14 @@ public class TaxRevenue extends BudgetRevenue{
             System.out.println(budgetRevenue);
         }
     }
+
+    public static TaxRevenue findTaxRevenueWithCode (String code) {
+        for (TaxRevenue taxRevenue : getTaxRevenues()) {
+            if (taxRevenue.getCode().equals(code)) {
+                return taxRevenue;
+            }
+        }
+        return null;
+    }
+    
 }
