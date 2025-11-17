@@ -1,5 +1,7 @@
 package com.financial;
 
+import java.util.ArrayList;
+
 public class SocialContributionsRevenue extends BudgetRevenue{
     public SocialContributionsRevenue(String code, String description, String category, long amount) {
         super(code, description, category, amount);
@@ -20,4 +22,14 @@ public class SocialContributionsRevenue extends BudgetRevenue{
             System.out.println(budgetRevenue);
         }
     }
+
+    public static SocialContributionsRevenue findSocialContributionWithCode (String code) {
+        for (SocialContributionsRevenue socialContributionsRevenue : getSocialContributionsRevenue()) {
+            if (socialContributionsRevenue.getCode().equals(code)) {
+                return socialContributionsRevenue;
+            }
+        }
+        return null;
+    }
+
 }
