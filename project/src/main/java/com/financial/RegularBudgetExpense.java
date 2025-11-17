@@ -21,5 +21,13 @@ public class RegularBudgetExpense extends BudgetExpense {
             System.out.println(regularBudgetExpense);
         }
     }
-    
+
+    public static long getSumOfRegularBudgetExpenses() {
+        long sum = 0;
+        for (RegularBudgetExpense regularBudgetExpense : regularBudgetExpenses) {
+            sum += regularBudgetExpense.getAmount();
+        }
+        return sum;
+    }
+
 }
