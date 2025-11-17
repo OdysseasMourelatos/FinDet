@@ -11,4 +11,15 @@ public class RegularBudgetExpense extends BudgetExpense {
         super(code,description,category,amount);
         regularBudgetExpenses.add(this);
     }
+
+    public static ArrayList<RegularBudgetExpense> getAllRegularBudgetExpenses() {
+        return regularBudgetExpenses;
+    }
+
+    public static void printAllRegularBudgetExpenses(){
+        for (RegularBudgetExpense regularBudgetExpense : regularBudgetExpenses) {
+            System.out.println(regularBudgetExpense);
+        }
+    }
+    
 }
