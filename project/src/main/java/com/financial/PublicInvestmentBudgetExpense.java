@@ -13,4 +13,14 @@ public class PublicInvestmentBudgetExpense extends BudgetExpense{
         super(code,description,category,amount);
         publicInvestmentBudgetExpenses.add(this);
     }
+
+    public static ArrayList<PublicInvestmentBudgetExpense> getAllPublicInvestmentBudgetExpenses() {
+        return publicInvestmentBudgetExpenses;
+    }
+
+    public static void printAllPublicInvestmentBudgetExpenses(){
+        for (PublicInvestmentBudgetExpense publicInvestmentBudgetExpense : publicInvestmentBudgetExpenses) {
+            System.out.println(publicInvestmentBudgetExpense);
+        }
+    }
 }
