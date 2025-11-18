@@ -28,6 +28,13 @@ public class Entity {
         return null;
     }
 
+    public static void printEntitiesWithTheirTotalRegularExpenses(){
+        for (Entity entity: entities) {
+            long totalRegularExpenses = RegularBudgetExpense.getRegularSumOfEntityWithEntityCode(entity.entityCode);
+            System.out.println(entity + ", Total Regular Expenses: " + String.format("%,d", totalRegularExpenses));
+        }
+    }
+
     public String getEntityCode() {
         return entityCode;
     }
@@ -35,6 +42,7 @@ public class Entity {
     public String getName(){
         return name;
     }
+
 
     @Override
     public String toString(){
