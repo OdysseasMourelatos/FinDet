@@ -51,6 +51,14 @@ public class RegularBudgetExpense extends BudgetExpense {
         return regularEntitySums;
     }
 
+    public static void printRegularSumOfEveryEntity(){
+        Map<String, Long> entitySums = getRegularSumOfEveryEntity();
+        entitySums.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
+                .forEach(entry ->
+                        System.out.println("Κωδικός Φορέα " + entry.getKey() + ": " + String.format("%,d", entry.getValue())));
+    }
+
     public String getEntityCode(){
         return entityCode;
     }
