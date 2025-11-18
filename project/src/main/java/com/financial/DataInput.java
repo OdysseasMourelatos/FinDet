@@ -47,7 +47,9 @@ public class DataInput {
             reader.readNext();
             String[] values;
             while ((values = reader.readNext()) != null) {
-                if (values.length == 3) {
+                if (values.length == 2) {
+                    createEntityFromCSV(values);
+                } else if (values.length == 3) {
                     createBudgetRevenueFromCSV(values);
                 } else if (values.length == 4) {
                     if (values[0].length() == 4) {
@@ -116,5 +118,11 @@ public class DataInput {
         String category = "ΕΞΟΔΑ";
         long amount = Long.parseLong(values[4]);
         BudgetEntry regularBudgetExpense = new PublicInvestmentBudgetExpense(entityCode, code, description, type, category, amount);
+    }
+
+    private static void createEntityFromCSV(String [] values) {
+        String entityCode = values[0];
+        String name = values[1];
+        Entity entity = new Entity(entityCode, name);
     }
 }
