@@ -9,13 +9,13 @@ public class Main {
         String filePath = s.nextLine();
         DataInput.advancedCSVReader(filePath);
         s = new Scanner(System.in);
-        System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου: (ΕΞΟΔΑ ΤΑΚΤΙΚΟΥ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ): ");
+        System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου (ΕΞΟΔΑ ΤΑΚΤΙΚΟΥ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ): ");
         filePath = s.nextLine();
         DataInput.advancedCSVReader(filePath);
-        System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου: (ΕΞΟΔΑ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ): ");
+        System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου (ΕΞΟΔΑ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ): ");
         filePath = s.nextLine();
         DataInput.advancedCSVReader(filePath);
-        System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου: (ΚΩΔΙΚΟΣ ΚΑΙ ΟΝΟΜΑΣΙΑ ΦΟΡΕΩΝ): ");
+        System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου (ΚΩΔΙΚΟΣ ΚΑΙ ΟΝΟΜΑΣΙΑ ΦΟΡΕΩΝ): ");
         filePath = s.nextLine();
         DataInput.advancedCSVReader(filePath);
         long totalRegularBudgetExpenses = RegularBudgetExpense.getSumOfRegularBudgetExpenses();
