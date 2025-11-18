@@ -15,6 +15,9 @@ public class Main {
         System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου: (ΕΞΟΔΑ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ): ");
         filePath = s.nextLine();
         DataInput.advancedCSVReader(filePath);
+        System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου: (ΚΩΔΙΚΟΣ ΚΑΙ ΟΝΟΜΑΣΙΑ ΦΟΡΕΩΝ): ");
+        filePath = s.nextLine();
+        DataInput.advancedCSVReader(filePath);
         long totalRegularBudgetExpenses = RegularBudgetExpense.getSumOfRegularBudgetExpenses();
         System.out.println("ΕΞΟΔΑ ΤΑΚΤΙΚΟΥ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ: " + String.format("%,d", totalRegularBudgetExpenses));
         long totalPublicInvestmentBudgetExpenses = PublicInvestmentBudgetExpense.getSumOfPublicInvestmentBudgetExpenses();
@@ -22,6 +25,7 @@ public class Main {
         long totalBudgetExpenses = totalRegularBudgetExpenses + totalPublicInvestmentBudgetExpenses;
         System.out.println("ΣΥΝΟΛΙΚΑ ΕΞΟΔΑ ΚΡΑΤΙΚΟΥ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ: " + String.format("%,d", totalBudgetExpenses));
 
+        Entity.printEntitiesWithTheirTotalRegularExpenses();
         DataUpdate.csvUpdate();
     }
 }
