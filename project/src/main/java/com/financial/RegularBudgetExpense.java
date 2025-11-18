@@ -1,6 +1,8 @@
 package com.financial;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RegularBudgetExpense extends BudgetExpense {
     String entityCode;
@@ -30,10 +32,29 @@ public class RegularBudgetExpense extends BudgetExpense {
         return sum;
     }
 
+    public static Map<String, Long> getRegularSumOfEveryEntity(){
+        String[] entityCodes = regularBudgetExpenses.stream()
+                .map(RegularBudgetExpense::getEntityCode)
+                .distinct()
+                .sorted()
+                .toArray(String[]::new);
+        Map<String, Long> regularEntitySums = new HashMap<>();
+        for (String entityCode : entityCodes) {
+            long sum = 0;
+            for (RegularBudgetExpense regularBudgetExpense : regularBudgetExpenses) {
+                if (entityCode.equals(regularBudgetExpense.entityCode)){
+                    sum+=regularBudgetExpense.getAmount();
+                }
+            }
+            regularEntitySums.merge(entityCode, sum, Long::sum);
+        }
+        return regularEntitySums;
+    }
+
     public String getEntityCode(){
         return entityCode;
     }
-    
+
     @Override
     public String toString(){
         return "Entity Code: " + entityCode + ", Category Code: " + getCode() + ", Description: " + getDescription() + ", Category: " + getCategory() + ", Amount: " + String.format("%,d", getAmount());
