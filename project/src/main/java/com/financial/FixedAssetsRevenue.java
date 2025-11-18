@@ -30,4 +30,9 @@ public class FixedAssetsRevenue extends BudgetRevenue {
         }
         return null;
     }
+
+    @Override
+    public String toString () {
+        return super.toString();
+    }
 }
