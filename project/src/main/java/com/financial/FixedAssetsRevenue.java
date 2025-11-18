@@ -21,4 +21,13 @@ public class FixedAssetsRevenue extends BudgetRevenue {
             System.out.println(budgetRevenue);
         }
     }
+
+    public static FixedAssetsRevenue findFixedAssetWithCode (String code) {
+        for (FixedAssetsRevenue fixedAssetRevenue : getFixedAssetsRevenue()) {
+            if (fixedAssetRevenue.getCode().equals(code)) {
+                return fixedAssetRevenue;
+            }
+        }
+        return null;
+    }
 }
