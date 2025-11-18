@@ -12,4 +12,28 @@ public class Entity {
         this.name = name;
         entities.add(this);
     }
+
+    public static void printAllEntities(){
+        for (Entity entity : entities) {
+            System.out.println(entity);
+        }
+    }
+
+    public static Entity findEntityWithEntityCode(String entityCode){
+        for (Entity entity : entities) {
+            if (entity.getEntityCode().equals(entityCode)){
+                return entity;
+            }
+        }
+        return null;
+    }
+
+    public String getEntityCode() {
+        return entityCode;
+    }
+
+    public String getName(){
+        return name;
+    }
+    
 }
