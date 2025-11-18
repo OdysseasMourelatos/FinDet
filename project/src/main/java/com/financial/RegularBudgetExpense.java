@@ -61,7 +61,10 @@ public class RegularBudgetExpense extends BudgetExpense {
 
     public static long getRegularSumOfEntityWithEntityCode(String entityCode){
         Map<String, Long> entitySums = getRegularSumOfEveryEntity();
-        return entitySums.get(entityCode);
+        if (entitySums.containsKey(entityCode)) {
+            return entitySums.get(entityCode);
+        }
+        return 0;
     }
 
     public String getEntityCode(){
@@ -72,5 +75,6 @@ public class RegularBudgetExpense extends BudgetExpense {
     public String toString(){
         return "Entity Code: " + entityCode + ", Category Code: " + getCode() + ", Description: " + getDescription() + ", Category: " + getCategory() + ", Amount: " + String.format("%,d", getAmount());
     }
+
 
 }
