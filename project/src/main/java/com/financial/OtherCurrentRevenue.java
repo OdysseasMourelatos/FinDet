@@ -30,4 +30,8 @@ public class OtherCurrentRevenue extends BudgetRevenue{
         }
         return null;
     }
+    @Override
+    public String toString () {
+        return super.toString();
+    }
 }
