@@ -21,4 +21,13 @@ public class OtherCurrentRevenue extends BudgetRevenue{
             System.out.println(budgetRevenue);
         }
     }
+
+    public static OtherCurrentRevenue findOtherCurrentRevenueWithCode (String code) {
+        for (OtherCurrentRevenue otherCurrentRevenue : getOtherCurrentRevenue()) {
+            if (otherCurrentRevenue.getCode().equals(code)) {
+                return otherCurrentRevenue;
+            }
+        }
+        return null;
+    }
 }
