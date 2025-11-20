@@ -67,12 +67,22 @@ public class BudgetRevenue extends BudgetEntry{
         return superCategories;
     }
 
-    public void printSuperCategories(){
+    public void printSuperCategoriesTopDown(){
         if (getSuperCategories().isEmpty()) {
             System.out.println("Δεν υπάρχουν κατηγορίες σε υψηλότερη ιεραρχία");
         } else {
             for (int i = getSuperCategories().size() -1; i >= 0; i--){
                 System.out.println(getSuperCategories().get(i));
+            }
+        }
+    }
+
+    public void printSuperCategoriesBottomsUp(){
+        if (getSuperCategories().isEmpty()) {
+            System.out.println("Δεν υπάρχουν κατηγορίες σε υψηλότερη ιεραρχία");
+        } else {
+            for (BudgetRevenue superCategory : getSuperCategories()){
+                System.out.println(superCategory);
             }
         }
     }
