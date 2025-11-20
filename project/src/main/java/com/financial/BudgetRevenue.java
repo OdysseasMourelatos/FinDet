@@ -67,6 +67,16 @@ public class BudgetRevenue extends BudgetEntry{
         return superCategories;
     }
 
+    public void printSuperCategories(){
+        if (getSuperCategories().isEmpty()) {
+            System.out.println("Δεν υπάρχουν κατηγορίες σε υψηλότερη ιεραρχία");
+        } else {
+            for (int i = getSuperCategories().size() -1; i >= 0; i--){
+                System.out.println(getSuperCategories().get(i));
+            }
+        }
+    }
+
     public void setAmountOfSuperCategories(long change){
         BudgetRevenue revenueSuperCategory = findSuperCategory();
 
