@@ -112,6 +112,25 @@ public class BudgetRevenue extends BudgetEntry{
         }
     }
 
+    public ArrayList<BudgetRevenue> findNextLevelSubCategories() {
+        int level = getLevelOfHierarchy();
+        int subCategoryCodeLength;
+        switch (level){
+            case 1 -> subCategoryCodeLength = 3;
+            case 2 -> subCategoryCodeLength = 5;
+            case 3 -> subCategoryCodeLength = 7;
+            case 4 -> subCategoryCodeLength = 10;
+            default -> subCategoryCodeLength = 0;
+        }
+        ArrayList<BudgetRevenue> subCategories = new ArrayList<>();
+        for (BudgetRevenue budgetRevenue : budgetRevenues){
+            if (budgetRevenue.getCode().startsWith(this.getCode()) && (budgetRevenue.getCode().length() == subCategoryCodeLength)){
+                subCategories.add(budgetRevenue);
+            }
+        }
+        return subCategories;
+    }
+
     public static BudgetRevenue findRevenueWithCode (String code) {
         for (BudgetRevenue budgetRevenue : budgetRevenues) {
             if (budgetRevenue.getCode().equals(code)) {
