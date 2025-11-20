@@ -78,11 +78,10 @@ public class BudgetRevenue extends BudgetEntry{
     }
 
     public void setAmountOfSuperCategories(long change){
-        BudgetRevenue revenueSuperCategory = findSuperCategory();
+        ArrayList<BudgetRevenue> superCategories = getSuperCategories();
 
-        while (revenueSuperCategory != null){
-            revenueSuperCategory.setAmount(revenueSuperCategory.getAmount() + change);
-            revenueSuperCategory = revenueSuperCategory.findSuperCategory();
+        for (BudgetRevenue superCategory : superCategories) {
+            superCategory.setAmount(superCategory.getAmount() + change);
         }
     }
 
