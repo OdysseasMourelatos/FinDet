@@ -54,9 +54,96 @@ public class BudgetRevenue extends BudgetEntry{
         return mainRevenues;
     }
 
+    public void printSuperCategoriesBottomsUp(){
+        if (getSuperCategories().isEmpty()) {
+            System.out.println("Δεν υπάρχουν κατηγορίες σε υψηλότερη ιεραρχία");
+        } else {
+            for (BudgetRevenue superCategory : getSuperCategories()){
+                System.out.println(superCategory);
+            }
+        }
+    }
+
+    public void setAmountOfSuperCategories(long change){
+        ArrayList<BudgetRevenue> superCategories = getSuperCategories();
+
+        for (BudgetRevenue superCategory : superCategories) {
+            superCategory.setAmount(superCategory.getAmount() + change);
+        }
+    }
+
+    public ArrayList<BudgetRevenue> findAllSubCategories() {
+        ArrayList<BudgetRevenue> subCategories = new ArrayList<>();
+        for (BudgetRevenue budgetRevenue : budgetRevenues){
+            if (budgetRevenue.getCode().startsWith(this.getCode()) && !(budgetRevenue.equals(this))){
+                subCategories.add(budgetRevenue);
+            }
+        }
+        return subCategories;
+    }
+
+    public void printAllSubCategories(){
+        ArrayList<BudgetRevenue> allSubCategories = findAllSubCategories();
+        for (BudgetRevenue subCategory : allSubCategories){
+            System.out.println(subCategory);
+        }
+    }
+
+    public ArrayList<BudgetRevenue> findNextLevelSubCategories() {
+        int level = getLevelOfHierarchy();
+        int subCategoryCodeLength;
+        switch (level){
+            case 1 -> subCategoryCodeLength = 3;
+            case 2 -> subCategoryCodeLength = 5;
+            case 3 -> subCategoryCodeLength = 7;
+            case 4 -> subCategoryCodeLength = 10;
+            default -> subCategoryCodeLength = 0;
+        }
+        ArrayList<BudgetRevenue> subCategories = new ArrayList<>();
+        for (BudgetRevenue budgetRevenue : budgetRevenues){
+            if (budgetRevenue.getCode().startsWith(this.getCode()) && (budgetRevenue.getCode().length() == subCategoryCodeLength)){
+                subCategories.add(budgetRevenue);
+            }
+        }
+        return subCategories;
+    }
+
+    public void printNextLevelSubCategories(){
+        ArrayList<BudgetRevenue> nextLevelSubCategories = findNextLevelSubCategories();
+        for (BudgetRevenue subCategory : nextLevelSubCategories){
+            System.out.println(subCategory);
+        }
+    }
+
+    public static ArrayList<BudgetRevenue> getBudgetRevenuesOfMainCategoryWithCode(String code) {
+        ArrayList<BudgetRevenue> mainRevenues = new ArrayList<>();
+        for (BudgetRevenue revenue : budgetRevenues) {
+            if (revenue.getCode().startsWith(code)) {
+                mainRevenues.add(revenue);
+            }
+        }
+        return mainRevenues;
+    }
+
+    public static void printBudgetRevenuesOfMainCategoryWithCode(String code){
+        for (BudgetRevenue revenue : getBudgetRevenuesOfMainCategoryWithCode(code)) {
+            System.out.println(revenue);
+        }
+    }
+
+    public static BudgetRevenue findRevenueWithCode (String code) {
+        for (BudgetRevenue budgetRevenue : budgetRevenues) {
+            if (budgetRevenue.getCode().equals(code)) {
+                return budgetRevenue;
+            }
+        }
+        return null;
+    }
+
     @Override
     public String toString () {
         return super.toString();
     }
 }
+
 
