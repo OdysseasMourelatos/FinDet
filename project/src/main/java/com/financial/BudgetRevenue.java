@@ -57,6 +57,16 @@ public class BudgetRevenue extends BudgetEntry{
         return findRevenueWithCode(tempCode);
     }
 
+    public ArrayList<BudgetRevenue> getSuperCategories(){
+        ArrayList<BudgetRevenue> superCategories= new ArrayList<>();
+        BudgetRevenue superCategory = findSuperCategory();
+        while (superCategory != null) {
+            superCategories.add(superCategory);
+            superCategory = superCategory.findSuperCategory();
+        }
+        return superCategories;
+    }
+
     public void setAmountOfSuperCategories(long change){
         BudgetRevenue revenueSuperCategory = findSuperCategory();
 
