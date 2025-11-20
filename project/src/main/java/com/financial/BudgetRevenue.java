@@ -95,6 +95,16 @@ public class BudgetRevenue extends BudgetEntry{
         }
     }
 
+    public ArrayList<BudgetRevenue> findAllSubCategories() {
+        ArrayList<BudgetRevenue> subCategories = new ArrayList<>();
+        for (BudgetRevenue budgetRevenue : budgetRevenues){
+            if (budgetRevenue.getCode().startsWith(this.getCode()) && !(budgetRevenue.equals(this))){
+                subCategories.add(budgetRevenue);
+            }
+        }
+        return subCategories;
+    }
+
     public static BudgetRevenue findRevenueWithCode (String code) {
         for (BudgetRevenue budgetRevenue : budgetRevenues) {
             if (budgetRevenue.getCode().equals(code)) {
