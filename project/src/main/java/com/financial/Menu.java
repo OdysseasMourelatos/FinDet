@@ -108,7 +108,7 @@ public class Menu {
             } else if(choise == 0) {
                 System.out.println("ΠΡΑΓΜΑΤΟΠΟΙΕΙΤΑΙ ΕΞΟΔΟΣ ΑΠΟ ΤΟ ΣΥΣΤΗΜΑ...");
             }
-        } while choise != 0;
+        } while (choise != 0)
     }
 }
 
