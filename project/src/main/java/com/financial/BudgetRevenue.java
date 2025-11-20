@@ -44,14 +44,37 @@ public class BudgetRevenue extends BudgetEntry{
         };
     }
 
-    public static ArrayList<BudgetRevenue> getBudgetRevenuesOfMainCategoryWithCode(String code) {
-        ArrayList<BudgetRevenue> mainRevenues = new ArrayList<>();
-        for (BudgetRevenue revenue : budgetRevenues) {
-            if (revenue.getCode().startsWith(code)) {
-                mainRevenues.add(revenue);
+    public BudgetRevenue findSuperCategory() {
+        int level = getLevelOfHierarchy();
+        String tempCode;
+        switch (level) {
+            case 2 -> tempCode = getCode().substring(0,2);
+            case 3 -> tempCode = getCode().substring(0,3);
+            case 4 -> tempCode = getCode().substring(0,5);
+            case 5 -> tempCode = getCode().substring(0,7);
+            default -> tempCode = "0";
+        }
+        return findRevenueWithCode(tempCode);
+    }
+
+    public ArrayList<BudgetRevenue> getSuperCategories(){
+        ArrayList<BudgetRevenue> superCategories= new ArrayList<>();
+        BudgetRevenue superCategory = findSuperCategory();
+        while (superCategory != null) {
+            superCategories.add(superCategory);
+            superCategory = superCategory.findSuperCategory();
+        }
+        return superCategories;
+    }
+
+    public void printSuperCategoriesTopDown(){
+        if (getSuperCategories().isEmpty()) {
+            System.out.println("Δεν υπάρχουν κατηγορίες σε υψηλότερη ιεραρχία");
+        } else {
+            for (int i = getSuperCategories().size() -1; i >= 0; i--){
+                System.out.println(getSuperCategories().get(i));
             }
         }
-        return mainRevenues;
     }
 
     public void printSuperCategoriesBottomsUp(){
