@@ -138,6 +138,22 @@ public class BudgetRevenue extends BudgetEntry{
         }
     }
 
+    public static ArrayList<BudgetRevenue> getBudgetRevenuesOfMainCategoryWithCode(String code) {
+        ArrayList<BudgetRevenue> mainRevenues = new ArrayList<>();
+        for (BudgetRevenue revenue : budgetRevenues) {
+            if (revenue.getCode().startsWith(code)) {
+                mainRevenues.add(revenue);
+            }
+        }
+        return mainRevenues;
+    }
+
+    public static void printBudgetRevenuesOfMainCategoryWithCode(String code){
+        for (BudgetRevenue revenue : getBudgetRevenuesOfMainCategoryWithCode(code)) {
+            System.out.println(revenue);
+        }
+    }
+    
     public static BudgetRevenue findRevenueWithCode (String code) {
         for (BudgetRevenue budgetRevenue : budgetRevenues) {
             if (budgetRevenue.getCode().equals(code)) {
@@ -152,4 +168,5 @@ public class BudgetRevenue extends BudgetEntry{
         return super.toString();
     }
 }
+
 
