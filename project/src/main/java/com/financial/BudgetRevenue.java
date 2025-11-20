@@ -44,6 +44,17 @@ public class BudgetRevenue extends BudgetEntry{
         };
     }
 
+    public static ArrayList<BudgetRevenue> getBudgetRevenuesOfMainCategoryWithCode(String code) {
+        ArrayList<BudgetRevenue> mainRevenues = new ArrayList<>();
+        for (BudgetRevenue revenue : budgetRevenues) {
+            if (revenue.getCode().startsWith(code)) {
+                mainRevenues.add(revenue);
+            }
+        }
+        return mainRevenues;
+    }
+
+
     @Override
     public String toString () {
         return super.toString();
