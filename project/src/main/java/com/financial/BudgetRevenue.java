@@ -44,6 +44,19 @@ public class BudgetRevenue extends BudgetEntry{
         };
     }
 
+    public BudgetRevenue findSuperCategory() {
+        int level = getLevelOfHierarchy();
+        String tempCode;
+        switch (level) {
+            case 2 -> tempCode = getCode().substring(0,2);
+            case 3 -> tempCode = getCode().substring(0,3);
+            case 4 -> tempCode = getCode().substring(0,5);
+            case 5 -> tempCode = getCode().substring(0,7);
+            default -> tempCode = "0";
+        }
+        return findRevenueWithCode(tempCode);
+    }
+
     public static BudgetRevenue findRevenueWithCode (String code) {
         for (BudgetRevenue budgetRevenue : budgetRevenues) {
             if (budgetRevenue.getCode().equals(code)) {
