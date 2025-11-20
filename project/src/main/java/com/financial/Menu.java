@@ -16,8 +16,8 @@ public class Menu {
             System.out.println("[0] Έξοδος");
             System.out.println();
             System.out.print("Επιλογή: ");
-            int choise = nextInt(); //Εισαγωγή αριθμού από τον χρήστη
-            input.nextLine()
+            int choise = input.nextInt(); //Εισαγωγή αριθμού από τον χρήστη
+            input.nextLine();
             if(choise == 1) {
                 System.out.println("=== ΦΟΡΤΩΣΗ / ΕΝΗΜΕΡΩΣΗ CSV ===");
                 System.out.println();
@@ -41,15 +41,28 @@ public class Menu {
                 System.out.print("Επιλογή: ");
 
             } else if(choise==3) {
-                System.out.println("=== ΕΙΣΑΓΩΓΗ ΑΛΛΑΓΩΝ ===");
-                System.out.println();
-                System.out.println("[1] Προσθήκη νέας γραμμής Εσόδων");
-                System.out.println("[2] Προσθήκη νέας γραμμής Εξόδων");
-                System.out.println("[3] Τροποποίηση υπάρχουσας γραμμής");
-                System.out.println("[4] Διαγραφή γραμμής");
-                System.out.println("[0] Επιστροφή στο Κύριο Μενού");
-                System.out.println();
-                System.out.print("Επιλογή: ");
+                    System.out.println("=== ΕΙΣΑΓΩΓΗ ΑΛΛΑΓΩΝ ===");
+                    System.out.println();
+                    System.out.println("[1] Τροποποίηση γραμμής");
+                    System.out.println("[2] Προσθήκη γραμμής Εσόδων");
+                    System.out.println("[3] Προσθήκη γραμμής Εξόδων");
+                    System.out.println("[4] Διαγραφή γραμμής");
+                    System.out.println("[0] Επιστροφή");
+                    System.out.println();
+                    System.out.print("Επιλογή: ");
+                    int choise2 = input.nextInt();
+                    input.nextLine();
+                    if (choise2 == 1) {
+                        System.out.println("=== ΤΡΟΠΟΠΟΙΗΣΗ ΓΡΑΜΜΗΣ ===");
+                        System.out.println();
+                        System.out.println("[1] Ισόποση αλλαγή");
+                        System.out.println("[2] Αναλογική αλλαγή");
+                        System.out.println("[3] Ποσοστιαία αλλαγή");
+                        System.out.println("[4] Χειροκίνητη αλλαγή ανά υποκατηγορία");
+                        System.out.println("[0] Επιστροφή στο προηγούμενο μενού");
+                        System.out.println();
+                        System.out.print("Επιλογή: ");
+                    }
             } else if(choise == 4) {
                 System.out.println("=== ΕΛΕΓΧΟΣ ΠΕΡΙΟΡΙΣΜΩΝ ===");
                 System.out.println();
@@ -98,3 +111,4 @@ public class Menu {
         }
     }
 }
+
