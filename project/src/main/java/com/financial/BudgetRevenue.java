@@ -44,6 +44,15 @@ public class BudgetRevenue extends BudgetEntry{
         };
     }
 
+    public static BudgetRevenue findRevenueWithCode (String code) {
+        for (BudgetRevenue budgetRevenue : budgetRevenues) {
+            if (budgetRevenue.getCode().equals(code)) {
+                return budgetRevenue;
+            }
+        }
+        return null;
+    }
+
     @Override
     public String toString () {
         return super.toString();
