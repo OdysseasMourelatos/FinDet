@@ -19,7 +19,7 @@ public class Menu {
         int choise;
         do {
             try {
-                System.out.println(BLUE + BOLD + "=========== ΚΥΡΙΟ ΜΕΝΟΥ ===========" + RESET + RESET_2);
+                System.out.println(CYAN + BOLD + "=========== ΚΥΡΙΟ ΜΕΝΟΥ ===========" + RESET + RESET_2);
                 System.out.println();
                 System.out.println(CYAN + BOLD + "[1] " + RESET + "Φόρτωση / Ενημέρωση CSV" + RESET_2);
                 System.out.println(CYAN + BOLD + "[2] " + RESET + "Προβολή Προϋπολογισμού" + RESET_2);
@@ -45,36 +45,36 @@ public class Menu {
                     input.nextLine();
                     if(choise11 == 1) {
                         System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου" + YELLOW + " (ΕΣΟΔΑ ΚΡΑΤΙΚΟΎ ΠΡΟΥΠΟΛΟΓΙΣΜΟΎ): " + RESET);
-                    String filePath = input.nextLine();
-                    //DataInput.advancedCSVReader(filePath);
-                    System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου (ΕΣΟΔΑ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ): ");
-                    filePath = input.nextLine();
-                    //DataInput.advancedCSVReader(filePath);
-                    System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου (ΕΞΟΔΑ ΤΑΚΤΙΚΟΥ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ): ");
-                    filePath = input.nextLine();
-                    //DataInput.advancedCSVReader(filePath);
-                    System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου (ΕΞΟΔΑ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ): ");
-                    filePath = input.nextLine();
-                    //DataInput.advancedCSVReader(filePath);
-                    System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου (ΚΩΔΙΚΟΣ ΚΑΙ ΟΝΟΜΑΣΙΑ ΦΟΡΕΩΝ): ");
-                    filePath = input.nextLine();
+                        String filePath = input.nextLine();
+                        //DataInput.advancedCSVReader(filePath);
+                        System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου (ΕΣΟΔΑ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ): ");
+                        filePath = input.nextLine();
+                        //DataInput.advancedCSVReader(filePath);
+                        System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου (ΕΞΟΔΑ ΤΑΚΤΙΚΟΥ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ): ");
+                        filePath = input.nextLine();
+                        //DataInput.advancedCSVReader(filePath);
+                        System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου (ΕΞΟΔΑ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ): ");
+                        filePath = input.nextLine();
+                        //DataInput.advancedCSVReader(filePath);
+                        System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου (ΚΩΔΙΚΟΣ ΚΑΙ ΟΝΟΜΑΣΙΑ ΦΟΡΕΩΝ): ");
+                        filePath = input.nextLine();
+                        System.out.println();
+                        System.out.println(GREEN + "Η ΦΟΡΤΩΣΗ ΤΩΝ ΑΡΧΕΙΩΝ ΠΡΑΓΜΑΤΟΠΟΙΗΘΗΚΕ ΕΠΙΤΥΧΩΣ!" + RESET);
+                        System.out.println();
+                    }
+                } else if(choise==2) {
+                    System.out.println("=== ΠΡΟΒΟΛΗ ΠΡΟΫΠΟΛΟΓΙΣΜΟΥ ===");
                     System.out.println();
-                    System.out.println(GREEN + "Η ΦΟΡΤΩΣΗ ΤΩΝ ΑΡΧΕΙΩΝ ΠΡΑΓΜΑΤΟΠΟΙΗΘΗΚΕ ΕΠΙΤΥΧΩΣ!" + RESET);
+                    System.out.println("[1] Προβολή συνολικών Εσόδων");
+                    System.out.println("[2] Προβολή συνολικών Εξόδων");
+                    System.out.println("[3] Προβολή ανά Υπουργείο");
+                    System.out.println("[4] Προβολή ανά Κωδικό");
+                    System.out.println("[5] Αναζήτηση στοιχείων");
+                    System.out.println("[0] Επιστροφή στο Κύριο Μενού");
                     System.out.println();
-                }
-            } else if(choise==2) {
-                System.out.println("=== ΠΡΟΒΟΛΗ ΠΡΟΫΠΟΛΟΓΙΣΜΟΥ ===");
-                System.out.println();
-                System.out.println("[1] Προβολή συνολικών Εσόδων");
-                System.out.println("[2] Προβολή συνολικών Εξόδων");
-                System.out.println("[3] Προβολή ανά Υπουργείο");
-                System.out.println("[4] Προβολή ανά Κωδικό");
-                System.out.println("[5] Αναζήτηση στοιχείων");
-                System.out.println("[0] Επιστροφή στο Κύριο Μενού");
-                System.out.println();
-                System.out.print("Επιλογή: ");
+                    System.out.print("Επιλογή: ");
 
-            } else if(choise==3) {
+                } else if(choise==3) {
                     System.out.println("=== ΕΙΣΑΓΩΓΗ ΑΛΛΑΓΩΝ ===");
                     System.out.println();
                     System.out.println("[1] Τροποποίηση Ποσού Υφιστάμενου Λογαριασμού");
@@ -154,6 +154,7 @@ public class Menu {
             } catch(IllegalArgumentException e) {
                 System.out.println(RED + "ΚΑΤΑΧΩΡΗΘΗΚΕ ΜΗ ΕΠΙΤΡΕΠΤΗ ΤΙΜΗ. ΠΑΡΑΚΑΛΩ ΕΙΣΑΓΕΤΕ ΤΙΜΗ ΕΝΤΟΣ ΤΩΝ ΟΡΙΩΝ" + RESET);
             }
-            } while (true);
-        }
+        } while (true);
     }
+}
+
