@@ -1,7 +1,10 @@
+package com.financial;
+
 import java.util.Scanner;
 public class Menu {
     public static void printmenu() {
-        Scanner input = new Scanner(System.in); //Δημιουργία αντικειμένου της κλάσης Scanner 
+        Scanner input = new Scanner(System.in); //Δημιουργία αντικειμένου της κλάσης Scanner
+        int choice;
         System.out.println("ΠΡΟΘΥΠΟΥΡΓΟΣ ΓΙΑ ΜΙΑ ΗΜΕΡΑ - BUDGET MANAGER 2026");
         do {
             System.out.println("=== ΚΥΡΙΟ ΜΕΝΟΥ ===");
@@ -16,9 +19,9 @@ public class Menu {
             System.out.println("[0] Έξοδος");
             System.out.println();
             System.out.print("Επιλογή: ");
-            int choise = input.nextInt(); //Εισαγωγή αριθμού από τον χρήστη
+            choice = input.nextInt(); //Εισαγωγή αριθμού από τον χρήστη
             input.nextLine();
-            if(choise == 1) {
+            if (choice == 1) {
                 System.out.println("=== ΦΟΡΤΩΣΗ / ΕΝΗΜΕΡΩΣΗ CSV ===");
                 System.out.println();
                 System.out.println("[1] Φόρτωση αρχείων Εσόδων");
@@ -28,7 +31,7 @@ public class Menu {
                 System.out.println("[0] Επιστροφή στο Κύριο Μενού");
                 System.out.println();
                 System.out.print("Επιλογή: ");
-            } else if(choise==2) {
+            } else if (choice == 2) {
                 System.out.println("=== ΠΡΟΒΟΛΗ ΠΡΟΫΠΟΛΟΓΙΣΜΟΥ ===");
                 System.out.println();
                 System.out.println("[1] Προβολή συνολικών Εσόδων");
@@ -40,30 +43,30 @@ public class Menu {
                 System.out.println();
                 System.out.print("Επιλογή: ");
 
-            } else if(choise==3) {
-                    System.out.println("=== ΕΙΣΑΓΩΓΗ ΑΛΛΑΓΩΝ ===");
+            } else if (choice == 3) {
+                System.out.println("=== ΕΙΣΑΓΩΓΗ ΑΛΛΑΓΩΝ ===");
+                System.out.println();
+                System.out.println("[1] Τροποποίηση γραμμής");
+                System.out.println("[2] Προσθήκη γραμμής Εσόδων");
+                System.out.println("[3] Προσθήκη γραμμής Εξόδων");
+                System.out.println("[4] Διαγραφή γραμμής");
+                System.out.println("[0] Επιστροφή");
+                System.out.println();
+                System.out.print("Επιλογή: ");
+                int choice2 = input.nextInt();
+                input.nextLine();
+                if (choice2 == 1) {
+                    System.out.println("=== ΤΡΟΠΟΠΟΙΗΣΗ ΓΡΑΜΜΗΣ ===");
                     System.out.println();
-                    System.out.println("[1] Τροποποίηση γραμμής");
-                    System.out.println("[2] Προσθήκη γραμμής Εσόδων");
-                    System.out.println("[3] Προσθήκη γραμμής Εξόδων");
-                    System.out.println("[4] Διαγραφή γραμμής");
-                    System.out.println("[0] Επιστροφή");
+                    System.out.println("[1] Ισόποση αλλαγή");
+                    System.out.println("[2] Αναλογική αλλαγή");
+                    System.out.println("[3] Ποσοστιαία αλλαγή");
+                    System.out.println("[4] Χειροκίνητη αλλαγή ανά υποκατηγορία");
+                    System.out.println("[0] Επιστροφή στο προηγούμενο μενού");
                     System.out.println();
                     System.out.print("Επιλογή: ");
-                    int choise2 = input.nextInt();
-                    input.nextLine();
-                    if (choise2 == 1) {
-                        System.out.println("=== ΤΡΟΠΟΠΟΙΗΣΗ ΓΡΑΜΜΗΣ ===");
-                        System.out.println();
-                        System.out.println("[1] Ισόποση αλλαγή");
-                        System.out.println("[2] Αναλογική αλλαγή");
-                        System.out.println("[3] Ποσοστιαία αλλαγή");
-                        System.out.println("[4] Χειροκίνητη αλλαγή ανά υποκατηγορία");
-                        System.out.println("[0] Επιστροφή στο προηγούμενο μενού");
-                        System.out.println();
-                        System.out.print("Επιλογή: ");
-                    }
-            } else if(choise == 4) {
+                }
+            } else if (choice == 4) {
                 System.out.println("=== ΕΛΕΓΧΟΣ ΠΕΡΙΟΡΙΣΜΩΝ ===");
                 System.out.println();
                 System.out.println("[1] Έλεγχος ισοσκέλισης προϋπολογισμού");
@@ -73,7 +76,7 @@ public class Menu {
                 System.out.println("[0] Επιστροφή στο Κύριο Μενού");
                 System.out.println();
                 System.out.print("Επιλογή: ");
-            } else if(choise == 5) {
+            } else if (choice == 5) {
                 System.out.println("=== ΟΙΚΟΝΟΜΙΚΗ ΑΝΑΛΥΣΗ ===");
                 System.out.println();
                 System.out.println("[1] Ανάλυση Εσόδων");
@@ -84,7 +87,7 @@ public class Menu {
                 System.out.println("[0] Επιστροφή στο Κύριο Μενού");
                 System.out.println();
                 System.out.print("Επιλογή: ");
-            } else if(choise == 6) {
+            } else if (choice == 6) {
                 System.out.println("=== ΓΡΑΦΗΜΑΤΑ & ΟΠΤΙΚΟΠΟΙΗΣΕΙΣ ===");
                 System.out.println();
                 System.out.println("[1] Γράφημα Εσόδων");
@@ -95,7 +98,7 @@ public class Menu {
                 System.out.println("[0] Επιστροφή στο Κύριο Μενού");
                 System.out.println();
                 System.out.print("Επιλογή: ");
-            } else if(choise == 7) {
+            } else if (choice == 7) {
                 System.out.println("=== EXPORT PDF / CSV ===");
                 System.out.println();
                 System.out.println("[1] Export Εσόδων σε PDF");
@@ -105,10 +108,10 @@ public class Menu {
                 System.out.println("[0] Επιστροφή στο Κύριο Μενού");
                 System.out.println();
                 System.out.print("Επιλογή: ");
-            } else if(choise == 0) {
+            } else if (choice == 0) {
                 System.out.println("ΠΡΑΓΜΑΤΟΠΟΙΕΙΤΑΙ ΕΞΟΔΟΣ ΑΠΟ ΤΟ ΣΥΣΤΗΜΑ...");
             }
-        } while (choise != 0);
+        } while (choice != 0);
     }
 }
 
