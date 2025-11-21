@@ -175,6 +175,15 @@ public class BudgetRevenue extends BudgetEntry{
         }
     }
 
+    public void setAmountOfNextLevelSubCategoriesWithPercentageAdjustment(double percentage) {
+        ArrayList<BudgetRevenue> nextLevelSubCategories = findNextLevelSubCategories();
+        if (!nextLevelSubCategories.isEmpty()) {
+            for (BudgetRevenue subCategory : nextLevelSubCategories) {
+                subCategory.setAmount((long) (subCategory.getAmount() * (1 + percentage)));
+            }
+        }
+    }
+
 
     public static ArrayList<BudgetRevenue> getBudgetRevenuesOfMainCategoryWithCode(String code) {
         ArrayList<BudgetRevenue> mainRevenues = new ArrayList<>();
