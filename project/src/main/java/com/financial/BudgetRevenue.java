@@ -154,9 +154,12 @@ public class BudgetRevenue extends BudgetEntry{
         ArrayList<BudgetRevenue> nextLevelSubCategories = findNextLevelSubCategories();
         long changeOfSubCategory = change;
         Map<String, Long> map = new HashMap<>();
+        //Βάζω τα αρχικά ποσά κάθε επόμενης κατηγορίας σε Map
         for (BudgetRevenue subCategory : nextLevelSubCategories){
             map.put(subCategory.getCode(), subCategory.getAmount());
         }
+        //Ανανεώνω τα ποσά της κάθε επόμενης κατηγορίας
+        this.setAmountOfNextLevelSubCategoriesWithEqualDistribution(changeOfSubCategory);
     }
 
 
