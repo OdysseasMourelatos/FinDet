@@ -83,12 +83,7 @@ public class DataInput {
         String description = values[1];
         String category = "ΕΣΟΔΑ";
         long amount = Long.parseLong(values[2]);
-        BudgetEntry budgetRevenue = switch (code.substring(0, 2)) {
-            case "11" -> new TaxRevenue(code, description, category, amount);
-            case "12" -> new SocialContributionsRevenue(code, description, category, amount);
-            case "15" -> new OtherCurrentRevenue(code, description, category, amount);
-            case "31" -> new FixedAssetsRevenue(code, description, category, amount);
-            default -> new BudgetRevenue(code, description, category, amount);
+        BudgetEntry budgetRevenue = new BudgetRevenue(code, description, category, amount);
         };
     }
 

@@ -5,26 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0b2062cf-b00e-403a-88ac-da3e4475457c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/BudgetRevenue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/BudgetRevenue.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/BudgetEntry.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/BudgetExpense.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/BudgetRevenue.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/DataInput.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/DataUpdate.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/Entity.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/FixedAssetsRevenue.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/Main.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/PublicInvestmentBudgetExpense.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/PublicInvestmentBudgetRevenue.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/RegularBudgetExpense.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/SocialContributionsRevenue.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/TaxRevenue.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
