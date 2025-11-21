@@ -184,6 +184,24 @@ public class BudgetRevenue extends BudgetEntry{
         }
     }
 
+    public void setAmountOfAllSubCategoriesWithPercentageAdjustment(double percentage) {
+        ArrayList<BudgetRevenue> nextLevelSubCategories = findNextLevelSubCategories();
+        try {
+            // Ανανεώνω τα ποσά της κάθε επόμενης κατηγορίας
+            this.setAmountOfNextLevelSubCategoriesWithPercentageAdjustment(percentage);
+            // Αν δεν υπάρχουν άλλες υποκατηγορίες τερματίζει
+            if (this.getCode().length() == 10) {
+                throw new RuntimeException();
+            }
+            // Για κάθε υποκατηγορία σε επόμενο επίπεδο
+            for (BudgetRevenue subCategory : nextLevelSubCategories) {
+                subCategory.setAmountOfAllSubCategoriesWithPercentageAdjustment(percentage);
+            }
+        } catch (RuntimeException e) {
+            return;
+        }
+    }
+
 
     public static ArrayList<BudgetRevenue> getBudgetRevenuesOfMainCategoryWithCode(String code) {
         ArrayList<BudgetRevenue> mainRevenues = new ArrayList<>();
