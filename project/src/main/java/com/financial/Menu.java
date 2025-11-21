@@ -1,7 +1,7 @@
 import java.util.InputMismatchException;
 import java.util.Scanner;
 public class Menu {
-    public static final String RESET = "\u001B[0m";
+    public static final String RESET = "\u001B[0m"; //προκαθορισμένο χρώμα χαρακτήρων
     public static final String BLACK = "\u001B[30m";
     public static final String RED = "\u001B[31m";
     public static final String GREEN = "\u001B[32m";
@@ -10,39 +10,41 @@ public class Menu {
     public static final String PURPLE = "\u001B[35m";
     public static final String CYAN = "\u001B[36m";
     public static final String WHITE = "\u001B[37m";
+    public static final String BOLD = "\u001B[1m";
+    public static final String RESET_2 = "\u001B[0m"; //προκαθορισμένη ένταση χρώματος χαρακτήρων
     
     public static void printmenu() {
         Scanner input = new Scanner(System.in); //Δημιουργία αντικειμένου της κλάσης Scanner 
-        System.out.println("ΠΡΟΘΥΠΟΥΡΓΟΣ ΓΙΑ ΜΙΑ ΗΜΕΡΑ - BUDGET MANAGER 2026");
+        System.out.println(PURPLE + BOLD + "ΠΡΟΘΥΠΟΥΡΓΟΣ ΓΙΑ ΜΙΑ ΗΜΕΡΑ - BUDGET MANAGER 2026" + RESET + RESET_2);
         int choise;
         do {
             try {
-            System.out.println("=== ΚΥΡΙΟ ΜΕΝΟΥ ===");
-            System.out.println();
-            System.out.println(CYAN + "[1] " + RESET + "Φόρτωση / Ενημέρωση CSV"); //CYAN
-            System.out.println("[2] Προβολή Προϋπολογισμού");
-            System.out.println("[3] Εισαγωγή Αλλαγών");
-            System.out.println("[4] Έλεγχος Περιορισμών");
-            System.out.println("[5] Οικονομική Ανάλυση");
-            System.out.println("[6] Γραφήματα & Οπτικοποιήσεις");
-            System.out.println("[7] Export PDF / CSV");
-            System.out.println("[0] Έξοδος");
-            System.out.println();
-            System.out.print("Επιλογή: ");
-            choise = input.nextInt(); //Εισαγωγή αριθμού από τον χρήστη
-            input.nextLine();
-            if(choise == 1) {
-                System.out.println(YELLOW + "=== ΦΟΡΤΩΣΗ / ΕΝΗΜΕΡΩΣΗ CSV ===" + RESET);
+                System.out.println(BLUE + BOLD + "=========== ΚΥΡΙΟ ΜΕΝΟΥ ===========" + RESET + RESET_2);
                 System.out.println();
-                System.out.println("[1] Φόρτωση αρχείων");     //CYAN
-                System.out.println("[2] Επαναφόρτωση όλων των CSV");
-                System.out.println("[0] Επιστροφή στο Κύριο Μενού");
+                System.out.println(CYAN + BOLD + "[1] " + RESET + "Φόρτωση / Ενημέρωση CSV" + RESET_2);
+                System.out.println(CYAN + BOLD + "[2] " + RESET + "Προβολή Προϋπολογισμού" + RESET_2);
+                System.out.println(CYAN + BOLD +"[3] " + RESET + "Εισαγωγή Αλλαγών" + RESET_2);
+                System.out.println(CYAN + BOLD +"[4] " + RESET + "Έλεγχος Περιορισμών" + RESET_2);
+                System.out.println(CYAN + BOLD +"[5] " + RESET + "Οικονομική Ανάλυση" + RESET_2);
+                System.out.println(CYAN + BOLD +"[6] " + RESET + "Γραφήματα & Οπτικοποιήσεις" + RESET_2);
+                System.out.println(CYAN + BOLD +"[7] " + RESET + "Export PDF / CSV" + RESET_2);
+                System.out.println(RED + BOLD + "[0] Έξοδος" + RESET + RESET_2);
                 System.out.println();
                 System.out.print("Επιλογή: ");
-                int choise11 = input.nextInt();
+                choise = input.nextInt(); //Εισαγωγή αριθμού από τον χρήστη
                 input.nextLine();
-                if(choise11 == 1) {
-                    System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου" + YELLOW + " (ΕΣΟΔΑ ΚΡΑΤΙΚΟΎ ΠΡΟΥΠΟΛΟΓΙΣΜΟΎ): " + RESET);
+                if(choise == 1) {
+                    System.out.println(YELLOW + "=== ΦΟΡΤΩΣΗ / ΕΝΗΜΕΡΩΣΗ CSV ===" + RESET);
+                    System.out.println();
+                    System.out.println(YELLOW + BOLD + "[1] " + RESET + "Φόρτωση αρχείων" + RESET + RESET_2);
+                    System.out.println(YELLOW + BOLD + "[2] " + RESET + "Επαναφόρτωση όλων των CSV" + RESET + RESET_2);
+                    System.out.println(YELLOW + BOLD + "[0] " + RESET + "Επιστροφή στο Κύριο Μενού" + RESET + RESET_2);
+                    System.out.println();
+                    System.out.print("Επιλογή: ");
+                    int choise11 = input.nextInt();
+                    input.nextLine();
+                    if(choise11 == 1) {
+                        System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου" + YELLOW + " (ΕΣΟΔΑ ΚΡΑΤΙΚΟΎ ΠΡΟΥΠΟΛΟΓΙΣΜΟΎ): " + RESET);
                     String filePath = input.nextLine();
                     //DataInput.advancedCSVReader(filePath);
                     System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου (ΕΣΟΔΑ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ): ");
@@ -118,40 +120,40 @@ public class Menu {
                 System.out.println("[5] Δείκτες οικονομικής απόδοσης");
                 System.out.println("[0] Επιστροφή στο Κύριο Μενού");
                 System.out.println();
-                System.out.print("Επιλογή: ");
-            } else if(choise == 6) {
-                System.out.println("=== ΓΡΑΦΗΜΑΤΑ & ΟΠΤΙΚΟΠΟΙΗΣΕΙΣ ===");
-                System.out.println();
-                System.out.println("[1] Γράφημα Εσόδων");
-                System.out.println("[2] Γράφημα Εξόδων");
-                System.out.println("[3] Γράφημα ανά Υπουργείο");
-                System.out.println("[4] Σύγκριση Εσόδων - Εξόδων");
-                System.out.println("[5] Custom γραφήματα");
-                System.out.println("[0] Επιστροφή στο Κύριο Μενού");
-                System.out.println();
-                System.out.print("Επιλογή: ");
-            } else if(choise == 7) {
-                System.out.println("=== EXPORT PDF / CSV ===");
-                System.out.println();
-                System.out.println("[1] Export Εσόδων σε PDF");
-                System.out.println("[2] Export Εξόδων σε PDF");
-                System.out.println("[3] Export όλων των δεδομένων σε CSV");
-                System.out.println("[4] Export ανάλυσης σε PDF");
-                System.out.println("[0] Επιστροφή στο Κύριο Μενού");
-                System.out.println();
-                System.out.print("Επιλογή: ");
-            } else if(choise == 0) {
-                System.out.println("ΠΡΑΓΜΑΤΟΠΟΙΕΙΤΑΙ ΕΞΟΔΟΣ ΑΠΟ ΤΟ ΣΥΣΤΗΜΑ...");
-                break;
-            } else {
-                throw new IllegalArgumentException();
+                    System.out.print("Επιλογή: ");
+                } else if(choise == 6) {
+                    System.out.println("=== ΓΡΑΦΗΜΑΤΑ & ΟΠΤΙΚΟΠΟΙΗΣΕΙΣ ===");
+                    System.out.println();
+                    System.out.println("[1] Γράφημα Εσόδων");
+                    System.out.println("[2] Γράφημα Εξόδων");
+                    System.out.println("[3] Γράφημα ανά Υπουργείο");
+                    System.out.println("[4] Σύγκριση Εσόδων - Εξόδων");
+                    System.out.println("[5] Custom γραφήματα");
+                    System.out.println("[0] Επιστροφή στο Κύριο Μενού");
+                    System.out.println();
+                    System.out.print("Επιλογή: ");
+                } else if(choise == 7) {
+                    System.out.println("=== EXPORT PDF / CSV ===");
+                    System.out.println();
+                    System.out.println("[1] Export Εσόδων σε PDF");
+                    System.out.println("[2] Export Εξόδων σε PDF");
+                    System.out.println("[3] Export όλων των δεδομένων σε CSV");
+                    System.out.println("[4] Export ανάλυσης σε PDF");
+                    System.out.println("[0] Επιστροφή στο Κύριο Μενού");
+                    System.out.println();
+                    System.out.print("Επιλογή: ");
+                } else if(choise == 0) {
+                    System.out.println("ΠΡΑΓΜΑΤΟΠΟΙΕΙΤΑΙ ΕΞΟΔΟΣ ΑΠΟ ΤΟ ΣΥΣΤΗΜΑ...");
+                    break;
+                } else {
+                    throw new IllegalArgumentException();
+                }
+            } catch(InputMismatchException e) {
+                System.out.println(RED + "ΚΑΤΑΧΩΡΗΘΗΚΕ ΜΗ ΕΠΙΤΡΕΠΤΗ ΤΙΜΗ. ΠΑΡΑΚΑΛΩ ΕΙΣΑΓΕΤΕ ΤΙΜΗ ΕΝΤΟΣ ΤΩΝ ΟΡΙΩΝ" + RESET);
+                input.nextLine();
+            } catch(IllegalArgumentException e) {
+                System.out.println(RED + "ΚΑΤΑΧΩΡΗΘΗΚΕ ΜΗ ΕΠΙΤΡΕΠΤΗ ΤΙΜΗ. ΠΑΡΑΚΑΛΩ ΕΙΣΑΓΕΤΕ ΤΙΜΗ ΕΝΤΟΣ ΤΩΝ ΟΡΙΩΝ" + RESET);
             }
-        } catch(InputMismatchException e) {
-            System.out.println(RED + "ΚΑΤΑΧΩΡΗΘΗΚΕ ΜΗ ΕΠΙΤΡΕΠΤΗ ΤΙΜΗ. ΠΑΡΑΚΑΛΩ ΕΙΣΑΓΕΤΕ ΤΙΜΗ ΕΝΤΟΣ ΤΩΝ ΟΡΙΩΝ" + RESET);
-            input.nextLine();
-        } catch(IllegalArgumentException e) {
-            System.out.println(RED + "ΚΑΤΑΧΩΡΗΘΗΚΕ ΜΗ ΕΠΙΤΡΕΠΤΗ ΤΙΜΗ. ΠΑΡΑΚΑΛΩ ΕΙΣΑΓΕΤΕ ΤΙΜΗ ΕΝΤΟΣ ΤΩΝ ΟΡΙΩΝ" + RESET);
+            } while (true);
         }
-        } while (true);
     }
-}
