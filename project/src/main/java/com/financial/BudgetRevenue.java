@@ -1,7 +1,9 @@
 package com.financial;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class BudgetRevenue extends BudgetEntry{
@@ -151,6 +153,10 @@ public class BudgetRevenue extends BudgetEntry{
     public void setAmountOfAllSubCategoriesWithEqualDistribution(long change){
         ArrayList<BudgetRevenue> nextLevelSubCategories = findNextLevelSubCategories();
         long changeOfSubCategory = change;
+        Map<String, Long> map = new HashMap<>();
+        for (BudgetRevenue subCategory : nextLevelSubCategories){
+            map.put(subCategory.getCode(), subCategory.getAmount());
+        }
     }
 
 
