@@ -10,6 +10,7 @@ public class Menu {
     public static final String PURPLE = "\u001B[35m";
     public static final String CYAN = "\u001B[36m";
     public static final String WHITE = "\u001B[37m";
+    public static final String ORANGE = "\u001B[38;5;208m";
     public static final String BOLD = "\u001B[1m";
     public static final String RESET_2 = "\u001B[0m"; //προκαθορισμένη ένταση χρώματος χαρακτήρων
     
@@ -23,12 +24,12 @@ public class Menu {
                 System.out.println();
                 System.out.println(CYAN + BOLD + "[1] " + RESET + "Φόρτωση / Ενημέρωση CSV" + RESET_2);
                 System.out.println(CYAN + BOLD + "[2] " + RESET + "Προβολή Προϋπολογισμού" + RESET_2);
-                System.out.println(CYAN + BOLD +"[3] " + RESET + "Εισαγωγή Αλλαγών" + RESET_2);
-                System.out.println(CYAN + BOLD +"[4] " + RESET + "Έλεγχος Περιορισμών" + RESET_2);
-                System.out.println(CYAN + BOLD +"[5] " + RESET + "Οικονομική Ανάλυση" + RESET_2);
-                System.out.println(CYAN + BOLD +"[6] " + RESET + "Γραφήματα & Οπτικοποιήσεις" + RESET_2);
-                System.out.println(CYAN + BOLD +"[7] " + RESET + "Export PDF / CSV" + RESET_2);
-                System.out.println(RED + BOLD + "[0] Έξοδος" + RESET + RESET_2);
+                System.out.println(CYAN + BOLD + "[3] " + RESET + "Εισαγωγή Αλλαγών" + RESET_2);
+                System.out.println(CYAN + BOLD + "[4] " + RESET + "Έλεγχος Περιορισμών" + RESET_2);
+                System.out.println(CYAN + BOLD + "[5] " + RESET + "Οικονομική Ανάλυση" + RESET_2);
+                System.out.println(CYAN + BOLD + "[6] " + RESET + "Γραφήματα & Οπτικοποιήσεις" + RESET_2);
+                System.out.println(CYAN + BOLD + "[7] " + RESET + "Export PDF / CSV" + RESET_2);
+                System.out.println(RED + BOLD +  "[0] Έξοδος" + RESET + RESET_2);
                 System.out.println();
                 System.out.print("Επιλογή: ");
                 choise = input.nextInt(); //Εισαγωγή αριθμού από τον χρήστη
@@ -157,4 +158,3 @@ public class Menu {
         } while (true);
     }
 }
-
