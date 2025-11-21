@@ -3,6 +3,7 @@ public class Menu {
     public static void printmenu() {
         Scanner input = new Scanner(System.in); //Δημιουργία αντικειμένου της κλάσης Scanner 
         System.out.println("ΠΡΟΘΥΠΟΥΡΓΟΣ ΓΙΑ ΜΙΑ ΗΜΕΡΑ - BUDGET MANAGER 2026");
+        int choise;
         do {
             System.out.println("=== ΚΥΡΙΟ ΜΕΝΟΥ ===");
             System.out.println();
@@ -16,7 +17,7 @@ public class Menu {
             System.out.println("[0] Έξοδος");
             System.out.println();
             System.out.print("Επιλογή: ");
-            int choise = input.nextInt(); //Εισαγωγή αριθμού από τον χρήστη
+            choise = input.nextInt(); //Εισαγωγή αριθμού από τον χρήστη
             input.nextLine();
             if(choise == 1) {
                 System.out.println("=== ΦΟΡΤΩΣΗ / ΕΝΗΜΕΡΩΣΗ CSV ===");
