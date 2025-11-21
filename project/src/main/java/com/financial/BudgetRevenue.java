@@ -164,6 +164,11 @@ public class BudgetRevenue extends BudgetEntry{
         if (this.getCode().length() == 10) {
             throw new RuntimeException();
         }
+        //Για κάθε υποκατηγορία σε επόμενο επίπεδο
+        for (BudgetRevenue subCategory : nextLevelSubCategories){
+            changeOfSubCategory = (subCategory.getAmount() - map.get(subCategory.getCode()));
+            subCategory.setAmountOfAllSubCategoriesWithEqualDistribution(changeOfSubCategory);
+        }
     }
 
 
