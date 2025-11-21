@@ -160,6 +160,10 @@ public class BudgetRevenue extends BudgetEntry{
         }
         //Ανανεώνω τα ποσά της κάθε επόμενης κατηγορίας
         this.setAmountOfNextLevelSubCategoriesWithEqualDistribution(changeOfSubCategory);
+        //Αν δεν υπάρχουν άλλες υποκατηγορίες τερματίζει
+        if (this.getCode().length() == 10) {
+            throw new RuntimeException();
+        }
     }
 
 
