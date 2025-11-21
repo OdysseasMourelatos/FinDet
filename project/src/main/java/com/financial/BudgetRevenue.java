@@ -153,21 +153,25 @@ public class BudgetRevenue extends BudgetEntry{
     public void setAmountOfAllSubCategoriesWithEqualDistribution(long change){
         ArrayList<BudgetRevenue> nextLevelSubCategories = findNextLevelSubCategories();
         long changeOfSubCategory = change;
-        Map<String, Long> map = new HashMap<>();
-        //Βάζω τα αρχικά ποσά κάθε επόμενης κατηγορίας σε Map
-        for (BudgetRevenue subCategory : nextLevelSubCategories){
-            map.put(subCategory.getCode(), subCategory.getAmount());
-        }
-        //Ανανεώνω τα ποσά της κάθε επόμενης κατηγορίας
-        this.setAmountOfNextLevelSubCategoriesWithEqualDistribution(changeOfSubCategory);
-        //Αν δεν υπάρχουν άλλες υποκατηγορίες τερματίζει
-        if (this.getCode().length() == 10) {
-            throw new RuntimeException();
-        }
-        //Για κάθε υποκατηγορία σε επόμενο επίπεδο
-        for (BudgetRevenue subCategory : nextLevelSubCategories){
-            changeOfSubCategory = (subCategory.getAmount() - map.get(subCategory.getCode()));
-            subCategory.setAmountOfAllSubCategoriesWithEqualDistribution(changeOfSubCategory);
+        try {
+            //Βάζω τα αρχικά ποσά κάθε επόμενης κατηγορίας σε Map
+            Map<String, Long> map = new HashMap<>();
+            for (BudgetRevenue subCategory : nextLevelSubCategories){
+                map.put(subCategory.getCode(), subCategory.getAmount());
+            }
+            //Ανανεώνω τα ποσά της κάθε επόμενης κατηγορίας
+            this.setAmountOfNextLevelSubCategoriesWithEqualDistribution(changeOfSubCategory);
+            //Αν δεν υπάρχουν άλλες υποκατηγορίες τερματίζει
+            if (this.getCode().length() == 10) {
+                throw new RuntimeException();
+            }
+            //Για κάθε υποκατηγορία σε επόμενο επίπεδο
+            for (BudgetRevenue subCategory : nextLevelSubCategories){
+                changeOfSubCategory = (subCategory.getAmount() - map.get(subCategory.getCode()));
+                subCategory.setAmountOfAllSubCategoriesWithEqualDistribution(changeOfSubCategory);
+            }
+        } catch (RuntimeException e) {
+            return;
         }
     }
 
