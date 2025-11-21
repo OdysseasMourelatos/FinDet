@@ -137,7 +137,7 @@ public class BudgetRevenue extends BudgetEntry{
             System.out.println(subCategory);
         }
     }
-    
+
     public void setAmountOfNextLevelSubCategoriesWithEqualDistribution(long change){
         ArrayList<BudgetRevenue> nextLevelSubCategories = findNextLevelSubCategories();
         if (!nextLevelSubCategories.isEmpty()) {
@@ -147,6 +147,12 @@ public class BudgetRevenue extends BudgetEntry{
             }
         }
     }
+
+    public void setAmountOfAllSubCategoriesWithEqualDistribution(long change){
+        ArrayList<BudgetRevenue> nextLevelSubCategories = findNextLevelSubCategories();
+        long changeOfSubCategory = change;
+    }
+
 
     public static ArrayList<BudgetRevenue> getBudgetRevenuesOfMainCategoryWithCode(String code) {
         ArrayList<BudgetRevenue> mainRevenues = new ArrayList<>();
