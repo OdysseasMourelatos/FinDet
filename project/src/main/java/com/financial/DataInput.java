@@ -84,7 +84,6 @@ public class DataInput {
         String category = "ΕΣΟΔΑ";
         long amount = Long.parseLong(values[2]);
         BudgetEntry budgetRevenue = new BudgetRevenue(code, description, category, amount);
-        };
     }
 
     private static void createPublicInvestmentBudgetRevenueFromCSV(String [] values) {
