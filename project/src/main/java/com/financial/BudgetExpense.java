@@ -14,13 +14,13 @@ public class BudgetExpense extends BudgetEntry{
     public BudgetExpense(String code, String description, String category, long amount, boolean includeList) {
         super(code, description, category, amount);
     }
-    
+
     public static long calculateSum(){
-        long sum = 0;
-        for (BudgetExpense expense : expenses) {
-            sum += expense.getAmount();
+        long totalExpensesSum = 0;
+        for (BudgetExpense expense : getSumOfEveryCategory()) {
+            totalExpensesSum += expense.getAmount();
         }
-        return sum;
+        return totalExpensesSum;
     }
 
     public static ArrayList<BudgetExpense> getSumOfEveryCategory(){
