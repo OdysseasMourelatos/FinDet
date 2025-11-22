@@ -37,7 +37,7 @@ public class BudgetExpense extends BudgetEntry{
                     sum+=expense.getAmount();
                 }
             }
-            expensesPerCategory.add(new BudgetExpense(categoryCode, findExpenseWithCode(categoryCode).getDescription(), "ΕΞΟΔΑ", sum));
+            expensesPerCategory.add(new BudgetExpense(categoryCode, findExpenseWithCode(categoryCode).getDescription(), "ΕΞΟΔΑ", sum, false));
         }
         return expensesPerCategory;
     }
