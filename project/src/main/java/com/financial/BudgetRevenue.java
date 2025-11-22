@@ -223,6 +223,16 @@ public class BudgetRevenue extends BudgetEntry{
         }
     }
 
+    public static long calculateSum() {
+        long sum = 0;
+        for (BudgetRevenue budgetRevenue : budgetRevenues) {
+            if (budgetRevenue.getCode().length() == 2) {
+                sum += budgetRevenue.getAmount();
+            }
+        }
+        return sum;
+    }
+    
     public static BudgetRevenue findRevenueWithCode (String code) {
         for (BudgetRevenue budgetRevenue : budgetRevenues) {
             if (budgetRevenue.getCode().equals(code)) {
