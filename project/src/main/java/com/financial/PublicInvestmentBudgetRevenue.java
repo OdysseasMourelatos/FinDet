@@ -36,6 +36,14 @@ public class PublicInvestmentBudgetRevenue extends BudgetEntry{
         ListHandling.printList(getAllPublicInvestmentBudgetRevenues());
     }
 
+    public static void printPublicInvestmentBudgetNationalRevenues(){
+        ListHandling.printList(getPublicInvestmentBudgetNationalRevenues());
+    }
+
+    public static void printPublicInvestmentBudgetCoFundedRevenues(){
+        ListHandling.printList(getPublicInvestmentBudgetCoFundedRevenues());
+    }
+
     public String getType(){
         return type;
     }
