@@ -47,9 +47,7 @@ public class BudgetExpense extends BudgetEntry{
     }
 
     public static void printExpenses() {
-        for (BudgetExpense expense : expenses) {
-            System.out.println(expense);
-        }
+        ListHandling.printList(expenses);
     }
 
     public static BudgetExpense findExpenseWithCode (String code) {
