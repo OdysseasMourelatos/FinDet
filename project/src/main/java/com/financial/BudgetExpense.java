@@ -43,10 +43,7 @@ public class BudgetExpense extends BudgetEntry{
     }
 
     public static void printSumOfEveryCategory(){
-        ArrayList <BudgetExpense> categorySums = getSumOfEveryCategory();
-        for (BudgetExpense expense : categorySums) {
-            System.out.println(expense);
-        }
+        ListHandling.printList(getSumOfEveryCategory());
     }
 
     public static void printExpenses() {
