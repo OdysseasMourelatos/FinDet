@@ -24,6 +24,14 @@ public class PublicInvestmentBudgetRevenue extends BudgetEntry{
         return publicInvestmentBudgetRevenues;
     }
 
+    public static ArrayList<PublicInvestmentBudgetRevenue> getPublicInvestmentBudgetNationalRevenues(){
+        return publicInvestmentBudgetNationalRevenues;
+    }
+
+    public static ArrayList<PublicInvestmentBudgetRevenue> getPublicInvestmentBudgetCoFundedRevenues(){
+        return publicInvestmentBudgetCoFundedRevenues;
+    }
+
     public static void printAllPublicInvestmentBudgetRevenues(){
         ListHandling.printList(getAllPublicInvestmentBudgetRevenues());
     }
