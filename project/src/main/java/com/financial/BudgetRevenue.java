@@ -233,6 +233,12 @@ public class BudgetRevenue extends BudgetEntry{
         return sum;
     }
     
+    public void implementChangesOfEqualDistribution(long change){
+        setAmountOfSuperCategories(change);
+        setAmountOfAllSubCategoriesWithEqualDistribution(change);
+        setAmount(getAmount() + change);
+    }
+
     public static BudgetRevenue findRevenueWithCode (String code) {
         for (BudgetRevenue budgetRevenue : budgetRevenues) {
             if (budgetRevenue.getCode().equals(code)) {
