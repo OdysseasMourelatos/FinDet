@@ -2,9 +2,7 @@ package com.financial;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class BudgetRevenue extends BudgetEntry{
 
@@ -25,8 +23,14 @@ public class BudgetRevenue extends BudgetEntry{
         }
     }
 
-    public static List<BudgetRevenue> getMainBudgetRevenues() {
-        return budgetRevenues.stream().filter(r -> r.getCode().length() == 2).collect(Collectors.toList());
+    public static ArrayList<BudgetRevenue> getMainBudgetRevenues() {
+        ArrayList<BudgetRevenue> mainBudgetRevenues = new ArrayList<>();
+        for (BudgetRevenue budgetRevenue : budgetRevenues){
+            if (budgetRevenue.getCode().length()== 2) {
+                mainBudgetRevenues.add(budgetRevenue);
+            }
+        }
+        return mainBudgetRevenues;
     }
 
     public static void printMainBudgetRevenues(){
