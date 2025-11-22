@@ -232,11 +232,17 @@ public class BudgetRevenue extends BudgetEntry{
         }
         return sum;
     }
-    
+
     public void implementChangesOfEqualDistribution(long change){
         setAmountOfSuperCategories(change);
         setAmountOfAllSubCategoriesWithEqualDistribution(change);
         setAmount(getAmount() + change);
+    }
+
+    public void implementChangesOfPercentageAdjustment(double percentage){
+        setAmountOfSuperCategories((long) (getAmount()*(percentage)));
+        setAmountOfAllSubCategoriesWithPercentageAdjustment(percentage);
+        setAmount((long) (getAmount()*(1+percentage)));
     }
 
     public static BudgetRevenue findRevenueWithCode (String code) {
