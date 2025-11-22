@@ -3,13 +3,18 @@ package com.financial;
 import java.util.ArrayList;
 
 public class PublicInvestmentBudgetRevenue extends BudgetEntry{
-    protected static ArrayList<PublicInvestmentBudgetRevenue> publicInvestmentBudgetRevenues = new ArrayList<>();
+    protected static ArrayList<PublicInvestmentBudgetRevenue> publicInvestmentBudgetNationalRevenues = new ArrayList<>();
+    protected static ArrayList<PublicInvestmentBudgetRevenue> publicInvestmentBudgetCoFundedRevenues = new ArrayList<>();
     private String type;
 
     public PublicInvestmentBudgetRevenue(String code, String description, String category, String type, long amount) {
         super(code, description, category, amount);
         this.type = type;
-        publicInvestmentBudgetRevenues.add(this);
+        if (type.equals("ΕΘΝΙΚΟ") || type.equals("ΕΘΝΙΚΟ ΣΚΕΛΟΣ")) {
+            publicInvestmentBudgetNationalRevenues.add(this);
+        } else if (type.equals("ΣΥΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ") || type.equals("ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ ΣΚΕΛΟΣ")){
+            publicInvestmentBudgetCoFundedRevenues.add(this);
+        }
     }
 
     public static ArrayList<PublicInvestmentBudgetRevenue> getAllPublicInvestmentBudgetRevenues() {
