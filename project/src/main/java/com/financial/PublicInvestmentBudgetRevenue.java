@@ -25,9 +25,7 @@ public class PublicInvestmentBudgetRevenue extends BudgetEntry{
     }
 
     public static void printAllPublicInvestmentBudgetRevenues(){
-        for (PublicInvestmentBudgetRevenue publicInvestmentBudgetRevenue : publicInvestmentBudgetRevenues) {
-            System.out.println(publicInvestmentBudgetRevenue);
-        }
+        ListHandling.printList(getAllPublicInvestmentBudgetRevenues());
     }
 
     public String getType(){
