@@ -18,9 +18,7 @@ public class BudgetRevenue extends BudgetEntry{
     }
 
     public static void printAllBudgetRevenues(){
-        for (BudgetRevenue budgetRevenue : budgetRevenues) {
-            System.out.println(budgetRevenue);
-        }
+        ListHandling.printList(budgetRevenues);
     }
 
     public static ArrayList<BudgetRevenue> getMainBudgetRevenues() {
@@ -34,9 +32,7 @@ public class BudgetRevenue extends BudgetEntry{
     }
 
     public static void printMainBudgetRevenues(){
-        for (BudgetRevenue budgetRevenue : getMainBudgetRevenues()) {
-            System.out.println(budgetRevenue);
-        }
+        ListHandling.printList(getMainBudgetRevenues());
     }
 
     public int getLevelOfHierarchy() {
@@ -87,9 +83,7 @@ public class BudgetRevenue extends BudgetEntry{
         if (getSuperCategories().isEmpty()) {
             System.out.println("Δεν υπάρχουν κατηγορίες σε υψηλότερη ιεραρχία");
         } else {
-            for (BudgetRevenue superCategory : getSuperCategories()){
-                System.out.println(superCategory);
-            }
+            ListHandling.printList(getSuperCategories());
         }
     }
 
@@ -113,9 +107,7 @@ public class BudgetRevenue extends BudgetEntry{
 
     public void printAllSubCategories(){
         ArrayList<BudgetRevenue> allSubCategories = findAllSubCategories();
-        for (BudgetRevenue subCategory : allSubCategories){
-            System.out.println(subCategory);
-        }
+        ListHandling.printList(allSubCategories);
     }
 
     public ArrayList<BudgetRevenue> findNextLevelSubCategories() {
@@ -139,9 +131,7 @@ public class BudgetRevenue extends BudgetEntry{
 
     public void printNextLevelSubCategories(){
         ArrayList<BudgetRevenue> nextLevelSubCategories = findNextLevelSubCategories();
-        for (BudgetRevenue subCategory : nextLevelSubCategories){
-            System.out.println(subCategory);
-        }
+        ListHandling.printList(findNextLevelSubCategories());
     }
 
     public void setAmountOfNextLevelSubCategoriesWithEqualDistribution(long change){
@@ -206,7 +196,6 @@ public class BudgetRevenue extends BudgetEntry{
         }
     }
 
-
     public static ArrayList<BudgetRevenue> getBudgetRevenuesOfMainCategoryWithCode(String code) {
         ArrayList<BudgetRevenue> mainRevenues = new ArrayList<>();
         for (BudgetRevenue revenue : budgetRevenues) {
@@ -218,9 +207,7 @@ public class BudgetRevenue extends BudgetEntry{
     }
 
     public static void printBudgetRevenuesOfMainCategoryWithCode(String code){
-        for (BudgetRevenue revenue : getBudgetRevenuesOfMainCategoryWithCode(code)) {
-            System.out.println(revenue);
-        }
+        ListHandling.printList(getBudgetRevenuesOfMainCategoryWithCode(code));
     }
 
     public static long calculateSum() {
@@ -259,5 +246,3 @@ public class BudgetRevenue extends BudgetEntry{
         return super.toString();
     }
 }
-
-
