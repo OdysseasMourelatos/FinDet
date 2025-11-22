@@ -41,11 +41,15 @@ public abstract class BudgetEntry {
         }
     }
 
-    public static ArrayList<BudgetEntry> mergeLists() {
+    public static ArrayList<BudgetEntry> mergeListsOfMainRevenuesAndMainExpenses() {
         ArrayList<BudgetEntry> merged = new ArrayList<>();
         merged.addAll(BudgetRevenue.getMainBudgetRevenues());
         merged.addAll(BudgetExpense.getSumOfEveryCategory());
         return merged;
+    }
+
+    public static void printMergedListsOfMainRevenuesAndMainExpenses(){
+        ListHandling.printList(mergeListsOfMainRevenuesAndMainExpenses());
     }
 
     @Override
