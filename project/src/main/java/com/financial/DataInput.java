@@ -92,9 +92,7 @@ public class DataInput {
         String category = "ΕΣΟΔΑ";
         String type = values[2];
         long amount = Long.parseLong(values[3]);
-        BudgetEntry publicInvestmentBudgetRevenue = switch (code.substring(0, 2)) {
-            default -> new PublicInvestmentBudgetRevenue(code, description, category, type, amount);
-        };
+        BudgetEntry publicInvestmentBudgetRevenue = new PublicInvestmentBudgetRevenue(code, description, category, type, amount);
     }
 
     private static void createRegularBudgetExpenseFromCSV(String[] values) {
