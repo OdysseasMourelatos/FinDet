@@ -18,6 +18,9 @@ public class PublicInvestmentBudgetRevenue extends BudgetEntry{
     }
 
     public static ArrayList<PublicInvestmentBudgetRevenue> getAllPublicInvestmentBudgetRevenues() {
+        ArrayList<PublicInvestmentBudgetRevenue> publicInvestmentBudgetRevenues = new ArrayList<>();
+        publicInvestmentBudgetRevenues.addAll(publicInvestmentBudgetNationalRevenues);
+        publicInvestmentBudgetRevenues.addAll(publicInvestmentBudgetCoFundedRevenues);
         return publicInvestmentBudgetRevenues;
     }
 
