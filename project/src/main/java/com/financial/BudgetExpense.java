@@ -11,6 +11,10 @@ public class BudgetExpense extends BudgetEntry{
         expenses.add(this);
     }
 
+    public BudgetExpense(String code, String description, String category, long amount, boolean includeList) {
+        super(code, description, category, amount);
+    }
+    
     public static long calculateSum(){
         long sum = 0;
         for (BudgetExpense expense : expenses) {
