@@ -1,6 +1,8 @@
 package com.financial;
 
 import java.util.ArrayList;
+import de.vandermeer.asciitable.AsciiTable;
+import de.vandermeer.asciitable.CWC_FixedWidth;
 
 public abstract class BudgetEntry {
     private final String code;
@@ -54,6 +56,13 @@ public abstract class BudgetEntry {
 
     public static void printWithAsciiTable(ArrayList<BudgetEntry> entries) {
         AsciiTable at = new AsciiTable();
+
+        at.getRenderer().setCWC(new CWC_FixedWidth()
+                .add(10)
+                .add(60)
+                .add(15)
+                .add(20)
+        );
 
         at.addRule();
         at.addRow("Κωδικός", "Περιγραφή", "Κατηγορία", "Ποσό");
