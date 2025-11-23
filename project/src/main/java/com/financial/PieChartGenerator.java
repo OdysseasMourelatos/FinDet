@@ -1,4 +1,5 @@
 package con.financial;
+package org.example;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtils;
@@ -46,3 +47,4 @@ public class PieChartGenerator {
     }
 
 }
+
