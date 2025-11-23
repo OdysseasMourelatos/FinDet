@@ -1,8 +1,6 @@
 package com.financial;
 
 import java.util.ArrayList;
-import de.vandermeer.asciitable.AsciiTable;
-import de.vandermeer.asciitable.CWC_FixedWidth;
 
 public abstract class BudgetEntry {
     private final String code;
@@ -52,33 +50,6 @@ public abstract class BudgetEntry {
 
     public static void printMergedListsOfMainRevenuesAndMainExpenses(){
         ListHandling.printList(mergeListsOfMainRevenuesAndMainExpenses());
-    }
-
-    public static void printWithAsciiTable(ArrayList<BudgetEntry> entries) {
-        AsciiTable at = new AsciiTable();
-
-        at.getRenderer().setCWC(new CWC_FixedWidth()
-                .add(20)
-                .add(60)
-                .add(15)
-                .add(20)
-        );
-
-        at.addRule();
-        at.addRow("Κωδικός Ταξινόμησης", "Ονομασία", "Κατηγορία", "Ποσό");
-        at.addRule();
-
-        for (BudgetEntry entry : entries) {
-            at.addRow(
-                    entry.getCode(),
-                    entry.getDescription(),
-                    entry.getCategory(),
-                    String.format("%,d", entry.getAmount())
-            );
-            at.addRule();
-        }
-
-        System.out.println(at.render());
     }
 
     @Override

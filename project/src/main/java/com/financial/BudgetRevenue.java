@@ -21,8 +21,8 @@ public class BudgetRevenue extends BudgetEntry{
         ListHandling.printList(budgetRevenues);
     }
 
-    public static ArrayList<BudgetEntry> getMainBudgetRevenues() {
-        ArrayList<BudgetEntry> mainBudgetRevenues = new ArrayList<>();
+    public static ArrayList<BudgetRevenue> getMainBudgetRevenues() {
+        ArrayList<BudgetRevenue> mainBudgetRevenues = new ArrayList<>();
         for (BudgetEntry budgetRevenue : budgetRevenues){
             if (budgetRevenue.getCode().length()== 2) {
                 mainBudgetRevenues.add(budgetRevenue);
@@ -32,7 +32,7 @@ public class BudgetRevenue extends BudgetEntry{
     }
 
     public static void printMainBudgetRevenues(){
-        BudgetEntry.printWithAsciiTable(getMainBudgetRevenues());
+        DataOutput.printWithAsciiTable(getMainBudgetRevenues());
     }
 
     public int getLevelOfHierarchy() {
