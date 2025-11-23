@@ -73,7 +73,7 @@ public abstract class BudgetEntry {
                     entry.getCode(),
                     entry.getDescription(),
                     entry.getCategory(),
-                    entry.getAmount()
+                    String.format("%,d", entry.getAmount())
             );
             at.addRule();
         }
