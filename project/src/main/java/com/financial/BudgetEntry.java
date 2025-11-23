@@ -52,6 +52,26 @@ public abstract class BudgetEntry {
         ListHandling.printList(mergeListsOfMainRevenuesAndMainExpenses());
     }
 
+    public static void printWithAsciiTable(ArrayList<BudgetEntry> entries) {
+        AsciiTable at = new AsciiTable();
+
+        at.addRule();
+        at.addRow("Κωδικός", "Περιγραφή", "Κατηγορία", "Ποσό");
+        at.addRule();
+
+        for (BudgetEntry entry : entries) {
+            at.addRow(
+                    entry.getCode(),
+                    entry.getDescription(),
+                    entry.getCategory(),
+                    entry.getAmount()
+            );
+            at.addRule();
+        }
+
+        System.out.println(at.render());
+    }
+
     @Override
     public String toString(){
         return "Code: " + code + ", Description: " + description + ", Category: " + category + ", Amount: " + String.format("%,d", amount);

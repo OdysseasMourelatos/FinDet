@@ -27,6 +27,12 @@
       <artifactId>opencsv</artifactId>
       <version>5.7.1</version>
     </dependency>
+
+      <dependency>
+          <groupId>de.vandermeer</groupId>
+          <artifactId>asciitable</artifactId>
+          <version>0.3.2</version>
+      </dependency>
   </dependencies>
 
   <build>
