@@ -9,6 +9,7 @@ public class Main {
         String filePath = s.nextLine();
         DataInput.advancedCSVReader(filePath);
         s = new Scanner(System.in);
+        BudgetRevenue.printMainBudgetRevenues();
         System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου (ΕΞΟΔΑ ΤΑΚΤΙΚΟΥ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ): ");
         filePath = s.nextLine();
         DataInput.advancedCSVReader(filePath);
