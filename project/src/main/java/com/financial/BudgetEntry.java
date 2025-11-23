@@ -58,14 +58,14 @@ public abstract class BudgetEntry {
         AsciiTable at = new AsciiTable();
 
         at.getRenderer().setCWC(new CWC_FixedWidth()
-                .add(10)
+                .add(20)
                 .add(60)
                 .add(15)
                 .add(20)
         );
 
         at.addRule();
-        at.addRow("Κωδικός", "Περιγραφή", "Κατηγορία", "Ποσό");
+        at.addRow("Κωδικός Ταξινόμησης", "Ονομασία", "Κατηγορία", "Ποσό");
         at.addRule();
 
         for (BudgetEntry entry : entries) {
