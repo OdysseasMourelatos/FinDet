@@ -15,30 +15,30 @@ import java.util.Map;
 public class PieChartGenerator {
 
 
-    static Map<String, Long> MainRevenueMap = new HashMap<>();
+    static Map<String, Long> InstanceMap = new HashMap<>();
 
-    public static Map<String,Long> fillMap(){
-        for (BudgetRevenue budgetRevenue : BudgetRevenue.getMainBudgetRevenues()) {
+    public static Map<String,Long> fillMap(Arraylist<? extends BudgetEnrries> entry) {
+        for (BudgetEntry entry : entries) {
             if (budgetRevenue.getCode().length()== 2) {
-                MainRevenueMap.put(budgetRevenue.getDescription(),budgetRevenue.getAmount());
+                InstanceMap.put(entry.getDescription(),entry.getAmount());
             }
         }
-        return MainRevenueMap;
+        return InstanceMap;
     }
 
-    private static JFreeChart createRevenuePie (Map<String, Long> MainRevenueMap) throws IOException {
+    private static JFreeChart createRevenuePie (Map<String, Long> InstanceMap) throws IOException {
         DefaultPieDataset<String> dataset = new DefaultPieDataset<>();
-        for (Map.Entry<String, Long> entry : MainRevenueMap.entrySet()) {
+        for (Map.Entry<String, Long> entry : InstanceMap.entrySet()) {
             dataset.setValue(entry.getKey(), entry.getValue());
         }
-        JFreeChart chart = ChartFactory.createPieChart("Main Revenues distribution", dataset);
+        JFreeChart chart = ChartFactory.createPieChart(title, dataset);
         ChartUtils.saveChartAsPNG(new File("revenue_pie_chart.png"), chart, 800, 600);
         return chart;
     }
 
-    public static void generateChart() {
+    public static void generateChart(Arraylist<? extends BudgetEnrries> entry, String title) {
         try {
-            fillMap();
+            fillMap(entries);
             createRevenuePie(MainRevenueMap);
             System.out.println("Το διάγραμμα δημιουργήθηκε: revenue_pie_chart.png");
         } catch (IOException e) {
@@ -47,4 +47,5 @@ public class PieChartGenerator {
     }
 
 }
+
 
