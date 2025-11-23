@@ -33,15 +33,15 @@ public class PublicInvestmentBudgetRevenue extends BudgetEntry{
     }
 
     public static void printAllPublicInvestmentBudgetRevenues(){
-        ListHandling.printList(getAllPublicInvestmentBudgetRevenues());
+        DataOutput.printWithAsciiTable(getAllPublicInvestmentBudgetRevenues());
     }
 
     public static void printPublicInvestmentBudgetNationalRevenues(){
-        ListHandling.printList(getPublicInvestmentBudgetNationalRevenues());
+        DataOutput.printWithAsciiTable(getPublicInvestmentBudgetNationalRevenues());
     }
 
     public static void printPublicInvestmentBudgetCoFundedRevenues(){
-        ListHandling.printList(getPublicInvestmentBudgetCoFundedRevenues());
+        DataOutput.printWithAsciiTable(getPublicInvestmentBudgetCoFundedRevenues());
     }
 
     public String getType(){

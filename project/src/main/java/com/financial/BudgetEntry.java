@@ -49,7 +49,7 @@ public abstract class BudgetEntry {
     }
 
     public static void printMergedListsOfMainRevenuesAndMainExpenses(){
-        ListHandling.printList(mergeListsOfMainRevenuesAndMainExpenses());
+        DataOutput.printWithAsciiTable(mergeListsOfMainRevenuesAndMainExpenses());
     }
 
     @Override

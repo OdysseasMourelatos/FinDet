@@ -18,12 +18,12 @@ public class BudgetRevenue extends BudgetEntry{
     }
 
     public static void printAllBudgetRevenues(){
-        ListHandling.printList(budgetRevenues);
+        DataOutput.printWithAsciiTable(budgetRevenues);
     }
 
     public static ArrayList<BudgetRevenue> getMainBudgetRevenues() {
         ArrayList<BudgetRevenue> mainBudgetRevenues = new ArrayList<>();
-        for (BudgetEntry budgetRevenue : budgetRevenues){
+        for (BudgetRevenue budgetRevenue : budgetRevenues){
             if (budgetRevenue.getCode().length()== 2) {
                 mainBudgetRevenues.add(budgetRevenue);
             }
@@ -83,7 +83,7 @@ public class BudgetRevenue extends BudgetEntry{
         if (getSuperCategories().isEmpty()) {
             System.out.println("Δεν υπάρχουν κατηγορίες σε υψηλότερη ιεραρχία");
         } else {
-            ListHandling.printList(getSuperCategories());
+            DataOutput.printWithAsciiTable(getSuperCategories());
         }
     }
 
@@ -107,7 +107,7 @@ public class BudgetRevenue extends BudgetEntry{
 
     public void printAllSubCategories(){
         ArrayList<BudgetRevenue> allSubCategories = findAllSubCategories();
-        ListHandling.printList(allSubCategories);
+        DataOutput.printWithAsciiTable(allSubCategories);
     }
 
     public ArrayList<BudgetRevenue> findNextLevelSubCategories() {
@@ -131,7 +131,7 @@ public class BudgetRevenue extends BudgetEntry{
 
     public void printNextLevelSubCategories(){
         ArrayList<BudgetRevenue> nextLevelSubCategories = findNextLevelSubCategories();
-        ListHandling.printList(findNextLevelSubCategories());
+        DataOutput.printWithAsciiTable(findNextLevelSubCategories());
     }
 
     public void setAmountOfNextLevelSubCategoriesWithEqualDistribution(long change){
@@ -207,7 +207,7 @@ public class BudgetRevenue extends BudgetEntry{
     }
 
     public static void printBudgetRevenuesOfMainCategoryWithCode(String code){
-        ListHandling.printList(getBudgetRevenuesOfMainCategoryWithCode(code));
+        DataOutput.printWithAsciiTable(getBudgetRevenuesOfMainCategoryWithCode(code));
     }
 
     public static long calculateSum() {

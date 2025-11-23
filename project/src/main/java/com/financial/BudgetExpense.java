@@ -43,11 +43,11 @@ public class BudgetExpense extends BudgetEntry{
     }
 
     public static void printSumOfEveryCategory(){
-        ListHandling.printList(getSumOfEveryCategory());
+        DataOutput.printWithAsciiTable(getSumOfEveryCategory());
     }
 
     public static void printExpenses() {
-        ListHandling.printList(expenses);
+        DataOutput.printWithAsciiTable(expenses);
     }
 
     public static BudgetExpense findExpenseWithCode (String code) {
