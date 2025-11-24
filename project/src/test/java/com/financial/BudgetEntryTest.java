@@ -21,6 +21,15 @@ class BudgetEntryTest {
     }
 
     @Test
+    void testStaticListAddsEntriesAutomatically() {
+        assertEquals(0, BudgetEntry.budgetEntries.size());
+
+        new TestBudgetEntry("001", "A", "ΕΣΟΔΑ", 500);
+
+        assertEquals(1, BudgetEntry.budgetEntries.size());
+    }
+    
+    @Test
     void testConstructorStoresValues() {
         BudgetEntry entry = new TestBudgetEntry("111", "Test Description", "ΕΣΟΔΑ", 1000);
 
