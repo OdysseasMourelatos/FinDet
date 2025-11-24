@@ -41,4 +41,18 @@ public class DataOutputTest {
         assertTrue(output.contains("B"));
     }
 
+    @Test
+    void testPrintEntryWithAsciiTable() {
+        BudgetRevenue br = new BudgetRevenue("11", "Main Revenue", "ΕΣΟΔΑ", 1000);
+
+        DataOutput.printEntryWithAsciiTable(br);
+
+        String output = getOutput();
+
+        // Check ASCII formatting
+        assertTrue(output.contains("+--------------------"));
+        assertTrue(output.contains("Κωδικός Ταξινόμησης"));
+        assertTrue(output.contains("Main Revenue"));
+        assertTrue(output.contains("1,000"));
+    }
 }
