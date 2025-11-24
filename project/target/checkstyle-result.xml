@@ -1,3 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <checkstyle version="9.3">
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/Main.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/BudgetEntry.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/DataUpdate.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/BudgetRevenue.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/Entity.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/DataInput.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/BudgetExpense.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/DataOutput.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/Menu.java">
+<error line="39" column="17" severity="error" message="&apos;if&apos; is not followed by whitespace." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="49" column="21" severity="error" message="&apos;if&apos; is not followed by whitespace." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="68" column="24" severity="error" message="&apos;if&apos; is not followed by whitespace." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="80" column="24" severity="error" message="&apos;if&apos; is not followed by whitespace." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="106" column="24" severity="error" message="&apos;if&apos; is not followed by whitespace." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/PublicInvestmentBudgetRevenue.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/RegularBudgetExpense.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/PublicInvestmentBudgetExpense.java">
+</file>
 </checkstyle>

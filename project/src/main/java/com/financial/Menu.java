@@ -16,7 +16,7 @@ public class Menu {
     public static final String BOLD = "\u001B[1m";
     public static final String RESET_2 = "\u001B[0m"; //προκαθορισμένη ένταση χρώματος χαρακτήρων
     
-    public static void printmenu() {
+    public static void printMenu() {
         Scanner input = new Scanner(System.in); //Δημιουργία αντικειμένου της κλάσης Scanner 
         System.out.println(PURPLE + BOLD + "ΠΡΟΘΥΠΟΥΡΓΟΣ ΓΙΑ ΜΙΑ ΗΜΕΡΑ - BUDGET MANAGER 2026" + RESET + RESET_2);
         int choice;
@@ -36,7 +36,7 @@ public class Menu {
                 System.out.print("Επιλογή: ");
                 choice = input.nextInt(); //Εισαγωγή αριθμού από τον χρήστη
                 input.nextLine();
-                if(choice == 1) {
+                if (choice == 1) {
                     System.out.println(YELLOW + "=== ΦΟΡΤΩΣΗ / ΕΝΗΜΕΡΩΣΗ CSV ===" + RESET);
                     System.out.println();
                     System.out.println(YELLOW + BOLD + "[1] " + RESET + "Φόρτωση αρχείων" + RESET + RESET_2);
@@ -46,7 +46,7 @@ public class Menu {
                     System.out.print("Επιλογή: ");
                     choice = input.nextInt();
                     input.nextLine();
-                    if(choice == 1) {
+                    if (choice == 1) {
                         System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου" + YELLOW + " (ΕΣΟΔΑ ΚΡΑΤΙΚΟΎ ΠΡΟΥΠΟΛΟΓΙΣΜΟΎ): " + RESET);
                         String filePath = input.nextLine();
                         DataInput.advancedCSVReader(filePath);
@@ -65,7 +65,7 @@ public class Menu {
                         System.out.println(GREEN + "Η ΦΟΡΤΩΣΗ ΤΩΝ ΑΡΧΕΙΩΝ ΠΡΑΓΜΑΤΟΠΟΙΗΘΗΚΕ ΕΠΙΤΥΧΩΣ!" + RESET);
                         System.out.println();
                     }
-                } else if(choice == 2) {
+                } else if (choice == 2) {
                     System.out.println("=== ΠΡΟΒΟΛΗ ΠΡΟΫΠΟΛΟΓΙΣΜΟΥ ===");
                     System.out.println();
                     System.out.println("[1] Προβολή συνολικών Εσόδων");
@@ -103,7 +103,7 @@ public class Menu {
                         System.out.println();
                         System.out.println(RED + "ΟΙ ΑΛΛΑΓΕΣ ΔΕΝ ΟΛΟΚΛΗΡΩΘΗΚΑΝ ΜΕ ΕΠΙΤΥΧΙΑ.\n" + RESET + "ΕΠΙΣΤΡΟΦΗ ΣΤΟ ΚΥΡΙΟ ΜΕΝΟΥ..");
                     }
-                } else if(choice == 4) {
+                } else if (choice == 4) {
                     System.out.println("=== ΕΛΕΓΧΟΣ ΠΕΡΙΟΡΙΣΜΩΝ ===");
                     System.out.println();
                     System.out.println("[1] Έλεγχος ισοσκέλισης προϋπολογισμού");
