@@ -15,14 +15,14 @@ import java.util.Map;
 public class PieChartGenerator {
 
 
-    static Map<String, Long> instanceMap = new HashMap<>();
+    static Map<String, Long> InstanceMap = new HashMap<>();
 
     public static Map<String, Long> fillMap(ArrayList<? extends BudgetEntry> entries) {
-        instanceMap.clear();
+        InstanceMap.clear();
         for (BudgetEntry entry : entries) {
-            instanceMap.put(entry.getDescription(), entry.getAmount());
+            InstanceMap.put(entry.getDescription(), entry.getAmount());
         }
-        return instanceMap;
+        return InstanceMap;
     }
 
     private static JFreeChart createRevenuePie(Map<String, Long> instanceMap) throws IOException {
@@ -42,7 +42,7 @@ public class PieChartGenerator {
     public static void generateChart(ArrayList<? extends BudgetEntry> entries, String title) {
         try {
             fillMap(entries);
-            createRevenuePie(instanceMap);
+            createRevenuePie(InstanceMap);
             System.out.println(Menu.GREEN + "Το διάγραμμα δημιουργήθηκε" + Menu.RESET);
         } catch (IOException e) {
             System.err.println("Σφάλμα: " + e.getMessage());

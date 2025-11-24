@@ -36,13 +36,13 @@ public class Menu {
                 System.out.print("Επιλογή: ");
                 choice = input.nextInt(); //Εισαγωγή αριθμού από τον χρήστη
                 input.nextLine();
-                if(choice == 1) {
+                if (choice == 1) {
                     printSubMenuOfChoice1();
-                } else if(choice==2) {
+                } else if (choice == 2) {
                     printSubMenuOfChoice2();
-                } else if(choice==3) {
+                } else if (choice == 3) {
                     printSubMenuOfChoice3();
-                } else if(choice == 4) {
+                } else if (choice == 4) {
                     System.out.println("=== ΑΝΑΖΗΤΗΣΗ ΣΤΟΙΧΕΙΩΝ ===");
                     System.out.println();
                     System.out.println("[1] Αναζήτηση με Κωδικό");
@@ -53,7 +53,7 @@ public class Menu {
                     System.out.print("Επιλογή: ");
                     choice = input.nextInt();
                     input.nextLine();
-                } else if(choice == 5) {
+                } else if (choice == 5) {
                     System.out.println("=== ΟΙΚΟΝΟΜΙΚΗ ΑΝΑΛΥΣΗ ===");
                     System.out.println();
                     System.out.println("[1] Ανάλυση Εσόδων");
@@ -66,9 +66,9 @@ public class Menu {
                     System.out.print("Επιλογή: ");
                     choice = input.nextInt();
                     input.nextLine();
-                } else if(choice == 6) {
+                } else if (choice == 6) {
                     printSubMenuOfChoice6();
-                } else if(choice == 7) {
+                } else if (choice == 7) {
                     System.out.println("=== ΕΞΑΓΩΓΗ ΣΕ PDF ===");
                     System.out.println();
                     System.out.println("[1] Εξαγωγή Εσόδων σε PDF");
@@ -81,7 +81,7 @@ public class Menu {
                     System.out.print("Επιλογή: ");
                     choice = input.nextInt();
                     input.nextLine();
-                } else if(choice == 0) {
+                } else if (choice == 0) {
                     System.out.println("ΠΡΑΓΜΑΤΟΠΟΙΕΙΤΑΙ ΕΞΟΔΟΣ ΑΠΟ ΤΟ ΣΥΣΤΗΜΑ...");
                     break;
                 } else {
@@ -109,7 +109,7 @@ public class Menu {
         System.out.print("Επιλογή: ");
         int choice = input.nextInt();
         input.nextLine();
-        if(choice == 1) {
+        if (choice == 1) {
             System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου" + BLUE + " (ΕΣΟΔΑ ΚΡΑΤΙΚΟΎ ΠΡΟΥΠΟΛΟΓΙΣΜΟΎ): " + RESET);
             String filePath = input.nextLine();
             DataInput.advancedCSVReader(filePath);
@@ -180,7 +180,7 @@ public class Menu {
         }
     }
 
-    public static void printSubMenuOfChoice3(){
+    public static void printSubMenuOfChoice3() {
         Scanner input = new Scanner(System.in);
         System.out.println("=== ΕΙΣΑΓΩΓΗ ΑΛΛΑΓΩΝ ===");
         System.out.println();
