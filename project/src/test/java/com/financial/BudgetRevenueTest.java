@@ -31,4 +31,24 @@ public class BudgetRevenueTest {
         Assertions.assertEquals(2, all.size());
     }
 
+    @Test
+    public void testHierarchyLevel() {
+        BudgetRevenue r1 = new BudgetRevenue("11", "Top", "ΕΣΟΔΑ", 1000);
+        BudgetRevenue r2 = new BudgetRevenue("111", "Second", "ΕΣΟΔΑ", 500);
+        BudgetRevenue r3 = new BudgetRevenue("11101", "Third", "ΕΣΟΔΑ", 300);
+
+        Assertions.assertEquals(1, r1.getLevelOfHierarchy());
+        Assertions.assertEquals(2, r2.getLevelOfHierarchy());
+        Assertions.assertEquals(3, r3.getLevelOfHierarchy());
+    }
+
+    @Test
+    public void testFindSuperCategory() {
+        BudgetRevenue top = new BudgetRevenue("11", "Top", "ΕΣΟΔΑ", 1000);
+        BudgetRevenue sub = new BudgetRevenue("111", "Sub", "ΕΣΟΔΑ", 200);
+
+        Assertions.assertEquals(top, sub.findSuperCategory());
+    }
+
+
 }
