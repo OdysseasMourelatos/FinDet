@@ -28,4 +28,16 @@ public class BudgetExpenseTest {
         long sum = BudgetExpense.calculateSum();
         Assertions.assertEquals(150, sum);
     }
+
+    @Test
+    public void testGetSumOfEveryCategory() {
+        new BudgetExpense("001", "Food", "ΕΞΟΔΑ", 100);
+        new BudgetExpense("001", "Food", "ΕΞΟΔΑ", 50);
+
+        var result = BudgetExpense.getSumOfEveryCategory();
+
+        Assertions.assertEquals(1, result.size());
+        Assertions.assertEquals(150, result.get(0).getAmount());
+    }
+
 }
