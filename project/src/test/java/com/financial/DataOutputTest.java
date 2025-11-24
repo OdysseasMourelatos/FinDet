@@ -55,4 +55,25 @@ public class DataOutputTest {
         assertTrue(output.contains("Main Revenue"));
         assertTrue(output.contains("1,000"));
     }
+
+    @Test
+    void testPrintWithAsciiTableMultipleRows() {
+        BudgetRevenue br1 = new BudgetRevenue("11", "Revenue A", "ΕΣΟΔΑ", 500);
+        BudgetRevenue br2 = new BudgetRevenue("12", "Revenue B", "ΕΣΟΔΑ", 3500);
+
+        ArrayList<BudgetRevenue> list = new ArrayList<>();
+        list.add(br1);
+        list.add(br2);
+
+        DataOutput.printWithAsciiTable(list);
+
+        String output = getOutput();
+
+        // Validate contents
+        assertTrue(output.contains("Revenue A"));
+        assertTrue(output.contains("Revenue B"));
+
+        // Check numeric formatting with commas
+        assertTrue(output.contains("3,500"));
+    }
 }
