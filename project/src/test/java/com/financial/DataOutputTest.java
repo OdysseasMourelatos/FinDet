@@ -27,4 +27,18 @@ public class DataOutputTest {
     protected String getOutput() {
         return outContent.toString();
     }
+
+    @Test
+    void testPrintList() {
+        ArrayList<String> list = new ArrayList<>();
+        list.add("A");
+        list.add("B");
+
+        DataOutput.printList(list);
+
+        String output = getOutput();
+        assertTrue(output.contains("A"));
+        assertTrue(output.contains("B"));
+    }
+
 }
