@@ -98,7 +98,7 @@ public class Menu {
         } while (true);
     }
 
-    ublic static void printSubMenuOfChoice1() {
+    public static void printSubMenuOfChoice1() {
         Scanner input = new Scanner(System.in);
         System.out.println(YELLOW + "=== ΦΟΡΤΩΣΗ / ΕΝΗΜΕΡΩΣΗ CSV ===" + RESET);
         System.out.println();
@@ -127,6 +127,56 @@ public class Menu {
             DataInput.advancedCSVReader(filePath);
             System.out.println();
             System.out.println(GREEN + "Η ΦΟΡΤΩΣΗ ΤΩΝ ΑΡΧΕΙΩΝ ΠΡΑΓΜΑΤΟΠΟΙΗΘΗΚΕ ΕΠΙΤΥΧΩΣ!" + RESET);
+        }
+    }
+
+    public static void printSubMenuOfChoice2() {
+        Scanner input = new Scanner(System.in);
+        System.out.println("=== ΠΡΟΒΟΛΗ ΣΤΟΙΧΕΙΩΝ ΠΡΟΫΠΟΛΟΓΙΣΜΟΥ ===");
+        System.out.println();
+        System.out.println("[1] Συνολικά Έσοδα");
+        System.out.println("[2] Συνολικά Έξοδα");
+
+        System.out.println("[3] Βασικές Κατηγορίες Εσόδων (2ψήφιοι)");
+        System.out.println("[4] Βασικές Κατηγορίες Εξόδων (2ψήφιοι)");
+        System.out.println("[5] Βασικές Κατηγορίες Εσόδων & Εξόδων + Αποτέλεσμα Κρατικού Προϋπολογισμού");
+
+        System.out.println("[6] Προβολή ανά Υπουργείο");
+        System.out.println("[7] Προβολή βάσει Κωδικού (2–10 ψηφία)");
+
+        System.out.println("[8] Προβολή ΠΔΕ συνολικά");
+        System.out.println("[9] Προβολή ΠΔΕ ανά Σκέλος (Εθνικό / Συγχρ.)");
+
+        System.out.println("[10] Προβολή ανά Τύπο Προϋπολογισμού (Τακτικός / ΠΔΕ / Κρατικός)");
+        System.out.println("[11] Προβολή ανά Κατηγορία Πόρων");
+
+        System.out.println("[0] Επιστροφή στο Κύριο Μενού\n");
+
+        System.out.println();
+        System.out.print("Επιλογή: ");
+        int choice = input.nextInt();
+        switch (choice) {
+            case 1 -> showTotalRevenuesMenu();
+            case 3 -> {
+                BudgetRevenue.printMainBudgetRevenues();
+                System.out.println("\nΣΥΝΟΛΙΚΑ ΕΣΟΔΑ: " + String.format("%,d", BudgetRevenue.calculateSum()));
+            }
+            case 4 -> {
+                BudgetExpense.printSumOfEveryCategory();
+                System.out.println("\nΣΥΝΟΛΙΚΑ ΕΞΟΔΑ: " + String.format("%,d", BudgetExpense.calculateSum()));
+            }
+            case 5 -> {
+                BudgetRevenue.printMainBudgetRevenues();
+                System.out.println();
+                BudgetExpense.printSumOfEveryCategory();
+                long totalRevenuesSum = BudgetRevenue.calculateSum();
+                System.out.println("\nΣΥΝΟΛΙΚΑ ΕΣΟΔΑ: " + String.format("%,d", totalRevenuesSum));
+                long totalExpensesSum = BudgetExpense.calculateSum();
+                System.out.println("ΣΥΝΟΛΙΚΑ ΕΞΟΔΑ: " + String.format("%,d", totalExpensesSum));
+                System.out.println("\nΑΠΟΤΕΛΕΣΜΑ ΚΡΑΤΙΚΟΥ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ (ΕΣΟΔΑ - ΕΞΟΔΑ): " + String.format("%,d", totalRevenuesSum - totalExpensesSum));
+
+            }
+            default -> System.out.println(RED + "Μη έγκυρη επιλογή" + RESET);
         }
     }
 }
