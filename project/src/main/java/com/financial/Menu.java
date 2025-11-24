@@ -244,6 +244,41 @@ public class Menu {
         executeBudgetChanges(budgetRevenue, changeMethod, inputMethod);
     }
 
+    public static void executeBudgetChanges(BudgetRevenue budgetRevenue, int changeMethod, int inputMethod) {
+        Scanner input = new Scanner(System.in);
+
+        switch (inputMethod) {
+            case 1 -> applyPercentageChange(budgetRevenue, changeMethod);
+            case 2 -> applyAbsoluteChange(budgetRevenue, changeMethod);
+            case 3 -> applyTargetBalanceChange(budgetRevenue, changeMethod);
+            default -> System.out.println(RED + "Μη έγκυρη επιλογή" + RESET);
+        }
+    }
+
+    public static void applyPercentageChange(BudgetRevenue budgetRevenue, int changeMethod) {
+        Scanner input = new Scanner(System.in);
+        System.out.print("Εισάγετε το ποσοστό (%) μεταβολής λογαριασμού: ");
+        double percentage = input.nextDouble() / 100;
+        applyChangeWithMethod(budgetRevenue, changeMethod, percentage, 0, true);
+    }
+
+    public static void applyAbsoluteChange(BudgetRevenue budgetRevenue, int changeMethod) {
+        Scanner input = new Scanner(System.in);
+        System.out.print("Εισάγετε το ποσό (€) μεταβολής λογαριασμού: ");
+        long change = input.nextLong();
+        double percentage = ((double) change / budgetRevenue.getAmount());
+        applyChangeWithMethod(budgetRevenue, changeMethod, percentage, change, false);
+    }
+
+    public static void applyTargetBalanceChange(BudgetRevenue budgetRevenue, int changeMethod) {
+        Scanner input = new Scanner(System.in);
+        System.out.print("Εισάγετε το νέο επιθυμητό υπόλοιπο (€) λογαριασμού: ");
+        long targetBalance = input.nextLong();
+        long change = targetBalance - budgetRevenue.getAmount();
+        double percentage = ((double) change / budgetRevenue.getAmount());
+        applyChangeWithMethod(budgetRevenue, changeMethod, percentage, change, false);
+    }
+
     public static void printSubMenuOfChoice6() {
         Scanner input = new Scanner(System.in);
         System.out.println("=== ΓΡΑΦΗΜΑΤΑ & ΟΠΤΙΚΟΠΟΙΗΣΕΙΣ ===");
