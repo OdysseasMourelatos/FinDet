@@ -25,7 +25,7 @@ public class PieChartGenerator {
         return InstanceMap;
     }
 
-    private static JFreeChart createRevenuePie(Map<String, Long> instanceMap) throws IOException {
+    private static JFreeChart createRevenuePie(Map<String, Long> instanceMap, String title) throws IOException {
         DefaultPieDataset<String> dataset = new DefaultPieDataset<>();
         for (Map.Entry<String, Long> entry : instanceMap.entrySet()) {
             dataset.setValue(entry.getKey(), entry.getValue());
@@ -42,7 +42,7 @@ public class PieChartGenerator {
     public static void generateChart(ArrayList<? extends BudgetEntry> entries, String title) {
         try {
             fillMap(entries);
-            createRevenuePie(InstanceMap);
+            createRevenuePie(InstanceMap, title);
             System.out.println(Menu.GREEN + "Το διάγραμμα δημιουργήθηκε" + Menu.RESET);
         } catch (IOException e) {
             System.err.println("Σφάλμα: " + e.getMessage());
