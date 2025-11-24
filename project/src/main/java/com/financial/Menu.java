@@ -194,33 +194,38 @@ public class Menu {
         int choice = input.nextInt();
         input.nextLine();
         if (choice == 1) {
-            System.out.println();
-            System.out.println("=== ΚΑΤΑΝΟΜΗ ΕΣΟΔΩΝ (PIE CHART) ===");
-            System.out.println();
-            System.out.println("[1] Κατανομή Βασικών Λογαριασμών Εσόδων");
-            System.out.println("[2] Κατανομή Φόρων");
-            System.out.println("[3] Κατανομή Μεταβιβάσεων");
-            System.out.println("[4] Κατανομή Πωλήσεων Αγαθών & Υπηρεσιών");
-            System.out.println("[5] Κατανομή Λοιπών Τρεχόντων Εσόδων");
-            System.out.println("[0] Επιστροφή στο Κύριο Μενού");
-            System.out.println();
-            System.out.print("Επιλογή: ");
-            choice = input.nextInt();
-            input.nextLine();
-            if (choice == 1) {
-                PieChartGenerator.generateChart(BudgetRevenue.getMainBudgetRevenues(), "Κατανομή Εσόδων");
-            } else if (choice == 2) {
-                printTaxChartsSubMenu();
-            } else if (choice == 3) {
-                BudgetRevenue budgetRevenue = BudgetRevenue.findRevenueWithCode("13");
-                PieChartGenerator.generateChart(budgetRevenue.findNextLevelSubCategories(), "Κατανομή Μεταβιβάσεων");
-            } else if (choice == 4) {
-                BudgetRevenue budgetRevenue = BudgetRevenue.findRevenueWithCode("14");
-                PieChartGenerator.generateChart(budgetRevenue.findNextLevelSubCategories(), "Κατανομή Πωλήσεων Αγαθών & Υπηρεσιών");
-            } else if (choice == 5) {
-                BudgetRevenue budgetRevenue = BudgetRevenue.findRevenueWithCode("15");
-                PieChartGenerator.generateChart(budgetRevenue.findNextLevelSubCategories(), "Κατανομή Λοιπών Τρεχόντων Εσόδων");
-            }
+            printRevenueChartsSubMenu();
+        }
+    }
+
+    public static void printRevenueChartsSubMenu() {
+        Scanner input = new Scanner(System.in);
+        System.out.println();
+        System.out.println("=== ΚΑΤΑΝΟΜΗ ΕΣΟΔΩΝ (PIE CHART) ===");
+        System.out.println();
+        System.out.println("[1] Κατανομή Βασικών Λογαριασμών Εσόδων");
+        System.out.println("[2] Κατανομή Φόρων");
+        System.out.println("[3] Κατανομή Μεταβιβάσεων");
+        System.out.println("[4] Κατανομή Πωλήσεων Αγαθών & Υπηρεσιών");
+        System.out.println("[5] Κατανομή Λοιπών Τρεχόντων Εσόδων");
+        System.out.println("[0] Επιστροφή στο Κύριο Μενού");
+        System.out.println();
+        System.out.print("Επιλογή: ");
+        int choice = input.nextInt();
+        input.nextLine();
+        if (choice == 1) {
+            PieChartGenerator.generateChart(BudgetRevenue.getMainBudgetRevenues(), "Κατανομή Εσόδων");
+        } else if (choice == 2) {
+            printTaxChartsSubMenu();
+        } else if (choice == 3) {
+            BudgetRevenue budgetRevenue = BudgetRevenue.findRevenueWithCode("13");
+            PieChartGenerator.generateChart(budgetRevenue.findNextLevelSubCategories(), "Κατανομή Μεταβιβάσεων");
+        } else if (choice == 4) {
+            BudgetRevenue budgetRevenue = BudgetRevenue.findRevenueWithCode("14");
+            PieChartGenerator.generateChart(budgetRevenue.findNextLevelSubCategories(), "Κατανομή Πωλήσεων Αγαθών & Υπηρεσιών");
+        } else if (choice == 5) {
+            BudgetRevenue budgetRevenue = BudgetRevenue.findRevenueWithCode("15");
+            PieChartGenerator.generateChart(budgetRevenue.findNextLevelSubCategories(), "Κατανομή Λοιπών Τρεχόντων Εσόδων");
         }
     }
 
