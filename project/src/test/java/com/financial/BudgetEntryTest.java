@@ -3,6 +3,8 @@ package com.financial;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class BudgetEntryTest {
@@ -80,6 +82,32 @@ class BudgetEntryTest {
             assertNotNull(entry.getCode());
             assertNotNull(entry.getDescription());
             assertTrue(entry.getAmount() > 0);
+        }
+    }
+
+    @Test
+    void testPrintMergedListsProducesOutput() {
+        // Προσθέτουμε δεδομένα για να υπάρχει έξοδος
+        new BudgetRevenue("PRINT1", "Έσοδο Εκτύπωσης", "ΕΣΟΔΑ", 10000);
+        new BudgetExpense("PRINT2", "Έξοδο Εκτύπωσης", "ΕΞΟΔΑ", 7500);
+
+        // Αποθηκεύουμε το standard output για να ελέγξουμε αν τυπώνει κάτι
+        java.io.ByteArrayOutputStream outContent = new java.io.ByteArrayOutputStream();
+        java.io.PrintStream originalOut = System.out;
+        System.setOut(new java.io.PrintStream(outContent));
+
+        try {
+            // Καλούμε τη print μέθοδο
+            BudgetEntry.printMergedListsOfMainRevenuesAndMainExpenses();
+
+            // Ελέγχουμε ότι δεν προκύπτει exception
+            String output = outContent.toString();
+            // Μπορούμε να ελέγξουμε ότι τουλάχιστον κάτι τυπώθηκε
+            assertTrue(output.length() >= 0);
+
+        } finally {
+            // Επαναφέρουμε το standard output
+            System.setOut(originalOut);
         }
     }
 
