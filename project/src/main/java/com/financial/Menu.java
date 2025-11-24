@@ -180,6 +180,24 @@ public class Menu {
         }
     }
 
+    public static void printSubMenuOfChoice3(){
+        Scanner input = new Scanner(System.in);
+        System.out.println("=== ΕΙΣΑΓΩΓΗ ΑΛΛΑΓΩΝ ===");
+        System.out.println();
+        System.out.println("[1] Τροποποίηση Ποσού Υφιστάμενου Λογαριασμού Εσόδων");
+        System.out.println("[2] Προσθήκη Γραμμής Εσόδων");
+        System.out.println("[3] Προσθήκη Γραμμής Εξόδων");
+        System.out.println("[4] Διαγραφή Γραμμής");
+        System.out.println("[0] Επιστροφή");
+        System.out.println();
+        System.out.print("Επιλογή: ");
+        int choice = input.nextInt();
+        input.nextLine();
+        if (choice == 1) {
+            modifyExistingRevenueAccount();
+        }
+    }
+
     public static void printSubMenuOfChoice6() {
         Scanner input = new Scanner(System.in);
         System.out.println("=== ΓΡΑΦΗΜΑΤΑ & ΟΠΤΙΚΟΠΟΙΗΣΕΙΣ ===");
