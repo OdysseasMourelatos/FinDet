@@ -33,11 +33,9 @@ public class BudgetEntryTest {
 
     @Test
     public void testStaticListAddsEntriesAutomatically() {
-        assertEquals(0, BudgetEntry.budgetEntries.size());
-
+        int initialSize = BudgetEntry.budgetEntries.size();
         new TestBudgetEntry("001", "A", "ΕΣΟΔΑ", 500);
-
-        assertEquals(1, BudgetEntry.budgetEntries.size());
+        assertEquals(initialSize + 1, BudgetEntry.budgetEntries.size());
     }
 
     @Test
