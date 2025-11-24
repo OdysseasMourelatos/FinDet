@@ -7,7 +7,7 @@ public abstract class BudgetEntry {
     private final String description;
     private final String category;
     private long amount;
-    protected static ArrayList<BudgetEntry> budgetEntries= new ArrayList<>();
+    protected static ArrayList<BudgetEntry> budgetEntries = new ArrayList<>();
 
     public BudgetEntry(String code, String description, String category, long amount) {
         this.code = code;
@@ -25,16 +25,16 @@ public abstract class BudgetEntry {
         return this.description;
     }
 
-    public String getCategory(){
+    public String getCategory() {
         return this.category;
     }
 
-    public long getAmount(){
+    public long getAmount() {
         return this.amount;
     }
 
     public void setAmount(long amount) {
-        if (amount>0) {
+        if (amount > 0) {
             this.amount = amount;
         } else {
             System.out.println("Το ποσό δεν μπορεί να είναι αρνητικό");
@@ -48,12 +48,12 @@ public abstract class BudgetEntry {
         return merged;
     }
 
-    public static void printMergedListsOfMainRevenuesAndMainExpenses(){
+    public static void printMergedListsOfMainRevenuesAndMainExpenses() {
         DataOutput.printWithAsciiTable(mergeListsOfMainRevenuesAndMainExpenses());
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Code: " + code + ", Description: " + description + ", Category: " + category + ", Amount: " + String.format("%,d", amount);
     }
 }

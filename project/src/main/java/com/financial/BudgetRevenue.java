@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BudgetRevenue extends BudgetEntry{
+public class BudgetRevenue extends BudgetEntry {
 
     protected static ArrayList <BudgetRevenue> budgetRevenues = new ArrayList<>();
 
@@ -17,21 +17,21 @@ public class BudgetRevenue extends BudgetEntry{
         return budgetRevenues;
     }
 
-    public static void printAllBudgetRevenues(){
+    public static void printAllBudgetRevenues() {
         DataOutput.printWithAsciiTable(budgetRevenues);
     }
 
     public static ArrayList<BudgetRevenue> getMainBudgetRevenues() {
         ArrayList<BudgetRevenue> mainBudgetRevenues = new ArrayList<>();
-        for (BudgetRevenue budgetRevenue : budgetRevenues){
-            if (budgetRevenue.getCode().length()== 2) {
+        for (BudgetRevenue budgetRevenue : budgetRevenues) {
+            if (budgetRevenue.getCode().length() == 2) {
                 mainBudgetRevenues.add(budgetRevenue);
             }
         }
         return mainBudgetRevenues;
     }
 
-    public static void printMainBudgetRevenues(){
+    public static void printMainBudgetRevenues() {
         DataOutput.printWithAsciiTable(getMainBudgetRevenues());
     }
 
@@ -50,17 +50,17 @@ public class BudgetRevenue extends BudgetEntry{
         int level = getLevelOfHierarchy();
         String tempCode;
         switch (level) {
-            case 2 -> tempCode = getCode().substring(0,2);
-            case 3 -> tempCode = getCode().substring(0,3);
-            case 4 -> tempCode = getCode().substring(0,5);
-            case 5 -> tempCode = getCode().substring(0,7);
+            case 2 -> tempCode = getCode().substring(0, 2);
+            case 3 -> tempCode = getCode().substring(0, 3);
+            case 4 -> tempCode = getCode().substring(0, 5);
+            case 5 -> tempCode = getCode().substring(0, 7);
             default -> tempCode = "0";
         }
         return findRevenueWithCode(tempCode);
     }
 
-    public ArrayList<BudgetRevenue> getSuperCategories(){
-        ArrayList<BudgetRevenue> superCategories= new ArrayList<>();
+    public ArrayList<BudgetRevenue> getSuperCategories() {
+        ArrayList<BudgetRevenue> superCategories = new ArrayList<>();
         BudgetRevenue superCategory = findSuperCategory();
         while (superCategory != null) {
             superCategories.add(superCategory);
@@ -69,17 +69,17 @@ public class BudgetRevenue extends BudgetEntry{
         return superCategories;
     }
 
-    public void printSuperCategoriesTopDown(){
+    public void printSuperCategoriesTopDown() {
         if (getSuperCategories().isEmpty()) {
             System.out.println("Δεν υπάρχουν κατηγορίες σε υψηλότερη ιεραρχία");
         } else {
-            for (int i = getSuperCategories().size() -1; i >= 0; i--){
+            for (int i = getSuperCategories().size() - 1; i >= 0; i--) {
                 System.out.println(getSuperCategories().get(i));
             }
         }
     }
 
-    public void printSuperCategoriesBottomsUp(){
+    public void printSuperCategoriesBottomsUp() {
         if (getSuperCategories().isEmpty()) {
             System.out.println("Δεν υπάρχουν κατηγορίες σε υψηλότερη ιεραρχία");
         } else {
@@ -87,7 +87,7 @@ public class BudgetRevenue extends BudgetEntry{
         }
     }
 
-    public void setAmountOfSuperCategories(long change){
+    public void setAmountOfSuperCategories(long change) {
         ArrayList<BudgetRevenue> superCategories = getSuperCategories();
 
         for (BudgetRevenue superCategory : superCategories) {
@@ -97,15 +97,15 @@ public class BudgetRevenue extends BudgetEntry{
 
     public ArrayList<BudgetRevenue> findAllSubCategories() {
         ArrayList<BudgetRevenue> subCategories = new ArrayList<>();
-        for (BudgetRevenue budgetRevenue : budgetRevenues){
-            if (budgetRevenue.getCode().startsWith(this.getCode()) && !(budgetRevenue.equals(this))){
+        for (BudgetRevenue budgetRevenue : budgetRevenues) {
+            if (budgetRevenue.getCode().startsWith(this.getCode()) && !(budgetRevenue.equals(this))) {
                 subCategories.add(budgetRevenue);
             }
         }
         return subCategories;
     }
 
-    public void printAllSubCategories(){
+    public void printAllSubCategories() {
         ArrayList<BudgetRevenue> allSubCategories = findAllSubCategories();
         DataOutput.printWithAsciiTable(allSubCategories);
     }
@@ -113,7 +113,7 @@ public class BudgetRevenue extends BudgetEntry{
     public ArrayList<BudgetRevenue> findNextLevelSubCategories() {
         int level = getLevelOfHierarchy();
         int subCategoryCodeLength;
-        switch (level){
+        switch (level) {
             case 1 -> subCategoryCodeLength = 3;
             case 2 -> subCategoryCodeLength = 5;
             case 3 -> subCategoryCodeLength = 7;
@@ -121,36 +121,36 @@ public class BudgetRevenue extends BudgetEntry{
             default -> subCategoryCodeLength = 0;
         }
         ArrayList<BudgetRevenue> subCategories = new ArrayList<>();
-        for (BudgetRevenue budgetRevenue : budgetRevenues){
-            if (budgetRevenue.getCode().startsWith(this.getCode()) && (budgetRevenue.getCode().length() == subCategoryCodeLength)){
+        for (BudgetRevenue budgetRevenue : budgetRevenues) {
+            if (budgetRevenue.getCode().startsWith(this.getCode()) && (budgetRevenue.getCode().length() == subCategoryCodeLength)) {
                 subCategories.add(budgetRevenue);
             }
         }
         return subCategories;
     }
 
-    public void printNextLevelSubCategories(){
+    public void printNextLevelSubCategories() {
         ArrayList<BudgetRevenue> nextLevelSubCategories = findNextLevelSubCategories();
         DataOutput.printWithAsciiTable(findNextLevelSubCategories());
     }
 
-    public void setAmountOfNextLevelSubCategoriesWithEqualDistribution(long change){
+    public void setAmountOfNextLevelSubCategoriesWithEqualDistribution(long change) {
         ArrayList<BudgetRevenue> nextLevelSubCategories = findNextLevelSubCategories();
         if (!nextLevelSubCategories.isEmpty()) {
             long changeOfCategory = change / nextLevelSubCategories.size();
-            for (BudgetRevenue subCategory : nextLevelSubCategories){
+            for (BudgetRevenue subCategory : nextLevelSubCategories) {
                 subCategory.setAmount(subCategory.getAmount() + changeOfCategory);
             }
         }
     }
 
-    public void setAmountOfAllSubCategoriesWithEqualDistribution(long change){
+    public void setAmountOfAllSubCategoriesWithEqualDistribution(long change) {
         ArrayList<BudgetRevenue> nextLevelSubCategories = findNextLevelSubCategories();
         long changeOfSubCategory = change;
         try {
             //Βάζω τα αρχικά ποσά κάθε επόμενης κατηγορίας σε Map
             Map<String, Long> map = new HashMap<>();
-            for (BudgetRevenue subCategory : nextLevelSubCategories){
+            for (BudgetRevenue subCategory : nextLevelSubCategories) {
                 map.put(subCategory.getCode(), subCategory.getAmount());
             }
             //Ανανεώνω τα ποσά της κάθε επόμενης κατηγορίας
@@ -160,7 +160,7 @@ public class BudgetRevenue extends BudgetEntry{
                 throw new RuntimeException();
             }
             //Για κάθε υποκατηγορία σε επόμενο επίπεδο
-            for (BudgetRevenue subCategory : nextLevelSubCategories){
+            for (BudgetRevenue subCategory : nextLevelSubCategories) {
                 changeOfSubCategory = (subCategory.getAmount() - map.get(subCategory.getCode()));
                 subCategory.setAmountOfAllSubCategoriesWithEqualDistribution(changeOfSubCategory);
             }
@@ -206,7 +206,7 @@ public class BudgetRevenue extends BudgetEntry{
         return mainRevenues;
     }
 
-    public static void printBudgetRevenuesOfMainCategoryWithCode(String code){
+    public static void printBudgetRevenuesOfMainCategoryWithCode(String code) {
         DataOutput.printWithAsciiTable(getBudgetRevenuesOfMainCategoryWithCode(code));
     }
 
@@ -220,16 +220,16 @@ public class BudgetRevenue extends BudgetEntry{
         return sum;
     }
 
-    public void implementChangesOfEqualDistribution(long change){
+    public void implementChangesOfEqualDistribution(long change) {
         setAmountOfSuperCategories(change);
         setAmountOfAllSubCategoriesWithEqualDistribution(change);
         setAmount(getAmount() + change);
     }
 
-    public void implementChangesOfPercentageAdjustment(double percentage){
-        setAmountOfSuperCategories((long) (getAmount()*(percentage)));
+    public void implementChangesOfPercentageAdjustment(double percentage) {
+        setAmountOfSuperCategories((long) (getAmount() * (percentage)));
         setAmountOfAllSubCategoriesWithPercentageAdjustment(percentage);
-        setAmount((long) (getAmount()*(1+percentage)));
+        setAmount((long) (getAmount() * (1 + percentage)));
     }
 
     public static BudgetRevenue findRevenueWithCode (String code) {

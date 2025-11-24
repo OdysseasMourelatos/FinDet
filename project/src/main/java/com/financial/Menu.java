@@ -7,7 +7,7 @@ public class Menu {
         int choice;
         System.out.println("ΠΡΟΘΥΠΟΥΡΓΟΣ ΓΙΑ ΜΙΑ ΗΜΕΡΑ - BUDGET MANAGER 2026");
         do {
-            System.out.println("=== ΚΥΡΙΟ ΜΕΝΟΥ ===");
+            System.out.println("=== ΚΥΡΙΟ ΜΕΝΟΥ= ==");
             System.out.println();
             System.out.println("[1] Φόρτωση / Ενημέρωση CSV");
             System.out.println("[2] Προβολή Προϋπολογισμού");
@@ -22,7 +22,7 @@ public class Menu {
             choice = input.nextInt(); //Εισαγωγή αριθμού από τον χρήστη
             input.nextLine();
             if (choice == 1) {
-                System.out.println("=== ΦΟΡΤΩΣΗ / ΕΝΗΜΕΡΩΣΗ CSV ===");
+                System.out.println("=== ΦΟΡΤΩΣΗ / ΕΝΗΜΕΡΩΣΗ CSV= ==");
                 System.out.println();
                 System.out.println("[1] Φόρτωση αρχείων Εσόδων");
                 System.out.println("[2] Φόρτωση αρχείων Εξόδων");
@@ -32,7 +32,7 @@ public class Menu {
                 System.out.println();
                 System.out.print("Επιλογή: ");
             } else if (choice == 2) {
-                System.out.println("=== ΠΡΟΒΟΛΗ ΠΡΟΫΠΟΛΟΓΙΣΜΟΥ ===");
+                System.out.println("=== ΠΡΟΒΟΛΗ ΠΡΟΫΠΟΛΟΓΙΣΜΟΥ= ==");
                 System.out.println();
                 System.out.println("[1] Προβολή συνολικών Εσόδων");
                 System.out.println("[2] Προβολή συνολικών Εξόδων");
@@ -44,7 +44,7 @@ public class Menu {
                 System.out.print("Επιλογή: ");
 
             } else if (choice == 3) {
-                System.out.println("=== ΕΙΣΑΓΩΓΗ ΑΛΛΑΓΩΝ ===");
+                System.out.println("=== ΕΙΣΑΓΩΓΗ ΑΛΛΑΓΩΝ= ==");
                 System.out.println();
                 System.out.println("[1] Τροποποίηση γραμμής");
                 System.out.println("[2] Προσθήκη γραμμής Εσόδων");
@@ -56,7 +56,7 @@ public class Menu {
                 int choice2 = input.nextInt();
                 input.nextLine();
                 if (choice2 == 1) {
-                    System.out.println("=== ΤΡΟΠΟΠΟΙΗΣΗ ΓΡΑΜΜΗΣ ===");
+                    System.out.println("=== ΤΡΟΠΟΠΟΙΗΣΗ ΓΡΑΜΜΗΣ= ==");
                     System.out.println();
                     System.out.println("[1] Ισόποση αλλαγή");
                     System.out.println("[2] Αναλογική αλλαγή");
@@ -67,7 +67,7 @@ public class Menu {
                     System.out.print("Επιλογή: ");
                 }
             } else if (choice == 4) {
-                System.out.println("=== ΕΛΕΓΧΟΣ ΠΕΡΙΟΡΙΣΜΩΝ ===");
+                System.out.println("=== ΕΛΕΓΧΟΣ ΠΕΡΙΟΡΙΣΜΩΝ= ==");
                 System.out.println();
                 System.out.println("[1] Έλεγχος ισοσκέλισης προϋπολογισμού");
                 System.out.println("[2] Έλεγχος υπέρβασης εξόδων");
@@ -77,7 +77,7 @@ public class Menu {
                 System.out.println();
                 System.out.print("Επιλογή: ");
             } else if (choice == 5) {
-                System.out.println("=== ΟΙΚΟΝΟΜΙΚΗ ΑΝΑΛΥΣΗ ===");
+                System.out.println("=== ΟΙΚΟΝΟΜΙΚΗ ΑΝΑΛΥΣΗ= ==");
                 System.out.println();
                 System.out.println("[1] Ανάλυση Εσόδων");
                 System.out.println("[2] Ανάλυση Εξόδων");
@@ -88,7 +88,7 @@ public class Menu {
                 System.out.println();
                 System.out.print("Επιλογή: ");
             } else if (choice == 6) {
-                System.out.println("=== ΓΡΑΦΗΜΑΤΑ & ΟΠΤΙΚΟΠΟΙΗΣΕΙΣ ===");
+                System.out.println("=== ΓΡΑΦΗΜΑΤΑ & ΟΠΤΙΚΟΠΟΙΗΣΕΙΣ= ==");
                 System.out.println();
                 System.out.println("[1] Γράφημα Εσόδων");
                 System.out.println("[2] Γράφημα Εξόδων");
@@ -99,7 +99,7 @@ public class Menu {
                 System.out.println();
                 System.out.print("Επιλογή: ");
             } else if (choice == 7) {
-                System.out.println("=== EXPORT PDF / CSV ===");
+                System.out.println("=== EXPORT PDF / CSV= ==");
                 System.out.println();
                 System.out.println("[1] Export Εσόδων σε PDF");
                 System.out.println("[2] Export Εξόδων σε PDF");

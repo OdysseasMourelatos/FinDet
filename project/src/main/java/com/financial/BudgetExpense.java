@@ -2,7 +2,7 @@ package com.financial;
 
 import java.util.ArrayList;
 
-public class BudgetExpense extends BudgetEntry{
+public class BudgetExpense extends BudgetEntry {
 
     protected static ArrayList <BudgetExpense> expenses = new ArrayList<>();
 
@@ -15,7 +15,7 @@ public class BudgetExpense extends BudgetEntry{
         super(code, description, category, amount);
     }
 
-    public static long calculateSum(){
+    public static long calculateSum() {
         long totalExpensesSum = 0;
         for (BudgetExpense expense : getSumOfEveryCategory()) {
             totalExpensesSum += expense.getAmount();
@@ -23,18 +23,14 @@ public class BudgetExpense extends BudgetEntry{
         return totalExpensesSum;
     }
 
-    public static ArrayList<BudgetExpense> getSumOfEveryCategory(){
-        String[] categoryCodes = expenses.stream()
-                .map(BudgetExpense::getCode)
-                .distinct()
-                .sorted()
-                .toArray(String[]::new);
-        ArrayList<BudgetExpense> expensesPerCategory = new ArrayList<>();;
+    public static ArrayList<BudgetExpense> getSumOfEveryCategory() {
+        String[] categoryCodes = expenses.stream().map(BudgetExpense::getCode).distinct().sorted().toArray(String[]::new);
+        ArrayList<BudgetExpense> expensesPerCategory = new ArrayList<>();
         for (String categoryCode : categoryCodes) {
             long sum = 0;
             for (BudgetExpense expense : expenses) {
-                if (categoryCode.equals(expense.getCode())){
-                    sum+=expense.getAmount();
+                if (categoryCode.equals(expense.getCode())) {
+                    sum += expense.getAmount();
                 }
             }
             expensesPerCategory.add(new BudgetExpense(categoryCode, findExpenseWithCode(categoryCode).getDescription(), "ΕΞΟΔΑ", sum, false));
@@ -42,7 +38,7 @@ public class BudgetExpense extends BudgetEntry{
         return expensesPerCategory;
     }
 
-    public static void printSumOfEveryCategory(){
+    public static void printSumOfEveryCategory() {
         DataOutput.printWithAsciiTable(getSumOfEveryCategory());
     }
 

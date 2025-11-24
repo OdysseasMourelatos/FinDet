@@ -12,7 +12,7 @@ public class DataInput {
 
     public static void simpleCSVReader(String filePath) {
         String line;
-        int lineNumber=0;
+        int lineNumber = 0;
         BufferedReader reader = null;
 
         try {
@@ -85,6 +85,7 @@ public class DataInput {
         long amount = Long.parseLong(values[2]);
         BudgetEntry budgetRevenue = new BudgetRevenue(code, description, category, amount);
     }
+
 
     private static void createPublicInvestmentBudgetRevenueFromCSV(String [] values) {
         String code = values[0];

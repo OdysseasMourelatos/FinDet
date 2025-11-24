@@ -23,7 +23,7 @@ public class BudgetEntryTest {
 
     @Test
     public void testConstructorStoresValues() {
-        BudgetEntry entry = new TestBudgetEntry("111", "Test Description", "ΕΣΟΔΑ", 1000);
+        BudgetEntry entry=  new TestBudgetEntry("111", "Test Description", "ΕΣΟΔΑ", 1000);
 
         assertEquals("111", entry.getCode());
         assertEquals("Test Description", entry.getDescription());
@@ -33,14 +33,14 @@ public class BudgetEntryTest {
 
     @Test
     public void testStaticListAddsEntriesAutomatically() {
-        int initialSize = BudgetEntry.budgetEntries.size();
+        int initialSize=  BudgetEntry.budgetEntries.size();
         new TestBudgetEntry("001", "A", "ΕΣΟΔΑ", 500);
         assertEquals(initialSize + 1, BudgetEntry.budgetEntries.size());
     }
 
     @Test
     public void testSetAmountWorksForPositiveValues() {
-        BudgetEntry entry = new TestBudgetEntry("001", "A", "ΕΣΟΔΑ", 1000);
+        BudgetEntry entry=  new TestBudgetEntry("001", "A", "ΕΣΟΔΑ", 1000);
 
         entry.setAmount(2000);
 
@@ -49,7 +49,7 @@ public class BudgetEntryTest {
 
     @Test
     public void testSetAmountDoesNotAcceptNegativeValues() {
-        BudgetEntry entry = new TestBudgetEntry("001", "A", "ΕΣΟΔΑ", 1000);
+        BudgetEntry entry=  new TestBudgetEntry("001", "A", "ΕΣΟΔΑ", 1000);
 
         entry.setAmount(-50);
 
@@ -60,14 +60,14 @@ public class BudgetEntryTest {
     @Test
     public void testMergeListsCombinesRevenuesAndExpenses() {
         // Δημιουργούμε test data στις υποκλάσεις
-        BudgetRevenue revenue1 = new BudgetRevenue("REV1", "Πωλήσεις", "ΕΣΟΔΑ", 5000);
-        BudgetRevenue revenue2 = new BudgetRevenue("REV2", "Υπηρεσίες", "ΕΣΟΔΑ", 3000);
+        BudgetRevenue revenue1=  new BudgetRevenue("REV1", "Πωλήσεις", "ΕΣΟΔΑ", 5000);
+        BudgetRevenue revenue2=  new BudgetRevenue("REV2", "Υπηρεσίες", "ΕΣΟΔΑ", 3000);
 
-        BudgetExpense expense1 = new BudgetExpense("EXP1", "Μισθοί", "ΕΞΟΔΑ", 2000);
-        BudgetExpense expense2 = new BudgetExpense("EXP2", "Αγορές", "ΕΞΟΔΑ", 1500);
+        BudgetExpense expense1=  new BudgetExpense("EXP1", "Μισθοί", "ΕΞΟΔΑ", 2000);
+        BudgetExpense expense2=  new BudgetExpense("EXP2", "Αγορές", "ΕΞΟΔΑ", 1500);
 
         // Καλούμε τη merge μέθοδο
-        ArrayList<BudgetEntry> result = BudgetEntry.mergeListsOfMainRevenuesAndMainExpenses();
+        ArrayList<BudgetEntry> result=  BudgetEntry.mergeListsOfMainRevenuesAndMainExpenses();
 
         // Ελέγχουμε ότι η λίστα δεν είναι κενή και περιέχει στοιχεία
         assertNotNull(result);
@@ -89,8 +89,8 @@ public class BudgetEntryTest {
         new BudgetExpense("PRINT2", "Έξοδο Εκτύπωσης", "ΕΞΟΔΑ", 7500);
 
         // Αποθηκεύουμε το standard output για να ελέγξουμε αν τυπώνει κάτι
-        java.io.ByteArrayOutputStream outContent = new java.io.ByteArrayOutputStream();
-        java.io.PrintStream originalOut = System.out;
+        java.io.ByteArrayOutputStream outContent=  new java.io.ByteArrayOutputStream();
+        java.io.PrintStream originalOut=  System.out;
         System.setOut(new java.io.PrintStream(outContent));
 
         try {
@@ -98,7 +98,7 @@ public class BudgetEntryTest {
             BudgetEntry.printMergedListsOfMainRevenuesAndMainExpenses();
 
             // Ελέγχουμε ότι δεν προκύπτει exception
-            String output = outContent.toString();
+            String output=  outContent.toString();
             // Μπορούμε να ελέγξουμε ότι τουλάχιστον κάτι τυπώθηκε
             assertTrue(output.length() >= 0);
 
@@ -110,9 +110,9 @@ public class BudgetEntryTest {
 
     @Test
     public void testToStringFormat() {
-        BudgetEntry entry = new TestBudgetEntry("111", "Description", "ΕΞΟΔΑ", 1234567);
+        BudgetEntry entry=  new TestBudgetEntry("111", "Description", "ΕΞΟΔΑ", 1234567);
 
-        String text = entry.toString();
+        String text=  entry.toString();
 
         assertTrue(text.contains("111"));
         assertTrue(text.contains("Description"));

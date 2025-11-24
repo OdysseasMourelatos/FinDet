@@ -5,8 +5,8 @@ import de.vandermeer.asciitable.AsciiTable;
 import de.vandermeer.asciitable.CWC_FixedWidth;
 
 public class DataOutput {
-    public static void printList (ArrayList<?> arrayList){
-        for (Object object : arrayList){
+    public static void printList (ArrayList<?> arrayList) {
+        for (Object object : arrayList) {
             System.out.println(object);
         }
     }
@@ -14,12 +14,7 @@ public class DataOutput {
     public static void printWithAsciiTable(ArrayList<? extends BudgetEntry> entries) {
         AsciiTable at = new AsciiTable();
 
-        at.getRenderer().setCWC(new CWC_FixedWidth()
-                .add(20)
-                .add(60)
-                .add(15)
-                .add(20)
-        );
+        at.getRenderer().setCWC(new CWC_FixedWidth().add(20).add(60).add(15).add(20));
 
         at.addRule();
         at.addRow("Κωδικός Ταξινόμησης", "Ονομασία", "Κατηγορία", "Ποσό");
@@ -41,12 +36,7 @@ public class DataOutput {
     public static <T extends BudgetEntry> void printEntryWithAsciiTable(T entry) {
         AsciiTable at = new AsciiTable();
 
-        at.getRenderer().setCWC(new CWC_FixedWidth()
-                .add(20)
-                .add(60)
-                .add(15)
-                .add(20)
-        );
+        at.getRenderer().setCWC(new CWC_FixedWidth().add(20).add(60).add(15).add(20));
 
         at.addRule();
         at.addRow("Κωδικός Ταξινόμησης", "Ονομασία", "Κατηγορία", "Ποσό");

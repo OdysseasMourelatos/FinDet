@@ -9,8 +9,8 @@ public class RegularBudgetExpense extends BudgetExpense {
     protected static ArrayList<RegularBudgetExpense> regularBudgetExpenses = new ArrayList<>();
 
     RegularBudgetExpense (String entityCode, String code, String description, String category, long amount) {
-        super(code,description,category,amount);
-        this.entityCode=entityCode;
+        super(code, description, category, amount);
+        this.entityCode = entityCode;
         regularBudgetExpenses.add(this);
     }
 
@@ -18,7 +18,7 @@ public class RegularBudgetExpense extends BudgetExpense {
         return regularBudgetExpenses;
     }
 
-    public static void printAllRegularBudgetExpenses(){
+    public static void printAllRegularBudgetExpenses() {
         for (RegularBudgetExpense regularBudgetExpense : regularBudgetExpenses) {
             System.out.println(regularBudgetExpense);
         }
@@ -32,18 +32,14 @@ public class RegularBudgetExpense extends BudgetExpense {
         return sum;
     }
 
-    public static Map<String, Long> getRegularSumOfEveryEntity(){
-        String[] entityCodes = regularBudgetExpenses.stream()
-                .map(RegularBudgetExpense::getEntityCode)
-                .distinct()
-                .sorted()
-                .toArray(String[]::new);
+    public static Map<String, Long> getRegularSumOfEveryEntity() {
+        String[] entityCodes = regularBudgetExpenses.stream().map(RegularBudgetExpense::getEntityCode).distinct().sorted().toArray(String[]::new);
         Map<String, Long> regularEntitySums = new HashMap<>();
         for (String entityCode : entityCodes) {
             long sum = 0;
             for (RegularBudgetExpense regularBudgetExpense : regularBudgetExpenses) {
-                if (entityCode.equals(regularBudgetExpense.entityCode)){
-                    sum+=regularBudgetExpense.getAmount();
+                if (entityCode.equals(regularBudgetExpense.entityCode)) {
+                    sum += regularBudgetExpense.getAmount();
                 }
             }
             regularEntitySums.merge(entityCode, sum, Long::sum);
@@ -51,15 +47,13 @@ public class RegularBudgetExpense extends BudgetExpense {
         return regularEntitySums;
     }
 
-    public static void printRegularSumOfEveryEntity(){
+    public static void printRegularSumOfEveryEntity() {
         Map<String, Long> entitySums = getRegularSumOfEveryEntity();
-        entitySums.entrySet().stream()
-                .sorted(Map.Entry.comparingByKey())
-                .forEach(entry ->
+        entitySums.entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach(entry ->
                         System.out.println("Κωδικός Φορέα " + entry.getKey() + ": " + String.format("%,d", entry.getValue())));
     }
 
-    public static long getRegularSumOfEntityWithEntityCode(String entityCode){
+    public static long getRegularSumOfEntityWithEntityCode(String entityCode) {
         Map<String, Long> entitySums = getRegularSumOfEveryEntity();
         if (entitySums.containsKey(entityCode)) {
             return entitySums.get(entityCode);
@@ -67,14 +61,12 @@ public class RegularBudgetExpense extends BudgetExpense {
         return 0;
     }
 
-    public String getEntityCode(){
+    public String getEntityCode() {
         return entityCode;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Entity Code: " + entityCode + ", Category Code: " + getCode() + ", Description: " + getDescription() + ", Category: " + getCategory() + ", Amount: " + String.format("%,d", getAmount());
     }
-
-
 }
