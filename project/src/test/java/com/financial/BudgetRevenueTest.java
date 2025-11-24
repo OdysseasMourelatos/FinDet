@@ -50,5 +50,27 @@ public class BudgetRevenueTest {
         Assertions.assertEquals(top, sub.findSuperCategory());
     }
 
+    @Test
+    public void testFindAllSubCategories() {
+        BudgetRevenue main = new BudgetRevenue("11", "Main", "ΕΣΟΔΑ", 1000);
+        BudgetRevenue sub1 = new BudgetRevenue("111", "Sub1", "ΕΣΟΔΑ", 300);
+        BudgetRevenue sub2 = new BudgetRevenue("112", "Sub2", "ΕΣΟΔΑ", 200);
+
+        List<BudgetRevenue> subs = main.findAllSubCategories();
+        Assertions.assertEquals(2, subs.size());
+    }
+
+    @Test
+    public void testFindNextLevelSubCategories() {
+        BudgetRevenue main = new BudgetRevenue("11", "Main", "ΕΣΟΔΑ", 1000);
+        BudgetRevenue sub = new BudgetRevenue("111", "Sub1", "ΕΣΟΔΑ", 300);
+        BudgetRevenue deeper = new BudgetRevenue("11101", "Deep", "ΕΣΟΔΑ", 200);
+
+        List<BudgetRevenue> nextLevel = main.findNextLevelSubCategories();
+        Assertions.assertEquals(1, nextLevel.size());
+        Assertions.assertEquals(sub, nextLevel.get(0));
+    }
+
+
 
 }
