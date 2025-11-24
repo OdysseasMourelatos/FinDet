@@ -21,6 +21,16 @@ class BudgetEntryTest {
     }
 
     @Test
+    void testConstructorStoresValues() {
+        BudgetEntry entry = new TestBudgetEntry("111", "Test Description", "ΕΣΟΔΑ", 1000);
+
+        assertEquals("111", entry.getCode());
+        assertEquals("Test Description", entry.getDescription());
+        assertEquals("ΕΣΟΔΑ", entry.getCategory());
+        assertEquals(1000, entry.getAmount());
+    }
+
+    @Test
     void testStaticListAddsEntriesAutomatically() {
         assertEquals(0, BudgetEntry.budgetEntries.size());
 
@@ -28,14 +38,23 @@ class BudgetEntryTest {
 
         assertEquals(1, BudgetEntry.budgetEntries.size());
     }
-    
-    @Test
-    void testConstructorStoresValues() {
-        BudgetEntry entry = new TestBudgetEntry("111", "Test Description", "ΕΣΟΔΑ", 1000);
 
-        assertEquals("111", entry.getCode());
-        assertEquals("Test Description", entry.getDescription());
-        assertEquals("ΕΣΟΔΑ", entry.getCategory());
+    @Test
+    void testSetAmountWorksForPositiveValues() {
+        BudgetEntry entry = new TestBudgetEntry("001", "A", "ΕΣΟΔΑ", 1000);
+
+        entry.setAmount(2000);
+
+        assertEquals(2000, entry.getAmount());
+    }
+
+    @Test
+    void testSetAmountDoesNotAcceptNegativeValues() {
+        BudgetEntry entry = new TestBudgetEntry("001", "A", "ΕΣΟΔΑ", 1000);
+
+        entry.setAmount(-50);
+
+        // Πρέπει να ΜΗΝ αλλάξει
         assertEquals(1000, entry.getAmount());
     }
 }
