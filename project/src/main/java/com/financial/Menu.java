@@ -213,6 +213,37 @@ public class Menu {
         }
     }
 
+    public static void selectChangeMethodAndApply(BudgetRevenue budgetRevenue) {
+        Scanner input = new Scanner(System.in);
+        System.out.println();
+        System.out.println("=== ΤΡΟΠΟΣ ΜΕΤΑΒΟΛΗΣ ΥΠΟΚΑΤΗΓΟΡΙΩΝ ΕΣΟΔΩΝ ===");
+        System.out.println();
+        System.out.println("[1] Ισόποση μεταβολή υποκατηγοριών");
+        System.out.println("[2] Ποσοστιαία (Αναλογική) μεταβολή υποκατηγοριών");
+        System.out.println("[3] Χειροκίνητη μεταβολή ανά υποκατηγορία");
+        System.out.println();
+        System.out.print("Επιλογή: ");
+        int changeMethod = input.nextInt();
+        System.out.println();
+
+        selectInputMethodAndExecute(budgetRevenue, changeMethod);
+    }
+
+    public static void selectInputMethodAndExecute(BudgetRevenue budgetRevenue, int changeMethod) {
+        Scanner input = new Scanner(System.in);
+        System.out.println("=== ΤΡΟΠΟΣ ΕΙΣΑΓΩΓΗΣ ΜΕΤΑΒΟΛΗΣ ΛΟΓΑΡΙΑΣΜΟΥ ΕΣΟΔΩΝ ===");
+        System.out.println();
+        System.out.println("[1] Εισαγωγή Ποσοστού (%) Μεταβολής Λογαριασμού");
+        System.out.println("[2] Εισαγωγή Ποσού (€) Μεταβολής Λογαριασμού");
+        System.out.println("[3] Εισαγωγή Νέου Επιθυμητού Υπολοίπου (€) Λογαριασμού");
+        System.out.println();
+        System.out.print("Επιλογή: ");
+        int inputMethod = input.nextInt();
+        System.out.println();
+
+        executeBudgetChanges(budgetRevenue, changeMethod, inputMethod);
+    }
+
     public static void printSubMenuOfChoice6() {
         Scanner input = new Scanner(System.in);
         System.out.println("=== ΓΡΑΦΗΜΑΤΑ & ΟΠΤΙΚΟΠΟΙΗΣΕΙΣ ===");
