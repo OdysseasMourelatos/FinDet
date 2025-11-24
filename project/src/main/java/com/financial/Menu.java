@@ -179,4 +179,34 @@ public class Menu {
             default -> System.out.println(RED + "Μη έγκυρη επιλογή" + RESET);
         }
     }
+
+    public static void showBeforeChanges(BudgetRevenue budgetRevenue){
+        System.out.println();
+        System.out.println("********************************************************* ΠΡΙΝ *********************************************************");
+        System.out.println();
+        DataOutput.printEntryWithAsciiTable(budgetRevenue);
+        System.out.println();
+        System.out.println("ΚΑΤΗΓΟΡΙΕΣ ΣΕ ΥΨΗΛΟΤΕΡΟ ΕΠΙΠΕΔΟ:\n");
+        budgetRevenue.printSuperCategoriesTopDown();
+        System.out.println();
+        System.out.println("ΚΑΤΗΓΟΡΙΕΣ ΣΕ ΧΑΜΗΛΟΤΕΡΟ ΕΠΙΠΕΔΟ:\n");
+        budgetRevenue.printAllSubCategories();
+        System.out.println();
+    }
+
+    public static void showAfterChanges(BudgetRevenue budgetRevenue){
+        System.out.println();
+        System.out.println("********************************************************* ΜΕΤΑ *********************************************************");
+        System.out.println();
+        DataOutput.printEntryWithAsciiTable(budgetRevenue);
+        System.out.println();
+        System.out.println("ΚΑΤΗΓΟΡΙΕΣ ΛΟΓΑΡΙΑΣΜΩΝ ΣΕ ΥΨΗΛΟΤΕΡΟ ΕΠΙΠΕΔΟ:\n");
+        budgetRevenue.printSuperCategoriesTopDown();
+        System.out.println();
+        System.out.println("ΚΑΤΗΓΟΡΙΕΣ ΛΟΓΑΡΙΑΣΜΩΝ ΣΕ ΧΑΜΗΛΟΤΕΡΟ ΕΠΙΠΕΔΟ:\n");
+        budgetRevenue.printAllSubCategories();
+        System.out.println();
+        System.out.println(GREEN + "ΟΙ ΑΛΛΑΓΕΣ ΟΛΟΚΛΗΡΩΘΗΚΑΝ ΜΕ ΕΠΙΤΥΧΙΑ.\n" + RESET + "ΕΠΙΣΤΡΟΦΗ ΣΤΟ ΚΥΡΙΟ ΜΕΝΟΥ..");
+
+    }
 }
