@@ -40,4 +40,19 @@ public class BudgetExpenseTest {
         Assertions.assertEquals(150, result.get(0).getAmount());
     }
 
+    @Test
+    public void testFindExpenseWithCode() {
+        BudgetExpense e = new BudgetExpense("003", "Coffee", "ΕΞΟΔΑ", 20);
+
+        BudgetExpense found = BudgetExpense.findExpenseWithCode("003");
+        Assertions.assertEquals(e, found);
+    }
+
+    @Test
+    public void testNoExpenseFound() {
+        BudgetExpense found = BudgetExpense.findExpenseWithCode("999");
+        Assertions.assertNull(found);
+    }
+
+
 }
