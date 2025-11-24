@@ -1,6 +1,13 @@
 package com.financial;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.io.TempDir;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import org.junit.jupiter.api.Test;
+import java.lang.reflect.Method;
+import static org.junit.jupiter.api.Assertions.*;
+
 
 public class DataInputTest {
 
@@ -10,11 +17,6 @@ public class DataInputTest {
     }
 
     package com.financial;
-
-import org.junit.jupiter.api.Test;
-import java.lang.reflect.Method;
-
-import static org.junit.jupiter.api.Assertions.*;
 
     public class DataInputTest {
 
@@ -39,6 +41,19 @@ import static org.junit.jupiter.api.Assertions.*;
             assertEquals("ΕΣΟΔΑ", rev.getCategory());
             assertEquals(1000, rev.getAmount());
         }
+    }
+    @Test
+    void testSimpleCSVReader(@TempDir Path tempDir) throws Exception {
+        Path csv = tempDir.resolve("test.csv");
+        Files.write(csv, (
+                "code,description,amount\n" +
+                        "11,RevenueA,500\n" +
+                        "12,RevenueB,300\n"
+        ).getBytes());
+
+        DataInput.simpleCSVReader(csv.toString());
+
+        assertEquals(2, BudgetRevenue.getAllBudgetRevenues().size());
     }
 
 }
