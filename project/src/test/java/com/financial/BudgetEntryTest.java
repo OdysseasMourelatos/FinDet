@@ -59,6 +59,31 @@ class BudgetEntryTest {
     }
 
     @Test
+    void testMergeListsCombinesRevenuesAndExpenses() {
+        // Δημιουργούμε test data στις υποκλάσεις
+        BudgetRevenue revenue1 = new BudgetRevenue("REV1", "Πωλήσεις", "ΕΣΟΔΑ", 5000);
+        BudgetRevenue revenue2 = new BudgetRevenue("REV2", "Υπηρεσίες", "ΕΣΟΔΑ", 3000);
+
+        BudgetExpense expense1 = new BudgetExpense("EXP1", "Μισθοί", "ΕΞΟΔΑ", 2000);
+        BudgetExpense expense2 = new BudgetExpense("EXP2", "Αγορές", "ΕΞΟΔΑ", 1500);
+
+        // Καλούμε τη merge μέθοδο
+        ArrayList<BudgetEntry> result = BudgetEntry.mergeListsOfMainRevenuesAndMainExpenses();
+
+        // Ελέγχουμε ότι η λίστα δεν είναι κενή και περιέχει στοιχεία
+        assertNotNull(result);
+        assertFalse(result.isEmpty());
+
+        // Ελέγχουμε ότι όλα τα στοιχεία είναι BudgetEntry
+        for (BudgetEntry entry : result) {
+            assertTrue(entry instanceof BudgetEntry);
+            assertNotNull(entry.getCode());
+            assertNotNull(entry.getDescription());
+            assertTrue(entry.getAmount() > 0);
+        }
+    }
+
+    @Test
     void testToStringFormat() {
         BudgetEntry entry = new TestBudgetEntry("111", "Description", "ΕΞΟΔΑ", 1234567);
 
