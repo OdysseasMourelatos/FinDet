@@ -2,6 +2,7 @@ package com.financial;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtils;
+import org.jfree.chart.ChartFrame;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
 
@@ -31,6 +32,10 @@ public class PieChartGenerator {
         }
         JFreeChart chart = ChartFactory.createPieChart(title, dataset);
         ChartUtils.saveChartAsPNG(new File("chart.png"), chart, 800, 600);
+        ChartFrame frame = new ChartFrame(title, chart);
+        frame.setSize(600, 400);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
         return chart;
     }
 
