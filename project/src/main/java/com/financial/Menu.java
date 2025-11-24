@@ -97,4 +97,36 @@ public class Menu {
             }
         } while (true);
     }
+
+    ublic static void printSubMenuOfChoice1() {
+        Scanner input = new Scanner(System.in);
+        System.out.println(YELLOW + "=== ΦΟΡΤΩΣΗ / ΕΝΗΜΕΡΩΣΗ CSV ===" + RESET);
+        System.out.println();
+        System.out.println(YELLOW + BOLD + "[1] " + RESET + "Φόρτωση αρχείων" + RESET + RESET_2);
+        System.out.println(YELLOW + BOLD + "[2] " + RESET + "Επαναφόρτωση όλων των CSV" + RESET + RESET_2);
+        System.out.println(YELLOW + BOLD + "[0] " + RESET + "Επιστροφή στο Κύριο Μενού" + RESET + RESET_2);
+        System.out.println();
+        System.out.print("Επιλογή: ");
+        int choice = input.nextInt();
+        input.nextLine();
+        if(choice == 1) {
+            System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου" + BLUE + " (ΕΣΟΔΑ ΚΡΑΤΙΚΟΎ ΠΡΟΥΠΟΛΟΓΙΣΜΟΎ): " + RESET);
+            String filePath = input.nextLine();
+            DataInput.advancedCSVReader(filePath);
+            System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου (ΕΣΟΔΑ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ): ");
+            filePath = input.nextLine();
+            DataInput.advancedCSVReader(filePath);
+            System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου (ΕΞΟΔΑ ΤΑΚΤΙΚΟΥ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ): ");
+            filePath = input.nextLine();
+            DataInput.advancedCSVReader(filePath);
+            System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου (ΕΞΟΔΑ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ): ");
+            filePath = input.nextLine();
+            DataInput.advancedCSVReader(filePath);
+            System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου (ΚΩΔΙΚΟΣ ΚΑΙ ΟΝΟΜΑΣΙΑ ΦΟΡΕΩΝ): ");
+            filePath = input.nextLine();
+            DataInput.advancedCSVReader(filePath);
+            System.out.println();
+            System.out.println(GREEN + "Η ΦΟΡΤΩΣΗ ΤΩΝ ΑΡΧΕΙΩΝ ΠΡΑΓΜΑΤΟΠΟΙΗΘΗΚΕ ΕΠΙΤΥΧΩΣ!" + RESET);
+        }
+    }
 }
