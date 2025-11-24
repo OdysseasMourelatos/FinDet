@@ -289,7 +289,6 @@ public class Menu {
         } else if (changeMethod == 2) {
             budgetRevenue.implementChangesOfPercentageAdjustment(percentage);
         } else if (changeMethod == 3) {
-            // Manual change implementation would go here
             return;
         }
 

@@ -5,86 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0b2062cf-b00e-403a-88ac-da3e4475457c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/checkstyle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/checkstyle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/BudgetEntry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/BudgetEntry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/BudgetExpense.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/BudgetExpense.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/BudgetRevenue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/BudgetRevenue.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/DataInput.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/DataInput.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/DataOutput.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/DataOutput.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/DataUpdate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/DataUpdate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/Entity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/Entity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/Main.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/financial/PieChartGenerator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/Menu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/PublicInvestmentBudgetExpense.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/PublicInvestmentBudgetExpense.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/PublicInvestmentBudgetRevenue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/PublicInvestmentBudgetRevenue.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/RegularBudgetExpense.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/RegularBudgetExpense.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/BudgetEntryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/BudgetEntryTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/checkstyle-cachefile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/checkstyle-checker.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/checkstyle-checker.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/checkstyle-result.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/checkstyle-result.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/BudgetEntry.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/BudgetExpense.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/BudgetRevenue.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/DataInput.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/DataOutput.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/DataUpdate.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/Entity.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/Main.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/Menu.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/PublicInvestmentBudgetExpense.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/PublicInvestmentBudgetRevenue.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/RegularBudgetExpense.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/css/apache-maven-fluido-2.0.0-M9.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/css/print.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/css/site.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/fonts/glyphicons-halflings-regular.eot" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/fonts/glyphicons-halflings-regular.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/fonts/glyphicons-halflings-regular.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/fonts/glyphicons-halflings-regular.woff" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/images/accessories-text-editor.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/images/add.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/images/apache-maven-project-2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/images/application-certificate.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/images/contact-new.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/images/document-properties.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/images/drive-harddisk.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/images/fix.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/images/icon_error_sml.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/images/icon_help_sml.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/images/icon_info_sml.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/images/icon_success_sml.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/images/icon_warning_sml.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/images/image-x-generic.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/images/internet-web-browser.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/images/logos/build-by-maven-black.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/images/logos/build-by-maven-white.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/images/logos/maven-feather.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/images/network-server.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/images/package-x-generic.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/images/profiles/pre-release.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/images/profiles/retired.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/images/profiles/sandbox.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/images/remove.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/images/rss.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/images/update.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/images/window-new.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/img/glyphicons-halflings-white.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/img/glyphicons-halflings.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/js/apache-maven-fluido-2.0.0-M9.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/reports/surefire.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.AppTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.BudgetEntryTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.financial.AppTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.financial.BudgetEntryTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/financial/AppTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/financial/BudgetEntryTest$TestBudgetEntry.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/financial/BudgetEntryTest.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -137,21 +59,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Main Run.executor": "Run",
-    "Application.Main.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "master",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/spmou/.jdks/openjdk-23.0.1",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "org.infernus.idea.checkstyle.CheckStyleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Main Run.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/spmou/.jdks/openjdk-23.0.1&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;org.infernus.idea.checkstyle.CheckStyleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration default="true" type="JetRunConfigurationType">
       <module name="project" />
