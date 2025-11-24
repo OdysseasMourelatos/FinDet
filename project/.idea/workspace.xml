@@ -5,8 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0b2062cf-b00e-403a-88ac-da3e4475457c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/BudgetEntryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/BudgetEntryTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/google_checks.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/checkstyle-cachefile" beforeDir="false" afterPath="$PROJECT_DIR$/target/checkstyle-cachefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.AppTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.AppTest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.BudgetEntryTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.BudgetEntryTest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.financial.BudgetEntryTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.financial.BudgetEntryTest.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/test-classes/com/financial/BudgetEntryTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/financial/BudgetEntryTest.class" afterDir="false" />
