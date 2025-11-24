@@ -235,4 +235,33 @@ public class Menu {
             default -> System.out.println(RED + "Μη έγκυρη επιλογή" + RESET);
         }
     }
+
+    public static void printTaxChartsSubMenu() {
+        Scanner input = new Scanner(System.in);
+        System.out.println();
+        System.out.println("=== ΚΑΤΑΝΟΜΗ ΦΟΡΩΝ ===");
+        System.out.println();
+        System.out.println("[1] Κατανομή Βασικών Λογαριασμών Φόρων");
+        System.out.println("[2] Κατανομή Φόρων επί αγαθών και υπηρεσιών");
+        System.out.println("[3] Κατανομή Φόρων Εισοδήματος");
+        System.out.println("[0] Επιστροφή στο Κύριο Μενού");
+        System.out.println();
+        System.out.print("Επιλογή: ");
+        int choice = input.nextInt();
+        input.nextLine();
+        switch (choice) {
+            case 1 -> {
+                BudgetRevenue budgetRevenue = BudgetRevenue.findRevenueWithCode("11");
+                PieChartGenerator.generateChart(budgetRevenue.findNextLevelSubCategories(), "Κατανομή Φόρων");
+            }
+            case 2 -> {
+                BudgetRevenue budgetRevenue = BudgetRevenue.findRevenueWithCode("111");
+                PieChartGenerator.generateChart(budgetRevenue.findNextLevelSubCategories(), "Κατανομή Φόρων επί αγαθών και υπηρεσιών");
+            }
+            case 3 -> {
+                BudgetRevenue budgetRevenue = BudgetRevenue.findRevenueWithCode("115");
+                PieChartGenerator.generateChart(budgetRevenue.findNextLevelSubCategories(), "Κατανομή Φόρων Εισοδήματος");
+            }
+        }
+    }
 }
