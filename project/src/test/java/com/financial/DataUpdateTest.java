@@ -2,6 +2,10 @@ package com.financial;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 
 import java.util.ArrayList;
 
@@ -61,6 +65,23 @@ public class DataUpdateTest {
                 }
             }
         }
+    }
+    @Test
+    void testCsvUpdateWritesFile(@TempDir Path tempDir) throws Exception {
+        BudgetRevenue rev1 = new BudgetRevenue("11", "Revenue A", "ΕΣΟΔΑ", 1000);
+        BudgetExpense exp1 = new BudgetExpense("21", "Expense A", "ΕΞΟΔΑ", 500);
+
+        Path tempFile = tempDir.resolve("budget.csv");
+
+        DataUpdate.csvUpdate(tempFile.toString());
+
+        // Read file content and validate
+        String content = Files.readString(tempFile);
+        assertTrue(content.contains("code,description,category,amount"));
+        assertTrue(content.contains("Revenue A"));
+        assertTrue(content.contains("Expense A"));
+        assertTrue(content.contains("1000"));
+        assertTrue(content.contains("500"));
     }
 
 }
