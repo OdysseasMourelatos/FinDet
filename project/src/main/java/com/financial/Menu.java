@@ -279,6 +279,23 @@ public class Menu {
         applyChangeWithMethod(budgetRevenue, changeMethod, percentage, change, false);
     }
 
+    public static void applyChangeWithMethod(BudgetRevenue budgetRevenue, int changeMethod,
+                                             double percentage, long changeAmount, boolean isPercentage) {
+        showBeforeChanges(budgetRevenue);
+
+        if (changeMethod == 1) {
+            long change = isPercentage ? (long) (budgetRevenue.getAmount() * percentage) : changeAmount;
+            budgetRevenue.implementChangesOfEqualDistribution(change);
+        } else if (changeMethod == 2) {
+            budgetRevenue.implementChangesOfPercentageAdjustment(percentage);
+        } else if (changeMethod == 3) {
+            // Manual change implementation would go here
+            return;
+        }
+
+        showAfterChanges(budgetRevenue);
+    }
+
     public static void printSubMenuOfChoice6() {
         Scanner input = new Scanner(System.in);
         System.out.println("=== ΓΡΑΦΗΜΑΤΑ & ΟΠΤΙΚΟΠΟΙΗΣΕΙΣ ===");
