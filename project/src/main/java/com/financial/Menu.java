@@ -16,22 +16,22 @@ public class Menu {
     public static final String BOLD = "\u001B[1m";
     public static final String RESET_2 = "\u001B[0m"; //προκαθορισμένη ένταση χρώματος χαρακτήρων
     
-    public static void printMenu() {
+    public static void printMainMenu() {
         Scanner input = new Scanner(System.in); //Δημιουργία αντικειμένου της κλάσης Scanner 
-        System.out.println(PURPLE + BOLD + "ΠΡΟΘΥΠΟΥΡΓΟΣ ΓΙΑ ΜΙΑ ΗΜΕΡΑ - BUDGET MANAGER 2026" + RESET + RESET_2);
+        System.out.println(BLUE + BOLD + "ΠΡΟΘΥΠΟΥΡΓΟΣ ΓΙΑ ΜΙΑ ΗΜΕΡΑ - BUDGET MANAGER 2026" + RESET + RESET_2);
         int choice;
         do {
             try {
-                System.out.println(CYAN + BOLD + "=========== ΚΥΡΙΟ ΜΕΝΟΥ ===========" + RESET + RESET_2);
+                System.out.println(BLUE + BOLD + "=========== ΚΥΡΙΟ ΜΕΝΟΥ ===========" + RESET + RESET_2);
                 System.out.println();
-                System.out.println(CYAN + BOLD + "[1] " + RESET + "Φόρτωση / Ενημέρωση CSV" + RESET_2);
-                System.out.println(CYAN + BOLD + "[2] " + RESET + "Προβολή Προϋπολογισμού" + RESET_2);
-                System.out.println(CYAN + BOLD + "[3] " + RESET + "Εισαγωγή Αλλαγών" + RESET_2);
-                System.out.println(CYAN + BOLD + "[4] " + RESET + "Έλεγχος Περιορισμών" + RESET_2);
-                System.out.println(CYAN + BOLD + "[5] " + RESET + "Οικονομική Ανάλυση" + RESET_2);
-                System.out.println(CYAN + BOLD + "[6] " + RESET + "Γραφήματα & Οπτικοποιήσεις" + RESET_2);
-                System.out.println(CYAN + BOLD + "[7] " + RESET + "Export PDF / CSV" + RESET_2);
-                System.out.println(RED + BOLD +  "[0] Έξοδος" + RESET + RESET_2);
+                System.out.println(BLUE + BOLD + "[1] " + RESET + "Φόρτωση / Ενημέρωση CSV" + RESET_2);
+                System.out.println(BLUE + BOLD + "[2] " + RESET + "Προβολή Προϋπολογισμού" + RESET_2);
+                System.out.println(BLUE + BOLD + "[3] " + RESET + "Εισαγωγή Αλλαγών" + RESET_2);
+                System.out.println(BLUE + BOLD + "[4] " + RESET + "Αναζήτηση Στοιχείων Προϋπολογισμού" + RESET_2);
+                System.out.println(BLUE + BOLD + "[5] " + RESET + "Οικονομική Ανάλυση" + RESET_2);
+                System.out.println(BLUE + BOLD + "[6] " + RESET + "Γραφήματα & Οπτικοποιήσεις" + RESET_2);
+                System.out.println(BLUE + BOLD + "[7] " + RESET + "Export σε PDF " + RESET_2);
+                System.out.println(BLUE + BOLD +  "[0] Έξοδος" + RESET + RESET_2);
                 System.out.println();
                 System.out.print("Επιλογή: ");
                 choice = input.nextInt(); //Εισαγωγή αριθμού από τον χρήστη
@@ -77,7 +77,7 @@ public class Menu {
                     System.out.println();
                     System.out.print("Επιλογή: ");
 
-                } else if(choice == 3) {
+                } else if (choice == 3) {
                     System.out.println("=== ΕΙΣΑΓΩΓΗ ΑΛΛΑΓΩΝ ===");
                     System.out.println();
                     System.out.println("[1] Τροποποίηση Ποσού Υφιστάμενου Λογαριασμού");
