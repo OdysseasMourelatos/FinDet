@@ -91,5 +91,23 @@ public class BudgetRevenueTest {
 
         Assertions.assertEquals(110, sub1.getAmount());
     }
+    @Test
+    public void testCalculateSum() {
+        new BudgetRevenue("11", "Top1", "ΕΣΟΔΑ", 500);
+        new BudgetRevenue("12", "Top2", "ΕΣΟΔΑ", 300);
+        new BudgetRevenue("111", "Sub", "ΕΣΟΔΑ", 100);
+
+        // Only code length == 2 counts
+        Assertions.assertEquals(800, BudgetRevenue.calculateSum());
+    }
+
+    @Test
+    public void testFindRevenueWithCode() {
+        BudgetRevenue r = new BudgetRevenue("11", "Rev", "ΕΣΟΔΑ", 500);
+
+        BudgetRevenue found = BudgetRevenue.findRevenueWithCode("11");
+
+        Assertions.assertEquals(r, found);
+    }
 
 }
