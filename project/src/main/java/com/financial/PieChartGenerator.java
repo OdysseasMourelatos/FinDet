@@ -7,38 +7,38 @@ import org.jfree.data.general.DefaultPieDataset;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class PieChartGenerator {
 
 
-    static Map<String, Long> InstanceMap = new HashMap<>();
+    static Map<String, Long> instanceMap = new HashMap<>();
 
-    public static Map<String,Long> fillMap(Arraylist<? extends BudgetEnrries> entry) {
+    public static Map<String, Long> fillMap(ArrayList<? extends BudgetEntry> entries) {
+        instanceMap.clear();
         for (BudgetEntry entry : entries) {
-            if (budgetRevenue.getCode().length()== 2) {
-                InstanceMap.put(entry.getDescription(),entry.getAmount());
-            }
+            instanceMap.put(entry.getDescription(), entry.getAmount());
         }
-        return InstanceMap;
+        return instanceMap;
     }
 
-    private static JFreeChart createRevenuePie (Map<String, Long> InstanceMap) throws IOException {
+    private static JFreeChart createRevenuePie(Map<String, Long> instanceMap) throws IOException {
         DefaultPieDataset<String> dataset = new DefaultPieDataset<>();
-        for (Map.Entry<String, Long> entry : InstanceMap.entrySet()) {
+        for (Map.Entry<String, Long> entry : instanceMap.entrySet()) {
             dataset.setValue(entry.getKey(), entry.getValue());
         }
         JFreeChart chart = ChartFactory.createPieChart(title, dataset);
-        ChartUtils.saveChartAsPNG(new File("revenue_pie_chart.png"), chart, 800, 600);
+        ChartUtils.saveChartAsPNG(new File("chart.png"), chart, 800, 600);
         return chart;
     }
 
-    public static void generateChart(Arraylist<? extends BudgetEnrries> entry, String title) {
+    public static void generateChart(ArrayList<? extends BudgetEntry> entries, String title) {
         try {
             fillMap(entries);
-            createRevenuePie(MainRevenueMap);
-            System.out.println("Το διάγραμμα δημιουργήθηκε: revenue_pie_chart.png");
+            createRevenuePie(instanceMap);
+            System.out.println(Menu.GREEN + "Το διάγραμμα δημιουργήθηκε" + Menu.RESET);
         } catch (IOException e) {
             System.err.println("Σφάλμα: " + e.getMessage());
         }
