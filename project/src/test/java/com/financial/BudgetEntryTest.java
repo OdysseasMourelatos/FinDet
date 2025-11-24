@@ -7,23 +7,26 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class BudgetEntryTest {
+public class BudgetEntryTest {
 
     // Dummy subclass γιατί η BudgetEntry είναι abstract
-    static class TestBudgetEntry extends BudgetEntry {
+    public static class TestBudgetEntry extends BudgetEntry {
         public TestBudgetEntry(String code, String description, String category, long amount) {
             super(code, description, category, amount);
         }
     }
 
     @BeforeEach
-    void setup() {
-        // Καθαρίζουμε τη static λίστα κάθε φορά πριν από test
-        BudgetEntry.budgetEntries.clear();
+    public void setup() {
+        try {
+            BudgetEntry.budgetEntries = new ArrayList<>();
+        } catch (Exception e) {
+            BudgetEntry.budgetEntries.clear();
+        }
     }
 
     @Test
-    void testConstructorStoresValues() {
+    public void testConstructorStoresValues() {
         BudgetEntry entry = new TestBudgetEntry("111", "Test Description", "ΕΣΟΔΑ", 1000);
 
         assertEquals("111", entry.getCode());
@@ -33,7 +36,7 @@ class BudgetEntryTest {
     }
 
     @Test
-    void testStaticListAddsEntriesAutomatically() {
+    public void testStaticListAddsEntriesAutomatically() {
         assertEquals(0, BudgetEntry.budgetEntries.size());
 
         new TestBudgetEntry("001", "A", "ΕΣΟΔΑ", 500);
@@ -42,7 +45,7 @@ class BudgetEntryTest {
     }
 
     @Test
-    void testSetAmountWorksForPositiveValues() {
+    public void testSetAmountWorksForPositiveValues() {
         BudgetEntry entry = new TestBudgetEntry("001", "A", "ΕΣΟΔΑ", 1000);
 
         entry.setAmount(2000);
@@ -51,7 +54,7 @@ class BudgetEntryTest {
     }
 
     @Test
-    void testSetAmountDoesNotAcceptNegativeValues() {
+    public void testSetAmountDoesNotAcceptNegativeValues() {
         BudgetEntry entry = new TestBudgetEntry("001", "A", "ΕΣΟΔΑ", 1000);
 
         entry.setAmount(-50);
@@ -61,7 +64,7 @@ class BudgetEntryTest {
     }
 
     @Test
-    void testMergeListsCombinesRevenuesAndExpenses() {
+    public void testMergeListsCombinesRevenuesAndExpenses() {
         // Δημιουργούμε test data στις υποκλάσεις
         BudgetRevenue revenue1 = new BudgetRevenue("REV1", "Πωλήσεις", "ΕΣΟΔΑ", 5000);
         BudgetRevenue revenue2 = new BudgetRevenue("REV2", "Υπηρεσίες", "ΕΣΟΔΑ", 3000);
@@ -86,7 +89,7 @@ class BudgetEntryTest {
     }
 
     @Test
-    void testPrintMergedListsProducesOutput() {
+    public void testPrintMergedListsProducesOutput() {
         // Προσθέτουμε δεδομένα για να υπάρχει έξοδος
         new BudgetRevenue("PRINT1", "Έσοδο Εκτύπωσης", "ΕΣΟΔΑ", 10000);
         new BudgetExpense("PRINT2", "Έξοδο Εκτύπωσης", "ΕΞΟΔΑ", 7500);
@@ -112,7 +115,7 @@ class BudgetEntryTest {
     }
 
     @Test
-    void testToStringFormat() {
+    public void testToStringFormat() {
         BudgetEntry entry = new TestBudgetEntry("111", "Description", "ΕΞΟΔΑ", 1234567);
 
         String text = entry.toString();

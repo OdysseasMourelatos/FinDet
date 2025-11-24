@@ -5,7 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0b2062cf-b00e-403a-88ac-da3e4475457c" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.AppTest.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.BudgetEntryTest.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/surefire-reports/com.financial.AppTest.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/surefire-reports/com.financial.BudgetEntryTest.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/test-classes/com/financial/AppTest.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/test-classes/com/financial/BudgetEntryTest$TestBudgetEntry.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/test-classes/com/financial/BudgetEntryTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/income_expenses_chart.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/AppTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/AppTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/BudgetEntryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/BudgetEntryTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/checkstyle-cachefile" beforeDir="false" afterPath="$PROJECT_DIR$/target/checkstyle-cachefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/OtherCurrentRevenue.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
