@@ -73,4 +73,19 @@ public class DataInputTest {
         assertEquals(1, BudgetRevenue.getAllBudgetRevenues().size());
     }
 
+    @Test
+    void testMalformedCSVInput(@TempDir Path tempDir) throws Exception {
+        Path csv = tempDir.resolve("bad.csv");
+        Files.write(csv, (
+                "code,description,amount\n" +
+                        "11,RevenueA,abc\n" +     // amount is not a number
+                        "too,many,columns,here,123,456\n"
+        ).getBytes());
+
+        assertDoesNotThrow(() -> DataInput.simpleCSVReader(csv.toString()));
+
+        assertEquals(0, BudgetRevenue.getAllBudgetRevenues().size());
+    }
+
+
 }
