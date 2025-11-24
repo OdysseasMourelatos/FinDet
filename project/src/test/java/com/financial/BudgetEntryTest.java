@@ -57,4 +57,16 @@ class BudgetEntryTest {
         // Πρέπει να ΜΗΝ αλλάξει
         assertEquals(1000, entry.getAmount());
     }
+
+    @Test
+    void testToStringFormat() {
+        BudgetEntry entry = new TestBudgetEntry("111", "Description", "ΕΞΟΔΑ", 1234567);
+
+        String text = entry.toString();
+
+        assertTrue(text.contains("111"));
+        assertTrue(text.contains("Description"));
+        assertTrue(text.contains("ΕΞΟΔΑ"));
+        assertTrue(text.contains("1,234,567") || text.contains("1.234.567"));
+    }
 }
