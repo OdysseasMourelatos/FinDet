@@ -194,7 +194,7 @@ public class Menu {
         System.out.println();
     }
 
-    public static void showAfterChanges(BudgetRevenue budgetRevenue){
+    public static void showAfterChanges(BudgetRevenue budgetRevenue) {
         System.out.println();
         System.out.println("********************************************************* ΜΕΤΑ *********************************************************");
         System.out.println();
@@ -207,6 +207,32 @@ public class Menu {
         budgetRevenue.printAllSubCategories();
         System.out.println();
         System.out.println(GREEN + "ΟΙ ΑΛΛΑΓΕΣ ΟΛΟΚΛΗΡΩΘΗΚΑΝ ΜΕ ΕΠΙΤΥΧΙΑ.\n" + RESET + "ΕΠΙΣΤΡΟΦΗ ΣΤΟ ΚΥΡΙΟ ΜΕΝΟΥ..");
+    }
 
+    private static void showTotalRevenuesMenu() {
+        Scanner input = new Scanner(System.in);
+
+        System.out.println("\n=== ΣΥΝΟΛΙΚΑ ΕΣΟΔΑ ===\n");
+        System.out.println("[1] Κρατικός Προϋπολογισμός");
+        System.out.println("[2] Κρατικός Προϋπολογισμός + Προϋπολογισμός Δημόσιων Επενδύσεων (ΠΔΕ)");
+        System.out.println("[3] Προϋπολογισμός Δημόσιων Επενδύσεων (Εθνικό + Συγχρηματοδοτούμενο Σκέλος)");
+        System.out.println("[4] Εθνικό Σκέλος Προϋπολογισμού Δημόσιων Επενδύσεων");
+        System.out.println("[5] Συγχρηματοδοτούμενο Σκέλος Προϋπολογισμού Δημόσιων Επενδύσεων");
+        System.out.print("\nΕπιλογή: ");
+
+        int choice = input.nextInt();
+        System.out.println();
+        switch (choice) {
+            case 1 -> BudgetRevenue.printAllBudgetRevenues();
+            case 2 -> {
+                BudgetRevenue.printAllBudgetRevenues();
+                System.out.println();
+                PublicInvestmentBudgetRevenue.printAllPublicInvestmentBudgetRevenues();
+            }
+            case 3 -> PublicInvestmentBudgetRevenue.printAllPublicInvestmentBudgetRevenues();
+            case 4 -> PublicInvestmentBudgetRevenue.printPublicInvestmentBudgetNationalRevenues();
+            case 5 -> PublicInvestmentBudgetRevenue.printPublicInvestmentBudgetCoFundedRevenues();
+            default -> System.out.println(RED + "Μη έγκυρη επιλογή" + RESET);
+        }
     }
 }
