@@ -18,11 +18,7 @@ public class BudgetEntryTest {
 
     @BeforeEach
     public void setup() {
-        try {
-            BudgetEntry.budgetEntries = new ArrayList<>();
-        } catch (Exception e) {
-            BudgetEntry.budgetEntries.clear();
-        }
+       BudgetEntry.budgetEntries.clear();
     }
 
     @Test

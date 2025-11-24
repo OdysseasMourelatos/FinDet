@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="7" failures="1" name="com.financial.BudgetEntryTest" time="0.075" errors="0" skipped="0">
+<testsuite tests="7" failures="1" name="com.financial.BudgetEntryTest" time="0.08" errors="0" skipped="0">
   <properties>
     <property name="jansi.mode" value="force"/>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
@@ -57,14 +57,11 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="sun.cpu.endian" value="little"/>
   </properties>
-  <testcase classname="com.financial.BudgetEntryTest" name="com.financial.BudgetEntryTest.testPrintMergedListsProducesOutput" time="0.057"/>
-  <testcase classname="com.financial.BudgetEntryTest" name="com.financial.BudgetEntryTest.testConstructorStoresValues" time="0.001"/>
-  <testcase classname="com.financial.BudgetEntryTest" name="com.financial.BudgetEntryTest.testSetAmountWorksForPositiveValues" time="0"/>
-  <testcase classname="com.financial.BudgetEntryTest" name="com.financial.BudgetEntryTest.testSetAmountDoesNotAcceptNegativeValues" time="0.001"/>
-  <testcase classname="com.financial.BudgetEntryTest" name="com.financial.BudgetEntryTest.testMergeListsCombinesRevenuesAndExpenses" time="0.001"/>
-  <testcase classname="com.financial.BudgetEntryTest" name="com.financial.BudgetEntryTest.testToStringFormat" time="0.01"/>
-  <testcase classname="com.financial.BudgetEntryTest" name="com.financial.BudgetEntryTest.testStaticListAddsEntriesAutomatically" time="0.005">
-    <failure message="expected: &lt;0&gt; but was: &lt;14&gt;" type="org.opentest4j.AssertionFailedError">org.opentest4j.AssertionFailedError: expected: &lt;0&gt; but was: &lt;14&gt;
+  <testcase classname="com.financial.BudgetEntryTest" name="com.financial.BudgetEntryTest.testPrintMergedListsProducesOutput" time="0.065"/>
+  <testcase classname="com.financial.BudgetEntryTest" name="com.financial.BudgetEntryTest.testToStringFormat" time="0.008"/>
+  <testcase classname="com.financial.BudgetEntryTest" name="com.financial.BudgetEntryTest.testConstructorStoresValues" time="0.002"/>
+  <testcase classname="com.financial.BudgetEntryTest" name="com.financial.BudgetEntryTest.testStaticListAddsEntriesAutomatically" time="0.004">
+    <failure message="expected: &lt;0&gt; but was: &lt;5&gt;" type="org.opentest4j.AssertionFailedError">org.opentest4j.AssertionFailedError: expected: &lt;0&gt; but was: &lt;5&gt;
 	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
 	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
 	at org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:197)
@@ -74,4 +71,7 @@
 	at com.financial.BudgetEntryTest.testStaticListAddsEntriesAutomatically(BudgetEntryTest.java:40)
 </failure>
   </testcase>
+  <testcase classname="com.financial.BudgetEntryTest" name="com.financial.BudgetEntryTest.testSetAmountWorksForPositiveValues" time="0"/>
+  <testcase classname="com.financial.BudgetEntryTest" name="com.financial.BudgetEntryTest.testSetAmountDoesNotAcceptNegativeValues" time="0.001"/>
+  <testcase classname="com.financial.BudgetEntryTest" name="com.financial.BudgetEntryTest.testMergeListsCombinesRevenuesAndExpenses" time="0"/>
 </testsuite>

@@ -1,9 +1,9 @@
 -------------------------------------------------------------------------------
 Test set: com.financial.BudgetEntryTest
 -------------------------------------------------------------------------------
-Tests run: 7, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.076 sec <<< FAILURE!
-com.financial.BudgetEntryTest.testStaticListAddsEntriesAutomatically()  Time elapsed: 0.005 sec  <<< FAILURE!
-org.opentest4j.AssertionFailedError: expected: <0> but was: <14>
+Tests run: 7, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.081 sec <<< FAILURE!
+com.financial.BudgetEntryTest.testStaticListAddsEntriesAutomatically()  Time elapsed: 0.004 sec  <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: <0> but was: <5>
 	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
 	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
 	at org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:197)
