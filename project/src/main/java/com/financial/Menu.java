@@ -36,84 +36,24 @@ public class Menu {
                 System.out.print("Επιλογή: ");
                 choice = input.nextInt(); //Εισαγωγή αριθμού από τον χρήστη
                 input.nextLine();
-                if (choice == 1) {
-                    System.out.println(YELLOW + "=== ΦΟΡΤΩΣΗ / ΕΝΗΜΕΡΩΣΗ CSV ===" + RESET);
+                if(choice == 1) {
+                    printSubMenuOfChoice1();
+                } else if(choice==2) {
+                    printSubMenuOfChoice2();
+                } else if(choice==3) {
+                    printSubMenuOfChoice3();
+                } else if(choice == 4) {
+                    System.out.println("=== ΑΝΑΖΗΤΗΣΗ ΣΤΟΙΧΕΙΩΝ ===");
                     System.out.println();
-                    System.out.println(YELLOW + BOLD + "[1] " + RESET + "Φόρτωση αρχείων" + RESET + RESET_2);
-                    System.out.println(YELLOW + BOLD + "[2] " + RESET + "Επαναφόρτωση όλων των CSV" + RESET + RESET_2);
-                    System.out.println(YELLOW + BOLD + "[0] " + RESET + "Επιστροφή στο Κύριο Μενού" + RESET + RESET_2);
+                    System.out.println("[1] Αναζήτηση με Κωδικό");
+                    System.out.println("[2] Αναζήτηση με Περιγραφή / Λέξη-κλειδί");
+                    System.out.println("[3] Αναζήτηση ανά Υπουργείο");
+                    System.out.println("[0] Επιστροφή στο Κύριο Μενού");
                     System.out.println();
                     System.out.print("Επιλογή: ");
                     choice = input.nextInt();
                     input.nextLine();
-                    if (choice == 1) {
-                        System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου" + YELLOW + " (ΕΣΟΔΑ ΚΡΑΤΙΚΟΎ ΠΡΟΥΠΟΛΟΓΙΣΜΟΎ): " + RESET);
-                        String filePath = input.nextLine();
-                        DataInput.advancedCSVReader(filePath);
-                        System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου (ΕΣΟΔΑ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ): ");
-                        filePath = input.nextLine();
-                        DataInput.advancedCSVReader(filePath);
-                        System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου (ΕΞΟΔΑ ΤΑΚΤΙΚΟΥ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ): ");
-                        filePath = input.nextLine();
-                        DataInput.advancedCSVReader(filePath);
-                        System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου (ΕΞΟΔΑ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ): ");
-                        filePath = input.nextLine();
-                        DataInput.advancedCSVReader(filePath);
-                        System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου (ΚΩΔΙΚΟΣ ΚΑΙ ΟΝΟΜΑΣΙΑ ΦΟΡΕΩΝ): ");
-                        filePath = input.nextLine();
-                        System.out.println();
-                        System.out.println(GREEN + "Η ΦΟΡΤΩΣΗ ΤΩΝ ΑΡΧΕΙΩΝ ΠΡΑΓΜΑΤΟΠΟΙΗΘΗΚΕ ΕΠΙΤΥΧΩΣ!" + RESET);
-                        System.out.println();
-                    }
-                } else if (choice == 2) {
-                    System.out.println("=== ΠΡΟΒΟΛΗ ΠΡΟΫΠΟΛΟΓΙΣΜΟΥ ===");
-                    System.out.println();
-                    System.out.println("[1] Προβολή συνολικών Εσόδων");
-                    System.out.println("[2] Προβολή συνολικών Εξόδων");
-                    System.out.println("[3] Προβολή ανά Υπουργείο");
-                    System.out.println("[4] Προβολή ανά Κωδικό");
-                    System.out.println("[5] Αναζήτηση στοιχείων");
-                    System.out.println("[0] Επιστροφή στο Κύριο Μενού");
-                    System.out.println();
-                    System.out.print("Επιλογή: ");
-
-                } else if (choice == 3) {
-                    System.out.println("=== ΕΙΣΑΓΩΓΗ ΑΛΛΑΓΩΝ ===");
-                    System.out.println();
-                    System.out.println("[1] Τροποποίηση Ποσού Υφιστάμενου Λογαριασμού");
-                    System.out.println("[2] Προσθήκη Γραμμής Εσόδων");
-                    System.out.println("[3] Προσθήκη Γραμμής Εξόδων");
-                    System.out.println("[4] Διαγραφή Γραμμής");
-                    System.out.println("[0] Επιστροφή");
-                    System.out.println();
-                    System.out.print("Επιλογή: ");
-                    choice = input.nextInt();
-                    input.nextLine();
-                    if (choice == 1) {
-                        System.out.println("=== ΤΡΟΠΟΠΟΙΗΣΗ ΠΟΣΟΥ ΥΦΙΣΤΑΜΕΝΟΥ ΛΟΓΑΡΙΑΣΜΟΥ ===");
-                        System.out.println();
-                        System.out.println("[1] Ισόποση αλλαγή");
-                        System.out.println("[2] Αναλογική αλλαγή");
-                        System.out.println("[3] Ποσοστιαία αλλαγή");
-                        System.out.println("[4] Χειροκίνητη αλλαγή ανά υποκατηγορία");
-                        System.out.println("[0] Επιστροφή στο προηγούμενο μενού");
-                        System.out.println();
-                        System.out.print("Επιλογή: ");
-                        choice = input.nextInt();
-                        System.out.println();
-                        System.out.println(RED + "ΟΙ ΑΛΛΑΓΕΣ ΔΕΝ ΟΛΟΚΛΗΡΩΘΗΚΑΝ ΜΕ ΕΠΙΤΥΧΙΑ.\n" + RESET + "ΕΠΙΣΤΡΟΦΗ ΣΤΟ ΚΥΡΙΟ ΜΕΝΟΥ..");
-                    }
-                } else if (choice == 4) {
-                    System.out.println("=== ΕΛΕΓΧΟΣ ΠΕΡΙΟΡΙΣΜΩΝ ===");
-                    System.out.println();
-                    System.out.println("[1] Έλεγχος ισοσκέλισης προϋπολογισμού");
-                    System.out.println("[2] Έλεγχος υπέρβασης εξόδων");
-                    System.out.println("[3] Έλεγχος μηδενικών ή ελλιπών τιμών");
-                    System.out.println("[4] Έλεγχος αντιστοίχισης κωδικών");
-                    System.out.println("[0] Επιστροφή στο Κύριο Μενού");
-                    System.out.println();
-                    System.out.print("Επιλογή: ");
-                } else if (choice == 5) {
+                } else if(choice == 5) {
                     System.out.println("=== ΟΙΚΟΝΟΜΙΚΗ ΑΝΑΛΥΣΗ ===");
                     System.out.println();
                     System.out.println("[1] Ανάλυση Εσόδων");
@@ -124,28 +64,24 @@ public class Menu {
                     System.out.println("[0] Επιστροφή στο Κύριο Μενού");
                     System.out.println();
                     System.out.print("Επιλογή: ");
-                } else if (choice == 6) {
-                    System.out.println("=== ΓΡΑΦΗΜΑΤΑ & ΟΠΤΙΚΟΠΟΙΗΣΕΙΣ ===");
+                    choice = input.nextInt();
+                    input.nextLine();
+                } else if(choice == 6) {
+                    printSubMenuOfChoice6();
+                } else if(choice == 7) {
+                    System.out.println("=== ΕΞΑΓΩΓΗ ΣΕ PDF ===");
                     System.out.println();
-                    System.out.println("[1] Γράφημα Εσόδων");
-                    System.out.println("[2] Γράφημα Εξόδων");
-                    System.out.println("[3] Γράφημα ανά Υπουργείο");
-                    System.out.println("[4] Σύγκριση Εσόδων - Εξόδων");
-                    System.out.println("[5] Custom γραφήματα");
+                    System.out.println("[1] Εξαγωγή Εσόδων σε PDF");
+                    System.out.println("[2] Εξαγωγή Εξόδων σε PDF");
+                    System.out.println("[3] Εξαγωγή Τελικού Κρατικού Προϋπολογισμού σε PDF");
+                    System.out.println("[4] Εξαγωγή Προϋπολογισμού Δημόσιων Επενδύσεων σε PDF");
+                    System.out.println("[5] Εξαγωγή Ανάλυσης σε PDF");
                     System.out.println("[0] Επιστροφή στο Κύριο Μενού");
                     System.out.println();
                     System.out.print("Επιλογή: ");
-                } else if (choice == 7) {
-                    System.out.println("=== EXPORT PDF / CSV ===");
-                    System.out.println();
-                    System.out.println("[1] Export Εσόδων σε PDF");
-                    System.out.println("[2] Export Εξόδων σε PDF");
-                    System.out.println("[3] Export όλων των δεδομένων σε CSV");
-                    System.out.println("[4] Export ανάλυσης σε PDF");
-                    System.out.println("[0] Επιστροφή στο Κύριο Μενού");
-                    System.out.println();
-                    System.out.print("Επιλογή: ");
-                } else if (choice == 0) {
+                    choice = input.nextInt();
+                    input.nextLine();
+                } else if(choice == 0) {
                     System.out.println("ΠΡΑΓΜΑΤΟΠΟΙΕΙΤΑΙ ΕΞΟΔΟΣ ΑΠΟ ΤΟ ΣΥΣΤΗΜΑ...");
                     break;
                 } else {
