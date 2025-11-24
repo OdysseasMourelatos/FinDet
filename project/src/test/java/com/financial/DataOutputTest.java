@@ -89,4 +89,16 @@ public class DataOutputTest {
         assertTrue(output.contains("Κωδικός Ταξινόμησης"));
         assertFalse(output.contains("ΕΣΟΔΑ"));  // no entries
     }
+
+    @Test
+    void testGreekCharactersOutput() {
+        BudgetRevenue br = new BudgetRevenue("11", "Έσοδα Δοκιμή", "ΕΣΟΔΑ", 1200);
+
+        DataOutput.printEntryWithAsciiTable(br);
+
+        String output = getOutput();
+
+        assertTrue(output.contains("Έσοδα"));
+        assertTrue(output.contains("ΕΣΟΔΑ"));
+    }
 }
