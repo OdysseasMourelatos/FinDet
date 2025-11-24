@@ -92,6 +92,8 @@ public class Menu {
                 input.nextLine();
             } catch (IllegalArgumentException e) {
                 System.out.println(RED + "ΚΑΤΑΧΩΡΗΘΗΚΕ ΜΗ ΕΠΙΤΡΕΠΤΗ ΤΙΜΗ. ΠΑΡΑΚΑΛΩ ΕΙΣΑΓΕΤΕ ΤΙΜΗ ΕΝΤΟΣ ΤΩΝ ΟΡΙΩΝ" + RESET);
+            } catch (NullPointerException e) {
+                System.out.println(RED + "ΕΣΦΑΛΜΕΝΗ ΕΚΧΩΡΗΣΗ ΚΩΔΙΚΟΥ ΛΟΓΑΡΙΑΣΜΟΥ" + RESET);
             }
         } while (true);
     }
