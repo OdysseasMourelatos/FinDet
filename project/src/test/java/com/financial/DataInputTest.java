@@ -56,4 +56,21 @@ public class DataInputTest {
         assertEquals(2, BudgetRevenue.getAllBudgetRevenues().size());
     }
 
+    @Test
+    void testAdvancedCSVReader(@TempDir Path tempDir) throws Exception {
+        Path csv = tempDir.resolve("test2.csv");
+        Files.write(csv, (
+                "header1,header2,header3\n" +
+                        "11,RevenueA,1000\n" +                   // BudgetRevenue
+                        "001,EntityName\n" +                   // Entity
+                        "1111,200,DescA,500\n" +               // RegularBudgetExpense
+                        "2201,DescB,TYPE,300\n" +              // PublicInvestmentBudgetRevenue
+                        "2201,330,DescC,TYPE,700\n"            // PublicInvestmentBudgetExpense
+        ).getBytes());
+
+        DataInput.advancedCSVReader(csv.toString());
+
+        assertEquals(1, BudgetRevenue.getAllBudgetRevenues().size());
+    }
+
 }
