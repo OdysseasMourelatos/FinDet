@@ -198,6 +198,21 @@ public class Menu {
         }
     }
 
+    public static void modifyExistingRevenueAccount() {
+        Scanner input = new Scanner(System.in);
+        System.out.println("=== ΤΡΟΠΟΠΟΙΗΣΗ ΠΟΣΟΥ ΥΦΙΣΤΑΜΕΝΟΥ ΛΟΓΑΡΙΑΣΜΟΥ ΕΣΟΔΩΝ ===");
+        System.out.println();
+        System.out.print("Εισάγετε τον κωδικό του λογαριασμού εσόδων του οποίου το ποσό επιθυμείτε να αλλάξει: ");
+        String code = input.nextLine();
+        BudgetRevenue budgetRevenue = BudgetRevenue.findRevenueWithCode(code);
+
+        if (budgetRevenue != null) {
+            selectChangeMethodAndApply(budgetRevenue);
+        } else {
+            System.out.println(RED + "Δεν βρέθηκε λογαριασμός με κωδικό: " + code + RESET);
+        }
+    }
+
     public static void printSubMenuOfChoice6() {
         Scanner input = new Scanner(System.in);
         System.out.println("=== ΓΡΑΦΗΜΑΤΑ & ΟΠΤΙΚΟΠΟΙΗΣΕΙΣ ===");
