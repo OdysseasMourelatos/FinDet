@@ -70,7 +70,26 @@ public class BudgetRevenueTest {
         Assertions.assertEquals(1, nextLevel.size());
         Assertions.assertEquals(sub, nextLevel.get(0));
     }
+    @Test
+    public void testEqualDistributionNextLevel() {
+        BudgetRevenue main = new BudgetRevenue("11", "Main", "ΕΣΟΔΑ", 1000);
+        BudgetRevenue sub1 = new BudgetRevenue("111", "A", "ΕΣΟΔΑ", 100);
+        BudgetRevenue sub2 = new BudgetRevenue("112", "B", "ΕΣΟΔΑ", 100);
 
+        main.setAmountOfNextLevelSubCategoriesWithEqualDistribution(200);
 
+        Assertions.assertEquals(200, sub1.getAmount());
+        Assertions.assertEquals(200, sub2.getAmount());
+    }
+
+    @Test
+    public void testPercentageAdjustment() {
+        BudgetRevenue main = new BudgetRevenue("11", "Main", "ΕΣΟΔΑ", 1000);
+        BudgetRevenue sub1 = new BudgetRevenue("111", "A", "ΕΣΟΔΑ", 100);
+
+        main.setAmountOfNextLevelSubCategoriesWithPercentageAdjustment(0.10);
+
+        Assertions.assertEquals(110, sub1.getAmount());
+    }
 
 }
