@@ -76,4 +76,17 @@ public class DataOutputTest {
         // Check numeric formatting with commas
         assertTrue(output.contains("3,500"));
     }
+
+    @Test
+    void testPrintWithAsciiTableEmptyList() {
+        ArrayList<BudgetRevenue> list = new ArrayList<>();
+
+        DataOutput.printWithAsciiTable(list);
+
+        String output = getOutput();
+
+        // Should contain header but no data rows except closing rule
+        assertTrue(output.contains("Κωδικός Ταξινόμησης"));
+        assertFalse(output.contains("ΕΣΟΔΑ"));  // no entries
+    }
 }
