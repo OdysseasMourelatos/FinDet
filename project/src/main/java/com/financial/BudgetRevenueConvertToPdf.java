@@ -23,8 +23,8 @@ public class BudgetRevenueConvertToPdf {
             PdfWriter.getInstance(document, new FileOutputStream(filename));
             document.open();
 
-           
-            BaseFont bf = BaseFont.createFont("C:/Windows/Fonts/arial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+
+            BaseFont bf = BaseFont.createFont("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
             Font font = new Font(bf, 12);
 
             Paragraph title = new Paragraph("ΚΡΑΤΙΚΟΣ ΠΡΟΥΠΟΛΟΓΙΣΜΟΣ:ΕΣΟΔΑ", font); 
@@ -48,6 +48,7 @@ public class BudgetRevenueConvertToPdf {
             document.close();
             System.out.println();
             System.out.println(Menu.GREEN + "Το pdf δημιουργήθηκε επιτυχώς" + Menu.RESET);
+            Runtime.getRuntime().exec(new String[]{"xdg-open", filename});
 
 
         } catch (Exception e) {
