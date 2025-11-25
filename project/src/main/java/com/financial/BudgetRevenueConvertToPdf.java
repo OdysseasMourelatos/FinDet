@@ -46,6 +46,9 @@ public class BudgetRevenueConvertToPdf {
 
             document.add(table);
             document.close();
+            System.out.println();
+            System.out.println(Menu.GREEN + "Το pdf δημιουργήθηκε επιτυχώς" + Menu.RESET);
+
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -84,6 +84,9 @@ public class Menu {
                     System.out.print("Επιλογή: ");
                     choice = input.nextInt();
                     input.nextLine();
+                    switch (choice) {
+                        case 1: BudgetRevenueConvertToPdf.createPdf("ΕΣΟΔΑ_ΚΡΑΤΙΚΟΥ_ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ.pdf");
+                    }
                 } else if (choice == 0) {
                     System.out.println("ΠΡΑΓΜΑΤΟΠΟΙΕΙΤΑΙ ΕΞΟΔΟΣ ΑΠΟ ΤΟ ΣΥΣΤΗΜΑ...");
                     break;
