@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="7" failures="0" name="com.financial.BudgetEntryTest" time="0.073" errors="0" skipped="0">
+<testsuite tests="5" failures="0" name="com.financial.EntityTest" time="0.017" errors="0" skipped="0">
   <properties>
     <property name="jansi.mode" value="force"/>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
@@ -57,11 +57,9 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="sun.cpu.endian" value="little"/>
   </properties>
-  <testcase classname="com.financial.BudgetEntryTest" name="com.financial.BudgetEntryTest.testConstructorStoresValues" time="0"/>
-  <testcase classname="com.financial.BudgetEntryTest" name="com.financial.BudgetEntryTest.testStaticListAddsEntriesAutomatically" time="0"/>
-  <testcase classname="com.financial.BudgetEntryTest" name="com.financial.BudgetEntryTest.testSetAmountWorksForPositiveValues" time="0"/>
-  <testcase classname="com.financial.BudgetEntryTest" name="com.financial.BudgetEntryTest.testSetAmountDoesNotAcceptNegativeValues" time="0"/>
-  <testcase classname="com.financial.BudgetEntryTest" name="com.financial.BudgetEntryTest.testMergeListsCombinesRevenuesAndExpenses" time="0.002"/>
-  <testcase classname="com.financial.BudgetEntryTest" name="com.financial.BudgetEntryTest.testPrintMergedListsProducesOutput" time="0.066"/>
-  <testcase classname="com.financial.BudgetEntryTest" name="com.financial.BudgetEntryTest.testToStringFormat" time="0.005"/>
+  <testcase classname="com.financial.EntityTest" name="com.financial.EntityTest.testConstructorAddsEntityToList" time="0.005"/>
+  <testcase classname="com.financial.EntityTest" name="com.financial.EntityTest.testGetters" time="0.001"/>
+  <testcase classname="com.financial.EntityTest" name="com.financial.EntityTest.testFindEntityWithEntityCode_Found" time="0.001"/>
+  <testcase classname="com.financial.EntityTest" name="com.financial.EntityTest.testFindEntityWithEntityCode_NotFound" time="0"/>
+  <testcase classname="com.financial.EntityTest" name="com.financial.EntityTest.testToString" time="0.01"/>
 </testsuite>
