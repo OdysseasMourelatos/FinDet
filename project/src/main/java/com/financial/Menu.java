@@ -18,10 +18,12 @@ public class Menu {
     
     public static void printMainMenu() {
         Scanner input = new Scanner(System.in); //Δημιουργία αντικειμένου της κλάσης Scanner 
+        System.out.println();
         System.out.println(BLUE + BOLD + "ΠΡΟΘΥΠΟΥΡΓΟΣ ΓΙΑ ΜΙΑ ΗΜΕΡΑ - BUDGET MANAGER 2026" + RESET + RESET_2);
         int choice;
         do {
             try {
+                System.out.println();
                 System.out.println(BLUE + BOLD + "=========== ΚΥΡΙΟ ΜΕΝΟΥ ===========" + RESET + RESET_2);
                 System.out.println();
                 System.out.println(BLUE + BOLD + "[1] " + RESET + "Φόρτωση / Ενημέρωση CSV" + RESET_2);
@@ -31,11 +33,12 @@ public class Menu {
                 System.out.println(BLUE + BOLD + "[5] " + RESET + "Οικονομική Ανάλυση" + RESET_2);
                 System.out.println(BLUE + BOLD + "[6] " + RESET + "Γραφήματα & Οπτικοποιήσεις" + RESET_2);
                 System.out.println(BLUE + BOLD + "[7] " + RESET + "Export σε PDF " + RESET_2);
-                System.out.println(BLUE + BOLD +  "[0] Έξοδος" + RESET + RESET_2);
+                System.out.println(BLUE + BOLD + "[0] " + RESET + "Έξοδος " + RESET_2);
                 System.out.println();
                 System.out.print("Επιλογή: ");
                 choice = input.nextInt(); //Εισαγωγή αριθμού από τον χρήστη
                 input.nextLine();
+                System.out.println();
                 if (choice == 1) {
                     printSubMenuOfChoice1();
                 } else if (choice == 2) {
@@ -43,25 +46,25 @@ public class Menu {
                 } else if (choice == 3) {
                     printSubMenuOfChoice3();
                 } else if (choice == 4) {
-                    System.out.println("=== ΑΝΑΖΗΤΗΣΗ ΣΤΟΙΧΕΙΩΝ ===");
+                    System.out.println(BLUE + BOLD + "=== ΑΝΑΖΗΤΗΣΗ ΣΤΟΙΧΕΙΩΝ ===" + RESET + RESET_2);
                     System.out.println();
-                    System.out.println("[1] Αναζήτηση με Κωδικό");
-                    System.out.println("[2] Αναζήτηση με Περιγραφή / Λέξη-κλειδί");
-                    System.out.println("[3] Αναζήτηση ανά Υπουργείο");
-                    System.out.println("[0] Επιστροφή στο Κύριο Μενού");
+                    System.out.println(BLUE + BOLD + "[1] " + RESET + "Αναζήτηση με Κωδικό" + RESET_2);
+                    System.out.println(BLUE + BOLD + "[2] " + RESET + "Αναζήτηση με Περιγραφή / Λέξη-κλειδί" + RESET_2);
+                    System.out.println(BLUE + BOLD + "[3] " + RESET + "Αναζήτηση ανά Υπουργείο" + RESET_2);
+                    System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή στο Κύριο Μενού" + RESET_2);
                     System.out.println();
                     System.out.print("Επιλογή: ");
                     choice = input.nextInt();
                     input.nextLine();
                 } else if (choice == 5) {
-                    System.out.println("=== ΟΙΚΟΝΟΜΙΚΗ ΑΝΑΛΥΣΗ ===");
+                    System.out.println(BLUE + BOLD + "=== ΟΙΚΟΝΟΜΙΚΗ ΑΝΑΛΥΣΗ ===" + RESET + RESET_2);
                     System.out.println();
-                    System.out.println("[1] Ανάλυση Εσόδων");
-                    System.out.println("[2] Ανάλυση Εξόδων");
-                    System.out.println("[3] Μεταβολές σε σχέση με προηγούμενο έτος");
-                    System.out.println("[4] Αναλογίες ανά Υπουργείο");
-                    System.out.println("[5] Δείκτες οικονομικής απόδοσης");
-                    System.out.println("[0] Επιστροφή στο Κύριο Μενού");
+                    System.out.println(BLUE + BOLD + "[1] " + RESET + "Ανάλυση Εσόδων" + RESET_2);
+                    System.out.println(BLUE + BOLD + "[2] " + RESET + "Ανάλυση Εξόδων" + RESET_2);
+                    System.out.println(BLUE + BOLD + "[3] " + RESET + "Μεταβολές σε σχέση με προηγούμενο έτος" + RESET_2);
+                    System.out.println(BLUE + BOLD + "[4] " + RESET + "Αναλογίες ανά Υπουργείο" + RESET_2);
+                    System.out.println(BLUE + BOLD + "[5] " + RESET + "Δείκτες οικονομικής απόδοσης" + RESET_2);
+                    System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή στο Κύριο Μενού" + RESET_2);
                     System.out.println();
                     System.out.print("Επιλογή: ");
                     choice = input.nextInt();
@@ -71,12 +74,12 @@ public class Menu {
                 } else if (choice == 7) {
                     System.out.println("=== ΕΞΑΓΩΓΗ ΣΕ PDF ===");
                     System.out.println();
-                    System.out.println("[1] Εξαγωγή Εσόδων σε PDF");
-                    System.out.println("[2] Εξαγωγή Εξόδων σε PDF");
-                    System.out.println("[3] Εξαγωγή Τελικού Κρατικού Προϋπολογισμού σε PDF");
-                    System.out.println("[4] Εξαγωγή Προϋπολογισμού Δημόσιων Επενδύσεων σε PDF");
-                    System.out.println("[5] Εξαγωγή Ανάλυσης σε PDF");
-                    System.out.println("[0] Επιστροφή στο Κύριο Μενού");
+                    System.out.println(BLUE + BOLD + "[1] " + RESET + "Εξαγωγή Εσόδων σε PDF" + RESET_2);
+                    System.out.println(BLUE + BOLD + "[2] " + RESET + "Εξαγωγή Εξόδων σε PDF" + RESET_2);
+                    System.out.println(BLUE + BOLD + "[3] " + RESET + "Εξαγωγή Τελικού Κρατικού Προϋπολογισμού σε PDF" + RESET_2);
+                    System.out.println(BLUE + BOLD + "[4] " + RESET + "Εξαγωγή Προϋπολογισμού Δημόσιων Επενδύσεων σε PDF" + RESET_2);
+                    System.out.println(BLUE + BOLD + "[5] " + RESET + "Εξαγωγή Ανάλυσης σε PDF" + RESET_2);
+                    System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή στο Κύριο Μενού" + RESET_2);
                     System.out.println();
                     System.out.print("Επιλογή: ");
                     choice = input.nextInt();
@@ -100,11 +103,11 @@ public class Menu {
 
     public static void printSubMenuOfChoice1() {
         Scanner input = new Scanner(System.in);
-        System.out.println(YELLOW + "=== ΦΟΡΤΩΣΗ / ΕΝΗΜΕΡΩΣΗ CSV ===" + RESET);
+        System.out.println(BLUE + BOLD + "=== ΦΟΡΤΩΣΗ / ΕΝΗΜΕΡΩΣΗ CSV ===" + RESET);
         System.out.println();
-        System.out.println(YELLOW + BOLD + "[1] " + RESET + "Φόρτωση αρχείων" + RESET + RESET_2);
-        System.out.println(YELLOW + BOLD + "[2] " + RESET + "Επαναφόρτωση όλων των CSV" + RESET + RESET_2);
-        System.out.println(YELLOW + BOLD + "[0] " + RESET + "Επιστροφή στο Κύριο Μενού" + RESET + RESET_2);
+        System.out.println(BLUE + BOLD + "[1] " + RESET + "Φόρτωση αρχείων" + RESET + RESET_2);
+        System.out.println(BLUE + BOLD + "[2] " + RESET + "Επαναφόρτωση όλων των CSV" + RESET + RESET_2);
+        System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή στο Κύριο Μενού" + RESET + RESET_2);
         System.out.println();
         System.out.print("Επιλογή: ");
         int choice = input.nextInt();
@@ -132,25 +135,27 @@ public class Menu {
 
     public static void printSubMenuOfChoice2() {
         Scanner input = new Scanner(System.in);
-        System.out.println("=== ΠΡΟΒΟΛΗ ΣΤΟΙΧΕΙΩΝ ΠΡΟΫΠΟΛΟΓΙΣΜΟΥ ===");
         System.out.println();
-        System.out.println("[1] Συνολικά Έσοδα");
-        System.out.println("[2] Συνολικά Έξοδα");
+        System.out.println(BLUE + BOLD + "=== ΠΡΟΒΟΛΗ ΣΤΟΙΧΕΙΩΝ ΠΡΟΫΠΟΛΟΓΙΣΜΟΥ ===" );
+        System.out.println();
+        System.out.println(BLUE + BOLD + "[1] " + RESET + "Συνολικά Έσοδα");
+        System.out.println(BLUE + BOLD + "[2] " + RESET + "Συνολικά Έξοδα");
 
-        System.out.println("[3] Βασικές Κατηγορίες Εσόδων (2ψήφιοι)");
-        System.out.println("[4] Βασικές Κατηγορίες Εξόδων (2ψήφιοι)");
-        System.out.println("[5] Βασικές Κατηγορίες Εσόδων & Εξόδων + Αποτέλεσμα Κρατικού Προϋπολογισμού");
+        
+        System.out.println(BLUE + BOLD + "[3] " + RESET + "Βασικές Κατηγορίες Εσόδων (2ψήφιοι)");
+        System.out.println(BLUE + BOLD + "[4] " + RESET + "Βασικές Κατηγορίες Εξόδων (2ψήφιοι)");
+        System.out.println(BLUE + BOLD + "[5] " + RESET + "Βασικές Κατηγορίες Εσόδων & Εξόδων + Αποτέλεσμα Κρατικού Προϋπολογισμού");
 
-        System.out.println("[6] Προβολή ανά Υπουργείο");
-        System.out.println("[7] Προβολή βάσει Κωδικού (2–10 ψηφία)");
+        System.out.println(BLUE + BOLD + "[6] " + RESET + "Προβολή ανά Υπουργείο");
+        System.out.println(BLUE + BOLD + "[7] " + RESET + "Προβολή βάσει Κωδικού (2–10 ψηφία)");
 
-        System.out.println("[8] Προβολή ΠΔΕ συνολικά");
-        System.out.println("[9] Προβολή ΠΔΕ ανά Σκέλος (Εθνικό / Συγχρ.)");
+        System.out.println(BLUE + BOLD + "[8] " + RESET + "Προβολή ΠΔΕ συνολικά");
+        System.out.println(BLUE + BOLD + "[9] " + RESET + "Προβολή ΠΔΕ ανά Σκέλος (Εθνικό / Συγχρ.)");
 
-        System.out.println("[10] Προβολή ανά Τύπο Προϋπολογισμού (Τακτικός / ΠΔΕ / Κρατικός)");
-        System.out.println("[11] Προβολή ανά Κατηγορία Πόρων");
+        System.out.println(BLUE + BOLD + "[10] " + RESET + "Προβολή ανά Τύπο Προϋπολογισμού (Τακτικός / ΠΔΕ / Κρατικός)");
+        System.out.println(BLUE + BOLD + "[11] " + RESET + "Προβολή ανά Κατηγορία Πόρων");
 
-        System.out.println("[0] Επιστροφή στο Κύριο Μενού\n");
+        System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή στο Κύριο Μενού\n" + RESET_2);
 
         System.out.println();
         System.out.print("Επιλογή: ");
@@ -182,13 +187,13 @@ public class Menu {
 
     public static void printSubMenuOfChoice3() {
         Scanner input = new Scanner(System.in);
-        System.out.println("=== ΕΙΣΑΓΩΓΗ ΑΛΛΑΓΩΝ ===");
+        System.out.println(BLUE + BOLD + "=== ΕΙΣΑΓΩΓΗ ΑΛΛΑΓΩΝ ===");
         System.out.println();
-        System.out.println("[1] Τροποποίηση Ποσού Υφιστάμενου Λογαριασμού Εσόδων");
-        System.out.println("[2] Προσθήκη Γραμμής Εσόδων");
-        System.out.println("[3] Προσθήκη Γραμμής Εξόδων");
-        System.out.println("[4] Διαγραφή Γραμμής");
-        System.out.println("[0] Επιστροφή");
+        System.out.println(BLUE + BOLD + "[1] " + RESET + "Τροποποίηση Ποσού Υφιστάμενου Λογαριασμού Εσόδων");
+        System.out.println(BLUE + BOLD + "[2] " + RESET + "Προσθήκη Γραμμής Εσόδων");
+        System.out.println(BLUE + BOLD + "[3] " + RESET + "Προσθήκη Γραμμής Εξόδων");
+        System.out.println(BLUE + BOLD + "[4] " + RESET + "Διαγραφή Γραμμής");
+        System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή" + RESET_2);
         System.out.println();
         System.out.print("Επιλογή: ");
         int choice = input.nextInt();
@@ -200,7 +205,8 @@ public class Menu {
 
     public static void modifyExistingRevenueAccount() {
         Scanner input = new Scanner(System.in);
-        System.out.println("=== ΤΡΟΠΟΠΟΙΗΣΗ ΠΟΣΟΥ ΥΦΙΣΤΑΜΕΝΟΥ ΛΟΓΑΡΙΑΣΜΟΥ ΕΣΟΔΩΝ ===");
+        System.out.println();
+        System.out.println(BLUE + BOLD + "=== ΤΡΟΠΟΠΟΙΗΣΗ ΠΟΣΟΥ ΥΦΙΣΤΑΜΕΝΟΥ ΛΟΓΑΡΙΑΣΜΟΥ ΕΣΟΔΩΝ ===" + RESET + RESET_2);
         System.out.println();
         System.out.print("Εισάγετε τον κωδικό του λογαριασμού εσόδων του οποίου το ποσό επιθυμείτε να αλλάξει: ");
         String code = input.nextLine();
@@ -216,11 +222,11 @@ public class Menu {
     public static void selectChangeMethodAndApply(BudgetRevenue budgetRevenue) {
         Scanner input = new Scanner(System.in);
         System.out.println();
-        System.out.println("=== ΤΡΟΠΟΣ ΜΕΤΑΒΟΛΗΣ ΥΠΟΚΑΤΗΓΟΡΙΩΝ ΕΣΟΔΩΝ ===");
+        System.out.println(BLUE + BOLD + "=== ΤΡΟΠΟΣ ΜΕΤΑΒΟΛΗΣ ΥΠΟΚΑΤΗΓΟΡΙΩΝ ΕΣΟΔΩΝ ===");
         System.out.println();
-        System.out.println("[1] Ισόποση μεταβολή υποκατηγοριών");
-        System.out.println("[2] Ποσοστιαία (Αναλογική) μεταβολή υποκατηγοριών");
-        System.out.println("[3] Χειροκίνητη μεταβολή ανά υποκατηγορία");
+        System.out.println(BLUE + BOLD + "[1] " + RESET + "Ισόποση μεταβολή υποκατηγοριών");
+        System.out.println(BLUE + BOLD + "[2] " + RESET + "Ποσοστιαία (Αναλογική) μεταβολή υποκατηγοριών");
+        System.out.println(BLUE + BOLD + "[3] " + RESET + "Χειροκίνητη μεταβολή ανά υποκατηγορία" + RESET_2);
         System.out.println();
         System.out.print("Επιλογή: ");
         int changeMethod = input.nextInt();
@@ -231,11 +237,11 @@ public class Menu {
 
     public static void selectInputMethodAndExecute(BudgetRevenue budgetRevenue, int changeMethod) {
         Scanner input = new Scanner(System.in);
-        System.out.println("=== ΤΡΟΠΟΣ ΕΙΣΑΓΩΓΗΣ ΜΕΤΑΒΟΛΗΣ ΛΟΓΑΡΙΑΣΜΟΥ ΕΣΟΔΩΝ ===");
+        System.out.println(BLUE + BOLD + "=== ΤΡΟΠΟΣ ΕΙΣΑΓΩΓΗΣ ΜΕΤΑΒΟΛΗΣ ΛΟΓΑΡΙΑΣΜΟΥ ΕΣΟΔΩΝ ===");
         System.out.println();
-        System.out.println("[1] Εισαγωγή Ποσοστού (%) Μεταβολής Λογαριασμού");
-        System.out.println("[2] Εισαγωγή Ποσού (€) Μεταβολής Λογαριασμού");
-        System.out.println("[3] Εισαγωγή Νέου Επιθυμητού Υπολοίπου (€) Λογαριασμού");
+        System.out.println(BLUE + BOLD + "[1] " + RESET + "Εισαγωγή Ποσοστού (%) Μεταβολής Λογαριασμού");
+        System.out.println(BLUE + BOLD + "[2] " + RESET + "Εισαγωγή Ποσού (€) Μεταβολής Λογαριασμού");
+        System.out.println(BLUE + BOLD + "[3] " + RESET + "Εισαγωγή Νέου Επιθυμητού Υπολοίπου (€) Λογαριασμού" + RESET_2);
         System.out.println();
         System.out.print("Επιλογή: ");
         int inputMethod = input.nextInt();
@@ -257,14 +263,14 @@ public class Menu {
 
     public static void applyPercentageChange(BudgetRevenue budgetRevenue, int changeMethod) {
         Scanner input = new Scanner(System.in);
-        System.out.print("Εισάγετε το ποσοστό (%) μεταβολής λογαριασμού: ");
+        System.out.print(BOLD + "Εισάγετε το ποσοστό (%) μεταβολής λογαριασμού: " + RESET_2);
         double percentage = input.nextDouble() / 100;
         applyChangeWithMethod(budgetRevenue, changeMethod, percentage, 0, true);
     }
 
     public static void applyAbsoluteChange(BudgetRevenue budgetRevenue, int changeMethod) {
         Scanner input = new Scanner(System.in);
-        System.out.print("Εισάγετε το ποσό (€) μεταβολής λογαριασμού: ");
+        System.out.print(BOLD + "Εισάγετε το ποσό (€) μεταβολής λογαριασμού: " + RESET_2);
         long change = input.nextLong();
         double percentage = ((double) change / budgetRevenue.getAmount());
         applyChangeWithMethod(budgetRevenue, changeMethod, percentage, change, false);
@@ -272,7 +278,7 @@ public class Menu {
 
     public static void applyTargetBalanceChange(BudgetRevenue budgetRevenue, int changeMethod) {
         Scanner input = new Scanner(System.in);
-        System.out.print("Εισάγετε το νέο επιθυμητό υπόλοιπο (€) λογαριασμού: ");
+        System.out.print(BOLD + "Εισάγετε το νέο επιθυμητό υπόλοιπο (€) λογαριασμού: " + RESET_2);
         long targetBalance = input.nextLong();
         long change = targetBalance - budgetRevenue.getAmount();
         double percentage = ((double) change / budgetRevenue.getAmount());
@@ -297,13 +303,13 @@ public class Menu {
 
     public static void printSubMenuOfChoice6() {
         Scanner input = new Scanner(System.in);
-        System.out.println("=== ΓΡΑΦΗΜΑΤΑ & ΟΠΤΙΚΟΠΟΙΗΣΕΙΣ ===");
+        System.out.println(BLUE + BOLD + "=== ΓΡΑΦΗΜΑΤΑ & ΟΠΤΙΚΟΠΟΙΗΣΕΙΣ ===");
         System.out.println();
-        System.out.println("[1] Κατανομή Εσόδων (Pie Chart)");
-        System.out.println("[2] Κατανομή Εξόδων (Pie Chart)");
-        System.out.println("[3] Σύγκριση Εσόδων–Εξόδων (Bar Chart)");
-        System.out.println("[4] Δαπάνες ανά Υπουργείο (Bar Chart)");
-        System.out.println("[0] Επιστροφή στο Κύριο Μενού");
+        System.out.println(BLUE + BOLD + "[1] " + RESET + "Κατανομή Εσόδων (Pie Chart)");
+        System.out.println(BLUE + BOLD + "[2] " + RESET + "Κατανομή Εξόδων (Pie Chart)");
+        System.out.println(BLUE + BOLD + "[3] " + RESET + "Σύγκριση Εσόδων–Εξόδων (Bar Chart)");
+        System.out.println(BLUE + BOLD + "[4] " + RESET + "Δαπάνες ανά Υπουργείο (Bar Chart)");
+        System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή στο Κύριο Μενού" + RESET_2);
         System.out.println();
         System.out.print("Επιλογή: ");
         int choice = input.nextInt();
@@ -316,14 +322,14 @@ public class Menu {
     public static void printRevenueChartsSubMenu() {
         Scanner input = new Scanner(System.in);
         System.out.println();
-        System.out.println("=== ΚΑΤΑΝΟΜΗ ΕΣΟΔΩΝ (PIE CHART) ===");
+        System.out.println(BLUE + BOLD + "=== ΚΑΤΑΝΟΜΗ ΕΣΟΔΩΝ (PIE CHART) ===");
         System.out.println();
-        System.out.println("[1] Κατανομή Βασικών Λογαριασμών Εσόδων");
-        System.out.println("[2] Κατανομή Φόρων");
-        System.out.println("[3] Κατανομή Μεταβιβάσεων");
-        System.out.println("[4] Κατανομή Πωλήσεων Αγαθών & Υπηρεσιών");
-        System.out.println("[5] Κατανομή Λοιπών Τρεχόντων Εσόδων");
-        System.out.println("[0] Επιστροφή στο Κύριο Μενού");
+        System.out.println(BLUE + BOLD + "[1] " + RESET + "Κατανομή Βασικών Λογαριασμών Εσόδων");
+        System.out.println(BLUE + BOLD + "[2] " + RESET + "Κατανομή Φόρων");
+        System.out.println(BLUE + BOLD + "[3] " + RESET + "Κατανομή Μεταβιβάσεων");
+        System.out.println(BLUE + BOLD + "[4] " + RESET + "Κατανομή Πωλήσεων Αγαθών & Υπηρεσιών");
+        System.out.println(BLUE + BOLD + "[5] " + RESET + "Κατανομή Λοιπών Τρεχόντων Εσόδων");
+        System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή στο Κύριο Μενού" + RESET_2);
         System.out.println();
         System.out.print("Επιλογή: ");
         int choice = input.nextInt();
@@ -350,10 +356,10 @@ public class Menu {
         System.out.println();
         DataOutput.printEntryWithAsciiTable(budgetRevenue);
         System.out.println();
-        System.out.println("ΚΑΤΗΓΟΡΙΕΣ ΣΕ ΥΨΗΛΟΤΕΡΟ ΕΠΙΠΕΔΟ:\n");
+        System.out.println(BOLD + "ΚΑΤΗΓΟΡΙΕΣ ΣΕ ΥΨΗΛΟΤΕΡΟ ΕΠΙΠΕΔΟ:\n" + RESET_2);
         budgetRevenue.printSuperCategoriesTopDown();
         System.out.println();
-        System.out.println("ΚΑΤΗΓΟΡΙΕΣ ΣΕ ΧΑΜΗΛΟΤΕΡΟ ΕΠΙΠΕΔΟ:\n");
+        System.out.println(BOLD + "ΚΑΤΗΓΟΡΙΕΣ ΣΕ ΧΑΜΗΛΟΤΕΡΟ ΕΠΙΠΕΔΟ:\n" + RESET_2);
         budgetRevenue.printAllSubCategories();
         System.out.println();
     }
@@ -364,10 +370,10 @@ public class Menu {
         System.out.println();
         DataOutput.printEntryWithAsciiTable(budgetRevenue);
         System.out.println();
-        System.out.println("ΚΑΤΗΓΟΡΙΕΣ ΛΟΓΑΡΙΑΣΜΩΝ ΣΕ ΥΨΗΛΟΤΕΡΟ ΕΠΙΠΕΔΟ:\n");
+        System.out.println(BOLD + "ΚΑΤΗΓΟΡΙΕΣ ΛΟΓΑΡΙΑΣΜΩΝ ΣΕ ΥΨΗΛΟΤΕΡΟ ΕΠΙΠΕΔΟ:\n" + RESET_2);
         budgetRevenue.printSuperCategoriesTopDown();
         System.out.println();
-        System.out.println("ΚΑΤΗΓΟΡΙΕΣ ΛΟΓΑΡΙΑΣΜΩΝ ΣΕ ΧΑΜΗΛΟΤΕΡΟ ΕΠΙΠΕΔΟ:\n");
+        System.out.println(BOLD + "ΚΑΤΗΓΟΡΙΕΣ ΛΟΓΑΡΙΑΣΜΩΝ ΣΕ ΧΑΜΗΛΟΤΕΡΟ ΕΠΙΠΕΔΟ:\n" + RESET_2);
         budgetRevenue.printAllSubCategories();
         System.out.println();
         System.out.println(GREEN + "ΟΙ ΑΛΛΑΓΕΣ ΟΛΟΚΛΗΡΩΘΗΚΑΝ ΜΕ ΕΠΙΤΥΧΙΑ.\n" + RESET + "ΕΠΙΣΤΡΟΦΗ ΣΤΟ ΚΥΡΙΟ ΜΕΝΟΥ..");
@@ -376,12 +382,12 @@ public class Menu {
     private static void showTotalRevenuesMenu() {
         Scanner input = new Scanner(System.in);
 
-        System.out.println("\n=== ΣΥΝΟΛΙΚΑ ΕΣΟΔΑ ===\n");
-        System.out.println("[1] Κρατικός Προϋπολογισμός");
-        System.out.println("[2] Κρατικός Προϋπολογισμός + Προϋπολογισμός Δημόσιων Επενδύσεων (ΠΔΕ)");
-        System.out.println("[3] Προϋπολογισμός Δημόσιων Επενδύσεων (Εθνικό + Συγχρηματοδοτούμενο Σκέλος)");
-        System.out.println("[4] Εθνικό Σκέλος Προϋπολογισμού Δημόσιων Επενδύσεων");
-        System.out.println("[5] Συγχρηματοδοτούμενο Σκέλος Προϋπολογισμού Δημόσιων Επενδύσεων");
+        System.out.println(BLUE + BOLD + "\n=== ΣΥΝΟΛΙΚΑ ΕΣΟΔΑ ===\n");
+        System.out.println(BLUE + BOLD + "[1] " + RESET + "Κρατικός Προϋπολογισμός");
+        System.out.println(BLUE + BOLD + "[2] " + RESET + "Κρατικός Προϋπολογισμός + Προϋπολογισμός Δημόσιων Επενδύσεων (ΠΔΕ)");
+        System.out.println(BLUE + BOLD + "[3] " + RESET + "Προϋπολογισμός Δημόσιων Επενδύσεων (Εθνικό + Συγχρηματοδοτούμενο Σκέλος)");
+        System.out.println(BLUE + BOLD + "[4] " + RESET + "Εθνικό Σκέλος Προϋπολογισμού Δημόσιων Επενδύσεων");
+        System.out.println(BLUE + BOLD + "[5] " + RESET + "Συγχρηματοδοτούμενο Σκέλος Προϋπολογισμού Δημόσιων Επενδύσεων" + RESET_2);
         System.out.print("\nΕπιλογή: ");
 
         int choice = input.nextInt();
@@ -403,12 +409,12 @@ public class Menu {
     public static void printTaxChartsSubMenu() {
         Scanner input = new Scanner(System.in);
         System.out.println();
-        System.out.println("=== ΚΑΤΑΝΟΜΗ ΦΟΡΩΝ ===");
+        System.out.println(BLUE + BOLD + "=== ΚΑΤΑΝΟΜΗ ΦΟΡΩΝ ===");
         System.out.println();
-        System.out.println("[1] Κατανομή Βασικών Λογαριασμών Φόρων");
-        System.out.println("[2] Κατανομή Φόρων επί αγαθών και υπηρεσιών");
-        System.out.println("[3] Κατανομή Φόρων Εισοδήματος");
-        System.out.println("[0] Επιστροφή στο Κύριο Μενού");
+        System.out.println(BLUE + BOLD + "[1] " + RESET + "Κατανομή Βασικών Λογαριασμών Φόρων");
+        System.out.println(BLUE + BOLD + "[2] " + RESET + "Κατανομή Φόρων επί αγαθών και υπηρεσιών");
+        System.out.println(BLUE + BOLD + "[3] " + RESET + "Κατανομή Φόρων Εισοδήματος");
+        System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή στο Κύριο Μενού" + RESET_2);
         System.out.println();
         System.out.print("Επιλογή: ");
         int choice = input.nextInt();
