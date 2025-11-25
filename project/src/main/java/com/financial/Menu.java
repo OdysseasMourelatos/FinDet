@@ -288,9 +288,15 @@ public class Menu {
     public static void applyChangeWithMethod(BudgetRevenue budgetRevenue, int changeMethod,
                                              double percentage, long changeAmount, boolean isPercentage) {
         showBeforeChanges(budgetRevenue);
-
         if (changeMethod == 1) {
-            long change = isPercentage ? (long) (budgetRevenue.getAmount() * percentage) : changeAmount;
+            long change;
+            if (isPercentage) {
+                double baseAmount = budgetRevenue.getAmount();
+                double calculated = baseAmount * percentage;   // π.χ. 0.20 = 20%
+                change = (long) calculated;
+            } else {
+                change = changeAmount;
+            }
             budgetRevenue.implementChangesOfEqualDistribution(change);
         } else if (changeMethod == 2) {
             budgetRevenue.implementChangesOfPercentageAdjustment(percentage);
