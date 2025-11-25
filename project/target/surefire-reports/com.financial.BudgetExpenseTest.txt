@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
-Test set: com.financial.AppTest
+Test set: com.financial.BudgetExpenseTest
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.04 s - in com.financial.AppTest
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.055 s - in com.financial.BudgetExpenseTest

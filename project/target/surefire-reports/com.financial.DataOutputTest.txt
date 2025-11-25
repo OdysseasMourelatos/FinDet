@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
-Test set: com.financial.AppTest
+Test set: com.financial.DataOutputTest
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.04 s - in com.financial.AppTest
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.091 s - in com.financial.DataOutputTest

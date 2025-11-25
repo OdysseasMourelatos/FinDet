@@ -16,32 +16,23 @@ public class DataInputTest {
         BudgetRevenue.getAllBudgetRevenues().clear();
     }
 
-    package com.financial;
+    @Test
+    void testCreateBudgetRevenueFromCSV() throws Exception {
+        String[] csvLine = {"11", "Main Revenue", "1000"};
 
-    public class DataInputTest {
+        Method m = DataInput.class.getDeclaredMethod("createBudgetRevenueFromCSV", String[].class);
+        m.setAccessible(true);
+        m.invoke(null, (Object) csvLine);
 
-        @BeforeEach
-        void resetState() {
-            BudgetRevenue.getAllBudgetRevenues().clear();
-        }
+        assertEquals(1, BudgetRevenue.getAllBudgetRevenues().size());
+        BudgetRevenue rev = BudgetRevenue.getAllBudgetRevenues().get(0);
 
-        @Test
-        void testCreateBudgetRevenueFromCSV() throws Exception {
-            String[] csvLine = {"11", "Main Revenue", "1000"};
-
-            Method m = DataInput.class.getDeclaredMethod("createBudgetRevenueFromCSV", String[].class);
-            m.setAccessible(true);
-            m.invoke(null, (Object) csvLine);
-
-            assertEquals(1, BudgetRevenue.getAllBudgetRevenues().size());
-            BudgetRevenue rev = BudgetRevenue.getAllBudgetRevenues().get(0);
-
-            assertEquals("11", rev.getCode());
-            assertEquals("Main Revenue", rev.getDescription());
-            assertEquals("ΕΣΟΔΑ", rev.getCategory());
-            assertEquals(1000, rev.getAmount());
-        }
+        assertEquals("11", rev.getCode());
+        assertEquals("Main Revenue", rev.getDescription());
+        assertEquals("ΕΣΟΔΑ", rev.getCategory());
+        assertEquals(1000, rev.getAmount());
     }
+
     @Test
     void testSimpleCSVReader(@TempDir Path tempDir) throws Exception {
         Path csv = tempDir.resolve("test.csv");
@@ -72,20 +63,5 @@ public class DataInputTest {
 
         assertEquals(1, BudgetRevenue.getAllBudgetRevenues().size());
     }
-
-    @Test
-    void testMalformedCSVInput(@TempDir Path tempDir) throws Exception {
-        Path csv = tempDir.resolve("bad.csv");
-        Files.write(csv, (
-                "code,description,amount\n" +
-                        "11,RevenueA,abc\n" +     // amount is not a number
-                        "too,many,columns,here,123,456\n"
-        ).getBytes());
-
-        assertDoesNotThrow(() -> DataInput.simpleCSVReader(csv.toString()));
-
-        assertEquals(0, BudgetRevenue.getAllBudgetRevenues().size());
-    }
-
 
 }

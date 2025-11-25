@@ -3,6 +3,10 @@ package com.financial;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -34,7 +38,7 @@ public class DataUpdateTest {
         String tempFile = "temp_GovernmentBudget.csv";
 
         try {
-            DataUpdate.csvUpdate(); // This writes to default file, we can adapt later to inject tempFile
+            DataUpdate.csvUpdate(tempFile); // This writes to default file, we can adapt later to inject tempFile
 
             // Since file writing is side-effect, we just check that no exception is thrown
             assertTrue(true);
