@@ -70,12 +70,14 @@ public class BudgetRevenue extends BudgetEntry {
     }
 
     public void printSuperCategoriesTopDown() {
+        ArrayList<BudgetRevenue> superCategories= new ArrayList<>();
         if (getSuperCategories().isEmpty()) {
             System.out.println("Δεν υπάρχουν κατηγορίες σε υψηλότερη ιεραρχία");
         } else {
-            for (int i = getSuperCategories().size() - 1; i >= 0; i--) {
-                System.out.println(getSuperCategories().get(i));
+            for (int i = getSuperCategories().size() -1; i >= 0; i--) {
+                superCategories.add(getSuperCategories().get(i));
             }
+            DataOutput.printWithAsciiTable(superCategories);
         }
     }
 
