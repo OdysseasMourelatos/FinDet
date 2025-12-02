@@ -43,7 +43,8 @@ public class PieChartGenerator {
         try {
             fillMap(entries);
             createPie(InstanceMap, title);
-            System.out.println(Menu.GREEN + "Το διάγραμμα δημιουργήθηκε" + Menu.RESET);
+            System.out.println();
+            System.out.println(Menu.GREEN + "Το διάγραμμα δημιουργήθηκε επιτυχώς" + Menu.RESET);
         } catch (IOException e) {
             System.err.println("Σφάλμα: " + e.getMessage());
         }

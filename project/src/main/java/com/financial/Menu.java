@@ -72,7 +72,7 @@ public class Menu {
                 } else if (choice == 6) {
                     printSubMenuOfChoice6();
                 } else if (choice == 7) {
-                    System.out.println("=== ΕΞΑΓΩΓΗ ΣΕ PDF ===");
+                    System.out.println(BLUE + BOLD + "=== ΕΞΑΓΩΓΗ ΣΕ PDF ===" + RESET + RESET_2);
                     System.out.println();
                     System.out.println(BLUE + BOLD + "[1] " + RESET + "Εξαγωγή Εσόδων σε PDF" + RESET_2);
                     System.out.println(BLUE + BOLD + "[2] " + RESET + "Εξαγωγή Εξόδων σε PDF" + RESET_2);
@@ -119,16 +119,16 @@ public class Menu {
             System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου" + BLUE + " (ΕΣΟΔΑ ΚΡΑΤΙΚΟΎ ΠΡΟΥΠΟΛΟΓΙΣΜΟΎ): " + RESET);
             String filePath = input.nextLine();
             DataInput.advancedCSVReader(filePath);
-            System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου (ΕΣΟΔΑ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ): ");
+            System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου" + BLUE + " (ΕΣΟΔΑ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ): " + RESET);
             filePath = input.nextLine();
             DataInput.advancedCSVReader(filePath);
-            System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου (ΕΞΟΔΑ ΤΑΚΤΙΚΟΥ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ): ");
+            System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου" + BLUE + " (ΕΞΟΔΑ ΤΑΚΤΙΚΟΥ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ): " + RESET);
             filePath = input.nextLine();
             DataInput.advancedCSVReader(filePath);
-            System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου (ΕΞΟΔΑ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ): ");
+            System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου" + BLUE + " (ΕΞΟΔΑ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ): " + RESET);
             filePath = input.nextLine();
             DataInput.advancedCSVReader(filePath);
-            System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου (ΚΩΔΙΚΟΣ ΚΑΙ ΟΝΟΜΑΣΙΑ ΦΟΡΕΩΝ): ");
+            System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου" + BLUE + " (ΚΩΔΙΚΟΣ ΚΑΙ ΟΝΟΜΑΣΙΑ ΦΟΡΕΩΝ): " + RESET);
             filePath = input.nextLine();
             DataInput.advancedCSVReader(filePath);
             System.out.println();
