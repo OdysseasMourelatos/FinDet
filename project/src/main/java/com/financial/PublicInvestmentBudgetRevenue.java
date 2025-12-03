@@ -2,28 +2,20 @@ package com.financial;
 
 import java.util.ArrayList;
 
-public class PublicInvestmentBudgetRevenue extends BudgetEntry {
-    protected static ArrayList<PublicInvestmentBudgetRevenue> publicInvestmentBudgetNationalRevenues = new ArrayList<>();
-    protected static ArrayList<PublicInvestmentBudgetRevenue> publicInvestmentBudgetCoFundedRevenues = new ArrayList<>();
+public class PublicInvestmentBudgetRevenue extends BudgetRevenue {
     private final String type;
+    protected static ArrayList<PublicInvestmentBudgetRevenue> publicInvestmentBudgetRevenues = new ArrayList<>();
 
     public PublicInvestmentBudgetRevenue(String code, String description, String category, String type, long amount) {
         super(code, description, category, amount);
         this.type = type;
-        if (type.equals("ΕΘΝΙΚΟ") || type.equals("ΕΘΝΙΚΟ ΣΚΕΛΟΣ")) {
-            publicInvestmentBudgetNationalRevenues.add(this);
-        } else if (type.equals("ΣΥΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ") || type.equals("ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ ΣΚΕΛΟΣ")) {
-            publicInvestmentBudgetCoFundedRevenues.add(this);
-        }
+        publicInvestmentBudgetRevenues.add(this);
     }
 
     public static ArrayList<PublicInvestmentBudgetRevenue> getAllPublicInvestmentBudgetRevenues() {
-        ArrayList<PublicInvestmentBudgetRevenue> publicInvestmentBudgetRevenues = new ArrayList<>();
-        publicInvestmentBudgetRevenues.addAll(publicInvestmentBudgetNationalRevenues);
-        publicInvestmentBudgetRevenues.addAll(publicInvestmentBudgetCoFundedRevenues);
         return publicInvestmentBudgetRevenues;
     }
-
+    
     public static ArrayList<PublicInvestmentBudgetRevenue> getPublicInvestmentBudgetNationalRevenues() {
         return publicInvestmentBudgetNationalRevenues;
     }

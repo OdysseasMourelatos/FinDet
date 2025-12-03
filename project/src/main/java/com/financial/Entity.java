@@ -167,11 +167,7 @@ public class Entity {
     //Get Sums Of Every Service
 
     public Map<String, Long> getRegularSumOfEveryService() {
-        String[] serviceCodes = regularBudgetExpenses.stream()
-                .map(RegularBudgetExpense::getServiceCode)
-                .distinct()
-                .sorted()
-                .toArray(String[]::new);
+        String[] serviceCodes = regularBudgetExpenses.stream().map(RegularBudgetExpense::getServiceCode).distinct().sorted().toArray(String[]::new);
         Map<String, Long> regularServiceSums = new HashMap<>();
         for (String serviceCode : serviceCodes) {
             regularServiceSums.put(serviceCode, getRegularSumOfServiceWithCode(serviceCode));
