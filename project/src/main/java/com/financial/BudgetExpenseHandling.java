@@ -13,4 +13,16 @@ public class BudgetExpenseHandling {
         return null;
     }
 
+    public static <T extends BudgetExpense> ArrayList<T> getExpensesOfEntityWithCode(String entityCode, ArrayList<T> expenses) {
+        ArrayList<T> expensesOfEntity = new ArrayList<>();
+
+        for (T expense : expenses) {
+            if (expense.getEntityCode().equals(entityCode)) {
+                expensesOfEntity.add(expense);
+            }
+        }
+
+        return expensesOfEntity;
+    }
+
 }
