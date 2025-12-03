@@ -133,6 +133,8 @@ public class Menu {
             DataInput.advancedCSVReader(filePath);
             System.out.println();
             System.out.println(GREEN + "Η ΦΟΡΤΩΣΗ ΤΩΝ ΑΡΧΕΙΩΝ ΠΡΑΓΜΑΤΟΠΟΙΗΘΗΚΕ ΕΠΙΤΥΧΩΣ!" + RESET);
+            DataInput.createEntityFromCSV();
+            DataInput.createRegularBudgetRevenueFromCSV();
         }
     }
 
