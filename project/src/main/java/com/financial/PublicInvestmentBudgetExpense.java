@@ -50,7 +50,7 @@ public class PublicInvestmentBudgetExpense extends BudgetExpense {
         DataOutput.printPublicInvestmentBudgetExpenseWithAsciiTable(getPublicInvestmentBudgetNationalExpenses());
     }
 
-    public static void printPublicInvestmentBudgetCoFundedExpenses(){
+    public static void printPublicInvestmentBudgetCoFundedExpenses() {
         DataOutput.printPublicInvestmentBudgetExpenseWithAsciiTable(getPublicInvestmentBudgetCoFundedExpenses());
     }
 
@@ -81,17 +81,13 @@ public class PublicInvestmentBudgetExpense extends BudgetExpense {
     }
 
     // Gets Sum Of Every Entity
-    public static Map<String, Long> getPublicInvestmentSumOfEveryEntity(){
-        String[] entityCodes = publicInvestmentBudgetExpenses.stream()
-                .map(PublicInvestmentBudgetExpense::getEntityCode)
-                .distinct()
-                .sorted()
-                .toArray(String[]::new);
+    public static Map<String, Long> getPublicInvestmentSumOfEveryEntity() {
+        String[] entityCodes = publicInvestmentBudgetExpenses.stream().map(PublicInvestmentBudgetExpense::getEntityCode).distinct().sorted().toArray(String[]::new);
         Map<String, Long> publicInvestmentEntitySums = new HashMap<>();
         for (String entityCode : entityCodes) {
             long sum = 0;
             for (PublicInvestmentBudgetExpense expense : publicInvestmentBudgetExpenses) {
-                if (entityCode.equals(expense.getEntityCode())){
+                if (entityCode.equals(expense.getEntityCode())) {
                     sum += expense.getAmount();
                 }
             }
@@ -105,7 +101,7 @@ public class PublicInvestmentBudgetExpense extends BudgetExpense {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return super.toString() + ", Σκέλος : " + type;
     }
 }
