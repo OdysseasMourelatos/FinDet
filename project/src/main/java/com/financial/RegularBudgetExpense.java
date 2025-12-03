@@ -28,7 +28,6 @@ public class RegularBudgetExpense extends BudgetExpense {
         DataOutput.printBudgetExpenseWithAsciiTable(regularBudgetExpenses);
     }
 
-
     public static long getSumOfRegularBudgetExpenses() {
         long sum = 0;
         for (RegularBudgetExpense regularBudgetExpense : regularBudgetExpenses) {
@@ -38,16 +37,20 @@ public class RegularBudgetExpense extends BudgetExpense {
     }
 
     public static Map<String, Long> getRegularSumOfEveryEntity() {
-        String[] entityCodes = regularBudgetExpenses.stream().map(RegularBudgetExpense::getEntityCode).distinct().sorted().toArray(String[]::new);
+        String[] entityCodes = regularBudgetExpenses.stream()
+                .map(RegularBudgetExpense::getEntityCode)
+                .distinct()
+                .sorted()
+                .toArray(String[]::new);
         Map<String, Long> regularEntitySums = new HashMap<>();
         for (String entityCode : entityCodes) {
             long sum = 0;
-            for (RegularBudgetExpense regularBudgetExpense : regularBudgetExpenses) {
-                if (entityCode.equals(regularBudgetExpense.getEntityCode())) {
-                    sum += regularBudgetExpense.getAmount();
+            for (RegularBudgetExpense expense : regularBudgetExpenses) {
+                if (entityCode.equals(expense.getEntityCode())) {
+                    sum += expense.getAmount();
                 }
             }
-            regularEntitySums.merge(entityCode, sum, Long::sum);
+            regularEntitySums.put(entityCode, sum);
         }
         return regularEntitySums;
     }
@@ -62,7 +65,7 @@ public class RegularBudgetExpense extends BudgetExpense {
         for (String serviceCode : serviceCodes) {
             long sum = 0;
             for (RegularBudgetExpense expense : regularBudgetExpenses) {
-                if (serviceCode.equals(expense.getServiceCode())){
+                if (serviceCode.equals(expense.getServiceCode())) {
                     sum += expense.getAmount();
                 }
             }
@@ -71,10 +74,10 @@ public class RegularBudgetExpense extends BudgetExpense {
         return regularServiceSums;
     }
 
-    public static ArrayList<RegularBudgetExpense> getRegularBudgetExpensesOfEntityPerService(String entityCode){
+    public static ArrayList<RegularBudgetExpense> getRegularBudgetExpensesOfEntityPerService(String entityCode) {
         ArrayList<RegularBudgetExpense> regularBudgetExpensesOfEntityPerService = new ArrayList<>();
         for (RegularBudgetExpense expense : regularBudgetExpenses) {
-            if (entityCode.equals(expense.getEntityCode())){
+            if (entityCode.equals(expense.getEntityCode())) {
                 regularBudgetExpensesOfEntityPerService.add(expense);
             }
         }
