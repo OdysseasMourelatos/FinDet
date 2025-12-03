@@ -24,6 +24,26 @@ public class Entity {
         }
     }
 
+    // Find Methods
+
+    public String findRegularServiceNameWithCode(String serviceCode) {
+        for (RegularBudgetExpense regularBudgetExpense : regularBudgetExpenses) {
+            if (regularBudgetExpense.getServiceCode().equals(serviceCode)) {
+                return regularBudgetExpense.getServiceName();
+            }
+        }
+        return null;
+    }
+
+    public String findPublicInvestmentServiceNameWithCode(String serviceCode, String type) {
+        for (PublicInvestmentBudgetExpense publicInvestmentBudgetExpense : publicInvestmentBudgetExpenses) {
+            if (publicInvestmentBudgetExpense.getServiceCode().equals(serviceCode)) {
+                return publicInvestmentBudgetExpense.getServiceName();
+            }
+        }
+        return null;
+    }
+
     public static Entity findEntityWithEntityCode(String entityCode) {
         for (Entity entity : entities) {
             if (entity.getEntityCode().equals(entityCode)) {
@@ -44,8 +64,8 @@ public class Entity {
         return entityCode;
     }
 
-    public String getName() {
-        return name;
+    public String getEntityName() {
+        return entityName;
     }
 
 
