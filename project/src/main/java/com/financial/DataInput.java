@@ -87,7 +87,8 @@ public class DataInput {
         String description = values[1];
         String category = "ΕΣΟΔΑ";
         long amount = Long.parseLong(values[2]);
-        BudgetEntry budgetRevenue = new BudgetRevenue(code, description, category, amount);
+        BudgetRevenue budgetRevenue = new BudgetRevenue(code, description, category, amount);
+        budgetRevenue.addBudgetRevenueToArrayList();
     }
 
 
