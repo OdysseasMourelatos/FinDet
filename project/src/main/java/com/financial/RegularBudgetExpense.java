@@ -40,13 +40,32 @@ public class RegularBudgetExpense extends BudgetExpense {
         for (String entityCode : entityCodes) {
             long sum = 0;
             for (RegularBudgetExpense regularBudgetExpense : regularBudgetExpenses) {
-                if (entityCode.equals(regularBudgetExpense.entityCode)) {
+                if (entityCode.equals(regularBudgetExpense.getEntityCode())) {
                     sum += regularBudgetExpense.getAmount();
                 }
             }
             regularEntitySums.merge(entityCode, sum, Long::sum);
         }
         return regularEntitySums;
+    }
+
+    public static Map<String, Long> getRegularSumOfEveryService() {
+        String[] serviceCodes = regularBudgetExpenses.stream()
+                .map(RegularBudgetExpense::getServiceCode)
+                .distinct()
+                .sorted()
+                .toArray(String[]::new);
+        Map<String, Long> regularServiceSums = new HashMap<>();
+        for (String serviceCode : serviceCodes) {
+            long sum = 0;
+            for (RegularBudgetExpense expense : regularBudgetExpenses) {
+                if (serviceCode.equals(expense.getServiceCode())){
+                    sum += expense.getAmount();
+                }
+            }
+            regularServiceSums.put(serviceCode, sum);
+        }
+        return regularServiceSums;
     }
 
     public static void printRegularSumOfEveryEntity() {
