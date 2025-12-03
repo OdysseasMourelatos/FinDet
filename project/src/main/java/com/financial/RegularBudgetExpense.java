@@ -63,12 +63,9 @@ public class RegularBudgetExpense extends BudgetExpense {
         return 0;
     }
 
-    public String getEntityCode() {
-        return entityCode;
-    }
 
     @Override
     public String toString() {
-        return "Entity Code: " + entityCode + ", Category Code: " + getCode() + ", Description: " + getDescription() + ", Category: " + getCategory() + ", Amount: " + String.format("%,d", getAmount());
+        return super.toString();
     }
 }
