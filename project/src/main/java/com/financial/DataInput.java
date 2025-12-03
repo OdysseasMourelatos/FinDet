@@ -3,6 +3,7 @@ package com.financial;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.opencsv.CSVReader;
@@ -91,6 +92,34 @@ public class DataInput {
         budgetRevenue.addBudgetRevenueToArrayList();
     }
 
+    protected static void createRegularBudgetRevenueFromCSV() {
+        ArrayList<BudgetRevenue> budgetRevenues = BudgetRevenue.getAllBudgetRevenues();
+        ArrayList<PublicInvestmentBudgetRevenue> publicInvestmentBudgetNationalRevenues = PublicInvestmentBudgetRevenue.getPublicInvestmentBudgetNationalRevenues();
+        ArrayList<PublicInvestmentBudgetRevenue> publicInvestmentBudgetCoFundedRevenues = PublicInvestmentBudgetRevenue.getPublicInvestmentBudgetCoFundedRevenues();
+        for (BudgetRevenue budgetRevenue : budgetRevenues) {
+            //Αντιγραφή όλων τον αντικειμένων στη λίστα budgetRevenues
+            RegularBudgetRevenue regularBudgetRevenue = new RegularBudgetRevenue(budgetRevenue.getCode(), budgetRevenue.getDescription(), "ΕΞΟΔΑ", budgetRevenue.getAmount());
+            for (PublicInvestmentBudgetRevenue publicInvestmentBudgetRevenue : publicInvestmentBudgetNationalRevenues) {
+                if (budgetRevenue.getCode().equals(publicInvestmentBudgetRevenue.getCode())) {
+                    long amount = budgetRevenue.getAmount() - publicInvestmentBudgetRevenue.getAmount();
+                    if (amount == 0) {
+                        RegularBudgetRevenue.regularBudgetRevenues.remove(regularBudgetRevenue);
+                    } else
+                        regularBudgetRevenue.setAmount(amount);
+                }
+            }
+            for (PublicInvestmentBudgetRevenue publicInvestmentBudgetRevenue : publicInvestmentBudgetCoFundedRevenues) {
+                if (budgetRevenue.getCode().equals(publicInvestmentBudgetRevenue.getCode())) {
+                    long amount = regularBudgetRevenue.getAmount() - publicInvestmentBudgetRevenue.getAmount();
+                    if (amount == 0) {
+                        RegularBudgetRevenue.regularBudgetRevenues.remove(regularBudgetRevenue);
+                    } else
+                        regularBudgetRevenue.setAmount(amount);
+                }
+            }
+        }
+    }
+
 
     private static void createPublicInvestmentBudgetRevenueFromCSV(String [] values) {
         String code = values[0];
@@ -99,15 +128,6 @@ public class DataInput {
         String type = values[2];
         long amount = Long.parseLong(values[3]);
         BudgetEntry publicInvestmentBudgetRevenue = new PublicInvestmentBudgetRevenue(code, description, category, type, amount);
-    }
-
-    private static void createRegularBudgetExpenseFromCSV(String[] values) {
-        String entityCode = values[0];
-        String code = values[1];
-        String description = values[2];
-        String category = "ΕΞΟΔΑ";
-        long amount = Long.parseLong(values[3]);
-        BudgetEntry regularBudgetExpense = new RegularBudgetExpense(entityCode, code, description, category, amount);
     }
 
     private static void createPublicInvestmentBudgetExpenseFromCSV(String [] values) {
