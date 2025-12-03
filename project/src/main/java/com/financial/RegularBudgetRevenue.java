@@ -42,4 +42,13 @@ public class RegularBudgetRevenue extends BudgetRevenue {
         }
         return sum;
     }
+
+    public static RegularBudgetRevenue findRevenueWithCode (String code) {
+        for (RegularBudgetRevenue regularBudgetRevenue : regularBudgetRevenues) {
+            if (regularBudgetRevenue.getCode().equals(code)) {
+                return regularBudgetRevenue;
+            }
+        }
+        return null;
+    }
 }
