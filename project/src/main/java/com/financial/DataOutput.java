@@ -92,6 +92,25 @@ public class DataOutput {
         at.addRule();
         System.out.println(at.render());
     }
-    
+
+    public static void printEntityWithAsciiTable(Entity entity, String budgetType) {
+        AsciiTable at = new AsciiTable();
+        at.getRenderer().setCWC(new CWC_FixedWidth()
+                .add(125)
+        );
+        at.addRule();
+        at.addRow(entity.getEntityName());
+        at.addRule();
+        System.out.println(at.render());
+
+        if (budgetType.equals("ΚΡΑΤΙΚΟΥ")) {
+            //printBudgetExpenseWithAsciiTable(entity.getAllBudgetExpenses()); // Αν υλοποιηθεί
+        } else if (budgetType.equals("ΤΑΚΤΙΚΟΥ")) {
+            printBudgetExpenseWithAsciiTable(entity.regularBudgetExpenses);
+        } else if (budgetType.equals("ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ")) {
+            printPublicInvestmentBudgetExpenseWithAsciiTable(entity.publicInvestmentBudgetExpenses);
+        }
+    }
+
 }
 
