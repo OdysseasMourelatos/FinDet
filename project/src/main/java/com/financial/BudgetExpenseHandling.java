@@ -25,4 +25,12 @@ public class BudgetExpenseHandling {
         return expensesOfEntity;
     }
 
+    public static long calculateSumOfExpenses(ArrayList<? extends BudgetExpense> expenses) {
+        long totalExpensesSum = 0;
+        for (BudgetExpense expense : expenses) {
+            totalExpensesSum += expense.getAmount();
+        }
+        return totalExpensesSum;
+    }
+
 }
