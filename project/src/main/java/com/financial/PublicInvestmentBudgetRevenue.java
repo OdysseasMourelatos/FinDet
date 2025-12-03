@@ -68,7 +68,7 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue {
         return sum;
     }
 
-    public static long getSumOfPublicInvestmentBudgetCoFundedExpenses() {
+    public static long getSumOfPublicInvestmentBudgetCoFundedRevenues() {
         long sum = 0;
         for (PublicInvestmentBudgetRevenue publicInvestmentBudgetRevenue : getPublicInvestmentBudgetCoFundedRevenues()) {
             if (publicInvestmentBudgetRevenue.getCode().length() == 2) {
@@ -77,7 +77,7 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue {
         }
         return sum;
     }
-    
+
     public String getType() {
         return type;
     }
