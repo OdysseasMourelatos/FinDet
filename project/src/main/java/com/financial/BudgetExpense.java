@@ -3,15 +3,19 @@ package com.financial;
 import java.util.ArrayList;
 
 public class BudgetExpense extends BudgetEntry {
-    
+
     private String entityCode;
     private String entityName;
     private String serviceCode;
     private String serviceName;
     protected static ArrayList <BudgetExpense> expenses = new ArrayList<>();
 
-    public BudgetExpense(String code, String description, String category, long amount) {
+    public BudgetExpense(String entityCode, String entityName, String serviceCode, String serviceName, String code, String description, String category, long amount) {
         super(code, description, category, amount);
+        this.entityCode = entityCode;
+        this.entityName = entityName;
+        this.serviceCode = serviceCode;
+        this.serviceName = serviceName;
         expenses.add(this);
     }
 
