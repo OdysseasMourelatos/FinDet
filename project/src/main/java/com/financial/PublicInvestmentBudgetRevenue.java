@@ -48,6 +48,36 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue {
         DataOutput.printPublicInvestmentBudgetRevenueWithAsciiTable(getPublicInvestmentBudgetCoFundedRevenues());
     }
 
+    public static long getSumOfAllPublicInvestmentBudgetRevenues() {
+        long sum = 0;
+        for (PublicInvestmentBudgetRevenue publicInvestmentBudgetRevenue : publicInvestmentBudgetRevenues) {
+            if (publicInvestmentBudgetRevenue.getCode().length() == 2) {
+                sum += publicInvestmentBudgetRevenue.getAmount();
+            }
+        }
+        return sum;
+    }
+
+    public static long getSumOfPublicInvestmentBudgetNationalRevenues() {
+        long sum = 0;
+        for (PublicInvestmentBudgetRevenue publicInvestmentBudgetRevenue : getPublicInvestmentBudgetNationalRevenues()) {
+            if (publicInvestmentBudgetRevenue.getCode().length() == 2) {
+                sum += publicInvestmentBudgetRevenue.getAmount();
+            }
+        }
+        return sum;
+    }
+
+    public static long getSumOfPublicInvestmentBudgetCoFundedExpenses() {
+        long sum = 0;
+        for (PublicInvestmentBudgetRevenue publicInvestmentBudgetRevenue : getPublicInvestmentBudgetCoFundedRevenues()) {
+            if (publicInvestmentBudgetRevenue.getCode().length() == 2) {
+                sum += publicInvestmentBudgetRevenue.getAmount();
+            }
+        }
+        return sum;
+    }
+    
     public String getType() {
         return type;
     }
