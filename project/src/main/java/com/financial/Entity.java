@@ -169,7 +169,7 @@ public class Entity {
         return  publicInvestmentExpenses;
     }
 
-    //Get Sums Of Every Service (προσθήκη)
+    //Get Sums Of Every Service
 
     public Map<String, Long> getRegularSumOfEveryService(){
         String[] serviceCodes = regularBudgetExpenses.stream()
@@ -197,7 +197,7 @@ public class Entity {
         return publicInvestmentServiceSums;
     }
 
-    // Get Sums Of Specific Expense Category (προσθήκη)
+    // Get Sums Of Specific Expense Category
 
     public long getRegularSumOfExpenseCategoryWithCode(String code) {
         long sum = 0;
@@ -219,7 +219,7 @@ public class Entity {
         return sum;
     }
 
-    //Get Sums Of Every Expense Category (προσθήκη)
+    //Get Sums Of Every Expense Category
 
     public Map<String, Long> getRegularSumOfEveryExpenseCategory(){
         String[] expenseCategories = regularBudgetExpenses.stream()
@@ -247,6 +247,23 @@ public class Entity {
         return publicInvestmentExpensesSums;
     }
 
+    //Sums Of Every Entity (προσθήκη)
+
+    public static ArrayList<? extends BudgetExpense> getSumOfEveryEntity(ArrayList<? extends BudgetExpense> expenses) {
+        ArrayList<BudgetExpense> expensesPerEntity = new ArrayList<>();;
+        for (Entity entity : entities) {
+            long sum = 0;
+            for (BudgetExpense expense : expenses) {
+                if (entity.entityCode.equals(expense.getEntityCode())){
+                    sum+=expense.getAmount();
+                }
+            }
+            // Υποθέτουμε ότι υπάρχει constructor BudgetExpense(String code, String name, String category, long amount)
+            expensesPerEntity.add(new BudgetExpense(entity.entityCode, entity.entityName, "ΕΞΟΔΑ", sum));
+        }
+        return expensesPerEntity;
+    }
+
     public String getEntityCode() {
         return entityCode;
     }
@@ -258,6 +275,6 @@ public class Entity {
 
     @Override
     public String toString() {
-        return "Entity Code: " + entityCode + ", Name: " + name;
+        return "Entity Code: " + entityCode + ", Name: " + entityName;
     }
 }
