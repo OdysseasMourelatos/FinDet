@@ -44,6 +44,28 @@ public class Entity {
         return null;
     }
 
+    // Get Service Codes
+
+    public ArrayList<String> getRegularServiceCodes(){
+        ArrayList<String> regularServiceCodes = new ArrayList<>();
+        for (RegularBudgetExpense regularBudgetExpense : regularBudgetExpenses) {
+            if (!regularServiceCodes.contains(regularBudgetExpense.getServiceCode())) {
+                regularServiceCodes.add(regularBudgetExpense.getServiceCode());
+            }
+        }
+        return regularServiceCodes;
+    }
+
+    public ArrayList<String> getPublicInvestmentServiceCodes(String type) {
+        ArrayList<String> publicInvestmentServiceCodes = new ArrayList<>();
+        for (PublicInvestmentBudgetExpense publicInvestmentBudgetExpense : publicInvestmentBudgetExpenses) {
+            if (!publicInvestmentServiceCodes.contains(publicInvestmentBudgetExpense.getServiceCode()) && publicInvestmentBudgetExpense.getType().equals(type)) {
+                publicInvestmentServiceCodes.add(publicInvestmentBudgetExpense.getServiceCode());
+            }
+        }
+        return publicInvestmentServiceCodes;
+    }
+
     public static Entity findEntityWithEntityCode(String entityCode) {
         for (Entity entity : entities) {
             if (entity.getEntityCode().equals(entityCode)) {
