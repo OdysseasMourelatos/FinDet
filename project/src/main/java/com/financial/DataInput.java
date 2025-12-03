@@ -120,7 +120,6 @@ public class DataInput {
         }
     }
 
-
     private static void createPublicInvestmentBudgetRevenueFromCSV(String [] values) {
         String code = values[0];
         String description = values[1];
@@ -130,14 +129,38 @@ public class DataInput {
         BudgetEntry publicInvestmentBudgetRevenue = new PublicInvestmentBudgetRevenue(code, description, category, type, amount);
     }
 
-    private static void createPublicInvestmentBudgetExpenseFromCSV(String [] values) {
+    private static void createRegularBudgetExpenseFromCSV(String[] values) {
         String entityCode = values[0];
         String code = values[1];
         String description = values[2];
-        String type = values[3];
         String category = "ΕΞΟΔΑ";
-        long amount = Long.parseLong(values[4]);
-        BudgetEntry regularBudgetExpense = new PublicInvestmentBudgetExpense(entityCode, code, description, type, category, amount);
+        long amount = Long.parseLong(values[3]);
+        //BudgetEntry regularBudgetExpense = new RegularBudgetExpense(entityCode, code, description, category, amount);
+    }
+
+    private static void createRegularBudgetExpensePerServiceFromCSV(String[] values) {
+        String entityCode = values[0];
+        String entityName = values[1];
+        String serviceCode = values[2];
+        String serviceName = values[3];
+        String expenseCode = values[4];
+        String description = values[5];
+        String category = "ΕΞΟΔΑ";
+        long amount = Long.parseLong(values[6]);
+        BudgetEntry regularBudgetExpense = new RegularBudgetExpense(entityCode, entityName, serviceCode, serviceName, expenseCode, description, category, amount);
+    }
+
+    private static void createPublicInvestmentBudgetExpenseFromCSV(String [] values) {
+        String entityCode = values[0];
+        String entityName = values[1];
+        String serviceCode = values[2];
+        String serviceName = values[3];
+        String expenseCode = values[4];
+        String description = values[5];
+        String type = values[6];
+        long amount = Long.parseLong(values[7]);
+        String category = "ΕΞΟΔΑ";
+        BudgetEntry publicInvestmentBudgetExpense = new PublicInvestmentBudgetExpense(entityCode, entityName, serviceCode, serviceName, expenseCode, description, type, category, amount);
     }
 
     private static void createEntityFromCSV(String [] values) {
