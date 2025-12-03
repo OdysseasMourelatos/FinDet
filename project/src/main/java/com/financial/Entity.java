@@ -147,7 +147,7 @@ public class Entity {
     public ArrayList<RegularBudgetExpense> getRegularExpensesOfServiceWithCode(String serviceCode) {
         ArrayList<RegularBudgetExpense> regularExpenses = new ArrayList<>();
         for (RegularBudgetExpense expense : regularBudgetExpenses) {
-            if (serviceCode.equals(expense.getServiceCode())){
+            if (serviceCode.equals(expense.getServiceCode())) {
                 regularExpenses.add(expense);
             }
         }
@@ -157,7 +157,7 @@ public class Entity {
     public ArrayList<PublicInvestmentBudgetExpense> getPublicInvestmentExpensesOfServiceWithCode(String serviceCode, String type) {
         ArrayList<PublicInvestmentBudgetExpense> publicInvestmentExpenses = new ArrayList<>();
         for (PublicInvestmentBudgetExpense expense : publicInvestmentBudgetExpenses) {
-            if (serviceCode.equals(expense.getServiceCode()) && type.equals(expense.getType())){
+            if (serviceCode.equals(expense.getServiceCode()) && type.equals(expense.getType())) {
                 publicInvestmentExpenses.add(expense);
             }
         }
@@ -166,7 +166,7 @@ public class Entity {
 
     //Get Sums Of Every Service
 
-    public Map<String, Long> getRegularSumOfEveryService(){
+    public Map<String, Long> getRegularSumOfEveryService() {
         String[] serviceCodes = regularBudgetExpenses.stream()
                 .map(RegularBudgetExpense::getServiceCode)
                 .distinct()
@@ -179,12 +179,8 @@ public class Entity {
         return regularServiceSums;
     }
 
-    public Map<String, Long> getPublicInvestmentSumOfEveryService(String type){
-        String[] serviceCodes = publicInvestmentBudgetExpenses.stream()
-                .map(PublicInvestmentBudgetExpense::getServiceCode)
-                .distinct()
-                .sorted()
-                .toArray(String[]::new);
+    public Map<String, Long> getPublicInvestmentSumOfEveryService(String type) {
+        String[] serviceCodes = publicInvestmentBudgetExpenses.stream().map(PublicInvestmentBudgetExpense::getServiceCode).distinct().sorted().toArray(String[]::new);
         Map<String, Long> publicInvestmentServiceSums = new HashMap<>();
         for (String serviceCode : serviceCodes) {
             publicInvestmentServiceSums.put(serviceCode, getPublicInvestmentSumOfServiceWithCode(serviceCode, type));
@@ -197,7 +193,7 @@ public class Entity {
     public long getRegularSumOfExpenseCategoryWithCode(String code) {
         long sum = 0;
         for (RegularBudgetExpense expense : regularBudgetExpenses) {
-            if (code.equals(expense.getCode())){
+            if (code.equals(expense.getCode())) {
                 sum += expense.getAmount();
             }
         }
@@ -207,7 +203,7 @@ public class Entity {
     public long getPublicInvestmentSumOfExpenseCategoryWithCode(String code, String type) {
         long sum = 0;
         for (PublicInvestmentBudgetExpense expense : publicInvestmentBudgetExpenses) {
-            if (code.equals(expense.getCode()) && type.equals(expense.getType())){
+            if (code.equals(expense.getCode()) && type.equals(expense.getType())) {
                 sum += expense.getAmount();
             }
         }
@@ -217,11 +213,7 @@ public class Entity {
     //Get Sums Of Every Expense Category
 
     public Map<String, Long> getRegularSumOfEveryExpenseCategory(){
-        String[] expenseCategories = regularBudgetExpenses.stream()
-                .map(RegularBudgetExpense::getCode)
-                .distinct()
-                .sorted()
-                .toArray(String[]::new);
+        String[] expenseCategories = regularBudgetExpenses.stream().map(RegularBudgetExpense::getCode).distinct().sorted().toArray(String[]::new);
         Map<String, Long> regularExpensesSums = new LinkedHashMap<>();
         for (String expenseCategory : expenseCategories) {
             regularExpensesSums.put(expenseCategory, getRegularSumOfExpenseCategoryWithCode(expenseCategory));
@@ -230,11 +222,7 @@ public class Entity {
     }
 
     public Map<String, Long> getPublicInvestmentSumOfEveryExpenseCategory(String type) {
-        String[] expenseCategories = publicInvestmentBudgetExpenses.stream()
-                .map(PublicInvestmentBudgetExpense::getCode)
-                .distinct()
-                .sorted()
-                .toArray(String[]::new);
+        String[] expenseCategories = publicInvestmentBudgetExpenses.stream().map(PublicInvestmentBudgetExpense::getCode).distinct().sorted().toArray(String[]::new);
         Map<String, Long> publicInvestmentExpensesSums = new LinkedHashMap<>();
         for (String expenseCategory : expenseCategories) {
             publicInvestmentExpensesSums.put(expenseCategory, getPublicInvestmentSumOfExpenseCategoryWithCode(expenseCategory, type));
@@ -242,18 +230,17 @@ public class Entity {
         return publicInvestmentExpensesSums;
     }
 
-    //Sums Of Every Entity (προσθήκη)
+    //Sums Of Every Entity
 
     public static ArrayList<? extends BudgetExpense> getSumOfEveryEntity(ArrayList<? extends BudgetExpense> expenses) {
         ArrayList<BudgetExpense> expensesPerEntity = new ArrayList<>();;
         for (Entity entity : entities) {
             long sum = 0;
             for (BudgetExpense expense : expenses) {
-                if (entity.entityCode.equals(expense.getEntityCode())){
+                if (entity.entityCode.equals(expense.getEntityCode())) {
                     sum += expense.getAmount();
                 }
             }
-            // Υποθέτουμε ότι υπάρχει constructor BudgetExpense(String code, String name, String category, long amount)
             expensesPerEntity.add(new BudgetExpense(entity.entityCode, entity.entityName, "ΕΞΟΔΑ", sum));
         }
         return expensesPerEntity;
