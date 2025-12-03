@@ -1,6 +1,8 @@
 package com.financial;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Entity {
     private final String entityCode;
@@ -165,6 +167,34 @@ public class Entity {
             }
         }
         return  publicInvestmentExpenses;
+    }
+
+    //Get Sums Of Every Service (προσθήκη)
+
+    public Map<String, Long> getRegularSumOfEveryService(){
+        String[] serviceCodes = regularBudgetExpenses.stream()
+                .map(RegularBudgetExpense::getServiceCode)
+                .distinct()
+                .sorted()
+                .toArray(String[]::new);
+        Map<String, Long> regularServiceSums = new HashMap<>();
+        for (String serviceCode : serviceCodes) {
+            regularServiceSums.put(serviceCode, getRegularSumOfServiceWithCode(serviceCode));
+        }
+        return regularServiceSums;
+    }
+
+    public Map<String, Long> getPublicInvestmentSumOfEveryService(String type){
+        String[] serviceCodes = publicInvestmentBudgetExpenses.stream()
+                .map(PublicInvestmentBudgetExpense::getServiceCode)
+                .distinct()
+                .sorted()
+                .toArray(String[]::new);
+        Map<String, Long> publicInvestmentServiceSums = new HashMap<>();
+        for (String serviceCode : serviceCodes) {
+            publicInvestmentServiceSums.put(serviceCode, getPublicInvestmentSumOfServiceWithCode(serviceCode, type));
+        }
+        return publicInvestmentServiceSums;
     }
 
     public String getEntityCode() {
