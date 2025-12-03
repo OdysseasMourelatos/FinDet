@@ -11,22 +11,31 @@ public class DataOutput {
         }
     }
 
-    public static void printWithAsciiTable(ArrayList<? extends BudgetEntry> entries) {
+    public static void printRevenueWithAsciiTable(ArrayList<? extends BudgetRevenue> entries, long sum) {
         AsciiTable at = new AsciiTable();
 
-        at.getRenderer().setCWC(new CWC_FixedWidth().add(20).add(60).add(15).add(20));
+        at.getRenderer().setCWC(new CWC_FixedWidth()
+                .add(20)
+                .add(60)
+                .add(15)
+                .add(20)
+        );
 
         at.addRule();
         at.addRow("Κωδικός Ταξινόμησης", "Ονομασία", "Κατηγορία", "Ποσό");
         at.addRule();
 
-        for (BudgetEntry entry : entries) {  // Εδώ μπορούμε να χρησιμοποιήσουμε BudgetEntry
+        for (BudgetEntry entry : entries) {
             at.addRow(
                     entry.getCode(),
                     entry.getDescription(),
                     entry.getCategory(),
                     String.format("%,d", entry.getAmount())
             );
+            at.addRule();
+        }
+        if (sum != 0){
+            at.addRow("", "", "", String.format("%,d", sum));
             at.addRule();
         }
 
@@ -36,7 +45,12 @@ public class DataOutput {
     public static <T extends BudgetEntry> void printEntryWithAsciiTable(T entry) {
         AsciiTable at = new AsciiTable();
 
-        at.getRenderer().setCWC(new CWC_FixedWidth().add(20).add(60).add(15).add(20));
+        at.getRenderer().setCWC(new CWC_FixedWidth()
+                .add(20)
+                .add(60)
+                .add(15)
+                .add(20)
+        );
 
         at.addRule();
         at.addRow("Κωδικός Ταξινόμησης", "Ονομασία", "Κατηγορία", "Ποσό");
