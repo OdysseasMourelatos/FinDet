@@ -2,22 +2,39 @@ package com.financial;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement; // ΝΕΟ
 import java.sql.SQLException;
 
 public class DatabaseManager {
+
 
     private static final String DB_URL = "jdbc:mysql://localhost:3306/budget_db";
     private static final String DB_USER = "your_username";
     private static final String DB_PASSWORD = "your_password";
 
     public static Connection getConnection() throws SQLException {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            System.err.println("MySQL JDBC Driver not found.");
-            e.printStackTrace();
-            throw new SQLException("JDBC Driver not found.", e);
+    }
+
+
+    public static void insertRegularExpense(String entityCode, String entityName, String serviceCode, String serviceName, String code, String description, String category, long amount) {
+        String sql = "INSERT INTO RegularBudgetExpenses (entityCode, entityName, serviceCode, serviceName, code, description, category, amount) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, entityCode);
+            pstmt.setString(2, entityName);
+            pstmt.setString(3, serviceCode);
+            pstmt.setString(4, serviceName);
+            pstmt.setString(5, code);
+            pstmt.setString(6, description);
+            pstmt.setString(7, category);
+            pstmt.setLong(8, amount);
+
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.err.println("Database INSERT error for RegularBudgetExpense: " + e.getMessage());
         }
-        return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
     }
 }
