@@ -10,6 +10,9 @@ public class BudgetRevenue extends BudgetEntry {
 
     public BudgetRevenue(String code, String description, String category, long amount) {
         super(code, description, category, amount);
+    }
+
+    public void addBudgetRevenueToArrayList() {
         budgetRevenues.add(this);
     }
 
