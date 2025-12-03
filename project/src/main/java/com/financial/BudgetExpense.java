@@ -3,7 +3,11 @@ package com.financial;
 import java.util.ArrayList;
 
 public class BudgetExpense extends BudgetEntry {
-
+    
+    private String entityCode;
+    private String entityName;
+    private String serviceCode;
+    private String serviceName;
     protected static ArrayList <BudgetExpense> expenses = new ArrayList<>();
 
     public BudgetExpense(String code, String description, String category, long amount) {
