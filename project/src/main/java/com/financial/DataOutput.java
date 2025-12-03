@@ -206,5 +206,38 @@ public class DataOutput {
         System.out.println(at.render());
     }
 
+    public static void printPublicInvestmentBudgetRevenueWithAsciiTable(ArrayList<? extends PublicInvestmentBudgetRevenue> revenues) {
+        AsciiTable at = new AsciiTable();
+        at.getRenderer().setCWC(new CWC_FixedWidth()
+                .add(20)
+                .add(40)
+                .add(20)
+                .add(15)
+                .add(20)
+        );
+
+        at.addRule();
+        at.addRow("Κωδικός Ταξινόμησης", "Ονομασία",  "Σκέλος", "Κατηγορία", "Ποσό");
+        at.addRule();
+        long sum = 0;
+
+        for (PublicInvestmentBudgetRevenue revenue : revenues) {
+            at.addRow(
+                    revenue.getCode(),
+                    revenue.getDescription(),
+                    revenue.getType(),
+                    revenue.getCategory(),
+                    String.format("%,d", revenue.getAmount())
+            );
+            if (revenue.getCode().length() == 2) { // Logic to sum only main categories
+                sum += revenue.getAmount();
+            }
+            at.addRule();
+        }
+        at.addRow("", "", "", "", String.format("%,d", sum));
+        at.addRule();
+        System.out.println(at.render());
+    }
+
 }
 
