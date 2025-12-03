@@ -1,6 +1,8 @@
 package com.financial;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PublicInvestmentBudgetExpense extends BudgetExpense {
     private final String type;
@@ -42,6 +44,8 @@ public class PublicInvestmentBudgetExpense extends BudgetExpense {
         return publicInvestmentBudgetCoFundedExpenses;
     }
 
+    //Sum Getters
+
     public static long getSumOfPublicInvestmentBudgetExpenses() {
         long sum = 0;
         for (PublicInvestmentBudgetExpense publicInvestmentBudgetExpense : publicInvestmentBudgetExpenses) {
@@ -64,6 +68,26 @@ public class PublicInvestmentBudgetExpense extends BudgetExpense {
             sum += publicInvestmentBudgetExpense.getAmount();
         }
         return sum;
+    }
+
+    
+    public static Map<String, Long> getPublicInvestmentSumOfEveryEntity(){
+        String[] entityCodes = publicInvestmentBudgetExpenses.stream()
+                .map(PublicInvestmentBudgetExpense::getEntityCode)
+                .distinct()
+                .sorted()
+                .toArray(String[]::new);
+        Map<String, Long> publicInvestmentEntitySums = new HashMap<>();
+        for (String entityCode : entityCodes) {
+            long sum = 0;
+            for (PublicInvestmentBudgetExpense expense : publicInvestmentBudgetExpenses) {
+                if (entityCode.equals(expense.getEntityCode())){
+                    sum += expense.getAmount();
+                }
+            }
+            publicInvestmentEntitySums.put(entityCode, sum);
+        }
+        return publicInvestmentEntitySums;
     }
 
     public String getType() {
