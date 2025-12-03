@@ -46,7 +46,7 @@ public class Entity {
 
     // Get Service Codes
 
-    public ArrayList<String> getRegularServiceCodes(){
+    public ArrayList<String> getRegularServiceCodes() {
         ArrayList<String> regularServiceCodes = new ArrayList<>();
         for (RegularBudgetExpense regularBudgetExpense : regularBudgetExpenses) {
             if (!regularServiceCodes.contains(regularBudgetExpense.getServiceCode())) {
@@ -64,6 +64,47 @@ public class Entity {
             }
         }
         return publicInvestmentServiceCodes;
+    }
+
+    // Get Sums
+
+    public long getTotalSum() {
+        return getRegularSum() + getPublicInvestmentSum();
+    }
+
+    public long getRegularSum() {
+        long sum = 0;
+        for (RegularBudgetExpense regularBudgetExpense : regularBudgetExpenses) {
+            sum += regularBudgetExpense.getAmount();
+        }
+        return sum;
+    }
+
+    public long getPublicInvestmentSum() {
+        long sum = 0;
+        for (PublicInvestmentBudgetExpense publicInvestmentBudgetExpense : publicInvestmentBudgetExpenses) {
+            sum += publicInvestmentBudgetExpense.getAmount();
+        }
+        return sum;
+    }
+
+    public long getPublicInvestmentSum(String type) {
+        long sum = 0;
+        for (PublicInvestmentBudgetExpense publicInvestmentBudgetExpense : publicInvestmentBudgetExpenses) {
+            if (publicInvestmentBudgetExpense.getType().equals(type)) {
+                sum += publicInvestmentBudgetExpense.getAmount();
+            }
+        }
+        return sum;
+    }
+
+    public long getSum(String budgetType) {
+        return switch (budgetType) {
+            case "ΚΡΑΤΙΚΟΥ" -> getTotalSum();
+            case "ΤΑΚΤΙΚΟΥ" -> getRegularSum();
+            case "ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ" -> getPublicInvestmentSum();
+            default -> 0;
+        };
     }
 
     public static Entity findEntityWithEntityCode(String entityCode) {
