@@ -2,6 +2,7 @@ package com.financial;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Entity {
@@ -18,12 +19,6 @@ public class Entity {
         regularBudgetExpenses = BudgetExpenseHandling.getExpensesOfEntityWithCode(entityCode, RegularBudgetExpense.getAllRegularBudgetExpenses());
         publicInvestmentBudgetExpenses = BudgetExpenseHandling.getExpensesOfEntityWithCode(entityCode, PublicInvestmentBudgetExpense.getAllPublicInvestmentBudgetExpenses());
         entities.add(this);
-    }
-
-    public static void printAllEntities() {
-        for (Entity entity : entities) {
-            System.out.println(entity);
-        }
     }
 
     // Find Methods
@@ -255,7 +250,7 @@ public class Entity {
             long sum = 0;
             for (BudgetExpense expense : expenses) {
                 if (entity.entityCode.equals(expense.getEntityCode())){
-                    sum+=expense.getAmount();
+                    sum += expense.getAmount();
                 }
             }
             // Υποθέτουμε ότι υπάρχει constructor BudgetExpense(String code, String name, String category, long amount)
@@ -271,7 +266,6 @@ public class Entity {
     public String getEntityName() {
         return entityName;
     }
-
 
     @Override
     public String toString() {
