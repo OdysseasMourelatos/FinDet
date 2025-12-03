@@ -66,5 +66,32 @@ public class DataOutput {
 
         System.out.println(at.render());
     }
+
+    public static void printEntitiesWithAsciiTable(String budgetType) {
+        AsciiTable at = new AsciiTable();
+        at.getRenderer().setCWC(new CWC_FixedWidth()
+                .add(20)
+                .add(70)
+                .add(20)
+        );
+        at.addRule();
+        at.addRow("Κωδικός Φορέα", "Ονομασία", "Ποσό");
+        at.addRule();
+        long sum = 0;
+        for (Entity entity : Entity.entities) {
+            at.addRow(
+                    entity.getEntityCode(),
+                    entity.getEntityName(),
+                    String.format("%,d", entity.getSum(budgetType))
+            );
+            at.addRule();
+            sum += entity.getSum(budgetType);
+        }
+
+        at.addRow("", "", String.format("%,d", sum));
+        at.addRule();
+        System.out.println(at.render());
+    }
+    
 }
 
