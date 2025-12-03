@@ -37,15 +37,15 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue {
     }
 
     public static void printAllPublicInvestmentBudgetRevenues() {
-        DataOutput.printWithAsciiTable(getAllPublicInvestmentBudgetRevenues());
+        DataOutput.printPublicInvestmentBudgetRevenueWithAsciiTable(getAllPublicInvestmentBudgetRevenues());
     }
 
     public static void printPublicInvestmentBudgetNationalRevenues() {
-        DataOutput.printWithAsciiTable(getPublicInvestmentBudgetNationalRevenues());
+        DataOutput.printPublicInvestmentBudgetRevenueWithAsciiTable(getPublicInvestmentBudgetNationalRevenues());
     }
 
     public static void printPublicInvestmentBudgetCoFundedRevenues() {
-        DataOutput.printWithAsciiTable(getPublicInvestmentBudgetCoFundedRevenues());
+        DataOutput.printPublicInvestmentBudgetRevenueWithAsciiTable(getPublicInvestmentBudgetCoFundedRevenues());
     }
 
     public String getType() {
