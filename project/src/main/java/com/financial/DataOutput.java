@@ -112,5 +112,34 @@ public class DataOutput {
         }
     }
 
+    public static void printExpenseWithAsciiTable(ArrayList<? extends BudgetExpense> expenses) {
+        AsciiTable at = new AsciiTable();
+        at.getRenderer().setCWC(new CWC_FixedWidth()
+                .add(20)
+                .add(40)
+                .add(20)
+        );
+
+        at.addRule();
+        at.addRow("Μείζονα Κατηγορία", "Ονομασία", "Ποσό");
+        at.addRule();
+
+        long sum = 0;
+
+        for (BudgetExpense expense : expenses) {
+            at.addRow(
+                    expense.getCode(),
+                    expense.getDescription(),
+                    String.format("%,d", expense.getAmount())
+            );
+            at.addRule();
+            sum += expense.getAmount();
+        }
+
+        at.addRow("", "", String.format("%,d", sum));
+        at.addRule();
+        System.out.println(at.render());
+    }
+
 }
 
