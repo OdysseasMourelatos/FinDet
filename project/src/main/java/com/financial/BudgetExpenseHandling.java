@@ -33,4 +33,28 @@ public class BudgetExpenseHandling {
         return totalExpensesSum;
     }
 
+    public static ArrayList<? extends BudgetExpense> getSumOfEveryCategory(ArrayList<? extends BudgetExpense> expenses) {
+        String[] categoryCodes = expenses.stream()
+                .map(BudgetExpense::getCode)
+                .distinct()
+                .sorted()
+                .toArray(String[]::new);
+        ArrayList<BudgetExpense> expensesPerCategory = new ArrayList<>();
+
+        for (String categoryCode : categoryCodes) {
+            long sum = 0;
+            for (BudgetExpense expense : expenses) {
+                if (categoryCode.equals(expense.getCode())){
+                    sum += expense.getAmount();
+                }
+            }
+            expensesPerCategory.add(new BudgetExpense(categoryCode, BudgetExpenseHandling.findExpenseWithCode(categoryCode, expenses).getDescription(), "ΕΞΟΔΑ", sum));
+        }
+        return expensesPerCategory;
+    }
+
+    public static void printSumOfEveryCategory(ArrayList<? extends BudgetExpense> expenses) {
+        DataOutput.printExpenseWithAsciiTable(getSumOfEveryCategory(expenses));
+    }
+
 }
