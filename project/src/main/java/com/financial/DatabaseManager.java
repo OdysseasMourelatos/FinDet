@@ -95,4 +95,32 @@ public class DatabaseManager {
         }
         return expenses;
     }
+    public static ArrayList<PublicInvestmentBudgetExpense> loadPublicInvestmentExpensesFromDB() {
+        ArrayList<PublicInvestmentBudgetExpense> expenses = new ArrayList<>();
+        String sql = "SELECT entityCode, entityName, serviceCode, serviceName, code, description, type, category, amount FROM PublicInvestmentBudgetExpenses";
+
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                String entityCode = rs.getString("entityCode");
+                String entityName = rs.getString("entityName");
+                String serviceCode = rs.getString("serviceCode");
+                String serviceName = rs.getString("serviceName");
+                String code = rs.getString("code");
+                String description = rs.getString("description");
+                String type = rs.getString("type");
+                String category = rs.getString("category");
+                long amount = rs.getLong("amount");
+
+                // Δημιουργία αντικειμένου Java από τα δεδομένα της βάσης
+                PublicInvestmentBudgetExpense expense = new PublicInvestmentBudgetExpense(entityCode, entityName, serviceCode, serviceName, code, description, type, category, amount);
+                expenses.add(expense);
+            }
+        } catch (SQLException e) {
+            System.err.println("SQL SELECT error for Public Investment Expenses: " + e.getMessage());
+        }
+        return expenses;
+    }
 }
