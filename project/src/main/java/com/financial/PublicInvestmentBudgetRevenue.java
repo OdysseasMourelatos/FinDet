@@ -15,12 +15,24 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue {
     public static ArrayList<PublicInvestmentBudgetRevenue> getAllPublicInvestmentBudgetRevenues() {
         return publicInvestmentBudgetRevenues;
     }
-    
+
     public static ArrayList<PublicInvestmentBudgetRevenue> getPublicInvestmentBudgetNationalRevenues() {
+        ArrayList<PublicInvestmentBudgetRevenue> publicInvestmentBudgetNationalRevenues = new ArrayList<>();
+        for (PublicInvestmentBudgetRevenue revenue : publicInvestmentBudgetRevenues) {
+            if (revenue.getType().equals("ΕΘΝΙΚΟ") || revenue.getType().equals("ΕΘΝΙΚΟ ΣΚΕΛΟΣ")) {
+                publicInvestmentBudgetNationalRevenues.add(revenue);
+            }
+        }
         return publicInvestmentBudgetNationalRevenues;
     }
 
     public static ArrayList<PublicInvestmentBudgetRevenue> getPublicInvestmentBudgetCoFundedRevenues() {
+        ArrayList<PublicInvestmentBudgetRevenue> publicInvestmentBudgetCoFundedRevenues = new ArrayList<>();
+        for (PublicInvestmentBudgetRevenue revenue : publicInvestmentBudgetRevenues) {
+            if (revenue.getType().equals("ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ") || revenue.getType().equals("ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ ΣΚΕΛΟΣ") ) {
+                publicInvestmentBudgetCoFundedRevenues.add(revenue);
+            }
+        }
         return publicInvestmentBudgetCoFundedRevenues;
     }
 
