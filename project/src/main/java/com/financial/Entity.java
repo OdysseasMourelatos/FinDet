@@ -123,6 +123,50 @@ public class Entity {
         }
     }
 
+    // Get Sums Of Service With Code
+
+    public long getRegularSumOfServiceWithCode(String serviceCode) {
+        long sum = 0;
+        for (RegularBudgetExpense expense : regularBudgetExpenses) {
+            if (serviceCode.equals(expense.getServiceCode())) {
+                sum += expense.getAmount();
+            }
+        }
+        return sum;
+    }
+
+    public long getPublicInvestmentSumOfServiceWithCode(String serviceCode, String type) {
+        long sum = 0;
+        for (PublicInvestmentBudgetExpense expense : publicInvestmentBudgetExpenses) {
+            if (serviceCode.equals(expense.getServiceCode()) && type.equals(expense.getType())) {
+                sum += expense.getAmount();
+            }
+        }
+        return sum;
+    }
+
+    //Get Expenses Of Service With Code
+
+    public ArrayList<RegularBudgetExpense> getRegularExpensesOfServiceWithCode(String serviceCode) {
+        ArrayList<RegularBudgetExpense> regularExpenses = new ArrayList<>();
+        for (RegularBudgetExpense expense : regularBudgetExpenses) {
+            if (serviceCode.equals(expense.getServiceCode())){
+                regularExpenses.add(expense);
+            }
+        }
+        return  regularExpenses;
+    }
+
+    public ArrayList<PublicInvestmentBudgetExpense> getPublicInvestmentExpensesOfServiceWithCode(String serviceCode, String type) {
+        ArrayList<PublicInvestmentBudgetExpense> publicInvestmentExpenses = new ArrayList<>();
+        for (PublicInvestmentBudgetExpense expense : publicInvestmentBudgetExpenses) {
+            if (serviceCode.equals(expense.getServiceCode()) && type.equals(expense.getType())){
+                publicInvestmentExpenses.add(expense);
+            }
+        }
+        return  publicInvestmentExpenses;
+    }
+
     public String getEntityCode() {
         return entityCode;
     }
