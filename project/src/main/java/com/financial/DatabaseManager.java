@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public class DatabaseManager {
 
@@ -65,5 +67,32 @@ public class DatabaseManager {
         } catch (SQLException e) {
             System.err.println("Database INSERT error for PublicInvestmentBudgetExpense: " + e.getMessage());
         }
+    }
+    public static ArrayList<RegularBudgetExpense> loadRegularExpensesFromDB() {
+        ArrayList<RegularBudgetExpense> expenses = new ArrayList<>();
+        String sql = "SELECT entityCode, entityName, serviceCode, serviceName, code, description, category, amount FROM RegularBudgetExpenses";
+
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                String entityCode = rs.getString("entityCode");
+                String entityName = rs.getString("entityName");
+                String serviceCode = rs.getString("serviceCode");
+                String serviceName = rs.getString("serviceName");
+                String code = rs.getString("code");
+                String description = rs.getString("description");
+                String category = rs.getString("category");
+                long amount = rs.getLong("amount");
+
+                // Δημιουργία αντικειμένου Java από τα δεδομένα της βάσης
+                RegularBudgetExpense expense = new RegularBudgetExpense(entityCode, entityName, serviceCode, serviceName, code, description, category, amount);
+                expenses.add(expense);
+            }
+        } catch (SQLException e) {
+            System.err.println("SQL SELECT error for Regular Expenses: " + e.getMessage());
+        }
+        return expenses;
     }
 }
