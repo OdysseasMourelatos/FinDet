@@ -112,7 +112,7 @@ public class BudgetRevenue extends BudgetEntry {
 
     public void printAllSubCategories() {
         ArrayList<BudgetRevenue> allSubCategories = findAllSubCategories();
-        DataOutput.printWithAsciiTable(allSubCategories);
+        DataOutput.printRevenueWithAsciiTable(allSubCategories, 0);
     }
 
     public ArrayList<BudgetRevenue> findNextLevelSubCategories() {
@@ -136,7 +136,7 @@ public class BudgetRevenue extends BudgetEntry {
 
     public void printNextLevelSubCategories() {
         ArrayList<BudgetRevenue> nextLevelSubCategories = findNextLevelSubCategories();
-        DataOutput.printWithAsciiTable(findNextLevelSubCategories());
+        DataOutput.printRevenueWithAsciiTable(findNextLevelSubCategories(), 0);
     }
 
     public void setAmountOfNextLevelSubCategoriesWithEqualDistribution(long change) {
@@ -212,7 +212,7 @@ public class BudgetRevenue extends BudgetEntry {
     }
 
     public static void printBudgetRevenuesOfMainCategoryWithCode(String code) {
-        DataOutput.printWithAsciiTable(getBudgetRevenuesOfMainCategoryWithCode(code));
+        DataOutput.printRevenueWithAsciiTable(getBudgetRevenuesOfMainCategoryWithCode(code), 0);
     }
 
     public static long calculateSum() {
