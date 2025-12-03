@@ -22,7 +22,22 @@ public class BudgetExpense extends BudgetEntry {
     public BudgetExpense(String code, String description, String category, long amount) {
         super(code, description, category, amount);
     }
-    
+
+    public String getEntityCode() {
+        return entityCode;
+    }
+
+    public String getEntityName() {
+        return entityName;
+    }
+
+    public String getServiceCode() {
+        return serviceCode;
+    }
+
+    public String getServiceName() {
+        return serviceName;
+    }
 
     @Override
     public String toString () {
