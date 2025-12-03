@@ -40,7 +40,7 @@ public class BudgetExpense extends BudgetEntry {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Entity Code: " + getEntityCode() + ", Entity Name : " + entityName + ", Service Code: " + serviceCode + ", Service Name: " + serviceName + ", Expense Code: " + getCode() + ", Description: " + getDescription() + ", Category: " + getCategory() + ", Amount: " + String.format("%,d", getAmount());
     }
 }

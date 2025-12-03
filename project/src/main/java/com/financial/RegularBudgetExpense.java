@@ -5,13 +5,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RegularBudgetExpense extends BudgetExpense {
-    String entityCode;
     protected static ArrayList<RegularBudgetExpense> regularBudgetExpenses = new ArrayList<>();
 
-    RegularBudgetExpense (String entityCode, String code, String description, String category, long amount) {
-        super(code, description, category, amount);
-        this.entityCode = entityCode;
+    public RegularBudgetExpense (String entityCode, String entityName, String serviceCode, String serviceName, String code, String description, String category, long amount) {
+        super(entityCode, entityName, serviceCode, serviceName, code, description, category, amount);
         regularBudgetExpenses.add(this);
+    }
+
+    public RegularBudgetExpense (String code, String description, String category, long amount) {
+        super(code, description, category, amount);
     }
 
     public static ArrayList<RegularBudgetExpense> getAllRegularBudgetExpenses() {
