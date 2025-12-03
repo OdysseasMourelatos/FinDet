@@ -3,8 +3,7 @@ package com.financial;
 import java.util.ArrayList;
 
 public class PublicInvestmentBudgetExpense extends BudgetExpense {
-    String entityCode;
-    String type;
+    private final String type;
     protected static ArrayList<PublicInvestmentBudgetExpense> publicInvestmentBudgetExpenses = new ArrayList<>();
 
     PublicInvestmentBudgetExpense (String entityCode, String entityName, String serviceCode, String serviceName, String code, String description, String type, String category, long amount) {
@@ -31,6 +30,10 @@ public class PublicInvestmentBudgetExpense extends BudgetExpense {
         return sum;
     }
 
+    public String getType() {
+        return type;
+    }
+    
     @Override
     public String toString() {
         return "Entity Code: " + entityCode + ", Category Code: " + getCode() + ", Description: " + getDescription() + ", Category: " + getCategory() + ", Type: " + type + ", Amount: " + String.format("%,d", getAmount());
