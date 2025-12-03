@@ -5,6 +5,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
@@ -163,9 +165,8 @@ public class DataInput {
         BudgetEntry publicInvestmentBudgetExpense = new PublicInvestmentBudgetExpense(entityCode, entityName, serviceCode, serviceName, expenseCode, description, type, category, amount);
     }
 
-    private static void createEntityFromCSV(String [] values) {
-        String entityCode = values[0];
-        String name = values[1];
-        Entity entity = new Entity(entityCode, name);
+    protected static void createEntityFromCSV() {
+        Map<String, String> entityMap = BudgetExpense.expenses.stream().collect(Collectors.toMap(BudgetExpense::getEntityCode, BudgetExpense::getEntityName, (existing, replacement) -> existing));
+        entityMap.keySet().stream().sorted().forEach(entityCode -> new Entity(entityCode, entityMap.get(entityCode)));
     }
 }
