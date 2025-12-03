@@ -80,7 +80,7 @@ public class BudgetRevenue extends BudgetEntry {
             for (int i = getSuperCategories().size() - 1; i >= 0; i--) {
                 superCategories.add(getSuperCategories().get(i));
             }
-            DataOutput.printWithAsciiTable(superCategories);
+            DataOutput.printRevenueWithAsciiTable(superCategories, 0);
         }
     }
 
@@ -88,7 +88,7 @@ public class BudgetRevenue extends BudgetEntry {
         if (getSuperCategories().isEmpty()) {
             System.out.println("Δεν υπάρχουν κατηγορίες σε υψηλότερη ιεραρχία");
         } else {
-            DataOutput.printWithAsciiTable(getSuperCategories());
+            DataOutput.printRevenueWithAsciiTable(getSuperCategories(), 0);
         }
     }
 
