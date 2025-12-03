@@ -197,6 +197,56 @@ public class Entity {
         return publicInvestmentServiceSums;
     }
 
+    // Get Sums Of Specific Expense Category (προσθήκη)
+
+    public long getRegularSumOfExpenseCategoryWithCode(String code) {
+        long sum = 0;
+        for (RegularBudgetExpense expense : regularBudgetExpenses) {
+            if (code.equals(expense.getCode())){
+                sum += expense.getAmount();
+            }
+        }
+        return sum;
+    }
+
+    public long getPublicInvestmentSumOfExpenseCategoryWithCode(String code, String type) {
+        long sum = 0;
+        for (PublicInvestmentBudgetExpense expense : publicInvestmentBudgetExpenses) {
+            if (code.equals(expense.getCode()) && type.equals(expense.getType())){
+                sum += expense.getAmount();
+            }
+        }
+        return sum;
+    }
+
+    //Get Sums Of Every Expense Category (προσθήκη)
+
+    public Map<String, Long> getRegularSumOfEveryExpenseCategory(){
+        String[] expenseCategories = regularBudgetExpenses.stream()
+                .map(RegularBudgetExpense::getCode)
+                .distinct()
+                .sorted()
+                .toArray(String[]::new);
+        Map<String, Long> regularExpensesSums = new LinkedHashMap<>();
+        for (String expenseCategory : expenseCategories) {
+            regularExpensesSums.put(expenseCategory, getRegularSumOfExpenseCategoryWithCode(expenseCategory));
+        }
+        return regularExpensesSums;
+    }
+
+    public Map<String, Long> getPublicInvestmentSumOfEveryExpenseCategory(String type) {
+        String[] expenseCategories = publicInvestmentBudgetExpenses.stream()
+                .map(PublicInvestmentBudgetExpense::getCode)
+                .distinct()
+                .sorted()
+                .toArray(String[]::new);
+        Map<String, Long> publicInvestmentExpensesSums = new LinkedHashMap<>();
+        for (String expenseCategory : expenseCategories) {
+            publicInvestmentExpensesSums.put(expenseCategory, getPublicInvestmentSumOfExpenseCategoryWithCode(expenseCategory, type));
+        }
+        return publicInvestmentExpensesSums;
+    }
+
     public String getEntityCode() {
         return entityCode;
     }
