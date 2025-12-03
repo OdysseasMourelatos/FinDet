@@ -35,7 +35,7 @@ public class BudgetRevenue extends BudgetEntry {
     }
 
     public static void printMainBudgetRevenues() {
-        DataOutput.printRevenueWithAsciiTable(getMainBudgetRevenues(), calculateSum())
+        DataOutput.printRevenueWithAsciiTable(getMainBudgetRevenues(), calculateSum());
     }
 
     public int getLevelOfHierarchy() {
