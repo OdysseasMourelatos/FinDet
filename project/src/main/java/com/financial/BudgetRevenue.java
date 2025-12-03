@@ -21,7 +21,7 @@ public class BudgetRevenue extends BudgetEntry {
     }
 
     public static void printAllBudgetRevenues() {
-        DataOutput.printWithAsciiTable(budgetRevenues);
+        DataOutput.printRevenueWithAsciiTable(budgetRevenues, calculateSum());
     }
 
     public static ArrayList<BudgetRevenue> getMainBudgetRevenues() {
@@ -35,7 +35,7 @@ public class BudgetRevenue extends BudgetEntry {
     }
 
     public static void printMainBudgetRevenues() {
-        DataOutput.printWithAsciiTable(getMainBudgetRevenues());
+        DataOutput.printRevenueWithAsciiTable(getMainBudgetRevenues(), calculateSum())
     }
 
     public int getLevelOfHierarchy() {
