@@ -48,7 +48,7 @@ public class DataInput {
             String[] values;
             while ((values = reader.readNext()) != null) {
                 if (values.length == 2) {
-                    createEntityFromCSV(values);
+                    return;
                 } else if (values.length == 3) {
                     createBudgetRevenueFromCSV(values);
                 } else if (values.length == 4) {
@@ -59,7 +59,11 @@ public class DataInput {
                     }
                 } else if (values.length == 5) {
                     createPublicInvestmentBudgetExpenseFromCSV(values);
-                } else if (values.length > 5) {
+                } else if (values.length == 7) {
+                    createRegularBudgetExpensePerServiceFromCSV(values);
+                } else if (values.length == 8) {
+                    createPublicInvestmentBudgetExpenseFromCSV(values);
+                } else if (values.length > 8) {
                     System.out.println("Σφάλμα στη γραμμή: " + Arrays.toString(values));
                 }
             }
