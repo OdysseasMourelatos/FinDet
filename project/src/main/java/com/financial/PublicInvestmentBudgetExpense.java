@@ -50,6 +50,22 @@ public class PublicInvestmentBudgetExpense extends BudgetExpense {
         return sum;
     }
 
+    public static long getSumOfPublicInvestmentBudgetNationalExpenses() {
+        long sum = 0;
+        for (PublicInvestmentBudgetExpense publicInvestmentBudgetExpense : getPublicInvestmentBudgetNationalExpenses()) {
+            sum += publicInvestmentBudgetExpense.getAmount();
+        }
+        return sum;
+    }
+
+    public static long getSumOfPublicInvestmentBudgetCoFundedExpenses() {
+        long sum = 0;
+        for (PublicInvestmentBudgetExpense publicInvestmentBudgetExpense : getPublicInvestmentBudgetCoFundedExpenses()) {
+            sum += publicInvestmentBudgetExpense.getAmount();
+        }
+        return sum;
+    }
+
     public String getType() {
         return type;
     }
