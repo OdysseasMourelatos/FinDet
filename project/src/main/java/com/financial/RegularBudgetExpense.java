@@ -68,6 +68,20 @@ public class RegularBudgetExpense extends BudgetExpense {
         return regularServiceSums;
     }
 
+    public static ArrayList<RegularBudgetExpense> getRegularBudgetExpensesOfEntityPerService(String entityCode){
+        ArrayList<RegularBudgetExpense> regularBudgetExpensesOfEntityPerService = new ArrayList<>();
+        for (RegularBudgetExpense expense : regularBudgetExpenses) {
+            if (entityCode.equals(expense.getEntityCode())){
+                regularBudgetExpensesOfEntityPerService.add(expense);
+            }
+        }
+        return regularBudgetExpensesOfEntityPerService;
+    }
+
+    public static void printRegularBudgetExpensesOfEntityPerService(String entityCode) {
+        DataOutput.printBudgetExpenseWithAsciiTable(getRegularBudgetExpensesOfEntityPerService(entityCode));
+    }
+
     public static void printRegularSumOfEveryEntity() {
         Map<String, Long> entitySums = getRegularSumOfEveryEntity();
         entitySums.entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach(entry ->
