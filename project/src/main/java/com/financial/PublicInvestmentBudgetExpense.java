@@ -22,6 +22,16 @@ public class PublicInvestmentBudgetExpense extends BudgetExpense {
         }
     }
 
+    public static ArrayList<PublicInvestmentBudgetExpense> getPublicInvestmentBudgetNationalExpenses() {
+        ArrayList<PublicInvestmentBudgetExpense> publicInvestmentBudgetNationalExpenses = new ArrayList<>();
+        for (PublicInvestmentBudgetExpense expense : publicInvestmentBudgetExpenses) {
+            if (expense.getType().equals("ΕΘΝΙΚΟ") || expense.getType().equals("ΕΘΝΙΚΟ ΣΚΕΛΟΣ") ) {
+                publicInvestmentBudgetNationalExpenses.add(expense);
+            }
+        }
+        return publicInvestmentBudgetNationalExpenses;
+    }
+
     public static long getSumOfPublicInvestmentBudgetExpenses() {
         long sum = 0;
         for (PublicInvestmentBudgetExpense publicInvestmentBudgetExpense : publicInvestmentBudgetExpenses) {
@@ -33,7 +43,7 @@ public class PublicInvestmentBudgetExpense extends BudgetExpense {
     public String getType() {
         return type;
     }
-    
+
     @Override
     public String toString() {
         return "Entity Code: " + entityCode + ", Category Code: " + getCode() + ", Description: " + getDescription() + ", Category: " + getCategory() + ", Type: " + type + ", Amount: " + String.format("%,d", getAmount());
