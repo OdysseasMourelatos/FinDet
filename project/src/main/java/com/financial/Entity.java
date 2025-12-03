@@ -212,7 +212,7 @@ public class Entity {
 
     //Get Sums Of Every Expense Category
 
-    public Map<String, Long> getRegularSumOfEveryExpenseCategory(){
+    public Map<String, Long> getRegularSumOfEveryExpenseCategory() {
         String[] expenseCategories = regularBudgetExpenses.stream().map(RegularBudgetExpense::getCode).distinct().sorted().toArray(String[]::new);
         Map<String, Long> regularExpensesSums = new LinkedHashMap<>();
         for (String expenseCategory : expenseCategories) {
@@ -233,7 +233,7 @@ public class Entity {
     //Sums Of Every Entity
 
     public static ArrayList<? extends BudgetExpense> getSumOfEveryEntity(ArrayList<? extends BudgetExpense> expenses) {
-        ArrayList<BudgetExpense> expensesPerEntity = new ArrayList<>();;
+        ArrayList<BudgetExpense> expensesPerEntity = new ArrayList<>();
         for (Entity entity : entities) {
             long sum = 0;
             for (BudgetExpense expense : expenses) {
