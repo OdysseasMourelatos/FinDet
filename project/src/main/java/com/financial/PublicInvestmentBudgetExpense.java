@@ -32,6 +32,16 @@ public class PublicInvestmentBudgetExpense extends BudgetExpense {
         return publicInvestmentBudgetNationalExpenses;
     }
 
+    public static ArrayList<PublicInvestmentBudgetExpense> getPublicInvestmentBudgetCoFundedExpenses() {
+        ArrayList<PublicInvestmentBudgetExpense> publicInvestmentBudgetCoFundedExpenses = new ArrayList<>();
+        for (PublicInvestmentBudgetExpense expense : publicInvestmentBudgetExpenses) {
+            if (expense.getType().equals("ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ") || expense.getType().equals("ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ ΣΚΕΛΟΣ") ) {
+                publicInvestmentBudgetCoFundedExpenses.add(expense);
+            }
+        }
+        return publicInvestmentBudgetCoFundedExpenses;
+    }
+
     public static long getSumOfPublicInvestmentBudgetExpenses() {
         long sum = 0;
         for (PublicInvestmentBudgetExpense publicInvestmentBudgetExpense : publicInvestmentBudgetExpenses) {
