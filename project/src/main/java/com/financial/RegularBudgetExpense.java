@@ -21,10 +21,13 @@ public class RegularBudgetExpense extends BudgetExpense {
     }
 
     public static void printAllRegularBudgetExpenses() {
-        for (RegularBudgetExpense regularBudgetExpense : regularBudgetExpenses) {
-            System.out.println(regularBudgetExpense);
-        }
+        DataOutput.printBudgetExpenseWithAsciiTable(regularBudgetExpenses);
     }
+
+    public static void printAllRegularBudgetExpensesPerService() {
+        DataOutput.printBudgetExpenseWithAsciiTable(regularBudgetExpenses);
+    }
+
 
     public static long getSumOfRegularBudgetExpenses() {
         long sum = 0;
