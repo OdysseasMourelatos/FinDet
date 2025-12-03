@@ -14,14 +14,10 @@ public class PublicInvestmentBudgetExpense extends BudgetExpense {
         publicInvestmentBudgetExpenses.add(this);
     }
 
+    //Get Lists
+
     public static ArrayList<PublicInvestmentBudgetExpense> getAllPublicInvestmentBudgetExpenses() {
         return publicInvestmentBudgetExpenses;
-    }
-
-    public static void printAllPublicInvestmentBudgetExpenses() {
-        for (PublicInvestmentBudgetExpense publicInvestmentBudgetExpense : publicInvestmentBudgetExpenses) {
-            System.out.println(publicInvestmentBudgetExpense);
-        }
     }
 
     public static ArrayList<PublicInvestmentBudgetExpense> getPublicInvestmentBudgetNationalExpenses() {
@@ -42,6 +38,20 @@ public class PublicInvestmentBudgetExpense extends BudgetExpense {
             }
         }
         return publicInvestmentBudgetCoFundedExpenses;
+    }
+
+    //Print Lists
+
+    public static void printAllPublicInvestmentBudgetExpenses() {
+        DataOutput.printPublicInvestmentBudgetExpenseWithAsciiTable(getAllPublicInvestmentBudgetExpenses());
+    }
+
+    public static void printPublicInvestmentBudgetNationalExpenses() {
+        DataOutput.printPublicInvestmentBudgetExpenseWithAsciiTable(getPublicInvestmentBudgetNationalExpenses());
+    }
+
+    public static void printPublicInvestmentBudgetCoFundedExpenses(){
+        DataOutput.printPublicInvestmentBudgetExpenseWithAsciiTable(getPublicInvestmentBudgetCoFundedExpenses());
     }
 
     //Sum Getters
@@ -70,7 +80,7 @@ public class PublicInvestmentBudgetExpense extends BudgetExpense {
         return sum;
     }
 
-    
+    // Gets Sum Of Every Entity
     public static Map<String, Long> getPublicInvestmentSumOfEveryEntity(){
         String[] entityCodes = publicInvestmentBudgetExpenses.stream()
                 .map(PublicInvestmentBudgetExpense::getEntityCode)
@@ -95,7 +105,7 @@ public class PublicInvestmentBudgetExpense extends BudgetExpense {
     }
 
     @Override
-    public String toString() {
-        return "Entity Code: " + entityCode + ", Category Code: " + getCode() + ", Description: " + getDescription() + ", Category: " + getCategory() + ", Type: " + type + ", Amount: " + String.format("%,d", getAmount());
+    public String toString(){
+        return super.toString() + ", Σκέλος : " + type;
     }
 }
