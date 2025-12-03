@@ -10,9 +10,11 @@ public class Entity {
 
     protected static ArrayList<Entity> entities = new ArrayList<>();
 
-    public Entity (String entityCode, String name) {
+    public Entity(String entityCode, String entityName) {
         this.entityCode = entityCode;
-        this.name = name;
+        this.entityName = entityName;
+        regularBudgetExpenses = BudgetExpenseHandling.getExpensesOfEntityWithCode(entityCode, RegularBudgetExpense.getAllRegularBudgetExpenses());
+        publicInvestmentBudgetExpenses = BudgetExpenseHandling.getExpensesOfEntityWithCode(entityCode, PublicInvestmentBudgetExpense.getAllPublicInvestmentBudgetExpenses());
         entities.add(this);
     }
 
