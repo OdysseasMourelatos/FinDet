@@ -10,4 +10,16 @@ public class AllEntitiesAccountPercentageAdjustment implements IExpenseAdjustmen
     public AllEntitiesAccountPercentageAdjustment(String code) {
         this.targetExpenseCode = code;
     }
+
+    @Override
+    public long applyAdjustment(ArrayList<? extends BudgetExpense> expenses, double percentage, long fixedAmount) {
+        long newTotal = 0;
+        for (BudgetExpense expense : expenses) {
+            if (expense.getCode().equals(targetExpenseCode)) {
+                expense.setAmount((long) (expense.getAmount() * (1 + percentage)));
+                newTotal += expense.getAmount();
+            }
+        }
+        return newTotal;
+    }
 }
