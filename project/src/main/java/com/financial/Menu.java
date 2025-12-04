@@ -159,6 +159,24 @@ public class Menu {
         }
     }
 
+    public static void showBudgetMenu() {
+        Scanner input = new Scanner(System.in);
+        System.out.println();
+        System.out.println(BLUE + BOLD + "=== ΠΡΟΒΟΛΗ ΣΤΟΙΧΕΙΩΝ ΚΡΑΤΙΚΟΥ ΠΡΟΫΠΟΛΟΓΙΣΜΟΥ ===" );
+        System.out.println();
+        System.out.println(BLUE + BOLD + "[1] " + RESET + "Προβολή Εσόδων Κρατικού Προϋπολογισμού");
+        System.out.println(BLUE + BOLD + "[2] " + RESET + "Προβολή Εξόδων Κρατικού Προϋπολογισμού");
+        System.out.println(BLUE + BOLD + "[3] " + RESET + "Προβολή Εσόδων & Εξόδων Κρατικού Προϋπολογισμού");
+        System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή στο Κύριο Μενού" + RESET_2);
+        System.out.println();
+        System.out.print("Επιλογή: ");
+        int choice = input.nextInt();
+        switch (choice) {
+            case 1 -> showTotalRevenuesMenu();
+            case 2 -> showExpensesMenu("ΚΡΑΤΙΚΟΥ");
+        }
+    }
+
     public static void printSubMenuOfChoice3() {
         Scanner input = new Scanner(System.in);
         System.out.println(BLUE + BOLD + "=== ΕΙΣΑΓΩΓΗ ΑΛΛΑΓΩΝ ===");
@@ -357,33 +375,6 @@ public class Menu {
         budgetRevenue.printAllSubCategories();
         System.out.println();
         System.out.println(GREEN + "ΟΙ ΑΛΛΑΓΕΣ ΟΛΟΚΛΗΡΩΘΗΚΑΝ ΜΕ ΕΠΙΤΥΧΙΑ.\n" + RESET + "ΕΠΙΣΤΡΟΦΗ ΣΤΟ ΚΥΡΙΟ ΜΕΝΟΥ..");
-    }
-
-    private static void showTotalRevenuesMenu() {
-        Scanner input = new Scanner(System.in);
-
-        System.out.println(BLUE + BOLD + "\n=== ΣΥΝΟΛΙΚΑ ΕΣΟΔΑ ===\n");
-        System.out.println(BLUE + BOLD + "[1] " + RESET + "Κρατικός Προϋπολογισμός");
-        System.out.println(BLUE + BOLD + "[2] " + RESET + "Κρατικός Προϋπολογισμός + Προϋπολογισμός Δημόσιων Επενδύσεων (ΠΔΕ)");
-        System.out.println(BLUE + BOLD + "[3] " + RESET + "Προϋπολογισμός Δημόσιων Επενδύσεων (Εθνικό + Συγχρηματοδοτούμενο Σκέλος)");
-        System.out.println(BLUE + BOLD + "[4] " + RESET + "Εθνικό Σκέλος Προϋπολογισμού Δημόσιων Επενδύσεων");
-        System.out.println(BLUE + BOLD + "[5] " + RESET + "Συγχρηματοδοτούμενο Σκέλος Προϋπολογισμού Δημόσιων Επενδύσεων" + RESET_2);
-        System.out.print("\nΕπιλογή: ");
-
-        int choice = input.nextInt();
-        System.out.println();
-        switch (choice) {
-            case 1 -> BudgetRevenue.printAllBudgetRevenues();
-            case 2 -> {
-                BudgetRevenue.printAllBudgetRevenues();
-                System.out.println();
-                PublicInvestmentBudgetRevenue.printAllPublicInvestmentBudgetRevenues();
-            }
-            case 3 -> PublicInvestmentBudgetRevenue.printAllPublicInvestmentBudgetRevenues();
-            case 4 -> PublicInvestmentBudgetRevenue.printPublicInvestmentBudgetNationalRevenues();
-            case 5 -> PublicInvestmentBudgetRevenue.printPublicInvestmentBudgetCoFundedRevenues();
-            default -> System.out.println(RED + "Μη έγκυρη επιλογή" + RESET);
-        }
     }
 
     public static void printTaxChartsSubMenu() {
