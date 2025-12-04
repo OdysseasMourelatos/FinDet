@@ -37,11 +37,7 @@ public class RegularBudgetExpense extends BudgetExpense {
     }
 
     public static Map<String, Long> getRegularSumOfEveryEntity() {
-        String[] entityCodes = regularBudgetExpenses.stream()
-                .map(RegularBudgetExpense::getEntityCode)
-                .distinct()
-                .sorted()
-                .toArray(String[]::new);
+        String[] entityCodes = regularBudgetExpenses.stream().map(RegularBudgetExpense::getEntityCode).distinct().sorted().toArray(String[]::new);
         Map<String, Long> regularEntitySums = new HashMap<>();
         for (String entityCode : entityCodes) {
             long sum = 0;
@@ -56,11 +52,7 @@ public class RegularBudgetExpense extends BudgetExpense {
     }
 
     public static Map<String, Long> getRegularSumOfEveryService() {
-        String[] serviceCodes = regularBudgetExpenses.stream()
-                .map(RegularBudgetExpense::getServiceCode)
-                .distinct()
-                .sorted()
-                .toArray(String[]::new);
+        String[] serviceCodes = regularBudgetExpenses.stream().map(RegularBudgetExpense::getServiceCode).distinct().sorted().toArray(String[]::new);
         Map<String, Long> regularServiceSums = new HashMap<>();
         for (String serviceCode : serviceCodes) {
             long sum = 0;

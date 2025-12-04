@@ -106,8 +106,9 @@ public class DataInput {
                     long amount = budgetRevenue.getAmount() - publicInvestmentBudgetRevenue.getAmount();
                     if (amount == 0) {
                         RegularBudgetRevenue.regularBudgetRevenues.remove(regularBudgetRevenue);
-                    } else
+                    } else {
                         regularBudgetRevenue.setAmount(amount);
+                    }
                 }
             }
             for (PublicInvestmentBudgetRevenue publicInvestmentBudgetRevenue : publicInvestmentBudgetCoFundedRevenues) {
@@ -115,8 +116,9 @@ public class DataInput {
                     long amount = regularBudgetRevenue.getAmount() - publicInvestmentBudgetRevenue.getAmount();
                     if (amount == 0) {
                         RegularBudgetRevenue.regularBudgetRevenues.remove(regularBudgetRevenue);
-                    } else
+                    } else {
                         regularBudgetRevenue.setAmount(amount);
+                    }
                 }
             }
         }
