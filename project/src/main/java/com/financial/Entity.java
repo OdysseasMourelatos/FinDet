@@ -228,22 +228,6 @@ public class Entity {
         return publicInvestmentExpensesSums;
     }
 
-    //Sums Of Every Entity
-
-    public static ArrayList<? extends BudgetExpense> getSumOfEveryEntity(ArrayList<? extends BudgetExpense> expenses) {
-        ArrayList<BudgetExpense> expensesPerEntity = new ArrayList<>();
-        for (Entity entity : entities) {
-            long sum = 0;
-            for (BudgetExpense expense : expenses) {
-                if (entity.entityCode.equals(expense.getEntityCode())) {
-                    sum += expense.getAmount();
-                }
-            }
-            expensesPerEntity.add(new BudgetExpense(entity.entityCode, entity.entityName, "ΕΞΟΔΑ", sum));
-        }
-        return expensesPerEntity;
-    }
-
     public String getEntityCode() {
         return entityCode;
     }

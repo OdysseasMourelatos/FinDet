@@ -57,12 +57,12 @@ public class BudgetExpenseHandling {
 
     //Sums Of Every Entity
     public static ArrayList<? extends BudgetExpense> getSumOfEveryEntity(ArrayList<? extends BudgetExpense> expenses) {
-        ArrayList<BudgetExpense> expensesPerEntity = new ArrayList<>();;
+        ArrayList<BudgetExpense> expensesPerEntity = new ArrayList<>();
         for (Entity entity : Entity.entities) {
             long sum = 0;
             for (BudgetExpense expense : expenses) {
-                if (entity.getEntityCode().equals(expense.getEntityCode())){
-                    sum+=expense.getAmount();
+                if (entity.getEntityCode().equals(expense.getEntityCode())) {
+                    sum += expense.getAmount();
                 }
             }
             expensesPerEntity.add(new BudgetExpense(entity.getEntityCode(), entity.getEntityName(), "ΕΞΟΔΑ", sum));
