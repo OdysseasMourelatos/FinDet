@@ -114,13 +114,7 @@ public class Entity {
         }
         return null;
     }
-
-    public static void printEntitiesWithTheirTotalRegularExpenses() {
-        for (Entity entity: entities) {
-            long totalRegularExpenses = RegularBudgetExpense.getRegularSumOfEntityWithEntityCode(entity.entityCode);
-            System.out.println(entity + ", Total Regular Expenses: " + String.format("%,d", totalRegularExpenses));
-        }
-    }
+    
 
     // Get Sums Of Service With Code
 
