@@ -209,6 +209,57 @@ public class Menu {
         }
     }
 
+    private static void showExpensesMenu(String budgetType) {
+        Scanner input = new Scanner(System.in);
+
+        System.out.println(BLUE + BOLD + "\n=== ΠΡΟΒΟΛΗ ΕΞΟΔΩΝ " + budgetType.toUpperCase() + " ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ===\n");
+        System.out.println(BLUE + BOLD + "[1] " + RESET + "Προβολή πιστώσεων κατά μείζονα κατηγορία δαπάνης");
+        System.out.println(BLUE + BOLD + "[2] " + RESET + "Προβολή πιστώσεων συνολικά κατά φορέα");
+        System.out.println(BLUE + BOLD + "[3] " + RESET + "Προβολή πιστώσεων κατά ειδικό φορέα & μείζονα κατηγορία δαπάνης");
+        System.out.print("\nΕπιλογή: ");
+        int choice = input.nextInt();
+        input.nextLine();
+        System.out.println();
+        switch (choice) {
+            case 1 -> {
+                if (budgetType.equals("ΚΡΑΤΙΚΟΥ")) {
+                    DataOutput.printExpenseWithAsciiTable(BudgetExpenseHandling.getSumOfEveryCategory(BudgetExpense.expenses));
+                } else if (budgetType.equals("ΤΑΚΤΙΚΟΥ")) {
+                    DataOutput.printExpenseWithAsciiTable(BudgetExpenseHandling.getSumOfEveryCategory(RegularBudgetExpense.regularBudgetExpenses));
+                } else if (budgetType.equals("ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ")) {
+                    DataOutput.printExpenseWithAsciiTable(BudgetExpenseHandling.getSumOfEveryCategory(PublicInvestmentBudgetExpense.getAllPublicInvestmentBudgetExpenses()));
+                }
+            }
+            case 2 -> DataOutput.printEntitiesWithAsciiTable(budgetType);
+            case 3 -> {
+                System.out.println(BLUE + BOLD + "\n=== ΠΡΟΒΟΛΗ ΠΙΣΤΩΣΕΩΝ ΚΑΤΑ ΕΙΔΙΚΟ ΦΟΡΕΑ & ΜΕΙΖΟΝΑ ΚΑΤΗΓΟΡΙΑ ΔΑΠΑΝΗΣ ===\n");
+                System.out.println(BLUE + BOLD + "[1] " + RESET + "Προβολή πιστώσεων όλων των φορέων");
+                System.out.println(BLUE + BOLD + "[2] " + RESET + "Προβολή πιστώσεων συγκεκριμένου φορέα");
+                System.out.print("\nΕπιλογή: ");
+                int choice2 = input.nextInt();
+                input.nextLine();
+                System.out.println();
+                switch (choice2) {
+                    case 1 -> {
+                        for (Entity entity : Entity.entities) {
+                            DataOutput.printEntityWithAsciiTable(entity, budgetType);
+                        }
+                        System.out.println();
+                    }
+                    case 2 -> {
+                        System.out.print("Παρακαλούμε εισάγετε τον κωδικό του επιθυμητού φορέα: ");
+                        String entityCode = input.nextLine();
+                        System.out.println();
+                        Entity entity = Entity.findEntityWithEntityCode(entityCode);
+                        DataOutput.printEntityWithAsciiTable(entity,budgetType);
+                    }
+                }
+            }
+
+            default -> System.out.println(RED + "Μη έγκυρη επιλογή" + RESET);
+        }
+    }
+
     public static void printSubMenuOfChoice3() {
         Scanner input = new Scanner(System.in);
         System.out.println(BLUE + BOLD + "=== ΕΙΣΑΓΩΓΗ ΑΛΛΑΓΩΝ ===");
