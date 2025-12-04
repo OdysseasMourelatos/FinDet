@@ -14,10 +14,12 @@ public class PublicInvestmentBudgetExpense extends BudgetExpense {
         publicInvestmentBudgetExpenses.add(this);
     }
 
-    //Get Lists
-
     public static ArrayList<PublicInvestmentBudgetExpense> getAllPublicInvestmentBudgetExpenses() {
         return publicInvestmentBudgetExpenses;
+    }
+
+    public static void printAllPublicInvestmentBudgetExpenses() {
+        DataOutput.printPublicInvestmentBudgetExpenseWithAsciiTable(getAllPublicInvestmentBudgetExpenses());
     }
 
     public static ArrayList<PublicInvestmentBudgetExpense> getPublicInvestmentBudgetNationalExpenses() {
@@ -30,6 +32,10 @@ public class PublicInvestmentBudgetExpense extends BudgetExpense {
         return publicInvestmentBudgetNationalExpenses;
     }
 
+    public static void printPublicInvestmentBudgetNationalExpenses() {
+        DataOutput.printPublicInvestmentBudgetExpenseWithAsciiTable(getPublicInvestmentBudgetNationalExpenses());
+    }
+
     public static ArrayList<PublicInvestmentBudgetExpense> getPublicInvestmentBudgetCoFundedExpenses() {
         ArrayList<PublicInvestmentBudgetExpense> publicInvestmentBudgetCoFundedExpenses = new ArrayList<>();
         for (PublicInvestmentBudgetExpense expense : publicInvestmentBudgetExpenses) {
@@ -40,60 +46,8 @@ public class PublicInvestmentBudgetExpense extends BudgetExpense {
         return publicInvestmentBudgetCoFundedExpenses;
     }
 
-    //Print Lists
-
-    public static void printAllPublicInvestmentBudgetExpenses() {
-        DataOutput.printPublicInvestmentBudgetExpenseWithAsciiTable(getAllPublicInvestmentBudgetExpenses());
-    }
-
-    public static void printPublicInvestmentBudgetNationalExpenses() {
-        DataOutput.printPublicInvestmentBudgetExpenseWithAsciiTable(getPublicInvestmentBudgetNationalExpenses());
-    }
-
     public static void printPublicInvestmentBudgetCoFundedExpenses() {
         DataOutput.printPublicInvestmentBudgetExpenseWithAsciiTable(getPublicInvestmentBudgetCoFundedExpenses());
-    }
-
-    //Sum Getters
-
-    public static long getSumOfPublicInvestmentBudgetExpenses() {
-        long sum = 0;
-        for (PublicInvestmentBudgetExpense publicInvestmentBudgetExpense : publicInvestmentBudgetExpenses) {
-            sum += publicInvestmentBudgetExpense.getAmount();
-        }
-        return sum;
-    }
-
-    public static long getSumOfPublicInvestmentBudgetNationalExpenses() {
-        long sum = 0;
-        for (PublicInvestmentBudgetExpense publicInvestmentBudgetExpense : getPublicInvestmentBudgetNationalExpenses()) {
-            sum += publicInvestmentBudgetExpense.getAmount();
-        }
-        return sum;
-    }
-
-    public static long getSumOfPublicInvestmentBudgetCoFundedExpenses() {
-        long sum = 0;
-        for (PublicInvestmentBudgetExpense publicInvestmentBudgetExpense : getPublicInvestmentBudgetCoFundedExpenses()) {
-            sum += publicInvestmentBudgetExpense.getAmount();
-        }
-        return sum;
-    }
-
-    // Gets Sum Of Every Entity
-    public static Map<String, Long> getPublicInvestmentSumOfEveryEntity() {
-        String[] entityCodes = publicInvestmentBudgetExpenses.stream().map(PublicInvestmentBudgetExpense::getEntityCode).distinct().sorted().toArray(String[]::new);
-        Map<String, Long> publicInvestmentEntitySums = new HashMap<>();
-        for (String entityCode : entityCodes) {
-            long sum = 0;
-            for (PublicInvestmentBudgetExpense expense : publicInvestmentBudgetExpenses) {
-                if (entityCode.equals(expense.getEntityCode())) {
-                    sum += expense.getAmount();
-                }
-            }
-            publicInvestmentEntitySums.put(entityCode, sum);
-        }
-        return publicInvestmentEntitySums;
     }
 
     public String getType() {
