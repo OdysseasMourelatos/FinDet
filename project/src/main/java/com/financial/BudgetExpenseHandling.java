@@ -1,5 +1,7 @@
 package com.financial;
 
+import com.financial.strategies.*;
+
 import java.util.ArrayList;
 
 public class BudgetExpenseHandling {
@@ -51,6 +53,10 @@ public class BudgetExpenseHandling {
 
     public static void printSumOfEveryCategory(ArrayList<? extends BudgetExpense> expenses) {
         DataOutput.printExpenseWithAsciiTable(getSumOfEveryCategory(expenses));
+    }
+
+    public static void applyGlobalAdjustment(IExpenseAdjustmentStrategy strategy, double percentage, long fixedAmount, ArrayList<BudgetExpense> expenses) {
+        strategy.applyAdjustment(expenses, percentage, fixedAmount);
     }
 
 }
