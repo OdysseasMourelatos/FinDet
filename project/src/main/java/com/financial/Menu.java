@@ -128,10 +128,6 @@ public class Menu {
             System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου" + BLUE + " (ΕΞΟΔΑ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ): " + RESET);
             filePath = input.nextLine();
             DataInput.advancedCSVReader(filePath);
-            System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου" + BLUE + " (ΚΩΔΙΚΟΣ ΚΑΙ ΟΝΟΜΑΣΙΑ ΦΟΡΕΩΝ): " + RESET);
-            filePath = input.nextLine();
-            DataInput.advancedCSVReader(filePath);
-            System.out.println();
             System.out.println(GREEN + "Η ΦΟΡΤΩΣΗ ΤΩΝ ΑΡΧΕΙΩΝ ΠΡΑΓΜΑΤΟΠΟΙΗΘΗΚΕ ΕΠΙΤΥΧΩΣ!" + RESET);
             DataInput.createEntityFromCSV();
             DataInput.createRegularBudgetRevenueFromCSV();

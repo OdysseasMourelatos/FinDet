@@ -1,4 +1,5 @@
 com/financial/DataOutput.class
+com/financial/RegularBudgetRevenue.class
 com/financial/PublicInvestmentBudgetRevenue.class
 com/financial/DataInput.class
 com/financial/BudgetRevenueConvertToPdf.class
