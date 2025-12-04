@@ -55,6 +55,21 @@ public class BudgetExpenseHandling {
         DataOutput.printExpenseWithAsciiTable(getSumOfEveryCategory(expenses));
     }
 
+    //Sums Of Every Entity
+    public static ArrayList<? extends BudgetExpense> getSumOfEveryEntity(ArrayList<? extends BudgetExpense> expenses) {
+        ArrayList<BudgetExpense> expensesPerEntity = new ArrayList<>();;
+        for (Entity entity : Entity.entities) {
+            long sum = 0;
+            for (BudgetExpense expense : expenses) {
+                if (entity.getEntityCode().equals(expense.getEntityCode())){
+                    sum+=expense.getAmount();
+                }
+            }
+            expensesPerEntity.add(new BudgetExpense(entity.getEntityCode(), entity.getEntityName(), "ΕΞΟΔΑ", sum));
+        }
+        return expensesPerEntity;
+    }
+
     public static void applyGlobalAdjustment(IExpenseAdjustmentStrategy strategy, double percentage, long fixedAmount, ArrayList<BudgetExpense> expenses) {
         strategy.applyAdjustment(expenses, percentage, fixedAmount);
     }
