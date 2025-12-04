@@ -143,49 +143,18 @@ public class Menu {
         System.out.println();
         System.out.println(BLUE + BOLD + "=== ΠΡΟΒΟΛΗ ΣΤΟΙΧΕΙΩΝ ΠΡΟΫΠΟΛΟΓΙΣΜΟΥ ===" );
         System.out.println();
-        System.out.println(BLUE + BOLD + "[1] " + RESET + "Συνολικά Έσοδα");
-        System.out.println(BLUE + BOLD + "[2] " + RESET + "Συνολικά Έξοδα");
-
-        
-        System.out.println(BLUE + BOLD + "[3] " + RESET + "Βασικές Κατηγορίες Εσόδων (2ψήφιοι)");
-        System.out.println(BLUE + BOLD + "[4] " + RESET + "Βασικές Κατηγορίες Εξόδων (2ψήφιοι)");
-        System.out.println(BLUE + BOLD + "[5] " + RESET + "Βασικές Κατηγορίες Εσόδων & Εξόδων + Αποτέλεσμα Κρατικού Προϋπολογισμού");
-
-        System.out.println(BLUE + BOLD + "[6] " + RESET + "Προβολή ανά Υπουργείο");
-        System.out.println(BLUE + BOLD + "[7] " + RESET + "Προβολή βάσει Κωδικού (2–10 ψηφία)");
-
-        System.out.println(BLUE + BOLD + "[8] " + RESET + "Προβολή ΠΔΕ συνολικά");
-        System.out.println(BLUE + BOLD + "[9] " + RESET + "Προβολή ΠΔΕ ανά Σκέλος (Εθνικό / Συγχρ.)");
-
-        System.out.println(BLUE + BOLD + "[10] " + RESET + "Προβολή ανά Τύπο Προϋπολογισμού (Τακτικός / ΠΔΕ / Κρατικός)");
-        System.out.println(BLUE + BOLD + "[11] " + RESET + "Προβολή ανά Κατηγορία Πόρων");
-
-        System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή στο Κύριο Μενού\n" + RESET_2);
+        System.out.println(BLUE + BOLD + "[1] " + RESET + "Προβολή Στοιχείων Κρατικού Προϋπολογισμού");
+        System.out.println(BLUE + BOLD + "[2] " + RESET + "Προβολή Στοιχείων Τακτικού Προϋπολογισμού");
+        System.out.println(BLUE + BOLD + "[3] " + RESET + "Προβολή Στοιχείων Προϋπολογισμού Δημόσιων Επενδύσεων");
+        System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή στο Κύριο Μενού" + RESET_2);
 
         System.out.println();
         System.out.print("Επιλογή: ");
         int choice = input.nextInt();
         switch (choice) {
-            case 1 -> showTotalRevenuesMenu();
-            case 3 -> {
-                BudgetRevenue.printMainBudgetRevenues();
-                System.out.println("\nΣΥΝΟΛΙΚΑ ΕΣΟΔΑ: " + String.format("%,d", BudgetRevenue.calculateSum()));
-            }
-            case 4 -> {
-                BudgetExpense.printSumOfEveryCategory();
-                System.out.println("\nΣΥΝΟΛΙΚΑ ΕΞΟΔΑ: " + String.format("%,d", BudgetExpense.calculateSum()));
-            }
-            case 5 -> {
-                BudgetRevenue.printMainBudgetRevenues();
-                System.out.println();
-                BudgetExpense.printSumOfEveryCategory();
-                long totalRevenuesSum = BudgetRevenue.calculateSum();
-                System.out.println("\nΣΥΝΟΛΙΚΑ ΕΣΟΔΑ: " + String.format("%,d", totalRevenuesSum));
-                long totalExpensesSum = BudgetExpense.calculateSum();
-                System.out.println("ΣΥΝΟΛΙΚΑ ΕΞΟΔΑ: " + String.format("%,d", totalExpensesSum));
-                System.out.println("\nΑΠΟΤΕΛΕΣΜΑ ΚΡΑΤΙΚΟΥ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ (ΕΣΟΔΑ - ΕΞΟΔΑ): " + String.format("%,d", totalRevenuesSum - totalExpensesSum));
-
-            }
+            case 1 -> showBudgetMenu();
+            case 2 -> showRegularBudgetMenu();
+            case 3 -> showPublicInvestmentBudgetMenu();
             default -> System.out.println(RED + "Μη έγκυρη επιλογή" + RESET);
         }
     }
