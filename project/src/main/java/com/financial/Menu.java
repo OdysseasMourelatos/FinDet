@@ -296,6 +296,39 @@ public class Menu {
         }
     }
 
+    private static void showRegularRevenuesMenu() {
+        Scanner input = new Scanner(System.in);
+
+        System.out.println(BLUE + BOLD + "\n=== ΠΡΟΒΟΛΗ ΕΣΟΔΩΝ ΤΑΚΤΙΚΟΥ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ===\n");
+        System.out.println(BLUE + BOLD + "[1] " + RESET + "Προβολή των βασικών λογαριασμών εσόδων");
+        System.out.println(BLUE + BOLD + "[2] " + RESET + "Προβολή όλων των λογαριασμών εσόδων");
+        System.out.println(BLUE + BOLD + "[3] " + RESET + "Προβολή συγκεκριμένων λογαριασμών εσόδων");
+        System.out.print("\nΕπιλογή: ");
+        int choice = input.nextInt();
+        input.nextLine();
+        System.out.println();
+        switch (choice) {
+            case 1 -> RegularBudgetRevenue.printMainRegularBudgetRevenues();
+            case 2 -> RegularBudgetRevenue.printAllRegularBudgetRevenues();
+            case 3 -> {
+                //ΦΤΙΑΞΤΟ ΒΓΑΖΕΙ ΛΑΘΟΣ ΣΤΑ budgetRevenue.printSuperCategoriesTopDown();
+                System.out.print("Παρακαλούμε εισάγετε τον κωδικό του επιθυμητού λογαριασμού εσόδων: ");
+                String code = input.nextLine();
+                System.out.println();
+                RegularBudgetRevenue budgetRevenue = RegularBudgetRevenue.findRevenueWithCode(code);
+                DataOutput.printEntryWithAsciiTable(budgetRevenue);
+                System.out.println();
+                System.out.println(BOLD + "ΚΑΤΗΓΟΡΙΕΣ ΣΕ ΥΨΗΛΟΤΕΡΟ ΕΠΙΠΕΔΟ:\n" + RESET_2);
+                budgetRevenue.printSuperCategoriesTopDown();
+                System.out.println();
+                System.out.println(BOLD + "ΚΑΤΗΓΟΡΙΕΣ ΣΕ ΧΑΜΗΛΟΤΕΡΟ ΕΠΙΠΕΔΟ:\n" + RESET_2);
+                budgetRevenue.printAllSubCategories();
+                System.out.println();
+            }
+            default -> System.out.println(RED + "Μη έγκυρη επιλογή" + RESET);
+        }
+    }
+
     private static void showPublicInvestmentBudgetRevenuesMenu() {
         Scanner input = new Scanner(System.in);
 
