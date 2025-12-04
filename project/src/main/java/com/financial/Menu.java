@@ -278,6 +278,24 @@ public class Menu {
         }
     }
 
+    public static void showPublicInvestmentBudgetMenu() {
+        Scanner input = new Scanner(System.in);
+        System.out.println();
+        System.out.println(BLUE + BOLD + "=== ΠΡΟΒΟΛΗ ΣΤΟΙΧΕΙΩΝ ΠΡΟΫΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ===" );
+        System.out.println();
+        System.out.println(BLUE + BOLD + "[1] " + RESET + "Προβολή Εσόδων Προϋπολογισμού Δημόσιων Επενδύσεων");
+        System.out.println(BLUE + BOLD + "[2] " + RESET + "Προβολή Εξόδων Προϋπολογισμού Δημόσιων Επενδύσεων");
+        System.out.println(BLUE + BOLD + "[3] " + RESET + "Προβολή Εσόδων & Εξόδων Προϋπολογισμού Δημόσιων Επενδύσεων");
+        System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή στο Κύριο Μενού" + RESET_2);
+        System.out.println();
+        System.out.print("Επιλογή: ");
+        int choice = input.nextInt();
+        switch (choice) {
+            case 1 -> showPublicInvestmentBudgetRevenuesMenu();
+            case 2 -> showExpensesMenu("ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ");
+        }
+    }
+
     private static void showPublicInvestmentBudgetRevenuesMenu() {
         Scanner input = new Scanner(System.in);
 
