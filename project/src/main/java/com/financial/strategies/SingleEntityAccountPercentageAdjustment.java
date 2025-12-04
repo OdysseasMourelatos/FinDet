@@ -16,8 +16,9 @@ public class SingleEntityAccountPercentageAdjustment implements  IExpenseAdjustm
         long newTotal = 0;
         for (BudgetExpense expense : expenses) {
             if (expense.getCode().equals(targetExpenseCode)) {
-                expense.setAmount( (long) (expense.getAmount()*(1+percentage)));
+                expense.setAmount( (long) (expense.getAmount() * (1+percentage)));
             }
+            newTotal += expense.getAmount();
         }
         return newTotal;
     }
