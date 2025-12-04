@@ -14,12 +14,7 @@ public class DataOutput {
     public static void printRevenueWithAsciiTable(ArrayList<? extends BudgetRevenue> entries, long sum) {
         AsciiTable at = new AsciiTable();
 
-        at.getRenderer().setCWC(new CWC_FixedWidth()
-                .add(20)
-                .add(60)
-                .add(15)
-                .add(20)
-        );
+        at.getRenderer().setCWC(new CWC_FixedWidth().add(20).add(60).add(15).add(20));
 
         at.addRule();
         at.addRow("Κωδικός Ταξινόμησης", "Ονομασία", "Κατηγορία", "Ποσό");
@@ -34,7 +29,7 @@ public class DataOutput {
             );
             at.addRule();
         }
-        if (sum != 0){
+        if (sum != 0) {
             at.addRow("", "", "", String.format("%,d", sum));
             at.addRule();
         }
@@ -45,12 +40,7 @@ public class DataOutput {
     public static <T extends BudgetEntry> void printEntryWithAsciiTable(T entry) {
         AsciiTable at = new AsciiTable();
 
-        at.getRenderer().setCWC(new CWC_FixedWidth()
-                .add(20)
-                .add(60)
-                .add(15)
-                .add(20)
-        );
+        at.getRenderer().setCWC(new CWC_FixedWidth().add(20).add(60).add(15).add(20));
 
         at.addRule();
         at.addRow("Κωδικός Ταξινόμησης", "Ονομασία", "Κατηγορία", "Ποσό");
@@ -69,11 +59,7 @@ public class DataOutput {
 
     public static void printEntitiesWithAsciiTable(String budgetType) {
         AsciiTable at = new AsciiTable();
-        at.getRenderer().setCWC(new CWC_FixedWidth()
-                .add(20)
-                .add(70)
-                .add(20)
-        );
+        at.getRenderer().setCWC(new CWC_FixedWidth().add(20).add(70).add(20));
         at.addRule();
         at.addRow("Κωδικός Φορέα", "Ονομασία", "Ποσό");
         at.addRule();
@@ -95,9 +81,7 @@ public class DataOutput {
 
     public static void printEntityWithAsciiTable(Entity entity, String budgetType) {
         AsciiTable at = new AsciiTable();
-        at.getRenderer().setCWC(new CWC_FixedWidth()
-                .add(125)
-        );
+        at.getRenderer().setCWC(new CWC_FixedWidth().add(125));
         at.addRule();
         at.addRow(entity.getEntityName());
         at.addRule();
@@ -114,11 +98,7 @@ public class DataOutput {
 
     public static void printExpenseWithAsciiTable(ArrayList<? extends BudgetExpense> expenses) {
         AsciiTable at = new AsciiTable();
-        at.getRenderer().setCWC(new CWC_FixedWidth()
-                .add(20)
-                .add(40)
-                .add(20)
-        );
+        at.getRenderer().setCWC(new CWC_FixedWidth().add(20).add(40).add(20));
 
         at.addRule();
         at.addRow("Μείζονα Κατηγορία", "Ονομασία", "Ποσό");
@@ -143,13 +123,7 @@ public class DataOutput {
 
     public static void printBudgetExpenseWithAsciiTable(ArrayList<? extends BudgetExpense> expenses) {
         AsciiTable at = new AsciiTable();
-        at.getRenderer().setCWC(new CWC_FixedWidth()
-                .add(10)
-                .add(61)
-                .add(10)
-                .add(25)
-                .add(15)
-        );
+        at.getRenderer().setCWC(new CWC_FixedWidth().add(10).add(61).add(10).add(25).add(15));
 
         at.addRule();
         at.addRow("Κωδικός Ειδικού Φορέα", "Ονομασία Ειδικού Φορέα", "Κωδικός Δαπάνης", "Ονομασία Δαπάνης", "Ποσό");
@@ -175,14 +149,7 @@ public class DataOutput {
 
     public static void printPublicInvestmentBudgetExpenseWithAsciiTable(ArrayList<? extends PublicInvestmentBudgetExpense> expenses) {
         AsciiTable at = new AsciiTable();
-        at.getRenderer().setCWC(new CWC_FixedWidth()
-                .add(10)
-                .add(40)
-                .add(10)
-                .add(25)
-                .add(20)
-                .add(15)
-        );
+        at.getRenderer().setCWC(new CWC_FixedWidth().add(10).add(40).add(10).add(25).add(20).add(15));
 
         at.addRule();
         at.addRow("Κωδικός Ειδικού Φορέα", "Ονομασία Ειδικού Φορέα", "Κωδικός Δαπάνης", "Ονομασία Δαπάνης",  "Σκέλος", "Ποσό");
@@ -208,13 +175,7 @@ public class DataOutput {
 
     public static void printPublicInvestmentBudgetRevenueWithAsciiTable(ArrayList<? extends PublicInvestmentBudgetRevenue> revenues) {
         AsciiTable at = new AsciiTable();
-        at.getRenderer().setCWC(new CWC_FixedWidth()
-                .add(20)
-                .add(40)
-                .add(20)
-                .add(15)
-                .add(20)
-        );
+        at.getRenderer().setCWC(new CWC_FixedWidth().add(20).add(40).add(20).add(15).add(20));
 
         at.addRule();
         at.addRow("Κωδικός Ταξινόμησης", "Ονομασία",  "Σκέλος", "Κατηγορία", "Ποσό");

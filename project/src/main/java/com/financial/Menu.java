@@ -251,7 +251,7 @@ public class Menu {
                         String entityCode = input.nextLine();
                         System.out.println();
                         Entity entity = Entity.findEntityWithEntityCode(entityCode);
-                        DataOutput.printEntityWithAsciiTable(entity,budgetType);
+                        DataOutput.printEntityWithAsciiTable(entity, budgetType);
                     }
                 }
             }
