@@ -10,4 +10,15 @@ public class SingleEntityAccountPercentageAdjustment implements  IExpenseAdjustm
     public SingleEntityAccountPercentageAdjustment(String targetExpenseCode) {
         this.targetExpenseCode = targetExpenseCode;
     }
+
+    @Override
+    public long applyAdjustment(ArrayList<? extends BudgetExpense> expenses, double percentage, long fixedAmount) {
+        long newTotal = 0;
+        for (BudgetExpense expense : expenses) {
+            if (expense.getCode().equals(targetExpenseCode)) {
+                expense.setAmount( (long) (expense.getAmount()*(1+percentage)));
+            }
+        }
+        return newTotal;
+    }
 }
