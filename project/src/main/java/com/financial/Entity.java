@@ -1,5 +1,7 @@
 package com.financial;
 
+import com.financial.strategies.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -248,6 +250,16 @@ public class Entity {
 
     public String getEntityName() {
         return entityName;
+    }
+
+    //Mass changes of entity
+
+    public long adjustRegularExpenses(IExpenseAdjustmentStrategy strategy, double percentage, long fixedAmount) {
+        return strategy.applyAdjustment(this.regularBudgetExpenses, percentage, fixedAmount);
+    }
+
+    public long adjustPublicInvestmentExpenses(IExpenseAdjustmentStrategy strategy, double percentage, long fixedAmount) {
+        return strategy.applyAdjustment(this.publicInvestmentBudgetExpenses, percentage, fixedAmount);
     }
 
     @Override
