@@ -260,6 +260,44 @@ public class Menu {
         }
     }
 
+    public static void showRegularBudgetMenu() {
+        Scanner input = new Scanner(System.in);
+        System.out.println();
+        System.out.println(BLUE + BOLD + "=== ΠΡΟΒΟΛΗ ΣΤΟΙΧΕΙΩΝ TΑΚΤΙΚΟΥ ΠΡΟΫΠΟΛΟΓΙΣΜΟΥ ===" );
+        System.out.println();
+        System.out.println(BLUE + BOLD + "[1] " + RESET + "Προβολή Εσόδων Τακτικού Προϋπολογισμού");
+        System.out.println(BLUE + BOLD + "[2] " + RESET + "Προβολή Εξόδων Τακτικού Προϋπολογισμού");
+        System.out.println(BLUE + BOLD + "[3] " + RESET + "Προβολή Εσόδων & Εξόδων Τακτικού Προϋπολογισμού");
+        System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή στο Κύριο Μενού" + RESET_2);
+        System.out.println();
+        System.out.print("Επιλογή: ");
+        int choice = input.nextInt();
+        switch (choice) {
+            case 1 -> showRegularRevenuesMenu();
+            case 2 -> showExpensesMenu("ΤΑΚΤΙΚΟΥ");
+        }
+    }
+
+    private static void showPublicInvestmentBudgetRevenuesMenu() {
+        Scanner input = new Scanner(System.in);
+
+        System.out.println(BLUE + BOLD + "\n=== ΠΡΟΒΟΛΗ ΕΣΟΔΩΝ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ ===\n");
+        System.out.println(BLUE + BOLD + "[1] " + RESET + "Προβολή λογαριασμών εσόδων (ΕΘΝΙΚΟ ΣΚΕΛΟΣ)");
+        System.out.println(BLUE + BOLD + "[2] " + RESET + "Προβολή λογαριασμών εσόδων (ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ ΣΚΕΛΟΣ)");
+        System.out.println(BLUE + BOLD + "[3] " + RESET + "Προβολή λογαριασμών εσόδων (ΕΘΝΙΚΟ + ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ ΣΚΕΛΟΣ)");
+        System.out.println(BLUE + BOLD + "[4] " + RESET + "Προβολή συγκεκριμένου λογαριασμού εσόδων");
+        System.out.print("\nΕπιλογή: ");
+        int choice = input.nextInt();
+        input.nextLine();
+        System.out.println();
+        switch (choice) {
+            case 1 -> PublicInvestmentBudgetRevenue.printPublicInvestmentBudgetNationalRevenues();
+            case 2 -> PublicInvestmentBudgetRevenue.printPublicInvestmentBudgetCoFundedRevenues();
+            case 3 -> PublicInvestmentBudgetRevenue.printAllPublicInvestmentBudgetRevenues();
+            default -> System.out.println(RED + "Μη έγκυρη επιλογή" + RESET);
+        }
+    }
+
     public static void printSubMenuOfChoice3() {
         Scanner input = new Scanner(System.in);
         System.out.println(BLUE + BOLD + "=== ΕΙΣΑΓΩΓΗ ΑΛΛΑΓΩΝ ===");
