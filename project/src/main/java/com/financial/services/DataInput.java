@@ -86,6 +86,17 @@ public class DataInput {
         return "UNKNOWN";
     }
 
+    private static void processCSVRow(String csvType, String[] values) {
+        switch (csvType) {
+            case "REGULAR_REVENUES" -> createRegularBudgetRevenueFromCSV(values);
+            case "PUBLIC_INVESTMENT_REVENUES" -> createPublicInvestmentBudgetRevenueFromCSV(values);
+            case "REGULAR_EXPENSES_PER_SERVICE" -> createRegularBudgetExpensePerServiceFromCSV(values);
+            case "PUBLIC_INVESTMENT_EXPENSES_PER_SERVICE" -> createPublicInvestmentBudgetExpenseFromCSV(values);
+            case "UNKNOWN" -> System.out.println("Σφάλμα: Άγνωστος τύπος CSV.");
+            default -> System.out.println("Σφάλμα στη γραμμή: " + Arrays.toString(values));
+        }
+    }
+
     private static void createBudgetRevenueFromCSV(String[] values) {
         String code = values[0];
         String description = values[1];
