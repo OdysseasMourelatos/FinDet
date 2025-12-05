@@ -1,5 +1,6 @@
 package com.financial.entries;
 
+import com.financial.services.BudgetRevenueHandling;
 import com.financial.services.DataOutput;
 
 import java.util.ArrayList;
@@ -21,6 +22,10 @@ public class RegularBudgetRevenue extends BudgetRevenue {
         DataOutput.printRevenueWithAsciiTable(regularBudgetRevenues, calculateSum());
     }
 
+    @Override
+    public RegularBudgetRevenue findSuperCategory() {
+        return BudgetRevenueHandling.findSuperCategory(this, regularBudgetRevenues);
+    }
 
     @Override
     public String toString () {
