@@ -1,6 +1,7 @@
 package com.financial.entries;
 
 import com.financial.services.BudgetExpenseHandling;
+import com.financial.services.BudgetRevenueHandling;
 
 import java.util.ArrayList;
 
@@ -45,7 +46,7 @@ public abstract class BudgetEntry {
 
     public static ArrayList<BudgetEntry> mergeListsOfMainRevenuesAndMainExpenses() {
         ArrayList<BudgetEntry> merged = new ArrayList<>();
-        merged.addAll(BudgetRevenue.getMainBudgetRevenues());
+        merged.addAll(BudgetRevenueHandling.getMainBudgetRevenues(BudgetRevenue.budgetRevenues));
         merged.addAll(BudgetExpenseHandling.getSumOfEveryCategory(BudgetExpense.expenses));
         return merged;
     }
