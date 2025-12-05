@@ -8,6 +8,10 @@ import com.financial.services.BudgetExpenseHandling;
 import com.financial.services.BudgetRevenueHandling;
 import com.financial.services.DataInput;
 import com.financial.services.DataOutput;
+import com.financial.strategies.IExpenseAdjustmentStrategy;
+import com.financial.strategies.PercentageAllocationAdjustmentStrategy;
+import com.financial.strategies.filters.ServiceFilter;
+import com.financial.strategies.operations.PercentageOperation;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -405,6 +409,67 @@ public class Menu {
         switch (choice) {
             case 1 -> showSpecificEntityExpensesChangesMenu();
             case 2 -> showAllEntitiesExpensesChangeMenu();
+        }
+    }
+
+    public static void showSpecificEntityExpensesChangesMenu() {
+        Scanner input = new Scanner(System.in);
+        System.out.println();
+        System.out.print("Εισάγετε τον κωδικό του φορέα του οποίου τα έξοδα επιθυμείτε να τροποποιήσετε: ");
+        String entityCode = input.nextLine();
+        System.out.println();
+        Entity entity = Entity.findEntityWithEntityCode(entityCode);
+        System.out.println(BLUE + BOLD + "=== " + entity.getEntityName() + " - ΕΙΣΑΓΩΓΗ ΑΛΛΑΓΩΝ ===");
+        System.out.println();
+        System.out.println(BLUE + BOLD + "[1] " + RESET + "Τροποποίηση συνολικών εξόδων του φορέα");
+        System.out.println(BLUE + BOLD + "[2] " + RESET + "Τροποποίηση συγκεκριμένου λογαριασμού εξόδων όλων των ειδικών φορέων");
+        System.out.println(BLUE + BOLD + "[3] " + RESET + "Τροποποίηση όλων των λογαριασμών εξόδων ενός ειδικού φορέα");
+        System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή" + RESET_2);
+        System.out.println();
+        System.out.print("Επιλογή: ");
+        int choice = input.nextInt();
+        input.nextLine();
+        switch (choice) {
+            case 1 -> {
+                System.out.println();
+                System.out.print("Εισάγετε το ποσοστό (%) μεταβολής των συνολικών εξόδων του φορέα: ");
+                double percentage = input.nextDouble()/100;
+                showExpensesOfEntity(entity, "ΤΑΚΤΙΚΟΥ", true);
+                IExpenseAdjustmentStrategy strategy = new PercentageAllocationAdjustmentStrategy(new MatchAllFilter(), new PercentageOperation());
+                strategy.applyAdjustment(entity.getRegularBudgetExpenses(), percentage, 0);
+                showExpensesOfEntity(entity, "ΤΑΚΤΙΚΟΥ", false);
+            }
+            case 2 -> {
+                System.out.println();
+                System.out.print("Εισάγετε τον κωδικό του λογαριασμού: ");
+                String code = input.nextLine();
+                System.out.println();
+                System.out.print("Εισάγετε το ποσοστό (%) μεταβολής του λογαριασμού " + BOLD + BudgetExpenseHandling.findExpenseWithCode(code, entity.getRegularBudgetExpenses()).getDescription().toUpperCase()  + RESET_2 + " : ");
+                double percentage = input.nextDouble()/100;
+                showExpensesOfEntity(entity, "ΤΑΚΤΙΚΟΥ", true);
+                IExpenseAdjustmentStrategy strategy = new PercentageAllocationAdjustmentStrategy(new AccountFilter(code), new PercentageOperation());
+                strategy.applyAdjustment(entity.getRegularBudgetExpenses(), percentage, 0);
+                showExpensesOfEntity(entity, "ΤΑΚΤΙΚΟΥ", false);
+            }
+            case 3 -> {
+                System.out.println("\nΕΙΔΙΚΟΙ ΦΟΡΕΙΣ & ΑΘΡΟΙΣΜΑ ΕΞΟΔΩΝ");
+                for (String serviceCode : entity.getRegularServiceCodes()) {
+                    System.out.println(serviceCode + " " + entity.findRegularServiceNameWithCode(serviceCode) + " " + entity.getRegularSumOfServiceWithCode(serviceCode));
+                    for (RegularBudgetExpense expense : entity.getRegularExpensesOfServiceWithCode(serviceCode)) {
+                        System.out.println(expense.getCode() + " " + expense.getDescription() + " " + expense.getAmount());
+                    }
+                }
+                System.out.println();
+                System.out.print("Εισάγετε τον κωδικό του ειδικού φορέα: ");
+                String serviceCode = input.nextLine();
+                System.out.println();
+                System.out.print("Εισάγετε το ποσοστό (%) μεταβολής του ειδικού φορέα " + BOLD + entity.findRegularServiceNameWithCode(serviceCode).toUpperCase() + RESET_2 + " : ");
+                double percentage = input.nextDouble()/100;
+                showExpensesOfEntity(entity, "ΤΑΚΤΙΚΟΥ", true);
+                IExpenseAdjustmentStrategy strategy = new PercentageAllocationAdjustmentStrategy(new ServiceFilter(serviceCode), new PercentageOperation());
+                strategy.applyAdjustment(entity.getRegularBudgetExpenses(), percentage, 0);
+                showExpensesOfEntity(entity, "ΤΑΚΤΙΚΟΥ", false);
+            }
         }
     }
 
