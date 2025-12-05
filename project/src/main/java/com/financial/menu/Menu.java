@@ -4,14 +4,11 @@ package com.financial.menu;
 import com.financial.pdf.BudgetRevenueConvertToPdf;
 import com.financial.charts.PieChartGenerator;
 import com.financial.entries.*;
-import com.financial.services.BudgetExpenseHandling;
-import com.financial.services.BudgetRevenueHandling;
-import com.financial.services.DataInput;
-import com.financial.services.DataOutput;
-import com.financial.strategies.IExpenseAdjustmentStrategy;
-import com.financial.strategies.PercentageAllocationAdjustmentStrategy;
-import com.financial.strategies.filters.ServiceFilter;
-import com.financial.strategies.operations.PercentageOperation;
+import com.financial.services.*;
+import com.financial.strategies.*;
+import com.financial.strategies.filters.*;
+import com.financial.strategies.operations.*;
+
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
