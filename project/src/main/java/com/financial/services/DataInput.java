@@ -27,8 +27,6 @@ public class DataInput {
                 String[] values = line.split(",");
                 if (values.length > 5) {
                     System.out.println("Σφάλμα στη γραμμή: " + Arrays.toString(values));
-                } else {
-                    createBudgetRevenueFromCSV(values);
                 }
             }
         } catch (IOException e) {
@@ -165,7 +163,7 @@ public class DataInput {
         BudgetExpense publicInvestmentBudgetExpense = new PublicInvestmentBudgetExpense(entityCode, entityName, serviceCode, serviceName, expenseCode, description, type, category, amount);
     }
 
-    protected static void createEntityFromCSV() {
+    public static void createEntityFromCSV() {
         Map<String, String> entityMap = BudgetExpense.getExpenses().stream().collect(Collectors.toMap(BudgetExpense::getEntityCode, BudgetExpense::getEntityName, (existing, replacement) -> existing));
         entityMap.keySet().stream().sorted().forEach(entityCode -> new Entity(entityCode, entityMap.get(entityCode)));
     }

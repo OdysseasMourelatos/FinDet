@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="88d8a661-a47d-4ac5-b89a-2164a467de01" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="88d8a661-a47d-4ac5-b89a-2164a467de01" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -72,7 +70,7 @@
       <module name="FinDet" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.financial.*" />
+          <option name="PATTERN" value="com.financial.entries.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -87,7 +85,7 @@
       <module name="FinDet" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.financial.*" />
+          <option name="PATTERN" value="com.financial.entries.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>

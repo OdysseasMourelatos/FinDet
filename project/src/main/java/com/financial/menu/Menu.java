@@ -1,9 +1,11 @@
 package com.financial.menu;
 
+
 import com.financial.pdf.BudgetRevenueConvertToPdf;
 import com.financial.charts.PieChartGenerator;
 import com.financial.entries.*;
 import com.financial.services.BudgetExpenseHandling;
+import com.financial.services.BudgetRevenueHandling;
 import com.financial.services.DataInput;
 import com.financial.services.DataOutput;
 
@@ -137,7 +139,7 @@ public class Menu {
             DataInput.advancedCSVReader(filePath);
             System.out.println(GREEN + "Η ΦΟΡΤΩΣΗ ΤΩΝ ΑΡΧΕΙΩΝ ΠΡΑΓΜΑΤΟΠΟΙΗΘΗΚΕ ΕΠΙΤΥΧΩΣ!" + RESET);
             DataInput.createEntityFromCSV();
-            DataInput.createRegularBudgetRevenueFromCSV();
+            DataInput.createBudgetRevenueFromCSV();
         }
     }
 
@@ -192,13 +194,13 @@ public class Menu {
         input.nextLine();
         System.out.println();
         switch (choice) {
-            case 1 -> BudgetRevenue.printMainBudgetRevenues();
+            case 1 -> BudgetRevenueHandling.printMainBudgetRevenues(BudgetRevenue.getAllBudgetRevenues());
             case 2 -> BudgetRevenue.printAllBudgetRevenues();
             case 3 -> {
                 System.out.print("Παρακαλούμε εισάγετε τον κωδικό του επιθυμητού λογαριασμού εσόδων: ");
                 String code = input.nextLine();
                 System.out.println();
-                BudgetRevenue budgetRevenue = BudgetRevenue.findRevenueWithCode(code);
+                BudgetRevenue budgetRevenue = BudgetRevenueHandling.findRevenueWithCode(code, BudgetRevenue.getAllBudgetRevenues());
                 DataOutput.printEntryWithAsciiTable(budgetRevenue);
                 System.out.println();
                 System.out.println(BOLD + "ΚΑΤΗΓΟΡΙΕΣ ΣΕ ΥΨΗΛΟΤΕΡΟ ΕΠΙΠΕΔΟ:\n" + RESET_2);
@@ -226,9 +228,9 @@ public class Menu {
         switch (choice) {
             case 1 -> {
                 if (budgetType.equals("ΚΡΑΤΙΚΟΥ")) {
-                    DataOutput.printExpenseWithAsciiTable(BudgetExpenseHandling.getSumOfEveryCategory(BudgetExpense.expenses));
+                    DataOutput.printExpenseWithAsciiTable(BudgetExpenseHandling.getSumOfEveryCategory(BudgetExpense.getExpenses()));
                 } else if (budgetType.equals("ΤΑΚΤΙΚΟΥ")) {
-                    DataOutput.printExpenseWithAsciiTable(BudgetExpenseHandling.getSumOfEveryCategory(RegularBudgetExpense.regularBudgetExpenses));
+                    DataOutput.printExpenseWithAsciiTable(BudgetExpenseHandling.getSumOfEveryCategory(RegularBudgetExpense.getAllRegularBudgetExpenses()));
                 } else if (budgetType.equals("ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ")) {
                     DataOutput.printExpenseWithAsciiTable(BudgetExpenseHandling.getSumOfEveryCategory(PublicInvestmentBudgetExpense.getAllPublicInvestmentBudgetExpenses()));
                 }
@@ -244,7 +246,7 @@ public class Menu {
                 System.out.println();
                 switch (choice2) {
                     case 1 -> {
-                        for (Entity entity : Entity.entities) {
+                        for (Entity entity : Entity.getEntities()) {
                             DataOutput.printEntityWithAsciiTable(entity, budgetType);
                         }
                         System.out.println();
@@ -311,14 +313,14 @@ public class Menu {
         input.nextLine();
         System.out.println();
         switch (choice) {
-            case 1 -> RegularBudgetRevenue.printMainRegularBudgetRevenues();
+            case 1 -> BudgetRevenueHandling.printMainBudgetRevenues(RegularBudgetRevenue.getAllRegularBudgetRevenues());
             case 2 -> RegularBudgetRevenue.printAllRegularBudgetRevenues();
             case 3 -> {
                 //ΦΤΙΑΞΤΟ ΒΓΑΖΕΙ ΛΑΘΟΣ ΣΤΑ budgetRevenue.printSuperCategoriesTopDown();
                 System.out.print("Παρακαλούμε εισάγετε τον κωδικό του επιθυμητού λογαριασμού εσόδων: ");
                 String code = input.nextLine();
                 System.out.println();
-                RegularBudgetRevenue budgetRevenue = RegularBudgetRevenue.findRevenueWithCode(code);
+                RegularBudgetRevenue budgetRevenue = BudgetRevenueHandling.findRevenueWithCode(code, RegularBudgetRevenue.getAllRegularBudgetRevenues());
                 DataOutput.printEntryWithAsciiTable(budgetRevenue);
                 System.out.println();
                 System.out.println(BOLD + "ΚΑΤΗΓΟΡΙΕΣ ΣΕ ΥΨΗΛΟΤΕΡΟ ΕΠΙΠΕΔΟ:\n" + RESET_2);
@@ -377,7 +379,7 @@ public class Menu {
         System.out.println();
         System.out.print("Εισάγετε τον κωδικό του λογαριασμού εσόδων του οποίου το ποσό επιθυμείτε να αλλάξει: ");
         String code = input.nextLine();
-        BudgetRevenue budgetRevenue = BudgetRevenue.findRevenueWithCode(code);
+        BudgetRevenue budgetRevenue = BudgetRevenueHandling.findRevenueWithCode(code, BudgetRevenue.getAllBudgetRevenues());
 
         if (budgetRevenue != null) {
             selectChangeMethodAndApply(budgetRevenue);
@@ -508,17 +510,17 @@ public class Menu {
         int choice = input.nextInt();
         input.nextLine();
         if (choice == 1) {
-            PieChartGenerator.generateChart(BudgetRevenue.getMainBudgetRevenues(), "Κατανομή Εσόδων");
+            PieChartGenerator.generateChart(BudgetRevenueHandling.getMainBudgetRevenues(BudgetRevenue.getAllBudgetRevenues()), "Κατανομή Εσόδων");
         } else if (choice == 2) {
             printTaxChartsSubMenu();
         } else if (choice == 3) {
-            BudgetRevenue budgetRevenue = BudgetRevenue.findRevenueWithCode("13");
+            BudgetRevenue budgetRevenue = BudgetRevenueHandling.findRevenueWithCode("13", BudgetRevenue.getAllBudgetRevenues());
             PieChartGenerator.generateChart(budgetRevenue.findNextLevelSubCategories(), "Κατανομή Μεταβιβάσεων");
         } else if (choice == 4) {
-            BudgetRevenue budgetRevenue = BudgetRevenue.findRevenueWithCode("14");
+            BudgetRevenue budgetRevenue = BudgetRevenueHandling.findRevenueWithCode("14", BudgetRevenue.getAllBudgetRevenues());
             PieChartGenerator.generateChart(budgetRevenue.findNextLevelSubCategories(), "Κατανομή Πωλήσεων Αγαθών & Υπηρεσιών");
         } else if (choice == 5) {
-            BudgetRevenue budgetRevenue = BudgetRevenue.findRevenueWithCode("15");
+            BudgetRevenue budgetRevenue = BudgetRevenueHandling.findRevenueWithCode("15", BudgetRevenue.getAllBudgetRevenues());
             PieChartGenerator.generateChart(budgetRevenue.findNextLevelSubCategories(), "Κατανομή Λοιπών Τρεχόντων Εσόδων");
         }
     }
@@ -567,15 +569,15 @@ public class Menu {
         input.nextLine();
         switch (choice) {
             case 1 -> {
-                BudgetRevenue budgetRevenue = BudgetRevenue.findRevenueWithCode("11");
+                BudgetRevenue budgetRevenue = BudgetRevenueHandling.findRevenueWithCode("11", BudgetRevenue.getAllBudgetRevenues());
                 PieChartGenerator.generateChart(budgetRevenue.findNextLevelSubCategories(), "Κατανομή Φόρων");
             }
             case 2 -> {
-                BudgetRevenue budgetRevenue = BudgetRevenue.findRevenueWithCode("111");
+                BudgetRevenue budgetRevenue = BudgetRevenueHandling.findRevenueWithCode("111", BudgetRevenue.getAllBudgetRevenues());
                 PieChartGenerator.generateChart(budgetRevenue.findNextLevelSubCategories(), "Κατανομή Φόρων επί αγαθών και υπηρεσιών");
             }
             case 3 -> {
-                BudgetRevenue budgetRevenue = BudgetRevenue.findRevenueWithCode("115");
+                BudgetRevenue budgetRevenue = BudgetRevenueHandling.findRevenueWithCode("115", BudgetRevenue.getAllBudgetRevenues());
                 PieChartGenerator.generateChart(budgetRevenue.findNextLevelSubCategories(), "Κατανομή Φόρων Εισοδήματος");
             }
         }
