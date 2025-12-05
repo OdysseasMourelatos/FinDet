@@ -372,6 +372,24 @@ public class Menu {
         }
     }
 
+    public static void showRegularChangesMenu() {
+        Scanner input = new Scanner(System.in);
+        System.out.println();
+        System.out.println(BLUE + BOLD + "=== ΕΙΣΑΓΩΓΗ ΑΛΛΑΓΩΝ ΣΕ ΣΤΟΙΧΕΙΑ ΤΑΚΤΙΚΟΥ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ===");
+        System.out.println();
+        System.out.println(BLUE + BOLD + "[1] " + RESET + "Εισαγωγή αλλαγών σε λογαριασμούς εσόδων");
+        System.out.println(BLUE + BOLD + "[2] " + RESET + "Εισαγωγή αλλαγών σε λογαριασμούς εξόδων");
+        System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή" + RESET_2);
+        System.out.println();
+        System.out.print("Επιλογή: ");
+        int choice = input.nextInt();
+        input.nextLine();
+        switch (choice) {
+            case 1 -> modifyExistingRevenueAccount();
+            case 2 -> showExpensesChangesMenu();
+        }
+    }
+
     public static void modifyExistingRevenueAccount() {
         Scanner input = new Scanner(System.in);
         System.out.println();
