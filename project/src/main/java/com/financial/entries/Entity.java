@@ -231,14 +231,16 @@ public class Entity {
         return entityName;
     }
 
-    //Mass changes of entity
-
-    public long adjustRegularExpenses(IExpenseAdjustmentStrategy strategy, double percentage, long fixedAmount) {
-        return strategy.applyAdjustment(this.regularBudgetExpenses, percentage, fixedAmount);
+    public ArrayList<RegularBudgetExpense> getRegularBudgetExpenses() {
+        return regularBudgetExpenses;
     }
 
-    public long adjustPublicInvestmentExpenses(IExpenseAdjustmentStrategy strategy, double percentage, long fixedAmount) {
-        return strategy.applyAdjustment(this.publicInvestmentBudgetExpenses, percentage, fixedAmount);
+    public ArrayList<PublicInvestmentBudgetExpense> getPublicInvestmentExpenses() {
+        return publicInvestmentBudgetExpenses;
+    }
+
+    public static ArrayList<Entity> getEntities() {
+        return entities;
     }
 
     @Override
