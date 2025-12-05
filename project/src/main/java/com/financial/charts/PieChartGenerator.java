@@ -6,10 +6,13 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtils;
 import org.jfree.chart.ChartFrame;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
+import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.DefaultPieDataset;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +36,8 @@ public class PieChartGenerator {
             dataset.setValue(entry.getKey(), entry.getValue());
         }
         JFreeChart chart = ChartFactory.createPieChart(title, dataset);
+        PiePlot plot = (PiePlot) chart.getPlot();
+        plot.setLabelGenerator(new StandardPieSectionLabelGenerator("{0} = {2}", new DecimalFormat("0"), new DecimalFormat("0.00%")));
         ChartUtils.saveChartAsPNG(new File("chart.png"), chart, 800, 600);
         ChartFrame frame = new ChartFrame(title, chart);
         frame.setSize(600, 400);
