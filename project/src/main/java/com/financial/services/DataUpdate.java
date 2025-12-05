@@ -1,4 +1,4 @@
-package com.financial;
+package com.financial.services;
 
 import com.financial.entries.BudgetEntry;
 

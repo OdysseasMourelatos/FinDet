@@ -1,4 +1,4 @@
-package com.financial;
+package com.financial.services;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.financial.*;
 import com.financial.entries.BudgetEntry;
 import com.financial.entries.BudgetExpense;
 import com.opencsv.CSVReader;
