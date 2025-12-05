@@ -390,6 +390,24 @@ public class Menu {
         }
     }
 
+    public static void showExpensesChangesMenu() {
+        Scanner input = new Scanner(System.in);
+        System.out.println();
+        System.out.println(BLUE + BOLD + "=== ΕΙΣΑΓΩΓΗ ΑΛΛΑΓΩΝ ΣΕ ΛΟΓΑΡΙΑΣΜΟΥΣ ΕΞΟΔΩΝ ===");
+        System.out.println();
+        System.out.println(BLUE + BOLD + "[1] " + RESET + "Εισαγωγή αλλαγών σε συγκεκριμένο φορέα");
+        System.out.println(BLUE + BOLD + "[2] " + RESET + "Εισαγωγή μαζικών αλλαγών σε όλους τους φορείς");
+        System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή" + RESET_2);
+        System.out.println();
+        System.out.print("Επιλογή: ");
+        int choice = input.nextInt();
+        input.nextLine();
+        switch (choice) {
+            case 1 -> showSpecificEntityExpensesChangesMenu();
+            case 2 -> showAllEntitiesExpensesChangeMenu();
+        }
+    }
+
     public static void modifyExistingRevenueAccount() {
         Scanner input = new Scanner(System.in);
         System.out.println();
