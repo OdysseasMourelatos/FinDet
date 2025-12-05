@@ -202,16 +202,6 @@ public class BudgetRevenue extends BudgetEntry {
         DataOutput.printRevenueWithAsciiTable(getBudgetRevenuesOfMainCategoryWithCode(code), 0);
     }
 
-    public static long calculateSum() {
-        long sum = 0;
-        for (BudgetRevenue budgetRevenue : budgetRevenues) {
-            if (budgetRevenue.getCode().length() == 2) {
-                sum += budgetRevenue.getAmount();
-            }
-        }
-        return sum;
-    }
-
     public void implementChangesOfEqualDistribution(long change) {
         setAmountOfSuperCategories(change);
         setAmountOfAllSubCategoriesWithEqualDistribution(change);
@@ -222,15 +212,6 @@ public class BudgetRevenue extends BudgetEntry {
         setAmountOfSuperCategories((long) (getAmount() * (percentage)));
         setAmountOfAllSubCategoriesWithPercentageAdjustment(percentage);
         setAmount((long) (getAmount() * (1 + percentage)));
-    }
-
-    public static BudgetRevenue findRevenueWithCode (String code) {
-        for (BudgetRevenue budgetRevenue : budgetRevenues) {
-            if (budgetRevenue.getCode().equals(code)) {
-                return budgetRevenue;
-            }
-        }
-        return null;
     }
 
     @Override
