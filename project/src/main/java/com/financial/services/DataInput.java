@@ -48,28 +48,11 @@ public class DataInput {
         CSVReader reader = null;
         try {
             reader = new CSVReader(new FileReader(filePath));
-            reader.readNext();
+            String[] header = reader.readNext();
+            String csvType = determineCSVType(header);
             String[] values;
             while ((values = reader.readNext()) != null) {
-                if (values.length == 2) {
-                    return;
-                } else if (values.length == 3) {
-                    createBudgetRevenueFromCSV(values);
-                } else if (values.length == 4) {
-                    if (values[0].length() == 4) {
-                        createRegularBudgetExpenseFromCSV(values);
-                    } else {
-                        createPublicInvestmentBudgetRevenueFromCSV(values);
-                    }
-                } else if (values.length == 5) {
-                    createPublicInvestmentBudgetExpenseFromCSV(values);
-                } else if (values.length == 7) {
-                    createRegularBudgetExpensePerServiceFromCSV(values);
-                } else if (values.length == 8) {
-                    createPublicInvestmentBudgetExpenseFromCSV(values);
-                } else if (values.length > 8) {
-                    System.out.println("Σφάλμα στη γραμμή: " + Arrays.toString(values));
-                }
+                processCSVRow(csvType, values);
             }
         } catch (IOException e) {
             e.printStackTrace();
