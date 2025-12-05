@@ -42,4 +42,20 @@ public class BudgetRevenueHandling {
     public static void printMainBudgetRevenues(ArrayList<? extends BudgetRevenue> budgetRevenues) {
         DataOutput.printRevenueWithAsciiTable(getMainBudgetRevenues(budgetRevenues), calculateSum(budgetRevenues));
     }
+
+    // Μέθοδος 5: Εύρεση Γονέα (Super Category)
+    public static <T extends BudgetRevenue> T findSuperCategory(T currentRevenue, ArrayList<T> revenues) {
+        int level = currentRevenue.getLevelOfHierarchy();
+        String tempCode;
+
+        switch (level) {
+            case 2 -> tempCode = currentRevenue.getCode().substring(0, 2);
+            case 3 -> tempCode = currentRevenue.getCode().substring(0, 3);
+            case 4 -> tempCode = currentRevenue.getCode().substring(0, 5);
+            case 5 -> tempCode = currentRevenue.getCode().substring(0, 7);
+            default -> tempCode = "0";
+        }
+        
+        return findRevenueWithCode(tempCode, revenues);
+    }
 }
