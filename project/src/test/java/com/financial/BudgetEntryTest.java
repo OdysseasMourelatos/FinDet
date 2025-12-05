@@ -2,6 +2,7 @@ package com.financial;
 
 import com.financial.entries.BudgetEntry;
 import com.financial.entries.BudgetExpense;
+import com.financial.entries.BudgetRevenue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -1,6 +1,5 @@
-package com.financial;
+package com.financial.entries;
 
-import com.financial.entries.BudgetEntry;
 import com.financial.services.DataOutput;
 
 import java.util.ArrayList;

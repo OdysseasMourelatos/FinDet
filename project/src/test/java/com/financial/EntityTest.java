@@ -1,4 +1,5 @@
 package com.financial;
+import com.financial.entries.Entity;
 import org.junit.jupiter.api.*;
 import java.lang.reflect.Field;
 import java.util.ArrayList;

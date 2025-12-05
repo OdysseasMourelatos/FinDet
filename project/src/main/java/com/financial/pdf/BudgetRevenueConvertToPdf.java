@@ -1,5 +1,7 @@
-package com.financial;
+package com.financial.pdf;
 
+import com.financial.entries.BudgetRevenue;
+import com.financial.menu.Menu;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import java.io.FileOutputStream;

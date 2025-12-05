@@ -1,4 +1,4 @@
-package com.financial;
+package com.financial.entries;
 
 import com.financial.services.DataOutput;
 

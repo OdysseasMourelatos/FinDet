@@ -1,7 +1,6 @@
 package com.financial.entries;
 
-import com.financial.BudgetExpenseHandling;
-import com.financial.BudgetRevenue;
+import com.financial.services.BudgetExpenseHandling;
 
 import java.util.ArrayList;
 
