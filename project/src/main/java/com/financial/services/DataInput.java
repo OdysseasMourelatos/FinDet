@@ -162,7 +162,7 @@ public class DataInput {
         String type = values[6];
         long amount = Long.parseLong(values[7]);
         String category = "ΕΞΟΔΑ";
-        BudgetEntry publicInvestmentBudgetExpense = new PublicInvestmentBudgetExpense(entityCode, entityName, serviceCode, serviceName, expenseCode, description, type, category, amount);
+        BudgetExpense publicInvestmentBudgetExpense = new PublicInvestmentBudgetExpense(entityCode, entityName, serviceCode, serviceName, expenseCode, description, type, category, amount);
     }
 
     protected static void createEntityFromCSV() {
