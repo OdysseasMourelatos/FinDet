@@ -15,4 +15,15 @@ public class BudgetRevenueHandling {
         }
         return null;
     }
+
+    // Μέθοδος 2: Εύρεση Bασικών Λογαριασμών 
+    public static ArrayList<BudgetRevenue> getMainBudgetRevenues(ArrayList<? extends BudgetRevenue> budgetRevenues) {
+        ArrayList<BudgetRevenue> mainBudgetRevenues = new ArrayList<>();
+        for (BudgetRevenue budgetRevenue : budgetRevenues) {
+            if (budgetRevenue.getCode().length() == 2) {
+                mainBudgetRevenues.add(budgetRevenue);
+            }
+        }
+        return mainBudgetRevenues;
+    }
 }
