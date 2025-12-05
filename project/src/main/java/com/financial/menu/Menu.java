@@ -13,6 +13,7 @@ import com.financial.strategies.PercentageAllocationAdjustmentStrategy;
 import com.financial.strategies.filters.ServiceFilter;
 import com.financial.strategies.operations.PercentageOperation;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 public class Menu {
@@ -520,6 +521,18 @@ public class Menu {
         System.out.println();
         DataOutput.printEntityWithAsciiTable(entity, budgetType);
     }
+
+    public static void showGeneralExpenses(ArrayList<? extends BudgetExpense> expenses, String budgetType, boolean before) {
+        System.out.println();
+        if (before) {
+            System.out.println("************************************ ΠΡΙΝ *****************************************");
+        } else {
+            System.out.println("************************************ ΜΕΤΑ *****************************************");
+        }
+        System.out.println();
+        DataOutput.printExpenseWithAsciiTable(BudgetExpenseHandling.getSumOfEveryCategory(expenses));
+    }
+
 
     public static void modifyExistingRevenueAccount() {
         Scanner input = new Scanner(System.in);
