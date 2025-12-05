@@ -123,34 +123,12 @@ public class DataInput {
         BudgetRevenue.sortBudgetRevenuesByCode();
     }
 
-    protected static void createRegularBudgetRevenueFromCSV() {
-        ArrayList<BudgetRevenue> budgetRevenues = BudgetRevenue.getAllBudgetRevenues();
-        ArrayList<PublicInvestmentBudgetRevenue> publicInvestmentBudgetNationalRevenues = PublicInvestmentBudgetRevenue.getPublicInvestmentBudgetNationalRevenues();
-        ArrayList<PublicInvestmentBudgetRevenue> publicInvestmentBudgetCoFundedRevenues = PublicInvestmentBudgetRevenue.getPublicInvestmentBudgetCoFundedRevenues();
-        for (BudgetRevenue budgetRevenue : budgetRevenues) {
-            //Αντιγραφή όλων τον αντικειμένων στη λίστα budgetRevenues
-            RegularBudgetRevenue regularBudgetRevenue = new RegularBudgetRevenue(budgetRevenue.getCode(), budgetRevenue.getDescription(), "ΕΞΟΔΑ", budgetRevenue.getAmount());
-            for (PublicInvestmentBudgetRevenue publicInvestmentBudgetRevenue : publicInvestmentBudgetNationalRevenues) {
-                if (budgetRevenue.getCode().equals(publicInvestmentBudgetRevenue.getCode())) {
-                    long amount = budgetRevenue.getAmount() - publicInvestmentBudgetRevenue.getAmount();
-                    if (amount == 0) {
-                        RegularBudgetRevenue.regularBudgetRevenues.remove(regularBudgetRevenue);
-                    } else {
-                        regularBudgetRevenue.setAmount(amount);
-                    }
-                }
-            }
-            for (PublicInvestmentBudgetRevenue publicInvestmentBudgetRevenue : publicInvestmentBudgetCoFundedRevenues) {
-                if (budgetRevenue.getCode().equals(publicInvestmentBudgetRevenue.getCode())) {
-                    long amount = regularBudgetRevenue.getAmount() - publicInvestmentBudgetRevenue.getAmount();
-                    if (amount == 0) {
-                        RegularBudgetRevenue.regularBudgetRevenues.remove(regularBudgetRevenue);
-                    } else {
-                        regularBudgetRevenue.setAmount(amount);
-                    }
-                }
-            }
-        }
+    private static void createRegularBudgetRevenueFromCSV(String[] values) {
+        String code = values[0];
+        String description = values[1];
+        String category = "ΕΣΟΔΑ";
+        long amount = Long.parseLong(values[2]);
+        BudgetRevenue regularBudgetRevenue = new RegularBudgetRevenue(code, description, category, amount);
     }
 
     private static void createPublicInvestmentBudgetRevenueFromCSV(String [] values) {
