@@ -39,6 +39,10 @@ public class BudgetExpense extends BudgetEntry {
         return serviceName;
     }
 
+    public static ArrayList <BudgetExpense> getExpenses() {
+        return expenses;
+    }
+
     @Override
     public String toString() {
         return "Entity Code: " + getEntityCode() + ", Entity Name : " + entityName + ", Service Code: " + serviceCode + ", Service Name: " + serviceName + ", Expense Code: " + getCode() + ", Description: " + getDescription() + ", Category: " + getCategory() + ", Amount: " + String.format("%,d", getAmount());
