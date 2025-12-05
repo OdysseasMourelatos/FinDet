@@ -24,4 +24,8 @@ public class PercentageAllocationAdjustmentStrategy implements IExpenseAdjustmen
             }
         }
     }
+
+    private long roundToNearestHundred(long amount) {
+        return Math.round(amount / 100.0) * 100;
+    }
 }
