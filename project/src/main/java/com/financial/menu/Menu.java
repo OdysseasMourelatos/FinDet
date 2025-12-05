@@ -473,6 +473,43 @@ public class Menu {
         }
     }
 
+    public static void showAllEntitiesExpensesChangeMenu() {
+        Scanner input = new Scanner(System.in);
+        System.out.println();
+        System.out.println(BLUE + BOLD + "=== ΕΙΣΑΓΩΓΗ ΜΑΖΙΚΩΝ ΑΛΛΑΓΩΝ ΣΕ ΟΛΟΥΣ ΤΟΥΣ ΦΟΡΕΙΣ ===");
+        System.out.println();
+        System.out.println(BLUE + BOLD + "[1] " + RESET + "Τροποποίηση ποσού λογαριασμού εξόδων για όλους τους φορείς");
+        System.out.println(BLUE + BOLD + "[2] " + RESET + "Αύξηση όλων των λογαριασμών εξόδων όλων των φορέων");
+        System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή" + RESET_2);
+        System.out.println();
+        System.out.print("Επιλογή: ");
+        int choice = input.nextInt();
+        input.nextLine();
+        switch (choice) {
+            case 1 -> {
+                System.out.println();
+                System.out.print("Εισάγετε τον κωδικό του λογαριασμού: ");
+                String code = input.nextLine();
+                System.out.println();
+                System.out.print("Εισάγετε το ποσοστό (%) μεταβολής του λογαριασμού " + BOLD + BudgetExpenseHandling.findExpenseWithCode(code, BudgetExpense.getExpenses()).getDescription().toUpperCase() + RESET_2 + " : ");
+                double percentage = input.nextDouble() / 100;
+                showGeneralExpenses(RegularBudgetExpense.getAllRegularBudgetExpenses(), "ΤΑΚΤΙΚΟΥ", true);
+                IExpenseAdjustmentStrategy strategy = new PercentageAllocationAdjustmentStrategy(new AccountFilter(code), new PercentageOperation());
+                strategy.applyAdjustment(BudgetExpense.getExpenses(), percentage, 0);
+                showGeneralExpenses(RegularBudgetExpense.getAllRegularBudgetExpenses(), "ΤΑΚΤΙΚΟΥ", false);
+            }
+            case 2 -> {
+                System.out.println();
+                System.out.print("Εισάγετε το ποσοστό (%) μεταβολής: ");
+                double percentage = input.nextDouble() / 100;
+                showGeneralExpenses(RegularBudgetExpense.getAllRegularBudgetExpenses(), "ΤΑΚΤΙΚΟΥ", true);
+                IExpenseAdjustmentStrategy strategy = new PercentageAllocationAdjustmentStrategy(new MatchAllFilter(), new PercentageOperation());
+                strategy.applyAdjustment(BudgetExpense.getExpenses(), percentage, 0);
+                showGeneralExpenses(RegularBudgetExpense.getAllRegularBudgetExpenses(), "ΤΑΚΤΙΚΟΥ", false);
+            }
+        }
+    }
+
     public static void modifyExistingRevenueAccount() {
         Scanner input = new Scanner(System.in);
         System.out.println();
