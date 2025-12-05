@@ -510,6 +510,17 @@ public class Menu {
         }
     }
 
+    public static void showExpensesOfEntity(Entity entity, String budgetType, boolean before) {
+        System.out.println();
+        if (before) {
+            System.out.println("************************************************************ ΠΡΙΝ ************************************************************");
+        } else {
+            System.out.println("************************************************************ ΜΕΤΑ ************************************************************");
+        }
+        System.out.println();
+        DataOutput.printEntityWithAsciiTable(entity, budgetType);
+    }
+
     public static void modifyExistingRevenueAccount() {
         Scanner input = new Scanner(System.in);
         System.out.println();
