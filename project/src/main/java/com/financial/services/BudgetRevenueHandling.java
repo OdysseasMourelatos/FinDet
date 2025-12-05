@@ -37,4 +37,9 @@ public class BudgetRevenueHandling {
         }
         return sum;
     }
+
+    // Μέθοδος 4: Εκτύπωση Λογαριασμών
+    public static void printMainBudgetRevenues(ArrayList<? extends BudgetRevenue> budgetRevenues) {
+        DataOutput.printRevenueWithAsciiTable(getMainBudgetRevenues(budgetRevenues), calculateSum(budgetRevenues));
+    }
 }
