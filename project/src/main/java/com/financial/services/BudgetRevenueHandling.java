@@ -16,7 +16,7 @@ public class BudgetRevenueHandling {
         return null;
     }
 
-    // Μέθοδος 2: Εύρεση Bασικών Λογαριασμών 
+    // Μέθοδος 2: Εύρεση Bασικών Λογαριασμών
     public static ArrayList<BudgetRevenue> getMainBudgetRevenues(ArrayList<? extends BudgetRevenue> budgetRevenues) {
         ArrayList<BudgetRevenue> mainBudgetRevenues = new ArrayList<>();
         for (BudgetRevenue budgetRevenue : budgetRevenues) {
@@ -25,5 +25,16 @@ public class BudgetRevenueHandling {
             }
         }
         return mainBudgetRevenues;
+    }
+
+    // Μέθοδος 3: Υπολογισμός Αθροίσματος
+    public static long calculateSum(ArrayList<? extends BudgetRevenue> budgetRevenues) {
+        long sum = 0;
+        for (BudgetRevenue budgetRevenue : budgetRevenues) {
+            if (budgetRevenue.getCode().length() == 2) {
+                sum += budgetRevenue.getAmount();
+            }
+        }
+        return sum;
     }
 }
