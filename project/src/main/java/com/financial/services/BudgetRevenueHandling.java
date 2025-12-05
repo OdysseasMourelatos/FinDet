@@ -55,7 +55,21 @@ public class BudgetRevenueHandling {
             case 5 -> tempCode = currentRevenue.getCode().substring(0, 7);
             default -> tempCode = "0";
         }
-        
+
         return findRevenueWithCode(tempCode, revenues);
+    }
+
+    // Μέθοδος 6: Εύρεση Όλων των Υποκατηγοριών
+    public static <T extends BudgetRevenue> ArrayList<T> findAllSubCategories(T parent, ArrayList<T> revenues) {
+        ArrayList<T> subCategories = new ArrayList<>();
+
+        for (T budgetRevenue : revenues) {
+            if (budgetRevenue.getCode().startsWith(parent.getCode()) &&
+                    !(budgetRevenue.equals(parent))) {
+
+                subCategories.add(budgetRevenue);
+            }
+        }
+        return subCategories;
     }
 }
