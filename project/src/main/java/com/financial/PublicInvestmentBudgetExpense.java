@@ -1,5 +1,7 @@
 package com.financial;
 
+import com.financial.entries.BudgetExpense;
+
 import java.util.ArrayList;
 
 public class PublicInvestmentBudgetExpense extends BudgetExpense {

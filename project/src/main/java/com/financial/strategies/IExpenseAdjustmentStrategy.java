@@ -1,6 +1,7 @@
 package com.financial.strategies;
 
-import com.financial.*;
+import com.financial.entries.BudgetExpense;
+
 import java.util.ArrayList;
 
 public interface IExpenseAdjustmentStrategy {

@@ -1,6 +1,8 @@
 package com.financial;
 
 import java.util.ArrayList;
+
+import com.financial.entries.BudgetExpense;
 import de.vandermeer.asciitable.AsciiTable;
 import de.vandermeer.asciitable.CWC_FixedWidth;
 

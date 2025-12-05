@@ -1,5 +1,6 @@
 package com.financial;
 
+import com.financial.entries.BudgetExpense;
 import org.junit.jupiter.api.*;
 
 public class BudgetExpenseTest {
