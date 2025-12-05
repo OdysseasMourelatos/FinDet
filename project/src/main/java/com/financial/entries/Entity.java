@@ -223,6 +223,8 @@ public class Entity {
         return publicInvestmentExpensesSums;
     }
 
+    //Getters
+
     public String getEntityCode() {
         return entityCode;
     }
