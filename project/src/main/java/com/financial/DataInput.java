@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.financial.entries.BudgetEntry;
 import com.financial.entries.BudgetExpense;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;

@@ -1,5 +1,6 @@
 package com.financial;
 
+import com.financial.entries.BudgetEntry;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtils;
 import org.jfree.chart.ChartFrame;

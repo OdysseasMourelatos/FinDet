@@ -1,5 +1,7 @@
 package com.financial;
 
+import com.financial.entries.BudgetEntry;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
