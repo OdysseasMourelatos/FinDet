@@ -358,17 +358,17 @@ public class Menu {
         Scanner input = new Scanner(System.in);
         System.out.println(BLUE + BOLD + "=== ΕΙΣΑΓΩΓΗ ΑΛΛΑΓΩΝ ===");
         System.out.println();
-        System.out.println(BLUE + BOLD + "[1] " + RESET + "Τροποποίηση Ποσού Υφιστάμενου Λογαριασμού Εσόδων");
-        System.out.println(BLUE + BOLD + "[2] " + RESET + "Προσθήκη Γραμμής Εσόδων");
-        System.out.println(BLUE + BOLD + "[3] " + RESET + "Προσθήκη Γραμμής Εξόδων");
-        System.out.println(BLUE + BOLD + "[4] " + RESET + "Διαγραφή Γραμμής");
+        System.out.println(BLUE + BOLD + "[1] " + RESET + "Εισαγωγή αλλαγών σε στοιχεία κρατικού προϋπολογισμού");
+        System.out.println(BLUE + BOLD + "[2] " + RESET + "Εισαγωγή αλλαγών σε στοιχεία τακτικού προϋπολογισμού");
+        System.out.println(BLUE + BOLD + "[3] " + RESET + "Εισαγωγή αλλαγών σε στοιχεία προϋπολογισμού δημόσιων επενδύσεων");
         System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή" + RESET_2);
         System.out.println();
         System.out.print("Επιλογή: ");
         int choice = input.nextInt();
         input.nextLine();
-        if (choice == 1) {
-            modifyExistingRevenueAccount();
+        switch (choice) {
+            case 1 -> modifyExistingRevenueAccount();
+            case 2 -> showRegularChangesMenu();
         }
     }
 
