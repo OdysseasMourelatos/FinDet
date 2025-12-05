@@ -1,5 +1,6 @@
 package com.financial.entries;
 
+import com.financial.services.BudgetRevenueHandling;
 import com.financial.services.DataOutput;
 
 import java.util.ArrayList;
@@ -48,6 +49,11 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue {
 
     public static void printPublicInvestmentBudgetCoFundedRevenues() {
         DataOutput.printPublicInvestmentBudgetRevenueWithAsciiTable(getPublicInvestmentBudgetCoFundedRevenues());
+    }
+
+    @Override
+    public PublicInvestmentBudgetRevenue findSuperCategory() {
+        return BudgetRevenueHandling.findSuperCategory(this, publicInvestmentBudgetRevenues);
     }
 
     public String getType() {
