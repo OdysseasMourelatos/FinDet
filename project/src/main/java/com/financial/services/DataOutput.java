@@ -97,9 +97,9 @@ public class DataOutput {
         if (budgetType.equals("ΚΡΑΤΙΚΟΥ")) {
             //printBudgetExpenseWithAsciiTable(entity.getAllBudgetExpenses()); // Αν υλοποιηθεί
         } else if (budgetType.equals("ΤΑΚΤΙΚΟΥ")) {
-            printBudgetExpenseWithAsciiTable(entity.regularBudgetExpenses);
+            printBudgetExpenseWithAsciiTable(entity.getRegularBudgetExpenses());
         } else if (budgetType.equals("ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ")) {
-            printPublicInvestmentBudgetExpenseWithAsciiTable(entity.publicInvestmentBudgetExpenses);
+            printPublicInvestmentBudgetExpenseWithAsciiTable(entity.getPublicInvestmentExpenses());
         }
     }
 
