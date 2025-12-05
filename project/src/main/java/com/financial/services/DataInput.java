@@ -97,13 +97,30 @@ public class DataInput {
         }
     }
 
-    private static void createBudgetRevenueFromCSV(String[] values) {
-        String code = values[0];
-        String description = values[1];
-        String category = "ΕΣΟΔΑ";
-        long amount = Long.parseLong(values[2]);
-        BudgetRevenue budgetRevenue = new BudgetRevenue(code, description, category, amount);
-        budgetRevenue.addBudgetRevenueToArrayList();
+    public static void createBudgetRevenueFromCSV() {
+        ArrayList<RegularBudgetRevenue> regularBudgetRevenues= RegularBudgetRevenue.getAllRegularBudgetRevenues();
+        ArrayList<PublicInvestmentBudgetRevenue> publicInvestmentBudgetRevenues =  PublicInvestmentBudgetRevenue.getAllPublicInvestmentBudgetRevenues();
+        for (RegularBudgetRevenue revenue : regularBudgetRevenues) {
+            BudgetRevenue budgetRevenue = new BudgetRevenue(revenue.getCode(), revenue.getDescription(), revenue.getCategory(), revenue.getAmount());
+            budgetRevenue.addBudgetRevenueToArrayList();
+        }
+
+        for (PublicInvestmentBudgetRevenue revenue : publicInvestmentBudgetRevenues) {
+
+            BudgetRevenue existingRevenue = BudgetRevenueHandling.findRevenueWithCode(revenue.getCode(), BudgetRevenue.getAllBudgetRevenues());
+
+            if (existingRevenue != null) {
+                // Περίπτωση Α: Ο κωδικός υπάρχει, Κάνουμε Άθροισμα
+                long newAmount = existingRevenue.getAmount() + revenue.getAmount();
+                existingRevenue.setAmount(newAmount);
+
+            } else {
+                // Περίπτωση Β: Ο κωδικός δεν υπάρχει (Μόνο Π.Δ.Ε.), Δημιουργία Νέου
+                BudgetRevenue budgetRevenue = new BudgetRevenue(revenue.getCode(), revenue.getDescription(), revenue.getCategory(), revenue.getAmount());
+                budgetRevenue.addBudgetRevenueToArrayList();
+            }
+        }
+        BudgetRevenue.sortBudgetRevenuesByCode();
     }
 
     protected static void createRegularBudgetRevenueFromCSV() {
