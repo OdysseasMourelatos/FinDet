@@ -71,7 +71,7 @@ public class DataOutput {
         at.addRow("Κωδικός Φορέα", "Ονομασία", "Ποσό");
         at.addRule();
         long sum = 0;
-        for (Entity entity : Entity.entities) {
+        for (Entity entity : Entity.getEntities()) {
             at.addRow(
                     entity.getEntityCode(),
                     entity.getEntityName(),

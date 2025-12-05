@@ -2,9 +2,7 @@ package com.financial.entries;
 
 import com.financial.services.DataOutput;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class BudgetRevenue extends BudgetEntry {
 
@@ -16,6 +14,15 @@ public class BudgetRevenue extends BudgetEntry {
 
     public void addBudgetRevenueToArrayList() {
         budgetRevenues.add(this);
+    }
+
+    public static void sortBudgetRevenuesByCode() {
+        Collections.sort(budgetRevenues, new Comparator<BudgetRevenue>() {
+            @Override
+            public int compare(BudgetRevenue b1, BudgetRevenue b2) {
+                return b1.getCode().compareTo(b2.getCode());
+            }
+        });
     }
 
     public static ArrayList<BudgetRevenue> getAllBudgetRevenues() {
