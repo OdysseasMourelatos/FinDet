@@ -14,4 +14,14 @@ public class PercentageAllocationAdjustmentStrategy implements IExpenseAdjustmen
         this.filter = filter;
         this.operation = operation;
     }
+
+    @Override
+    public void applyAdjustment(ArrayList<? extends BudgetExpense> expenses, double percentage, long fixedAmount) {
+        for (BudgetExpense expense : expenses) {
+            if (filter.matches(expense)) {
+                long newAmount = operation.apply(expense.getAmount(), percentage, fixedAmount);
+                expense.setAmount(roundToNearestHundred(newAmount));
+            }
+        }
+    }
 }
