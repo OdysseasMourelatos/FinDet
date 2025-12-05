@@ -19,7 +19,7 @@ public class RegularBudgetRevenue extends BudgetRevenue {
     }
 
     public static void printAllRegularBudgetRevenues() {
-        DataOutput.printRevenueWithAsciiTable(regularBudgetRevenues, calculateSum());
+        DataOutput.printRevenueWithAsciiTable(regularBudgetRevenues, BudgetRevenueHandling.calculateSum(regularBudgetRevenues));
     }
 
     @Override
