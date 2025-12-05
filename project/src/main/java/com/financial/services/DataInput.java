@@ -90,7 +90,7 @@ public class DataInput {
         switch (csvType) {
             case "REGULAR_REVENUES" -> createRegularBudgetRevenueFromCSV(values);
             case "PUBLIC_INVESTMENT_REVENUES" -> createPublicInvestmentBudgetRevenueFromCSV(values);
-            case "REGULAR_EXPENSES_PER_SERVICE" -> createRegularBudgetExpensePerServiceFromCSV(values);
+            case "REGULAR_EXPENSES_PER_SERVICE" -> createRegularBudgetExpenseFromCSV(values);
             case "PUBLIC_INVESTMENT_EXPENSES_PER_SERVICE" -> createPublicInvestmentBudgetExpenseFromCSV(values);
             case "UNKNOWN" -> System.out.println("Σφάλμα: Άγνωστος τύπος CSV.");
             default -> System.out.println("Σφάλμα στη γραμμή: " + Arrays.toString(values));
@@ -142,15 +142,6 @@ public class DataInput {
 
     private static void createRegularBudgetExpenseFromCSV(String[] values) {
         String entityCode = values[0];
-        String code = values[1];
-        String description = values[2];
-        String category = "ΕΞΟΔΑ";
-        long amount = Long.parseLong(values[3]);
-        //BudgetEntry regularBudgetExpense = new RegularBudgetExpense(entityCode, code, description, category, amount);
-    }
-
-    private static void createRegularBudgetExpensePerServiceFromCSV(String[] values) {
-        String entityCode = values[0];
         String entityName = values[1];
         String serviceCode = values[2];
         String serviceName = values[3];
@@ -158,7 +149,7 @@ public class DataInput {
         String description = values[5];
         String category = "ΕΞΟΔΑ";
         long amount = Long.parseLong(values[6]);
-        BudgetEntry regularBudgetExpense = new RegularBudgetExpense(entityCode, entityName, serviceCode, serviceName, expenseCode, description, category, amount);
+        BudgetExpense regularBudgetExpense = new RegularBudgetExpense(entityCode, entityName, serviceCode, serviceName, expenseCode, description, category, amount);
     }
 
     private static void createPublicInvestmentBudgetExpenseFromCSV(String [] values) {
