@@ -3,9 +3,7 @@ package com.financial.services;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.financial.entries.*;
@@ -67,6 +65,25 @@ public class DataInput {
                 e.printStackTrace();
             }
         }
+    }
+
+    private static String determineCSVType(String[] header) {
+        Set<String> headerSet = new HashSet<>(Arrays.asList(header));
+
+        if (headerSet.contains("Σκέλος")) {
+
+            if (headerSet.contains("Κωδικός_Υπηρεσίας")) {
+                return "PUBLIC_INVESTMENT_EXPENSES_PER_SERVICE";
+            }
+
+            return "PUBLIC_INVESTMENT_REVENUES";
+
+        } else if (headerSet.contains("Κωδικός_Υπηρεσίας")) {
+            return "REGULAR_EXPENSES_PER_SERVICE";
+        } else if (headerSet.size() == 3) {
+            return "REGULAR_REVENUES";
+        }
+        return "UNKNOWN";
     }
 
     private static void createBudgetRevenueFromCSV(String[] values) {
