@@ -33,20 +33,6 @@ public class BudgetRevenue extends BudgetEntry {
         DataOutput.printRevenueWithAsciiTable(budgetRevenues, calculateSum());
     }
 
-    public static ArrayList<BudgetRevenue> getMainBudgetRevenues() {
-        ArrayList<BudgetRevenue> mainBudgetRevenues = new ArrayList<>();
-        for (BudgetRevenue budgetRevenue : budgetRevenues) {
-            if (budgetRevenue.getCode().length() == 2) {
-                mainBudgetRevenues.add(budgetRevenue);
-            }
-        }
-        return mainBudgetRevenues;
-    }
-
-    public static void printMainBudgetRevenues() {
-        DataOutput.printRevenueWithAsciiTable(getMainBudgetRevenues(), calculateSum());
-    }
-
     public int getLevelOfHierarchy() {
         return switch (getCode().length()) {
             case 2 -> 1;   // "11" - top level
