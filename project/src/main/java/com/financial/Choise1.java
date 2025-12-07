@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class Choise1 {
     public static void printSubMenuOfChoice1() {
         Scanner input = new Scanner(System.in);
@@ -34,3 +36,4 @@ public class Choise1 {
         }
     }
 }
+
