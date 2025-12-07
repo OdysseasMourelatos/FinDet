@@ -1,3 +1,4 @@
+package com.financial.menu;
 import java.util.Scanner;
 
 public class MainMenu {
@@ -96,3 +97,4 @@ public class MainMenu {
         } while (true);
     }
 }
+
