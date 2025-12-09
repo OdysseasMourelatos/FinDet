@@ -96,7 +96,7 @@ public class DataInput {
     }
 
     public static void createBudgetRevenueFromCSV() {
-        ArrayList<RegularBudgetRevenue> regularBudgetRevenues= RegularBudgetRevenue.getAllRegularBudgetRevenues();
+        ArrayList<RegularBudgetRevenue> regularBudgetRevenues = RegularBudgetRevenue.getAllRegularBudgetRevenues();
         ArrayList<PublicInvestmentBudgetRevenue> publicInvestmentBudgetRevenues =  PublicInvestmentBudgetRevenue.getAllPublicInvestmentBudgetRevenues();
         for (RegularBudgetRevenue revenue : regularBudgetRevenues) {
             BudgetRevenue budgetRevenue = new BudgetRevenue(revenue.getCode(), revenue.getDescription(), revenue.getCategory(), revenue.getAmount());

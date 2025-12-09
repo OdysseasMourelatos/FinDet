@@ -127,7 +127,7 @@ public class Menu {
         int choice = input.nextInt();
         input.nextLine();
         if (choice == 1) {
-            System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου" + BLUE + " (ΕΣΟΔΑ ΚΡΑΤΙΚΟΎ ΠΡΟΥΠΟΛΟΓΙΣΜΟΎ): " + RESET);
+            System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου" + BLUE + " (ΕΣΟΔΑ ΤΑΚΤΙΚΟΥ ΠΡΟΥΠΟΛΟΓΙΣΜΟΎ): " + RESET);
             String filePath = input.nextLine();
             DataInput.advancedCSVReader(filePath);
             System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου" + BLUE + " (ΕΣΟΔΑ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ): " + RESET);
@@ -139,6 +139,7 @@ public class Menu {
             System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου" + BLUE + " (ΕΞΟΔΑ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ): " + RESET);
             filePath = input.nextLine();
             DataInput.advancedCSVReader(filePath);
+            System.out.println();
             System.out.println(GREEN + "Η ΦΟΡΤΩΣΗ ΤΩΝ ΑΡΧΕΙΩΝ ΠΡΑΓΜΑΤΟΠΟΙΗΘΗΚΕ ΕΠΙΤΥΧΩΣ!" + RESET);
             DataInput.createEntityFromCSV();
             DataInput.createBudgetRevenueFromCSV();
@@ -431,7 +432,7 @@ public class Menu {
             case 1 -> {
                 System.out.println();
                 System.out.print("Εισάγετε το ποσοστό (%) μεταβολής των συνολικών εξόδων του φορέα: ");
-                double percentage = input.nextDouble()/100;
+                double percentage = input.nextDouble() / 100;
                 showExpensesOfEntity(entity, "ΤΑΚΤΙΚΟΥ", true);
                 IExpenseAdjustmentStrategy strategy = new PercentageAllocationAdjustmentStrategy(new MatchAllFilter(), new PercentageOperation());
                 strategy.applyAdjustment(entity.getRegularBudgetExpenses(), percentage, 0);
@@ -443,7 +444,7 @@ public class Menu {
                 String code = input.nextLine();
                 System.out.println();
                 System.out.print("Εισάγετε το ποσοστό (%) μεταβολής του λογαριασμού " + BOLD + BudgetExpenseHandling.findExpenseWithCode(code, entity.getRegularBudgetExpenses()).getDescription().toUpperCase()  + RESET_2 + " : ");
-                double percentage = input.nextDouble()/100;
+                double percentage = input.nextDouble() / 100;
                 showExpensesOfEntity(entity, "ΤΑΚΤΙΚΟΥ", true);
                 IExpenseAdjustmentStrategy strategy = new PercentageAllocationAdjustmentStrategy(new AccountFilter(code), new PercentageOperation());
                 strategy.applyAdjustment(entity.getRegularBudgetExpenses(), percentage, 0);
@@ -462,7 +463,7 @@ public class Menu {
                 String serviceCode = input.nextLine();
                 System.out.println();
                 System.out.print("Εισάγετε το ποσοστό (%) μεταβολής του ειδικού φορέα " + BOLD + entity.findRegularServiceNameWithCode(serviceCode).toUpperCase() + RESET_2 + " : ");
-                double percentage = input.nextDouble()/100;
+                double percentage = input.nextDouble() / 100;
                 showExpensesOfEntity(entity, "ΤΑΚΤΙΚΟΥ", true);
                 IExpenseAdjustmentStrategy strategy = new PercentageAllocationAdjustmentStrategy(new ServiceFilter(serviceCode), new PercentageOperation());
                 strategy.applyAdjustment(entity.getRegularBudgetExpenses(), percentage, 0);
