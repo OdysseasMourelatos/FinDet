@@ -31,46 +31,32 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue {
         publicInvestmentBudgetRevenuesFiltered.add(this);
     }
 
-    public static ArrayList<PublicInvestmentBudgetRevenue> getAllPublicInvestmentBudgetRevenues() {
+    public static ArrayList<PublicInvestmentBudgetRevenue> getPublicInvestmentBudgetRevenues() {
         return publicInvestmentBudgetRevenues;
     }
 
-    public static ArrayList<PublicInvestmentBudgetRevenue> getPublicInvestmentBudgetNationalRevenues() {
-        ArrayList<PublicInvestmentBudgetRevenue> publicInvestmentBudgetNationalRevenues = new ArrayList<>();
-        for (PublicInvestmentBudgetRevenue revenue : publicInvestmentBudgetRevenues) {
-            if (revenue.getType().equals("ΕΘΝΙΚΟ") || revenue.getType().equals("ΕΘΝΙΚΟ ΣΚΕΛΟΣ")) {
-                publicInvestmentBudgetNationalRevenues.add(revenue);
-            }
-        }
-        return publicInvestmentBudgetNationalRevenues;
+    public static void printPublicInvestmentBudgetRevenues() {
+        DataOutput.printPublicInvestmentBudgetRevenueWithAsciiTable(publicInvestmentBudgetRevenues);
     }
 
-    public static ArrayList<PublicInvestmentBudgetRevenue> getPublicInvestmentBudgetCoFundedRevenues() {
-        ArrayList<PublicInvestmentBudgetRevenue> publicInvestmentBudgetCoFundedRevenues = new ArrayList<>();
-        for (PublicInvestmentBudgetRevenue revenue : publicInvestmentBudgetRevenues) {
-            if (revenue.getType().equals("ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ") || revenue.getType().equals("ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ ΣΚΕΛΟΣ") ) {
-                publicInvestmentBudgetCoFundedRevenues.add(revenue);
-            }
-        }
-        return publicInvestmentBudgetCoFundedRevenues;
+    public static ArrayList<PublicInvestmentBudgetRevenue> getMainPublicInvestmentBudgetRevenues() {
+        return BudgetRevenueHandling.getMainBudgetRevenues(publicInvestmentBudgetRevenuesFiltered);
     }
 
-    public static void printAllPublicInvestmentBudgetRevenues() {
-        DataOutput.printPublicInvestmentBudgetRevenueWithAsciiTable(getAllPublicInvestmentBudgetRevenues());
+    public static void printMainPublicInvestmentBudgetRevenues() {
+        BudgetRevenueHandling.printMainBudgetRevenues(getMainPublicInvestmentBudgetRevenues());
     }
 
-    public static void printPublicInvestmentBudgetNationalRevenues() {
-        DataOutput.printPublicInvestmentBudgetRevenueWithAsciiTable(getPublicInvestmentBudgetNationalRevenues());
+    public static ArrayList<PublicInvestmentBudgetRevenue> getPublicInvestmentBudgetRevenuesFiltered() {
+        return publicInvestmentBudgetRevenuesFiltered;
     }
 
-    public static void printPublicInvestmentBudgetCoFundedRevenues() {
-        DataOutput.printPublicInvestmentBudgetRevenueWithAsciiTable(getPublicInvestmentBudgetCoFundedRevenues());
+    public static void printPublicInvestmentBudgetRevenuesFiltered() {
+        DataOutput.printPublicInvestmentBudgetRevenuesFilteredWithAsciiTable(getPublicInvestmentBudgetRevenuesFiltered(), BudgetRevenueHandling.calculateSum(getPublicInvestmentBudgetRevenuesFiltered()));
     }
 
-    @Override
-    public PublicInvestmentBudgetRevenue findSuperCategory() {
-        return BudgetRevenueHandling.findSuperCategory(this, publicInvestmentBudgetRevenues);
-    }
+
+    //Getters & Setters
 
     public String getType() {
         return type;
