@@ -26,12 +26,22 @@ public class BudgetRevenue extends BudgetEntry {
         });
     }
 
+    //Class Methods
+
     public static ArrayList<BudgetRevenue> getAllBudgetRevenues() {
         return budgetRevenues;
     }
 
     public static void printAllBudgetRevenues() {
         DataOutput.printRevenueWithAsciiTable(budgetRevenues, BudgetRevenueHandling.calculateSum(budgetRevenues));
+    }
+
+    public static ArrayList<BudgetRevenue> getMainBudgetRevenues() {
+        return BudgetRevenueHandling.getMainBudgetRevenues(getAllBudgetRevenues());
+    }
+
+    public static void printMainBudgetRevenues() {
+        DataOutput.printBudgetRevenuesWithAsciiTable(getMainBudgetRevenues(), BudgetRevenueHandling.calculateSum(getMainBudgetRevenues()));
     }
 
     public int getLevelOfHierarchy() {
