@@ -8,15 +8,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel; 
-import org.jfree.chart.JFreeChart; 
+import org.jfree.chart.ChartFrame;
+import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.category.CategoryDataset; 
-import org.jfree.data.category.DefaultCategoryDataset; 
-import org.jfree.ui.ApplicationFrame; 
-import org.jfree.ui.RefineryUtilities; 
-
-
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.chart.ChartUtils;
+import static com.financial.menu.Colors.*;
 
 import com.financial.entries.BudgetEntry;
 
@@ -32,14 +29,15 @@ public class BarChartGenerator {
         return barMap;
     }
 
-    private static JFreeChart createBars (Map<String, Long> barMap, String title, String Xaxis, String Yaxis) throws IOException{
-        DefaultCategoryDataset<String> dataset = new DefaultCategoryDataset<>();
-        for (Map.Entry<String, Long> Entry: barMap.entrySet()){
-            dataset.setValue(Entry.getkey(), entry.getValue());
+    public static JFreeChart createBarChart(Map<String, Long> barMap, String title, String Xaxis, String Yaxis) throws IOException {
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        String series = title;
+        for (Map.Entry<String, Long> entry: barMap.entrySet()) {
+            dataset.setValue(entry.getValue(), series, entry.getKey());
         }
-        JFreeChart barChart3d = ChartFactory.createBarChart3D(title, Xaxis, Yaxis, dataset, PlotOrientation.VERTICAL, true ,true ,false);
-        File BarChart3d = new File(BarChart3d.jpeg);
-        ChartUtilities.SaveChartAsJPEG(bar3dChart, barChart, 650, 500);
+        JFreeChart barChart3d = ChartFactory.createBarChart(title, Xaxis, Yaxis, dataset, PlotOrientation.VERTICAL, true, true, false);
+        File barChart3dFile = new File("BarChart3d.jpeg");
+        ChartUtils.saveChartAsJPEG(barChart3dFile, barChart3d, 650, 500);
         ChartFrame frame = new ChartFrame(title, barChart3d);
         frame.setSize(600, 400);
         frame.setLocationRelativeTo(null);
@@ -47,15 +45,13 @@ public class BarChartGenerator {
         return barChart3d;
     }
 
-    public static void generateChart(ArrayList<? extends BudgetEntry> entries, String title, String Xaxis, String Yaxis){
+    public static void generateChart(ArrayList<? extends BudgetEntry> entries, String title, String Xaxis, String Yaxis) {
         try {
-            createBars(BarChartGenerator.fillMap(entries), title, Xaxis, Yaxis);
+            createBarChart(BarChartGenerator.fillMap(entries), title, Xaxis, Yaxis);
             System.out.println();
             System.out.println(GREEN + "Το διάγραμμα δημιουργήθηκε επιτυχώς" + RESET);
         } catch (IOException e) {
             System.err.println("Σφάλμα: " + e.getMessage());
         }
     }
-
-
 }
