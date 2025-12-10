@@ -127,6 +127,15 @@ public class DataInput {
         String category = "ΕΣΟΔΑ";
         long amount = Long.parseLong(values[2]);
         BudgetRevenue regularBudgetRevenue = new RegularBudgetRevenue(code, description, category, amount);
+        //New filtered object of BudgetRevenue class
+        BudgetRevenue budgetRevenue = new BudgetRevenue(code, description, category, amount, 0, amount);
+    }
+
+    //Activated when all PublicInvestmentBudgetRevenues are filtered
+    public static void createBudgetRevenueFilteredFromPublicInvestmentBudgetRevenue() {
+        for (PublicInvestmentBudgetRevenue revenue : PublicInvestmentBudgetRevenue.getPublicInvestmentBudgetRevenuesFiltered()) {
+            BudgetRevenue budgetRevenue = new BudgetRevenue(revenue.getCode(), revenue.getDescription(), revenue.getCategory(), 0, revenue.getAmount(), revenue.getAmount());
+        }
     }
 
     private static void createPublicInvestmentBudgetRevenueFromCSV(String [] values) {
@@ -155,6 +164,8 @@ public class DataInput {
         long amount = Long.parseLong(values[6]);
         BudgetExpense regularBudgetExpense = new RegularBudgetExpense(entityCode, entityName, serviceCode, serviceName, expenseCode, description, category, amount);
     }
+
+
 
     private static void createPublicInvestmentBudgetExpenseFromCSV(String [] values) {
         String entityCode = values[0];
