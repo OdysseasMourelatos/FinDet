@@ -34,6 +34,17 @@ public class BudgetRevenueHandling {
         return findRevenueWithCode(tempCode, revenues);
     }
 
+    //Gets all super categories by using findSuperCategory as long as there is one
+    public static <T extends BudgetRevenue> ArrayList<BudgetRevenue> getSuperCategories(T currentRevenue, ArrayList<T> revenues) {
+        ArrayList<BudgetRevenue> superCategories = new ArrayList<>();
+        BudgetRevenue superCategory = findSuperCategory(currentRevenue, revenues);
+        while (superCategory != null) {
+            superCategories.add(superCategory);
+            superCategory = (T) findSuperCategory((T)superCategory, revenues);
+        }
+        return superCategories;
+    }
+
     // Μέθοδος 1: Εύρεση Εσόδου με Βάση τον Κωδικό
     public static <T extends BudgetRevenue> T findRevenueWithCode(String code, ArrayList<T> revenues) {
         for (T revenue : revenues) {
