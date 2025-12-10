@@ -92,9 +92,9 @@ public class BudgetRevenueHandling {
     }
 
     //Returns only revenues with 2 digits
-    public static ArrayList<BudgetRevenue> getMainBudgetRevenues(ArrayList<? extends BudgetRevenue> budgetRevenues) {
-        ArrayList<BudgetRevenue> mainBudgetRevenues = new ArrayList<>();
-        for (BudgetRevenue budgetRevenue : budgetRevenues) {
+    public static <T extends BudgetRevenue> ArrayList<T> getMainBudgetRevenues(ArrayList<T> budgetRevenues) {
+        ArrayList<T> mainBudgetRevenues = new ArrayList<>();
+        for (T budgetRevenue : budgetRevenues) {
             if (budgetRevenue.getCode().length() == 2) {
                 mainBudgetRevenues.add(budgetRevenue);
             }
