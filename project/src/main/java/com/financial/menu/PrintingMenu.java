@@ -59,8 +59,8 @@ public class PrintingMenu {
         System.out.print("Επιλογή: ");
         int choice = input.nextInt();
         switch (choice) {
-            case 1 -> RevenuesPrintingSubMenu.showRevenuesMenu(budgetType, publicInvestmentType);
-            case 2 -> ExpensesPrintingSubMenu.showExpensesMenu(budgetType - 1, publicInvestmentType);
+            case 1 -> RevenuesPrintingMenu.showRevenuesMenu(budgetType, publicInvestmentType);
+            case 2 -> ExpensesPrintingMenu.showExpensesMenu(budgetType - 1, publicInvestmentType);
         }
     }
 }
