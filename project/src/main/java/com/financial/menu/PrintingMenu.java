@@ -1,13 +1,9 @@
 package com.financial.menu;
 
-import java.io.DataOutput;
 import java.util.Scanner;
 import static com.financial.menu.Colors.*;
 
-import com.financial.services.*;
-import com.financial.entries.*;
-
-public class PrintingSubMenu {
+public class PrintingMenu {
 
     public static void showSubMenuOfPrinting() {
         Scanner input = new Scanner(System.in);
