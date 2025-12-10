@@ -1,6 +1,8 @@
 package com.financial.pdf;
 
 import com.financial.entries.BudgetRevenue;
+import com.financial.entries.PublicInvestmentBudgetCoFundedRevenue;
+import com.financial.entries.PublicInvestmentBudgetNationalRevenue;
 import com.financial.entries.PublicInvestmentBudgetRevenue;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
@@ -14,8 +16,8 @@ public class BudgetRevenueConvertToPdf {
         try {
             ArrayList<BudgetRevenue> br = BudgetRevenue.getAllBudgetRevenues();
             ArrayList<BudgetRevenue> brm = BudgetRevenue.getMainBudgetRevenues();
-            ArrayList<PublicInvestmentBudgetRevenue> brcf = PublicInvestmentBudgetRevenue.getPublicInvestmentBudgetCoFundedRevenues();
-            ArrayList<PublicInvestmentBudgetRevenue> brn = PublicInvestmentBudgetRevenue.getPublicInvestmentBudgetNationalRevenues();
+            ArrayList<PublicInvestmentBudgetCoFundedRevenue> brcf = PublicInvestmentBudgetCoFundedRevenue.getPublicInvestmentBudgetCoFundedRevenues();
+            ArrayList<PublicInvestmentBudgetNationalRevenue> brn = PublicInvestmentBudgetNationalRevenue.getPublicInvestmentBudgetNationalRevenues();
 
 
             Document document = new Document();
@@ -74,7 +76,7 @@ public class BudgetRevenueConvertToPdf {
             table2.addCell(PdfFormat.createCenteredCell("Ονομασία", font));
             table2.addCell(PdfFormat.createCenteredCell("Ποσό", font)); 
 
-            for (PublicInvestmentBudgetRevenue budgetrevenuecof : brcf) {
+            for (PublicInvestmentBudgetCoFundedRevenue budgetrevenuecof : brcf) {
                 table2.addCell(PdfFormat.createCenteredCell(String.valueOf(budgetrevenuecof.getCode()), font));
                 table2.addCell(PdfFormat.createCenteredCell(budgetrevenuecof.getDescription(), font));
                 table2.addCell(PdfFormat.createCenteredCell(String.format("%,d", budgetrevenuecof.getAmount()), font));
@@ -92,7 +94,7 @@ public class BudgetRevenueConvertToPdf {
             table3.addCell(PdfFormat.createCenteredCell("Ονομασία", font));
             table3.addCell(PdfFormat.createCenteredCell("Ποσό", font)); 
 
-            for (PublicInvestmentBudgetRevenue budgetrevenuenat : brn) {
+            for (PublicInvestmentBudgetNationalRevenue budgetrevenuenat : brn) {
                 table3.addCell(PdfFormat.createCenteredCell(String.valueOf(budgetrevenuenat.getCode()), font));
                 table3.addCell(PdfFormat.createCenteredCell(budgetrevenuenat.getDescription(), font));
                 table3.addCell(PdfFormat.createCenteredCell(String.format("%,d", budgetrevenuenat.getAmount()), font));

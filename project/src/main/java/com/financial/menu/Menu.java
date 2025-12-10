@@ -143,6 +143,8 @@ public class Menu {
             System.out.println(GREEN + "Η ΦΟΡΤΩΣΗ ΤΩΝ ΑΡΧΕΙΩΝ ΠΡΑΓΜΑΤΟΠΟΙΗΘΗΚΕ ΕΠΙΤΥΧΩΣ!" + RESET);
             DataInput.createEntityFromCSV();
             DataInput.createBudgetRevenueFromCSV();
+            PublicInvestmentBudgetRevenue.sortPublicInvestmentBudgetRevenuesByCode();
+            PublicInvestmentBudgetRevenue.filterPublicInvestmentBudgetRevenues();
         }
     }
 
