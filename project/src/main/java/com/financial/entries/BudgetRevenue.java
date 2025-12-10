@@ -44,6 +44,14 @@ public class BudgetRevenue extends BudgetEntry {
         DataOutput.printBudgetRevenuesWithAsciiTable(getMainBudgetRevenues(), BudgetRevenueHandling.calculateSum(getMainBudgetRevenues()));
     }
 
+    public static ArrayList<BudgetRevenue> getBudgetRevenuesStartingWithCode(String code) {
+        return BudgetRevenueHandling.getRevenuesStartingWithCode(code, budgetRevenues);
+    }
+
+    public static void printBudgetRevenuesStartingWithCode(String code) {
+        DataOutput.printRevenueWithAsciiTable(getBudgetRevenuesStartingWithCode(code), 0);
+    }
+
     public int getLevelOfHierarchy() {
         return switch (getCode().length()) {
             case 2 -> 1;   // "11" - top level
@@ -196,20 +204,6 @@ public class BudgetRevenue extends BudgetEntry {
         } catch (RuntimeException e) {
             return;
         }
-    }
-
-    public static ArrayList<BudgetRevenue> getBudgetRevenuesOfMainCategoryWithCode(String code) {
-        ArrayList<BudgetRevenue> mainRevenues = new ArrayList<>();
-        for (BudgetRevenue revenue : budgetRevenues) {
-            if (revenue.getCode().startsWith(code)) {
-                mainRevenues.add(revenue);
-            }
-        }
-        return mainRevenues;
-    }
-
-    public static void printBudgetRevenuesOfMainCategoryWithCode(String code) {
-        DataOutput.printRevenueWithAsciiTable(getBudgetRevenuesOfMainCategoryWithCode(code), 0);
     }
 
     public void implementChangesOfEqualDistribution(long change) {
