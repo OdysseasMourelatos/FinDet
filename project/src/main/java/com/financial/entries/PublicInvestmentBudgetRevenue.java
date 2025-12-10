@@ -55,6 +55,10 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue {
         DataOutput.printPublicInvestmentBudgetRevenuesFilteredWithAsciiTable(getPublicInvestmentBudgetRevenuesFiltered(), BudgetRevenueHandling.calculateSum(getPublicInvestmentBudgetRevenuesFiltered()));
     }
 
+    public static PublicInvestmentBudgetRevenue findPublicInvestmentBudgetRevenueWithCode(String code) {
+        return BudgetRevenueHandling.findRevenueWithCode(code, publicInvestmentBudgetRevenuesFiltered);
+    }
+
 
     //Getters & Setters
 
