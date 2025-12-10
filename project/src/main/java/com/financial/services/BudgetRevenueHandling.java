@@ -105,4 +105,20 @@ public class BudgetRevenueHandling {
     public static void printMainBudgetRevenues(ArrayList<? extends BudgetRevenue> budgetRevenues) {
         DataOutput.printRevenueWithAsciiTable(getMainBudgetRevenues(budgetRevenues), calculateSum(budgetRevenues));
     }
+
+    //Get & Print certain revenues
+
+    public static ArrayList<BudgetRevenue> getRevenuesStartingWithCode(String code, ArrayList<? extends BudgetRevenue> revenues) {
+        ArrayList<BudgetRevenue> mainRevenues = new ArrayList<>();
+        for (BudgetRevenue revenue : revenues) {
+            if (revenue.getCode().startsWith(code)) {
+                mainRevenues.add(revenue);
+            }
+        }
+        return mainRevenues;
+    }
+
+    public static void printRevenuesStartingWithCode(String code, ArrayList<? extends BudgetRevenue> revenues) {
+        DataOutput.printRevenueWithAsciiTable(getRevenuesStartingWithCode(code, revenues), 0);
+    }
 }
