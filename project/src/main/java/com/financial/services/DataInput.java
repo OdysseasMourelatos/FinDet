@@ -94,7 +94,7 @@ public class DataInput {
             default -> System.out.println("Σφάλμα στη γραμμή: " + Arrays.toString(values));
         }
     }
-    
+
     private static void createRegularBudgetRevenueFromCSV(String[] values) {
         String code = values[0];
         String description = values[1];
