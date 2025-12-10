@@ -40,6 +40,30 @@ public class BudgetRevenue extends BudgetEntry implements IBudgetRevenueLogic {
         });
     }
 
+    public static void filterBudgetRevenues() {
+        ArrayList<Integer> repeatedRevenues = new ArrayList<>();
+        //Finds codes that are repeated in the list
+        // Adds to a new list the 2 placements in the list where we have repeated codes
+        for (int i = 1; i < budgetRevenuesFiltered.size(); i++) {
+            if (budgetRevenuesFiltered.get(i).getCode().equals(budgetRevenuesFiltered.get(i-1).getCode())) {
+                repeatedRevenues.add(i);
+            }
+        }
+         /*With a loop starting from the end of the list
+         we in a way merge those values that are repeated into a single object
+         then remove the other one
+       */
+        for (int j = repeatedRevenues.size() - 1; j >= 0; j--) {
+            Integer i = repeatedRevenues.get(j);
+            BudgetRevenue b1 = budgetRevenuesFiltered.get(i);
+            BudgetRevenue b2 = budgetRevenuesFiltered.get(i-1);
+            budgetRevenuesFiltered.remove(b1);
+            b2.setRegularAmount(b2.getRegularAmount() + b1.getRegularAmount());
+            b2.setPublicInvestmentAmount(b2.getPublicInvestmentAmount() + b1.getPublicInvestmentAmount());
+            b2.setAmount(b2.getAmount()+b1.getAmount());
+        }
+    }
+
     //Class Methods
 
     public static ArrayList<BudgetRevenue> getAllBudgetRevenues() {
