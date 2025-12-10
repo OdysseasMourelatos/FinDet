@@ -117,4 +117,14 @@ public class RevenuesPrintingMenu {
             }
         }
     }
+
+    private static <T extends BudgetRevenue> void printRevenue(T budgetRevenue) {
+        System.out.println();
+        System.out.println(BOLD + "ΚΑΤΗΓΟΡΙΕΣ ΣΕ ΥΨΗΛΟΤΕΡΟ ΕΠΙΠΕΔΟ:\n" + RESET_2);
+        budgetRevenue.printSuperCategoriesTopDown();
+        System.out.println();
+        System.out.println(BOLD + "ΚΑΤΗΓΟΡΙΕΣ ΣΕ ΧΑΜΗΛΟΤΕΡΟ ΕΠΙΠΕΔΟ:\n" + RESET_2);
+        budgetRevenue.printAllSubCategories();
+        System.out.println();
+    }
 }
