@@ -5,8 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="88d8a661-a47d-4ac5-b89a-2164a467de01" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/entries/Entity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/Entity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/services/DataOutput.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/services/DataOutput.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/Choise3.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/menu/ChangesMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/ExpenseChangeMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/menu/ExpensesChangeMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/Menu.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/RevenueChangeMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/menu/RevenuesChangeMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/charts/PieChartGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/charts/PieChartGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/menu/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/menu/Menu.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

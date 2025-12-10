@@ -1,96 +1,74 @@
 package com.financial.menu;
-
-
 import com.financial.pdf.BudgetRevenueConvertToPdf;
-import com.financial.charts.PieChartGenerator;
-import com.financial.entries.*;
-import com.financial.services.*;
-import com.financial.strategies.*;
-import com.financial.strategies.filters.*;
-import com.financial.strategies.operations.*;
 
-
-import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+
 public class Menu {
-    public static final String RESET = "\u001B[0m"; //προκαθορισμένο χρώμα χαρακτήρων
-    public static final String BLACK = "\u001B[30m";
-    public static final String RED = "\u001B[31m";
-    public static final String GREEN = "\u001B[32m";
-    public static final String YELLOW = "\u001B[33m";
-    public static final String BLUE = "\u001B[34m";
-    public static final String PURPLE = "\u001B[35m";
-    public static final String CYAN = "\u001B[36m";
-    public static final String WHITE = "\u001B[37m";
-    public static final String ORANGE = "\u001B[38;5;208m";
-    public static final String BOLD = "\u001B[1m";
-    public static final String RESET_2 = "\u001B[0m"; //προκαθορισμένη ένταση χρώματος χαρακτήρων
-    
     public static void printMainMenu() {
         Scanner input = new Scanner(System.in); //Δημιουργία αντικειμένου της κλάσης Scanner 
         System.out.println();
-        System.out.println(BLUE + BOLD + "ΠΡΟΘΥΠΟΥΡΓΟΣ ΓΙΑ ΜΙΑ ΗΜΕΡΑ - BUDGET MANAGER 2026" + RESET + RESET_2);
+        System.out.println(Colors.BLUE + Colors.BOLD + "ΠΡΟΘΥΠΟΥΡΓΟΣ ΓΙΑ ΜΙΑ ΗΜΕΡΑ - BUDGET MANAGER 2026" + Colors.RESET + Colors.RESET_2);
         int choice;
         do {
             try {
                 System.out.println();
-                System.out.println(BLUE + BOLD + "=========== ΚΥΡΙΟ ΜΕΝΟΥ ===========" + RESET + RESET_2);
+                System.out.println(Colors.BLUE + Colors.BOLD + "=========== ΚΥΡΙΟ ΜΕΝΟΥ ===========" + Colors.RESET + Colors.RESET_2);
                 System.out.println();
-                System.out.println(BLUE + BOLD + "[1] " + RESET + "Φόρτωση / Ενημέρωση CSV" + RESET_2);
-                System.out.println(BLUE + BOLD + "[2] " + RESET + "Προβολή Προϋπολογισμού" + RESET_2);
-                System.out.println(BLUE + BOLD + "[3] " + RESET + "Εισαγωγή Αλλαγών" + RESET_2);
-                System.out.println(BLUE + BOLD + "[4] " + RESET + "Αναζήτηση Στοιχείων Προϋπολογισμού" + RESET_2);
-                System.out.println(BLUE + BOLD + "[5] " + RESET + "Οικονομική Ανάλυση" + RESET_2);
-                System.out.println(BLUE + BOLD + "[6] " + RESET + "Γραφήματα & Οπτικοποιήσεις" + RESET_2);
-                System.out.println(BLUE + BOLD + "[7] " + RESET + "Export σε PDF " + RESET_2);
-                System.out.println(BLUE + BOLD + "[0] " + RESET + "Έξοδος " + RESET_2);
+                System.out.println(Colors.BLUE + Colors.BOLD + "[1] " + Colors.RESET + "Φόρτωση / Ενημέρωση CSV" + Colors.RESET_2);
+                System.out.println(Colors.BLUE + Colors.BOLD + "[2] " + Colors.RESET + "Προβολή Προϋπολογισμού" + Colors.RESET_2);
+                System.out.println(Colors.BLUE + Colors.BOLD + "[3] " + Colors.RESET + "Εισαγωγή Αλλαγών" + Colors.RESET_2);
+                System.out.println(Colors.BLUE + Colors.BOLD + "[4] " + Colors.RESET + "Αναζήτηση Στοιχείων Προϋπολογισμού" + Colors.RESET_2);
+                System.out.println(Colors.BLUE + Colors.BOLD + "[5] " + Colors.RESET + "Οικονομική Ανάλυση" + Colors.RESET_2);
+                System.out.println(Colors.BLUE + Colors.BOLD + "[6] " + Colors.RESET + "Γραφήματα & Οπτικοποιήσεις" + Colors.RESET_2);
+                System.out.println(Colors.BLUE + Colors.BOLD + "[7] " + Colors.RESET + "Export σε PDF " + Colors.RESET_2);
+                System.out.println(Colors.BLUE + Colors.BOLD + "[0] " + Colors.RESET + "Έξοδος " + Colors.RESET_2);
                 System.out.println();
                 System.out.print("Επιλογή: ");
                 choice = input.nextInt(); //Εισαγωγή αριθμού από τον χρήστη
                 input.nextLine();
                 System.out.println();
                 if (choice == 1) {
-                    printSubMenuOfChoice1();
+                    CSVDownloadAndSavingMenu.printSubMenuOfCSVDownloadAndSaving();
                 } else if (choice == 2) {
-                    printSubMenuOfChoice2();
+                    PrintingMenu.showSubMenuOfPrinting();
                 } else if (choice == 3) {
                     printSubMenuOfChoice3();
                 } else if (choice == 4) {
-                    System.out.println(BLUE + BOLD + "=== ΑΝΑΖΗΤΗΣΗ ΣΤΟΙΧΕΙΩΝ ===" + RESET + RESET_2);
+                    System.out.println(Colors.BLUE + Colors.BOLD + "=== ΑΝΑΖΗΤΗΣΗ ΣΤΟΙΧΕΙΩΝ ===" + Colors.RESET + Colors.RESET_2);
                     System.out.println();
-                    System.out.println(BLUE + BOLD + "[1] " + RESET + "Αναζήτηση με Κωδικό" + RESET_2);
-                    System.out.println(BLUE + BOLD + "[2] " + RESET + "Αναζήτηση με Περιγραφή / Λέξη-κλειδί" + RESET_2);
-                    System.out.println(BLUE + BOLD + "[3] " + RESET + "Αναζήτηση ανά Υπουργείο" + RESET_2);
-                    System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή στο Κύριο Μενού" + RESET_2);
+                    System.out.println(Colors.BLUE + Colors.BOLD + "[1] " + Colors.RESET + "Αναζήτηση με Κωδικό" + Colors.RESET_2);
+                    System.out.println(Colors.BLUE + Colors.BOLD + "[2] " + Colors.RESET + "Αναζήτηση με Περιγραφή / Λέξη-κλειδί" + Colors.RESET_2);
+                    System.out.println(Colors.BLUE + Colors.BOLD + "[3] " + Colors.RESET + "Αναζήτηση ανά Υπουργείο" + Colors.RESET_2);
+                    System.out.println(Colors.BLUE + Colors.BOLD + "[0] " + Colors.RESET + "Επιστροφή στο Κύριο Μενού" + Colors.RESET_2);
                     System.out.println();
                     System.out.print("Επιλογή: ");
                     choice = input.nextInt();
                     input.nextLine();
                 } else if (choice == 5) {
-                    System.out.println(BLUE + BOLD + "=== ΟΙΚΟΝΟΜΙΚΗ ΑΝΑΛΥΣΗ ===" + RESET + RESET_2);
+                    System.out.println(Colors.BLUE + Colors.BOLD + "=== ΟΙΚΟΝΟΜΙΚΗ ΑΝΑΛΥΣΗ ===" + Colors.RESET + Colors.RESET_2);
                     System.out.println();
-                    System.out.println(BLUE + BOLD + "[1] " + RESET + "Ανάλυση Εσόδων" + RESET_2);
-                    System.out.println(BLUE + BOLD + "[2] " + RESET + "Ανάλυση Εξόδων" + RESET_2);
-                    System.out.println(BLUE + BOLD + "[3] " + RESET + "Μεταβολές σε σχέση με προηγούμενο έτος" + RESET_2);
-                    System.out.println(BLUE + BOLD + "[4] " + RESET + "Αναλογίες ανά Υπουργείο" + RESET_2);
-                    System.out.println(BLUE + BOLD + "[5] " + RESET + "Δείκτες οικονομικής απόδοσης" + RESET_2);
-                    System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή στο Κύριο Μενού" + RESET_2);
+                    System.out.println(Colors.BLUE + Colors.BOLD + "[1] " + Colors.RESET + "Ανάλυση Εσόδων" + Colors.RESET_2);
+                    System.out.println(Colors.BLUE + Colors.BOLD + "[2] " + Colors.RESET + "Ανάλυση Εξόδων" + Colors.RESET_2);
+                    System.out.println(Colors.BLUE + Colors.BOLD + "[3] " + Colors.RESET + "Μεταβολές σε σχέση με προηγούμενο έτος" + Colors.RESET_2);
+                    System.out.println(Colors.BLUE + Colors.BOLD + "[4] " + Colors.RESET + "Αναλογίες ανά Υπουργείο" + Colors.RESET_2);
+                    System.out.println(Colors.BLUE + Colors.BOLD + "[5] " + Colors.RESET + "Δείκτες οικονομικής απόδοσης" + Colors.RESET_2);
+                    System.out.println(Colors.BLUE + Colors.BOLD + "[0] " + Colors.RESET + "Επιστροφή στο Κύριο Μενού" + Colors.RESET_2);
                     System.out.println();
                     System.out.print("Επιλογή: ");
                     choice = input.nextInt();
                     input.nextLine();
                 } else if (choice == 6) {
-                    printSubMenuOfChoice6();
+                    ChartsMenu.printChartsMenu();
                 } else if (choice == 7) {
-                    System.out.println(BLUE + BOLD + "=== ΕΞΑΓΩΓΗ ΣΕ PDF ===" + RESET + RESET_2);
+                    System.out.println(Colors.BLUE + Colors.BOLD + "=== ΕΞΑΓΩΓΗ ΣΕ PDF ===" + Colors.RESET + Colors.RESET_2);
                     System.out.println();
-                    System.out.println(BLUE + BOLD + "[1] " + RESET + "Εξαγωγή Εσόδων σε PDF" + RESET_2);
-                    System.out.println(BLUE + BOLD + "[2] " + RESET + "Εξαγωγή Εξόδων σε PDF" + RESET_2);
-                    System.out.println(BLUE + BOLD + "[3] " + RESET + "Εξαγωγή Τελικού Κρατικού Προϋπολογισμού σε PDF" + RESET_2);
-                    System.out.println(BLUE + BOLD + "[4] " + RESET + "Εξαγωγή Προϋπολογισμού Δημόσιων Επενδύσεων σε PDF" + RESET_2);
-                    System.out.println(BLUE + BOLD + "[5] " + RESET + "Εξαγωγή Ανάλυσης σε PDF" + RESET_2);
-                    System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή στο Κύριο Μενού" + RESET_2);
+                    System.out.println(Colors.BLUE + Colors.BOLD + "[1] " + Colors.RESET + "Εξαγωγή Εσόδων σε PDF" + Colors.RESET_2);
+                    System.out.println(Colors.BLUE + Colors.BOLD + "[2] " + Colors.RESET + "Εξαγωγή Εξόδων σε PDF" + Colors.RESET_2);
+                    System.out.println(Colors.BLUE + Colors.BOLD + "[3] " + Colors.RESET + "Εξαγωγή Τελικού Κρατικού Προϋπολογισμού σε PDF" + Colors.RESET_2);
+                    System.out.println(Colors.BLUE + Colors.BOLD + "[4] " + Colors.RESET + "Εξαγωγή Προϋπολογισμού Δημόσιων Επενδύσεων σε PDF" + Colors.RESET_2);
+                    System.out.println(Colors.BLUE + Colors.BOLD + "[5] " + Colors.RESET + "Εξαγωγή Ανάλυσης σε PDF" + Colors.RESET_2);
+                    System.out.println(Colors.BLUE + Colors.BOLD + "[0] " + Colors.RESET + "Επιστροφή στο Κύριο Μενού" + Colors.RESET_2);
                     System.out.println();
                     System.out.print("Επιλογή: ");
                     choice = input.nextInt();
@@ -105,644 +83,13 @@ public class Menu {
                     throw new IllegalArgumentException();
                 }
             } catch (InputMismatchException e) {
-                System.out.println(RED + "ΚΑΤΑΧΩΡΗΘΗΚΕ ΜΗ ΕΠΙΤΡΕΠΤΗ ΤΙΜΗ. ΠΑΡΑΚΑΛΩ ΕΙΣΑΓΕΤΕ ΤΙΜΗ ΕΝΤΟΣ ΤΩΝ ΟΡΙΩΝ" + RESET);
+                System.out.println(Colors.RED + "ΚΑΤΑΧΩΡΗΘΗΚΕ ΜΗ ΕΠΙΤΡΕΠΤΗ ΤΙΜΗ. ΠΑΡΑΚΑΛΩ ΕΙΣΑΓΕΤΕ ΤΙΜΗ ΕΝΤΟΣ ΤΩΝ ΟΡΙΩΝ" + Colors.RESET);
                 input.nextLine();
             } catch (IllegalArgumentException e) {
-                System.out.println(RED + "ΚΑΤΑΧΩΡΗΘΗΚΕ ΜΗ ΕΠΙΤΡΕΠΤΗ ΤΙΜΗ. ΠΑΡΑΚΑΛΩ ΕΙΣΑΓΕΤΕ ΤΙΜΗ ΕΝΤΟΣ ΤΩΝ ΟΡΙΩΝ" + RESET);
+                System.out.println(Colors.RED + "ΚΑΤΑΧΩΡΗΘΗΚΕ ΜΗ ΕΠΙΤΡΕΠΤΗ ΤΙΜΗ. ΠΑΡΑΚΑΛΩ ΕΙΣΑΓΕΤΕ ΤΙΜΗ ΕΝΤΟΣ ΤΩΝ ΟΡΙΩΝ" + Colors.RESET);
             } catch (NullPointerException e) {
-                System.out.println(RED + "ΕΣΦΑΛΜΕΝΗ ΕΚΧΩΡΗΣΗ ΚΩΔΙΚΟΥ ΛΟΓΑΡΙΑΣΜΟΥ" + RESET);
+                System.out.println(Colors.RED + "ΕΣΦΑΛΜΕΝΗ ΕΚΧΩΡΗΣΗ ΚΩΔΙΚΟΥ ΛΟΓΑΡΙΑΣΜΟΥ" + Colors.RESET);
             }
         } while (true);
-    }
-
-    public static void printSubMenuOfChoice1() {
-        Scanner input = new Scanner(System.in);
-        System.out.println(BLUE + BOLD + "=== ΦΟΡΤΩΣΗ / ΕΝΗΜΕΡΩΣΗ CSV ===" + RESET);
-        System.out.println();
-        System.out.println(BLUE + BOLD + "[1] " + RESET + "Φόρτωση αρχείων" + RESET + RESET_2);
-        System.out.println(BLUE + BOLD + "[2] " + RESET + "Επαναφόρτωση όλων των CSV" + RESET + RESET_2);
-        System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή στο Κύριο Μενού" + RESET + RESET_2);
-        System.out.println();
-        System.out.print("Επιλογή: ");
-        int choice = input.nextInt();
-        input.nextLine();
-        if (choice == 1) {
-            System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου" + BLUE + " (ΕΣΟΔΑ ΤΑΚΤΙΚΟΥ ΠΡΟΥΠΟΛΟΓΙΣΜΟΎ): " + RESET);
-            String filePath = input.nextLine();
-            DataInput.advancedCSVReader(filePath);
-            System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου" + BLUE + " (ΕΣΟΔΑ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ): " + RESET);
-            filePath = input.nextLine();
-            DataInput.advancedCSVReader(filePath);
-            System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου" + BLUE + " (ΕΞΟΔΑ ΤΑΚΤΙΚΟΥ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ): " + RESET);
-            filePath = input.nextLine();
-            DataInput.advancedCSVReader(filePath);
-            System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου" + BLUE + " (ΕΞΟΔΑ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ): " + RESET);
-            filePath = input.nextLine();
-            DataInput.advancedCSVReader(filePath);
-            System.out.println();
-            System.out.println(GREEN + "Η ΦΟΡΤΩΣΗ ΤΩΝ ΑΡΧΕΙΩΝ ΠΡΑΓΜΑΤΟΠΟΙΗΘΗΚΕ ΕΠΙΤΥΧΩΣ!" + RESET);
-            DataInput.createEntityFromCSV();
-            PublicInvestmentBudgetRevenue.sortPublicInvestmentBudgetRevenuesByCode();
-            PublicInvestmentBudgetRevenue.filterPublicInvestmentBudgetRevenues();
-            BudgetRevenue.sortBudgetRevenuesByCode();
-            BudgetRevenue.filterBudgetRevenues();
-        }
-    }
-
-    public static void printSubMenuOfChoice2() {
-        Scanner input = new Scanner(System.in);
-        System.out.println();
-        System.out.println(BLUE + BOLD + "=== ΠΡΟΒΟΛΗ ΣΤΟΙΧΕΙΩΝ ΠΡΟΫΠΟΛΟΓΙΣΜΟΥ ===" );
-        System.out.println();
-        System.out.println(BLUE + BOLD + "[1] " + RESET + "Προβολή Στοιχείων Κρατικού Προϋπολογισμού");
-        System.out.println(BLUE + BOLD + "[2] " + RESET + "Προβολή Στοιχείων Τακτικού Προϋπολογισμού");
-        System.out.println(BLUE + BOLD + "[3] " + RESET + "Προβολή Στοιχείων Προϋπολογισμού Δημόσιων Επενδύσεων");
-        System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή στο Κύριο Μενού" + RESET_2);
-
-        System.out.println();
-        System.out.print("Επιλογή: ");
-        int choice = input.nextInt();
-        switch (choice) {
-            case 1 -> showBudgetMenu();
-            case 2 -> showRegularBudgetMenu();
-            case 3 -> showPublicInvestmentBudgetMenu();
-            default -> System.out.println(RED + "Μη έγκυρη επιλογή" + RESET);
-        }
-    }
-
-    public static void showBudgetMenu() {
-        Scanner input = new Scanner(System.in);
-        System.out.println();
-        System.out.println(BLUE + BOLD + "=== ΠΡΟΒΟΛΗ ΣΤΟΙΧΕΙΩΝ ΚΡΑΤΙΚΟΥ ΠΡΟΫΠΟΛΟΓΙΣΜΟΥ ===" );
-        System.out.println();
-        System.out.println(BLUE + BOLD + "[1] " + RESET + "Προβολή Εσόδων Κρατικού Προϋπολογισμού");
-        System.out.println(BLUE + BOLD + "[2] " + RESET + "Προβολή Εξόδων Κρατικού Προϋπολογισμού");
-        System.out.println(BLUE + BOLD + "[3] " + RESET + "Προβολή Εσόδων & Εξόδων Κρατικού Προϋπολογισμού");
-        System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή στο Κύριο Μενού" + RESET_2);
-        System.out.println();
-        System.out.print("Επιλογή: ");
-        int choice = input.nextInt();
-        switch (choice) {
-            case 1 -> showTotalRevenuesMenu();
-            case 2 -> showExpensesMenu("ΚΡΑΤΙΚΟΥ");
-        }
-    }
-
-    private static void showTotalRevenuesMenu() {
-        Scanner input = new Scanner(System.in);
-
-        System.out.println(BLUE + BOLD + "\n=== ΠΡΟΒΟΛΗ ΕΣΟΔΩΝ ΚΡΑΤΙΚΟΥ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ===\n");
-        System.out.println(BLUE + BOLD + "[1] " + RESET + "Προβολή των βασικών λογαριασμών εσόδων");
-        System.out.println(BLUE + BOLD + "[2] " + RESET + "Προβολή όλων των λογαριασμών εσόδων");
-        System.out.println(BLUE + BOLD + "[3] " + RESET + "Προβολή συγκεκριμένων λογαριασμών εσόδων");
-        System.out.print("\nΕπιλογή: ");
-        int choice = input.nextInt();
-        input.nextLine();
-        System.out.println();
-        switch (choice) {
-            case 1 -> BudgetRevenueHandling.printMainBudgetRevenues(BudgetRevenue.getAllBudgetRevenues());
-            case 2 -> BudgetRevenue.printAllBudgetRevenues();
-            case 3 -> {
-                System.out.print("Παρακαλούμε εισάγετε τον κωδικό του επιθυμητού λογαριασμού εσόδων: ");
-                String code = input.nextLine();
-                System.out.println();
-                BudgetRevenue budgetRevenue = BudgetRevenueHandling.findRevenueWithCode(code, BudgetRevenue.getAllBudgetRevenues());
-                DataOutput.printEntryWithAsciiTable(budgetRevenue);
-                System.out.println();
-                System.out.println(BOLD + "ΚΑΤΗΓΟΡΙΕΣ ΣΕ ΥΨΗΛΟΤΕΡΟ ΕΠΙΠΕΔΟ:\n" + RESET_2);
-                budgetRevenue.printSuperCategoriesTopDown();
-                System.out.println();
-                System.out.println(BOLD + "ΚΑΤΗΓΟΡΙΕΣ ΣΕ ΧΑΜΗΛΟΤΕΡΟ ΕΠΙΠΕΔΟ:\n" + RESET_2);
-                budgetRevenue.printAllSubCategories();
-                System.out.println();
-            }
-            default -> System.out.println(RED + "Μη έγκυρη επιλογή" + RESET);
-        }
-    }
-
-    private static void showExpensesMenu(String budgetType) {
-        Scanner input = new Scanner(System.in);
-
-        System.out.println(BLUE + BOLD + "\n=== ΠΡΟΒΟΛΗ ΕΞΟΔΩΝ " + budgetType.toUpperCase() + " ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ===\n");
-        System.out.println(BLUE + BOLD + "[1] " + RESET + "Προβολή πιστώσεων κατά μείζονα κατηγορία δαπάνης");
-        System.out.println(BLUE + BOLD + "[2] " + RESET + "Προβολή πιστώσεων συνολικά κατά φορέα");
-        System.out.println(BLUE + BOLD + "[3] " + RESET + "Προβολή πιστώσεων κατά ειδικό φορέα & μείζονα κατηγορία δαπάνης");
-        System.out.print("\nΕπιλογή: ");
-        int choice = input.nextInt();
-        input.nextLine();
-        System.out.println();
-        switch (choice) {
-            case 1 -> {
-                if (budgetType.equals("ΚΡΑΤΙΚΟΥ")) {
-                    DataOutput.printExpenseWithAsciiTable(BudgetExpenseHandling.getSumOfEveryCategory(BudgetExpense.getExpenses()));
-                } else if (budgetType.equals("ΤΑΚΤΙΚΟΥ")) {
-                    DataOutput.printExpenseWithAsciiTable(BudgetExpenseHandling.getSumOfEveryCategory(RegularBudgetExpense.getAllRegularBudgetExpenses()));
-                } else if (budgetType.equals("ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ")) {
-                    DataOutput.printExpenseWithAsciiTable(BudgetExpenseHandling.getSumOfEveryCategory(PublicInvestmentBudgetExpense.getAllPublicInvestmentBudgetExpenses()));
-                }
-            }
-            case 2 -> DataOutput.printEntitiesWithAsciiTable(budgetType);
-            case 3 -> {
-                System.out.println(BLUE + BOLD + "\n=== ΠΡΟΒΟΛΗ ΠΙΣΤΩΣΕΩΝ ΚΑΤΑ ΕΙΔΙΚΟ ΦΟΡΕΑ & ΜΕΙΖΟΝΑ ΚΑΤΗΓΟΡΙΑ ΔΑΠΑΝΗΣ ===\n");
-                System.out.println(BLUE + BOLD + "[1] " + RESET + "Προβολή πιστώσεων όλων των φορέων");
-                System.out.println(BLUE + BOLD + "[2] " + RESET + "Προβολή πιστώσεων συγκεκριμένου φορέα");
-                System.out.print("\nΕπιλογή: ");
-                int choice2 = input.nextInt();
-                input.nextLine();
-                System.out.println();
-                switch (choice2) {
-                    case 1 -> {
-                        for (Entity entity : Entity.getEntities()) {
-                            DataOutput.printEntityWithAsciiTable(entity, budgetType);
-                        }
-                        System.out.println();
-                    }
-                    case 2 -> {
-                        System.out.print("Παρακαλούμε εισάγετε τον κωδικό του επιθυμητού φορέα: ");
-                        String entityCode = input.nextLine();
-                        System.out.println();
-                        Entity entity = Entity.findEntityWithEntityCode(entityCode);
-                        DataOutput.printEntityWithAsciiTable(entity, budgetType);
-                    }
-                }
-            }
-
-            default -> System.out.println(RED + "Μη έγκυρη επιλογή" + RESET);
-        }
-    }
-
-    public static void showRegularBudgetMenu() {
-        Scanner input = new Scanner(System.in);
-        System.out.println();
-        System.out.println(BLUE + BOLD + "=== ΠΡΟΒΟΛΗ ΣΤΟΙΧΕΙΩΝ TΑΚΤΙΚΟΥ ΠΡΟΫΠΟΛΟΓΙΣΜΟΥ ===" );
-        System.out.println();
-        System.out.println(BLUE + BOLD + "[1] " + RESET + "Προβολή Εσόδων Τακτικού Προϋπολογισμού");
-        System.out.println(BLUE + BOLD + "[2] " + RESET + "Προβολή Εξόδων Τακτικού Προϋπολογισμού");
-        System.out.println(BLUE + BOLD + "[3] " + RESET + "Προβολή Εσόδων & Εξόδων Τακτικού Προϋπολογισμού");
-        System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή στο Κύριο Μενού" + RESET_2);
-        System.out.println();
-        System.out.print("Επιλογή: ");
-        int choice = input.nextInt();
-        switch (choice) {
-            case 1 -> showRegularRevenuesMenu();
-            case 2 -> showExpensesMenu("ΤΑΚΤΙΚΟΥ");
-        }
-    }
-
-    public static void showPublicInvestmentBudgetMenu() {
-        Scanner input = new Scanner(System.in);
-        System.out.println();
-        System.out.println(BLUE + BOLD + "=== ΠΡΟΒΟΛΗ ΣΤΟΙΧΕΙΩΝ ΠΡΟΫΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ===" );
-        System.out.println();
-        System.out.println(BLUE + BOLD + "[1] " + RESET + "Προβολή Εσόδων Προϋπολογισμού Δημόσιων Επενδύσεων");
-        System.out.println(BLUE + BOLD + "[2] " + RESET + "Προβολή Εξόδων Προϋπολογισμού Δημόσιων Επενδύσεων");
-        System.out.println(BLUE + BOLD + "[3] " + RESET + "Προβολή Εσόδων & Εξόδων Προϋπολογισμού Δημόσιων Επενδύσεων");
-        System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή στο Κύριο Μενού" + RESET_2);
-        System.out.println();
-        System.out.print("Επιλογή: ");
-        int choice = input.nextInt();
-        switch (choice) {
-            case 1 -> showPublicInvestmentBudgetRevenuesMenu();
-            case 2 -> showExpensesMenu("ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ");
-        }
-    }
-
-    private static void showRegularRevenuesMenu() {
-        Scanner input = new Scanner(System.in);
-
-        System.out.println(BLUE + BOLD + "\n=== ΠΡΟΒΟΛΗ ΕΣΟΔΩΝ ΤΑΚΤΙΚΟΥ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ===\n");
-        System.out.println(BLUE + BOLD + "[1] " + RESET + "Προβολή των βασικών λογαριασμών εσόδων");
-        System.out.println(BLUE + BOLD + "[2] " + RESET + "Προβολή όλων των λογαριασμών εσόδων");
-        System.out.println(BLUE + BOLD + "[3] " + RESET + "Προβολή συγκεκριμένων λογαριασμών εσόδων");
-        System.out.print("\nΕπιλογή: ");
-        int choice = input.nextInt();
-        input.nextLine();
-        System.out.println();
-        switch (choice) {
-            case 1 -> BudgetRevenueHandling.printMainBudgetRevenues(RegularBudgetRevenue.getAllRegularBudgetRevenues());
-            case 2 -> RegularBudgetRevenue.printAllRegularBudgetRevenues();
-            case 3 -> {
-                //ΦΤΙΑΞΤΟ ΒΓΑΖΕΙ ΛΑΘΟΣ ΣΤΑ budgetRevenue.printSuperCategoriesTopDown();
-                System.out.print("Παρακαλούμε εισάγετε τον κωδικό του επιθυμητού λογαριασμού εσόδων: ");
-                String code = input.nextLine();
-                System.out.println();
-                RegularBudgetRevenue budgetRevenue = BudgetRevenueHandling.findRevenueWithCode(code, RegularBudgetRevenue.getAllRegularBudgetRevenues());
-                DataOutput.printEntryWithAsciiTable(budgetRevenue);
-                System.out.println();
-                System.out.println(BOLD + "ΚΑΤΗΓΟΡΙΕΣ ΣΕ ΥΨΗΛΟΤΕΡΟ ΕΠΙΠΕΔΟ:\n" + RESET_2);
-                budgetRevenue.printSuperCategoriesTopDown();
-                System.out.println();
-                System.out.println(BOLD + "ΚΑΤΗΓΟΡΙΕΣ ΣΕ ΧΑΜΗΛΟΤΕΡΟ ΕΠΙΠΕΔΟ:\n" + RESET_2);
-                budgetRevenue.printAllSubCategories();
-                System.out.println();
-            }
-            default -> System.out.println(RED + "Μη έγκυρη επιλογή" + RESET);
-        }
-    }
-
-    private static void showPublicInvestmentBudgetRevenuesMenu() {
-        Scanner input = new Scanner(System.in);
-
-        System.out.println(BLUE + BOLD + "\n=== ΠΡΟΒΟΛΗ ΕΣΟΔΩΝ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ ===\n");
-        System.out.println(BLUE + BOLD + "[1] " + RESET + "Προβολή λογαριασμών εσόδων (ΕΘΝΙΚΟ ΣΚΕΛΟΣ)");
-        System.out.println(BLUE + BOLD + "[2] " + RESET + "Προβολή λογαριασμών εσόδων (ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ ΣΚΕΛΟΣ)");
-        System.out.println(BLUE + BOLD + "[3] " + RESET + "Προβολή λογαριασμών εσόδων (ΕΘΝΙΚΟ + ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ ΣΚΕΛΟΣ)");
-        System.out.println(BLUE + BOLD + "[4] " + RESET + "Προβολή συγκεκριμένου λογαριασμού εσόδων");
-        System.out.print("\nΕπιλογή: ");
-        int choice = input.nextInt();
-        input.nextLine();
-        System.out.println();
-        switch (choice) {
-            case 1 -> PublicInvestmentBudgetRevenue.printPublicInvestmentBudgetNationalRevenues();
-            case 2 -> PublicInvestmentBudgetRevenue.printPublicInvestmentBudgetCoFundedRevenues();
-            case 3 -> PublicInvestmentBudgetRevenue.printAllPublicInvestmentBudgetRevenues();
-            default -> System.out.println(RED + "Μη έγκυρη επιλογή" + RESET);
-        }
-    }
-
-    public static void printSubMenuOfChoice3() {
-        Scanner input = new Scanner(System.in);
-        System.out.println(BLUE + BOLD + "=== ΕΙΣΑΓΩΓΗ ΑΛΛΑΓΩΝ ===");
-        System.out.println();
-        System.out.println(BLUE + BOLD + "[1] " + RESET + "Εισαγωγή αλλαγών σε στοιχεία κρατικού προϋπολογισμού");
-        System.out.println(BLUE + BOLD + "[2] " + RESET + "Εισαγωγή αλλαγών σε στοιχεία τακτικού προϋπολογισμού");
-        System.out.println(BLUE + BOLD + "[3] " + RESET + "Εισαγωγή αλλαγών σε στοιχεία προϋπολογισμού δημόσιων επενδύσεων");
-        System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή" + RESET_2);
-        System.out.println();
-        System.out.print("Επιλογή: ");
-        int choice = input.nextInt();
-        input.nextLine();
-        switch (choice) {
-            case 1 -> modifyExistingRevenueAccount();
-            case 2 -> showRegularChangesMenu();
-        }
-    }
-
-    public static void showRegularChangesMenu() {
-        Scanner input = new Scanner(System.in);
-        System.out.println();
-        System.out.println(BLUE + BOLD + "=== ΕΙΣΑΓΩΓΗ ΑΛΛΑΓΩΝ ΣΕ ΣΤΟΙΧΕΙΑ ΤΑΚΤΙΚΟΥ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ===");
-        System.out.println();
-        System.out.println(BLUE + BOLD + "[1] " + RESET + "Εισαγωγή αλλαγών σε λογαριασμούς εσόδων");
-        System.out.println(BLUE + BOLD + "[2] " + RESET + "Εισαγωγή αλλαγών σε λογαριασμούς εξόδων");
-        System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή" + RESET_2);
-        System.out.println();
-        System.out.print("Επιλογή: ");
-        int choice = input.nextInt();
-        input.nextLine();
-        switch (choice) {
-            case 1 -> modifyExistingRevenueAccount();
-            case 2 -> showExpensesChangesMenu();
-        }
-    }
-
-    public static void showExpensesChangesMenu() {
-        Scanner input = new Scanner(System.in);
-        System.out.println();
-        System.out.println(BLUE + BOLD + "=== ΕΙΣΑΓΩΓΗ ΑΛΛΑΓΩΝ ΣΕ ΛΟΓΑΡΙΑΣΜΟΥΣ ΕΞΟΔΩΝ ===");
-        System.out.println();
-        System.out.println(BLUE + BOLD + "[1] " + RESET + "Εισαγωγή αλλαγών σε συγκεκριμένο φορέα");
-        System.out.println(BLUE + BOLD + "[2] " + RESET + "Εισαγωγή μαζικών αλλαγών σε όλους τους φορείς");
-        System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή" + RESET_2);
-        System.out.println();
-        System.out.print("Επιλογή: ");
-        int choice = input.nextInt();
-        input.nextLine();
-        switch (choice) {
-            case 1 -> showSpecificEntityExpensesChangesMenu();
-            case 2 -> showAllEntitiesExpensesChangeMenu();
-        }
-    }
-
-    public static void showSpecificEntityExpensesChangesMenu() {
-        Scanner input = new Scanner(System.in);
-        System.out.println();
-        System.out.print("Εισάγετε τον κωδικό του φορέα του οποίου τα έξοδα επιθυμείτε να τροποποιήσετε: ");
-        String entityCode = input.nextLine();
-        System.out.println();
-        Entity entity = Entity.findEntityWithEntityCode(entityCode);
-        System.out.println(BLUE + BOLD + "=== " + entity.getEntityName() + " - ΕΙΣΑΓΩΓΗ ΑΛΛΑΓΩΝ ===");
-        System.out.println();
-        System.out.println(BLUE + BOLD + "[1] " + RESET + "Τροποποίηση συνολικών εξόδων του φορέα");
-        System.out.println(BLUE + BOLD + "[2] " + RESET + "Τροποποίηση συγκεκριμένου λογαριασμού εξόδων όλων των ειδικών φορέων");
-        System.out.println(BLUE + BOLD + "[3] " + RESET + "Τροποποίηση όλων των λογαριασμών εξόδων ενός ειδικού φορέα");
-        System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή" + RESET_2);
-        System.out.println();
-        System.out.print("Επιλογή: ");
-        int choice = input.nextInt();
-        input.nextLine();
-        switch (choice) {
-            case 1 -> {
-                System.out.println();
-                System.out.print("Εισάγετε το ποσοστό (%) μεταβολής των συνολικών εξόδων του φορέα: ");
-                double percentage = input.nextDouble() / 100;
-                showExpensesOfEntity(entity, "ΤΑΚΤΙΚΟΥ", true);
-                IExpenseAdjustmentStrategy strategy = new PercentageAllocationAdjustmentStrategy(new MatchAllFilter(), new PercentageOperation());
-                strategy.applyAdjustment(entity.getRegularBudgetExpenses(), percentage, 0);
-                showExpensesOfEntity(entity, "ΤΑΚΤΙΚΟΥ", false);
-            }
-            case 2 -> {
-                System.out.println();
-                System.out.print("Εισάγετε τον κωδικό του λογαριασμού: ");
-                String code = input.nextLine();
-                System.out.println();
-                System.out.print("Εισάγετε το ποσοστό (%) μεταβολής του λογαριασμού " + BOLD + BudgetExpenseHandling.findExpenseWithCode(code, entity.getRegularBudgetExpenses()).getDescription().toUpperCase()  + RESET_2 + " : ");
-                double percentage = input.nextDouble() / 100;
-                showExpensesOfEntity(entity, "ΤΑΚΤΙΚΟΥ", true);
-                IExpenseAdjustmentStrategy strategy = new PercentageAllocationAdjustmentStrategy(new AccountFilter(code), new PercentageOperation());
-                strategy.applyAdjustment(entity.getRegularBudgetExpenses(), percentage, 0);
-                showExpensesOfEntity(entity, "ΤΑΚΤΙΚΟΥ", false);
-            }
-            case 3 -> {
-                System.out.println("\nΕΙΔΙΚΟΙ ΦΟΡΕΙΣ & ΑΘΡΟΙΣΜΑ ΕΞΟΔΩΝ");
-                for (String serviceCode : entity.getRegularServiceCodes()) {
-                    System.out.println(serviceCode + " " + entity.findRegularServiceNameWithCode(serviceCode) + " " + entity.getRegularSumOfServiceWithCode(serviceCode));
-                    for (RegularBudgetExpense expense : entity.getRegularExpensesOfServiceWithCode(serviceCode)) {
-                        System.out.println(expense.getCode() + " " + expense.getDescription() + " " + expense.getAmount());
-                    }
-                }
-                System.out.println();
-                System.out.print("Εισάγετε τον κωδικό του ειδικού φορέα: ");
-                String serviceCode = input.nextLine();
-                System.out.println();
-                System.out.print("Εισάγετε το ποσοστό (%) μεταβολής του ειδικού φορέα " + BOLD + entity.findRegularServiceNameWithCode(serviceCode).toUpperCase() + RESET_2 + " : ");
-                double percentage = input.nextDouble() / 100;
-                showExpensesOfEntity(entity, "ΤΑΚΤΙΚΟΥ", true);
-                IExpenseAdjustmentStrategy strategy = new PercentageAllocationAdjustmentStrategy(new ServiceFilter(serviceCode), new PercentageOperation());
-                strategy.applyAdjustment(entity.getRegularBudgetExpenses(), percentage, 0);
-                showExpensesOfEntity(entity, "ΤΑΚΤΙΚΟΥ", false);
-            }
-        }
-    }
-
-    public static void showAllEntitiesExpensesChangeMenu() {
-        Scanner input = new Scanner(System.in);
-        System.out.println();
-        System.out.println(BLUE + BOLD + "=== ΕΙΣΑΓΩΓΗ ΜΑΖΙΚΩΝ ΑΛΛΑΓΩΝ ΣΕ ΟΛΟΥΣ ΤΟΥΣ ΦΟΡΕΙΣ ===");
-        System.out.println();
-        System.out.println(BLUE + BOLD + "[1] " + RESET + "Τροποποίηση ποσού λογαριασμού εξόδων για όλους τους φορείς");
-        System.out.println(BLUE + BOLD + "[2] " + RESET + "Αύξηση όλων των λογαριασμών εξόδων όλων των φορέων");
-        System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή" + RESET_2);
-        System.out.println();
-        System.out.print("Επιλογή: ");
-        int choice = input.nextInt();
-        input.nextLine();
-        switch (choice) {
-            case 1 -> {
-                System.out.println();
-                System.out.print("Εισάγετε τον κωδικό του λογαριασμού: ");
-                String code = input.nextLine();
-                System.out.println();
-                System.out.print("Εισάγετε το ποσοστό (%) μεταβολής του λογαριασμού " + BOLD + BudgetExpenseHandling.findExpenseWithCode(code, BudgetExpense.getExpenses()).getDescription().toUpperCase() + RESET_2 + " : ");
-                double percentage = input.nextDouble() / 100;
-                showGeneralExpenses(RegularBudgetExpense.getAllRegularBudgetExpenses(), "ΤΑΚΤΙΚΟΥ", true);
-                IExpenseAdjustmentStrategy strategy = new PercentageAllocationAdjustmentStrategy(new AccountFilter(code), new PercentageOperation());
-                strategy.applyAdjustment(BudgetExpense.getExpenses(), percentage, 0);
-                showGeneralExpenses(RegularBudgetExpense.getAllRegularBudgetExpenses(), "ΤΑΚΤΙΚΟΥ", false);
-            }
-            case 2 -> {
-                System.out.println();
-                System.out.print("Εισάγετε το ποσοστό (%) μεταβολής: ");
-                double percentage = input.nextDouble() / 100;
-                showGeneralExpenses(RegularBudgetExpense.getAllRegularBudgetExpenses(), "ΤΑΚΤΙΚΟΥ", true);
-                IExpenseAdjustmentStrategy strategy = new PercentageAllocationAdjustmentStrategy(new MatchAllFilter(), new PercentageOperation());
-                strategy.applyAdjustment(BudgetExpense.getExpenses(), percentage, 0);
-                showGeneralExpenses(RegularBudgetExpense.getAllRegularBudgetExpenses(), "ΤΑΚΤΙΚΟΥ", false);
-            }
-        }
-    }
-
-    public static void showExpensesOfEntity(Entity entity, String budgetType, boolean before) {
-        System.out.println();
-        if (before) {
-            System.out.println("************************************************************ ΠΡΙΝ ************************************************************");
-        } else {
-            System.out.println("************************************************************ ΜΕΤΑ ************************************************************");
-        }
-        System.out.println();
-        DataOutput.printEntityWithAsciiTable(entity, budgetType);
-    }
-
-    public static void showGeneralExpenses(ArrayList<? extends BudgetExpense> expenses, String budgetType, boolean before) {
-        System.out.println();
-        if (before) {
-            System.out.println("************************************ ΠΡΙΝ *****************************************");
-        } else {
-            System.out.println("************************************ ΜΕΤΑ *****************************************");
-        }
-        System.out.println();
-        DataOutput.printExpenseWithAsciiTable(BudgetExpenseHandling.getSumOfEveryCategory(expenses));
-    }
-
-
-    public static void modifyExistingRevenueAccount() {
-        Scanner input = new Scanner(System.in);
-        System.out.println();
-        System.out.println(BLUE + BOLD + "=== ΤΡΟΠΟΠΟΙΗΣΗ ΠΟΣΟΥ ΥΦΙΣΤΑΜΕΝΟΥ ΛΟΓΑΡΙΑΣΜΟΥ ΕΣΟΔΩΝ ===" + RESET + RESET_2);
-        System.out.println();
-        System.out.print("Εισάγετε τον κωδικό του λογαριασμού εσόδων του οποίου το ποσό επιθυμείτε να αλλάξει: ");
-        String code = input.nextLine();
-        BudgetRevenue budgetRevenue = BudgetRevenueHandling.findRevenueWithCode(code, BudgetRevenue.getAllBudgetRevenues());
-
-        if (budgetRevenue != null) {
-            selectChangeMethodAndApply(budgetRevenue);
-        } else {
-            System.out.println(RED + "Δεν βρέθηκε λογαριασμός με κωδικό: " + code + RESET);
-        }
-    }
-
-    public static void selectChangeMethodAndApply(BudgetRevenue budgetRevenue) {
-        Scanner input = new Scanner(System.in);
-        System.out.println();
-        System.out.println(BLUE + BOLD + "=== ΤΡΟΠΟΣ ΜΕΤΑΒΟΛΗΣ ΥΠΟΚΑΤΗΓΟΡΙΩΝ ΕΣΟΔΩΝ ===");
-        System.out.println();
-        System.out.println(BLUE + BOLD + "[1] " + RESET + "Ισόποση μεταβολή υποκατηγοριών");
-        System.out.println(BLUE + BOLD + "[2] " + RESET + "Ποσοστιαία (Αναλογική) μεταβολή υποκατηγοριών");
-        System.out.println(BLUE + BOLD + "[3] " + RESET + "Χειροκίνητη μεταβολή ανά υποκατηγορία" + RESET_2);
-        System.out.println();
-        System.out.print("Επιλογή: ");
-        int changeMethod = input.nextInt();
-        System.out.println();
-
-        selectInputMethodAndExecute(budgetRevenue, changeMethod);
-    }
-
-    public static void selectInputMethodAndExecute(BudgetRevenue budgetRevenue, int changeMethod) {
-        Scanner input = new Scanner(System.in);
-        System.out.println(BLUE + BOLD + "=== ΤΡΟΠΟΣ ΕΙΣΑΓΩΓΗΣ ΜΕΤΑΒΟΛΗΣ ΛΟΓΑΡΙΑΣΜΟΥ ΕΣΟΔΩΝ ===");
-        System.out.println();
-        System.out.println(BLUE + BOLD + "[1] " + RESET + "Εισαγωγή Ποσοστού (%) Μεταβολής Λογαριασμού");
-        System.out.println(BLUE + BOLD + "[2] " + RESET + "Εισαγωγή Ποσού (€) Μεταβολής Λογαριασμού");
-        System.out.println(BLUE + BOLD + "[3] " + RESET + "Εισαγωγή Νέου Επιθυμητού Υπολοίπου (€) Λογαριασμού" + RESET_2);
-        System.out.println();
-        System.out.print("Επιλογή: ");
-        int inputMethod = input.nextInt();
-        System.out.println();
-
-        executeBudgetChanges(budgetRevenue, changeMethod, inputMethod);
-    }
-
-    public static void executeBudgetChanges(BudgetRevenue budgetRevenue, int changeMethod, int inputMethod) {
-        Scanner input = new Scanner(System.in);
-
-        switch (inputMethod) {
-            case 1 -> applyPercentageChange(budgetRevenue, changeMethod);
-            case 2 -> applyAbsoluteChange(budgetRevenue, changeMethod);
-            case 3 -> applyTargetBalanceChange(budgetRevenue, changeMethod);
-            default -> System.out.println(RED + "Μη έγκυρη επιλογή" + RESET);
-        }
-    }
-
-    public static void applyPercentageChange(BudgetRevenue budgetRevenue, int changeMethod) {
-        Scanner input = new Scanner(System.in);
-        System.out.print(BOLD + "Εισάγετε το ποσοστό (%) μεταβολής λογαριασμού: " + RESET_2);
-        double percentage = input.nextDouble() / 100;
-        applyChangeWithMethod(budgetRevenue, changeMethod, percentage, 0, true);
-    }
-
-    public static void applyAbsoluteChange(BudgetRevenue budgetRevenue, int changeMethod) {
-        Scanner input = new Scanner(System.in);
-        System.out.print(BOLD + "Εισάγετε το ποσό (€) μεταβολής λογαριασμού: " + RESET_2);
-        long change = input.nextLong();
-        double percentage = ((double) change / budgetRevenue.getAmount());
-        applyChangeWithMethod(budgetRevenue, changeMethod, percentage, change, false);
-    }
-
-    public static void applyTargetBalanceChange(BudgetRevenue budgetRevenue, int changeMethod) {
-        Scanner input = new Scanner(System.in);
-        System.out.print(BOLD + "Εισάγετε το νέο επιθυμητό υπόλοιπο (€) λογαριασμού: " + RESET_2);
-        long targetBalance = input.nextLong();
-        long change = targetBalance - budgetRevenue.getAmount();
-        double percentage = ((double) change / budgetRevenue.getAmount());
-        applyChangeWithMethod(budgetRevenue, changeMethod, percentage, change, false);
-    }
-
-    public static void applyChangeWithMethod(BudgetRevenue budgetRevenue, int changeMethod,
-                                             double percentage, long changeAmount, boolean isPercentage) {
-        showBeforeChanges(budgetRevenue);
-        if (changeMethod == 1) {
-            long change;
-            if (isPercentage) {
-                double baseAmount = budgetRevenue.getAmount();
-                double calculated = baseAmount * percentage;   // π.χ. 0.20 = 20%
-                change = (long) calculated;
-            } else {
-                change = changeAmount;
-            }
-            budgetRevenue.implementChangesOfEqualDistribution(change);
-        } else if (changeMethod == 2) {
-            budgetRevenue.implementChangesOfPercentageAdjustment(percentage);
-        } else if (changeMethod == 3) {
-            return;
-        }
-
-        showAfterChanges(budgetRevenue);
-    }
-
-    public static void printSubMenuOfChoice6() {
-        Scanner input = new Scanner(System.in);
-        System.out.println(BLUE + BOLD + "=== ΓΡΑΦΗΜΑΤΑ & ΟΠΤΙΚΟΠΟΙΗΣΕΙΣ ===");
-        System.out.println();
-        System.out.println(BLUE + BOLD + "[1] " + RESET + "Κατανομή Εσόδων (Pie Chart)");
-        System.out.println(BLUE + BOLD + "[2] " + RESET + "Κατανομή Εξόδων (Pie Chart)");
-        System.out.println(BLUE + BOLD + "[3] " + RESET + "Σύγκριση Εσόδων–Εξόδων (Bar Chart)");
-        System.out.println(BLUE + BOLD + "[4] " + RESET + "Δαπάνες ανά Υπουργείο (Bar Chart)");
-        System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή στο Κύριο Μενού" + RESET_2);
-        System.out.println();
-        System.out.print("Επιλογή: ");
-        int choice = input.nextInt();
-        input.nextLine();
-        if (choice == 1) {
-            printRevenueChartsSubMenu();
-        }
-    }
-
-    public static void printRevenueChartsSubMenu() {
-        Scanner input = new Scanner(System.in);
-        System.out.println();
-        System.out.println(BLUE + BOLD + "=== ΚΑΤΑΝΟΜΗ ΕΣΟΔΩΝ (PIE CHART) ===");
-        System.out.println();
-        System.out.println(BLUE + BOLD + "[1] " + RESET + "Κατανομή Βασικών Λογαριασμών Εσόδων");
-        System.out.println(BLUE + BOLD + "[2] " + RESET + "Κατανομή Φόρων");
-        System.out.println(BLUE + BOLD + "[3] " + RESET + "Κατανομή Μεταβιβάσεων");
-        System.out.println(BLUE + BOLD + "[4] " + RESET + "Κατανομή Πωλήσεων Αγαθών & Υπηρεσιών");
-        System.out.println(BLUE + BOLD + "[5] " + RESET + "Κατανομή Λοιπών Τρεχόντων Εσόδων");
-        System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή στο Κύριο Μενού" + RESET_2);
-        System.out.println();
-        System.out.print("Επιλογή: ");
-        int choice = input.nextInt();
-        input.nextLine();
-        if (choice == 1) {
-            PieChartGenerator.generateChart(BudgetRevenueHandling.getMainBudgetRevenues(BudgetRevenue.getAllBudgetRevenues()), "Κατανομή Εσόδων");
-        } else if (choice == 2) {
-            printTaxChartsSubMenu();
-        } else if (choice == 3) {
-            BudgetRevenue budgetRevenue = BudgetRevenueHandling.findRevenueWithCode("13", BudgetRevenue.getAllBudgetRevenues());
-            PieChartGenerator.generateChart(budgetRevenue.findNextLevelSubCategories(), "Κατανομή Μεταβιβάσεων");
-        } else if (choice == 4) {
-            BudgetRevenue budgetRevenue = BudgetRevenueHandling.findRevenueWithCode("14", BudgetRevenue.getAllBudgetRevenues());
-            PieChartGenerator.generateChart(budgetRevenue.findNextLevelSubCategories(), "Κατανομή Πωλήσεων Αγαθών & Υπηρεσιών");
-        } else if (choice == 5) {
-            BudgetRevenue budgetRevenue = BudgetRevenueHandling.findRevenueWithCode("15", BudgetRevenue.getAllBudgetRevenues());
-            PieChartGenerator.generateChart(budgetRevenue.findNextLevelSubCategories(), "Κατανομή Λοιπών Τρεχόντων Εσόδων");
-        }
-    }
-
-    public static void showBeforeChanges(BudgetRevenue budgetRevenue) {
-        System.out.println();
-        System.out.println("********************************************************* ΠΡΙΝ *********************************************************");
-        System.out.println();
-        DataOutput.printEntryWithAsciiTable(budgetRevenue);
-        System.out.println();
-        System.out.println(BOLD + "ΚΑΤΗΓΟΡΙΕΣ ΣΕ ΥΨΗΛΟΤΕΡΟ ΕΠΙΠΕΔΟ:\n" + RESET_2);
-        budgetRevenue.printSuperCategoriesTopDown();
-        System.out.println();
-        System.out.println(BOLD + "ΚΑΤΗΓΟΡΙΕΣ ΣΕ ΧΑΜΗΛΟΤΕΡΟ ΕΠΙΠΕΔΟ:\n" + RESET_2);
-        budgetRevenue.printAllSubCategories();
-        System.out.println();
-    }
-
-    public static void showAfterChanges(BudgetRevenue budgetRevenue) {
-        System.out.println();
-        System.out.println("********************************************************* ΜΕΤΑ *********************************************************");
-        System.out.println();
-        DataOutput.printEntryWithAsciiTable(budgetRevenue);
-        System.out.println();
-        System.out.println(BOLD + "ΚΑΤΗΓΟΡΙΕΣ ΛΟΓΑΡΙΑΣΜΩΝ ΣΕ ΥΨΗΛΟΤΕΡΟ ΕΠΙΠΕΔΟ:\n" + RESET_2);
-        budgetRevenue.printSuperCategoriesTopDown();
-        System.out.println();
-        System.out.println(BOLD + "ΚΑΤΗΓΟΡΙΕΣ ΛΟΓΑΡΙΑΣΜΩΝ ΣΕ ΧΑΜΗΛΟΤΕΡΟ ΕΠΙΠΕΔΟ:\n" + RESET_2);
-        budgetRevenue.printAllSubCategories();
-        System.out.println();
-        System.out.println(GREEN + "ΟΙ ΑΛΛΑΓΕΣ ΟΛΟΚΛΗΡΩΘΗΚΑΝ ΜΕ ΕΠΙΤΥΧΙΑ.\n" + RESET + "ΕΠΙΣΤΡΟΦΗ ΣΤΟ ΚΥΡΙΟ ΜΕΝΟΥ..");
-    }
-
-    public static void printTaxChartsSubMenu() {
-        Scanner input = new Scanner(System.in);
-        System.out.println();
-        System.out.println(BLUE + BOLD + "=== ΚΑΤΑΝΟΜΗ ΦΟΡΩΝ ===");
-        System.out.println();
-        System.out.println(BLUE + BOLD + "[1] " + RESET + "Κατανομή Βασικών Λογαριασμών Φόρων");
-        System.out.println(BLUE + BOLD + "[2] " + RESET + "Κατανομή Φόρων επί αγαθών και υπηρεσιών");
-        System.out.println(BLUE + BOLD + "[3] " + RESET + "Κατανομή Φόρων Εισοδήματος");
-        System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή στο Κύριο Μενού" + RESET_2);
-        System.out.println();
-        System.out.print("Επιλογή: ");
-        int choice = input.nextInt();
-        input.nextLine();
-        switch (choice) {
-            case 1 -> {
-                BudgetRevenue budgetRevenue = BudgetRevenueHandling.findRevenueWithCode("11", BudgetRevenue.getAllBudgetRevenues());
-                PieChartGenerator.generateChart(budgetRevenue.findNextLevelSubCategories(), "Κατανομή Φόρων");
-            }
-            case 2 -> {
-                BudgetRevenue budgetRevenue = BudgetRevenueHandling.findRevenueWithCode("111", BudgetRevenue.getAllBudgetRevenues());
-                PieChartGenerator.generateChart(budgetRevenue.findNextLevelSubCategories(), "Κατανομή Φόρων επί αγαθών και υπηρεσιών");
-            }
-            case 3 -> {
-                BudgetRevenue budgetRevenue = BudgetRevenueHandling.findRevenueWithCode("115", BudgetRevenue.getAllBudgetRevenues());
-                PieChartGenerator.generateChart(budgetRevenue.findNextLevelSubCategories(), "Κατανομή Φόρων Εισοδήματος");
-            }
-        }
     }
 }

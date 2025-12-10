@@ -1,10 +1,17 @@
+package com.financial.menu;
+
 import com.financial.entries.*;
+import com.financial.services.BudgetExpenseHandling;
+import com.financial.services.DataOutput;
 import com.financial.strategies.*;
 import java.util.ArrayList;
 import java.util.Scanner;
-import static com.financial.util.Colors.*;
+import com.financial.strategies.filters.*;
+import com.financial.strategies.operations.*;
 
-public class ExpenseChangeMenu {
+import static com.financial.menu.Colors.*;
+
+public class ExpensesChangeMenu {
     public static void showExpensesChangesMenu() {
         Scanner input = new Scanner(System.in);
         System.out.println();
@@ -33,8 +40,7 @@ public class ExpenseChangeMenu {
         System.out.println(BLUE + BOLD + "=== " + entity.getEntityName() + " - ΕΙΣΑΓΩΓΗ ΑΛΛΑΓΩΝ ===");
         System.out.println();
         System.out.println(BLUE + BOLD + "[1] " + RESET + "Τροποποίηση συνολικών εξόδων του φορέα");
-        System.out.println(BLUE + BOLD + "[2] " + RESET
-        + "Τροποποίηση συγκεκριμένου λογαριασμού εξόδων όλων των ειδικών φορέων");
+        System.out.println(BLUE + BOLD + "[2] " + RESET + "Τροποποίηση συγκεκριμένου λογαριασμού εξόδων όλων των ειδικών φορέων");
         System.out.println(BLUE + BOLD + "[3] " + RESET + "Τροποποίηση όλων των λογαριασμών εξόδων ενός ειδικού φορέα");
         System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή" + RESET_2);
         System.out.println();
@@ -57,7 +63,7 @@ public class ExpenseChangeMenu {
                 String code = input.nextLine();
                 System.out.println();
                 System.out.print("Εισάγετε το ποσοστό (%) μεταβολής του λογαριασμού " + BOLD + BudgetExpenseHandling.findExpenseWithCode(code, entity.getRegularBudgetExpenses()).getDescription().toUpperCase()  + RESET_2 + " : ");
-                double percentage = input.nextDouble()/100;
+                double percentage = input.nextDouble() / 100;
                 showExpensesOfEntity(entity, "ΤΑΚΤΙΚΟΥ", true);
                 IExpenseAdjustmentStrategy strategy = new PercentageAllocationAdjustmentStrategy(new AccountFilter(code), new PercentageOperation());
                 strategy.applyAdjustment(entity.getRegularBudgetExpenses(), percentage, 0);
@@ -66,8 +72,7 @@ public class ExpenseChangeMenu {
             case 3 -> {
                 System.out.println("\nΕΙΔΙΚΟΙ ΦΟΡΕΙΣ & ΑΘΡΟΙΣΜΑ ΕΞΟΔΩΝ");
                 for (String serviceCode : entity.getRegularServiceCodes()) {
-                    System.out.println(serviceCode + " " + entity.findRegularServiceNameWithCode(serviceCode)
-                    + " " + entity.getRegularSumOfServiceWithCode(serviceCode));
+                    System.out.println(serviceCode + " " + entity.findRegularServiceNameWithCode(serviceCode) + " " + entity.getRegularSumOfServiceWithCode(serviceCode));
                     for (RegularBudgetExpense expense : entity.getRegularExpensesOfServiceWithCode(serviceCode)) {
                         System.out.println(expense.getCode() + " " + expense.getDescription() + " " + expense.getAmount());
                     }
@@ -76,9 +81,8 @@ public class ExpenseChangeMenu {
                 System.out.print("Εισάγετε τον κωδικό του ειδικού φορέα: ");
                 String serviceCode = input.nextLine();
                 System.out.println();
-                System.out.print("Εισάγετε το ποσοστό (%) μεταβολής του ειδικού φορέα " + BOLD
-                + entity.findRegularServiceNameWithCode(serviceCode).toUpperCase() + RESET_2 + " : ");
-                double percentage = input.nextDouble()/100;
+                System.out.print("Εισάγετε το ποσοστό (%) μεταβολής του ειδικού φορέα " + BOLD + entity.findRegularServiceNameWithCode(serviceCode).toUpperCase() + RESET_2 + " : ");
+                double percentage = input.nextDouble() / 100;
                 showExpensesOfEntity(entity, "ΤΑΚΤΙΚΟΥ", true);
                 IExpenseAdjustmentStrategy strategy = new PercentageAllocationAdjustmentStrategy(new ServiceFilter(serviceCode), new PercentageOperation());
                 strategy.applyAdjustment(entity.getRegularBudgetExpenses(), percentage, 0);
@@ -124,7 +128,7 @@ public class ExpenseChangeMenu {
         }
     }
 
-    public static void showExpensesOfEntity(Entity entity, String budgetType, boolean before) {
+    public static void showExpensesOfEntity(Entity entity, int budgetType, boolean before) {
         System.out.println();
         if (before) {
             System.out.println("************************************************************ ΠΡΙΝ ************************************************************");

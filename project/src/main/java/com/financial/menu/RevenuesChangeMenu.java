@@ -1,9 +1,11 @@
+package com.financial.menu;
+
 import java.util.Scanner;
 import com.finacial.services.*;
 import com.financial.entries.*;
 
 
-public class RevenueChangeMenu {
+public class RevenuesChangeMenu {
     public static void modifyExistingRevenueAccount() {
         Scanner input = new Scanner(System.in);
         System.out.println();
