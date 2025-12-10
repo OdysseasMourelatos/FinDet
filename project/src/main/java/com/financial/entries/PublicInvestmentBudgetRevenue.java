@@ -4,6 +4,8 @@ import com.financial.services.BudgetRevenueHandling;
 import com.financial.services.DataOutput;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class PublicInvestmentBudgetRevenue extends BudgetRevenue {
 
@@ -29,6 +31,18 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue {
         this.nationalAmount = nationalAmount;
         this.coFundedAmount = coFundedAmount;
         publicInvestmentBudgetRevenuesFiltered.add(this);
+    }
+
+    //Class Methods
+
+    //Creation of PublicInvestmentBudgetRevenuesSorted
+    public static void sortPublicInvestmentBudgetRevenuesByCode() {
+        Collections.sort(publicInvestmentBudgetRevenuesFiltered, new Comparator<PublicInvestmentBudgetRevenue>() {
+            @Override
+            public int compare(PublicInvestmentBudgetRevenue b1, PublicInvestmentBudgetRevenue b2) {
+                return b1.getCode().compareTo(b2.getCode());
+            }
+        });
     }
 
     public static ArrayList<PublicInvestmentBudgetRevenue> getPublicInvestmentBudgetRevenues() {
@@ -58,7 +72,6 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue {
     public static PublicInvestmentBudgetRevenue findPublicInvestmentBudgetRevenueWithCode(String code) {
         return BudgetRevenueHandling.findRevenueWithCode(code, publicInvestmentBudgetRevenuesFiltered);
     }
-
 
     //Getters & Setters
 
