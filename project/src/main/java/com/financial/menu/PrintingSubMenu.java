@@ -1,41 +1,32 @@
+package com.financial.menu;
+
 import java.io.DataOutput;
 import java.util.Scanner;
-import static Colors.*;
+import static com.financial.menu.Colors.*;
+
 import com.financial.services.*;
 import com.financial.entries.*;
 
-public class BudgetDataView {
-    private static void showTotalRevenuesMenu() {
+public class PrintingSubMenu {
+    
+    public static void showSubMenuOfPrinting() {
         Scanner input = new Scanner(System.in);
-
-        System.out.println(BLUE + BOLD + "\n=== ΠΡΟΒΟΛΗ ΕΣΟΔΩΝ ΚΡΑΤΙΚΟΥ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ===\n");
-        System.out.println(BLUE + BOLD + "[1] " + RESET + "Προβολή των βασικών λογαριασμών εσόδων");
-        System.out.println(BLUE + BOLD + "[2] " + RESET + "Προβολή όλων των λογαριασμών εσόδων");
-        System.out.println(BLUE + BOLD + "[3] " + RESET + "Προβολή συγκεκριμένων λογαριασμών εσόδων");
-        System.out.print("\nΕπιλογή: ");
-        int choice = input.nextInt();
-        input.nextLine();
+        System.out.println(BLUE + BOLD + "=== ΠΡΟΒΟΛΗ ΣΤΟΙΧΕΙΩΝ ΠΡΟΫΠΟΛΟΓΙΣΜΟΥ ===" );
         System.out.println();
+        System.out.println(BLUE + BOLD + "[1] " + RESET + "Προβολή Στοιχείων Κρατικού Προϋπολογισμού");
+        System.out.println(BLUE + BOLD + "[2] " + RESET + "Προβολή Στοιχείων Τακτικού Προϋπολογισμού");
+        System.out.println(BLUE + BOLD + "[3] " + RESET + "Προβολή Στοιχείων Προϋπολογισμού Δημόσιων Επενδύσεων");
+        System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή στο Κύριο Μενού" + RESET_2);
+
+        System.out.println();
+        System.out.print("Επιλογή: ");
+        int choice = input.nextInt();
         switch (choice) {
-            case 1 -> BudgetRevenueHandling.printMainBudgetRevenues(BudgetRevenue.getAllBudgetRevenues());
-            case 2 -> BudgetRevenue.printAllBudgetRevenues();
-            case 3 -> {
-                System.out.print("Παρακαλούμε εισάγετε τον κωδικό του επιθυμητού λογαριασμού εσόδων: ");
-                String code = input.nextLine();
-                System.out.println();
-                BudgetRevenue budgetRevenue = BudgetRevenueHandling.findRevenueWithCode(code, BudgetRevenue.getAllBudgetRevenues());
-                DataOutput.printEntryWithAsciiTable(budgetRevenue);
-                System.out.println();
-                System.out.println(BOLD + "ΚΑΤΗΓΟΡΙΕΣ ΣΕ ΥΨΗΛΟΤΕΡΟ ΕΠΙΠΕΔΟ:\n" + RESET_2);
-                budgetRevenue.printSuperCategoriesTopDown();
-                System.out.println();
-                System.out.println(BOLD + "ΚΑΤΗΓΟΡΙΕΣ ΣΕ ΧΑΜΗΛΟΤΕΡΟ ΕΠΙΠΕΔΟ:\n" + RESET_2);
-                budgetRevenue.printAllSubCategories();
-                System.out.println();
-            }
+            case 1, 2, 3 -> showBudgetMenu(choice);
             default -> System.out.println(RED + "Μη έγκυρη επιλογή" + RESET);
         }
     }
+
     private static void showExpensesMenu(String budgetType) {
         Scanner input = new Scanner(System.in);
 
