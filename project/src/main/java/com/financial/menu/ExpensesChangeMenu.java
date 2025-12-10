@@ -51,19 +51,10 @@ public class ExpensesChangeMenu {
             case 1 -> {
                 System.out.println();
                 System.out.print("Εισάγετε το ποσοστό (%) μεταβολής των συνολικών εξόδων του φορέα: ");
-                double percentage = input.nextDouble()/100;
+                double percentage = input.nextDouble() / 100;
                 showExpensesOfEntity(entity, budgetType, true);
                 IExpenseAdjustmentStrategy strategy = new PercentageAllocationAdjustmentStrategy(new MatchAllFilter(), new PercentageOperation());
-                ArrayList<BudgetExpense> expenses = strategy.applyAdjustment(entity.getRegularBudgetExpenses(), percentage, 0);
-
-                showExpensesOfEntity(entity, budgetType, false);
-                for (BudgetExpense expense : entity.getRegularBudgetExpenses()) {
-                    for (BudgetExpense expense2 : expenses) {
-                        if (expense.getServiceCode().equals(expense2.getCode()) && expense.getCode().equals(expense2.getDescription())) {
-                            expense.setAmount(expense2.getAmount());
-                        }
-                    }
-                }
+                strategy.applyAdjustment(entity.getRegularBudgetExpenses(), percentage, 0);
                 showExpensesOfEntity(entity, budgetType, false);
             }
             case 2 -> {
@@ -72,7 +63,7 @@ public class ExpensesChangeMenu {
                 String code = input.nextLine();
                 System.out.println();
                 System.out.print("Εισάγετε το ποσοστό (%) μεταβολής του λογαριασμού " + BOLD + BudgetExpenseHandling.findExpenseWithCode(code, entity.getRegularBudgetExpenses()).getDescription().toUpperCase()  + RESET_2 + " : ");
-                double percentage = input.nextDouble()/100;
+                double percentage = input.nextDouble() / 100;
                 showExpensesOfEntity(entity, budgetType, true);
                 IExpenseAdjustmentStrategy strategy = new PercentageAllocationAdjustmentStrategy(new AccountFilter(code), new PercentageOperation());
                 strategy.applyAdjustment(entity.getRegularBudgetExpenses(), percentage, 0);

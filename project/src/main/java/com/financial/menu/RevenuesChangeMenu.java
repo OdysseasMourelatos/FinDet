@@ -1,16 +1,15 @@
 package com.financial.menu;
 
 import java.util.Scanner;
-import com.finacial.services.*;
 import com.financial.entries.*;
-
+import com.financial.services.*;
+import static com.financial.menu.Colors.*;
 
 public class RevenuesChangeMenu {
     public static void modifyExistingRevenueAccount() {
         Scanner input = new Scanner(System.in);
         System.out.println();
-        System.out.println(BLUE + BOLD
-        + "=== ΤΡΟΠΟΠΟΙΗΣΗ ΠΟΣΟΥ ΥΦΙΣΤΑΜΕΝΟΥ ΛΟΓΑΡΙΑΣΜΟΥ ΕΣΟΔΩΝ ===" + RESET + RESET_2);
+        System.out.println(BLUE + BOLD + "=== ΤΡΟΠΟΠΟΙΗΣΗ ΠΟΣΟΥ ΥΦΙΣΤΑΜΕΝΟΥ ΛΟΓΑΡΙΑΣΜΟΥ ΕΣΟΔΩΝ ===" + RESET + RESET_2);
         System.out.println();
         System.out.print("Εισάγετε τον κωδικό του λογαριασμού εσόδων του οποίου το ποσό επιθυμείτε να αλλάξει: ");
         String code = input.nextLine();
@@ -43,12 +42,9 @@ public class RevenuesChangeMenu {
         Scanner input = new Scanner(System.in);
         System.out.println(BLUE + BOLD + "=== ΤΡΟΠΟΣ ΕΙΣΑΓΩΓΗΣ ΜΕΤΑΒΟΛΗΣ ΛΟΓΑΡΙΑΣΜΟΥ ΕΣΟΔΩΝ ===");
         System.out.println();
-        System.out.println(BLUE + BOLD + "[1] " + RESET
-        + "Εισαγωγή Ποσοστού (%) Μεταβολής Λογαριασμού");
-        System.out.println(BLUE + BOLD + "[2] " + RESET
-        + "Εισαγωγή Ποσού (€) Μεταβολής Λογαριασμού");
-        System.out.println(BLUE + BOLD + "[3] " + RESET
-        + "Εισαγωγή Νέου Επιθυμητού Υπολοίπου (€) Λογαριασμού" + RESET_2);
+        System.out.println(BLUE + BOLD + "[1] " + RESET + "Εισαγωγή Ποσοστού (%) Μεταβολής Λογαριασμού");
+        System.out.println(BLUE + BOLD + "[2] " + RESET + "Εισαγωγή Ποσού (€) Μεταβολής Λογαριασμού");
+        System.out.println(BLUE + BOLD + "[3] " + RESET + "Εισαγωγή Νέου Επιθυμητού Υπολοίπου (€) Λογαριασμού" + RESET_2);
         System.out.println();
         System.out.print("Επιλογή: ");
         int inputMethod = input.nextInt();
@@ -93,7 +89,7 @@ public class RevenuesChangeMenu {
     }
 
     public static void applyChangeWithMethod(BudgetRevenue budgetRevenue, int changeMethod,
-    double percentage, long changeAmount, boolean isPercentage) {
+                                             double percentage, long changeAmount, boolean isPercentage) {
         showBeforeChanges(budgetRevenue);
         if (changeMethod == 1) {
             long change;
@@ -110,8 +106,36 @@ public class RevenuesChangeMenu {
         } else if (changeMethod == 3) {
             return;
         }
-
         showAfterChanges(budgetRevenue);
+    }
+
+    public static void showBeforeChanges(BudgetRevenue budgetRevenue) {
+        System.out.println();
+        System.out.println("********************************************************* ΠΡΙΝ *********************************************************");
+        System.out.println();
+        DataOutput.printEntryWithAsciiTable(budgetRevenue);
+        System.out.println();
+        System.out.println(BOLD + "ΚΑΤΗΓΟΡΙΕΣ ΣΕ ΥΨΗΛΟΤΕΡΟ ΕΠΙΠΕΔΟ:\n" + RESET_2);
+        budgetRevenue.printSuperCategoriesTopDown();
+        System.out.println();
+        System.out.println(BOLD + "ΚΑΤΗΓΟΡΙΕΣ ΣΕ ΧΑΜΗΛΟΤΕΡΟ ΕΠΙΠΕΔΟ:\n" + RESET_2);
+        budgetRevenue.printAllSubCategories();
+        System.out.println();
+    }
+
+    public static void showAfterChanges(BudgetRevenue budgetRevenue) {
+        System.out.println();
+        System.out.println("********************************************************* ΜΕΤΑ *********************************************************");
+        System.out.println();
+        DataOutput.printEntryWithAsciiTable(budgetRevenue);
+        System.out.println();
+        System.out.println(BOLD + "ΚΑΤΗΓΟΡΙΕΣ ΛΟΓΑΡΙΑΣΜΩΝ ΣΕ ΥΨΗΛΟΤΕΡΟ ΕΠΙΠΕΔΟ:\n" + RESET_2);
+        budgetRevenue.printSuperCategoriesTopDown();
+        System.out.println();
+        System.out.println(BOLD + "ΚΑΤΗΓΟΡΙΕΣ ΛΟΓΑΡΙΑΣΜΩΝ ΣΕ ΧΑΜΗΛΟΤΕΡΟ ΕΠΙΠΕΔΟ:\n" + RESET_2);
+        budgetRevenue.printAllSubCategories();
+        System.out.println();
+        System.out.println(GREEN + "ΟΙ ΑΛΛΑΓΕΣ ΟΛΟΚΛΗΡΩΘΗΚΑΝ ΜΕ ΕΠΙΤΥΧΙΑ.\n" + RESET + "ΕΠΙΣΤΡΟΦΗ ΣΤΟ ΚΥΡΙΟ ΜΕΝΟΥ..");
     }
 
 }

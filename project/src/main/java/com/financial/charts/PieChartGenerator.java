@@ -15,6 +15,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import static com.financial.menu.Colors.*;
+
 
 public class PieChartGenerator {
 
@@ -50,7 +52,7 @@ public class PieChartGenerator {
             fillMap(entries);
             createPie(InstanceMap, title);
             System.out.println();
-            System.out.println(Menu.GREEN + "Το διάγραμμα δημιουργήθηκε επιτυχώς" + Menu.RESET);
+            System.out.println(GREEN + "Το διάγραμμα δημιουργήθηκε επιτυχώς" + RESET);
         } catch (IOException e) {
             System.err.println("Σφάλμα: " + e.getMessage());
         }

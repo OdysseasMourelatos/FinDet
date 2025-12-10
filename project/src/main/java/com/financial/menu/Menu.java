@@ -33,7 +33,7 @@ public class Menu {
                 } else if (choice == 2) {
                     PrintingMenu.showSubMenuOfPrinting();
                 } else if (choice == 3) {
-                    printSubMenuOfChoice3();
+                    ChangesMenu.printChangesMenu();
                 } else if (choice == 4) {
                     System.out.println(Colors.BLUE + Colors.BOLD + "=== ΑΝΑΖΗΤΗΣΗ ΣΤΟΙΧΕΙΩΝ ===" + Colors.RESET + Colors.RESET_2);
                     System.out.println();

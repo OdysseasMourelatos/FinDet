@@ -56,35 +56,6 @@ public class ChartsMenu {
         }
     }
 
-    public static void showBeforeChanges(BudgetRevenue budgetRevenue) {
-        System.out.println();
-        System.out.println("********************************************************* ΠΡΙΝ *********************************************************");
-        System.out.println();
-        DataOutput.printEntryWithAsciiTable(budgetRevenue);
-        System.out.println();
-        System.out.println(Colors.BOLD + "ΚΑΤΗΓΟΡΙΕΣ ΣΕ ΥΨΗΛΟΤΕΡΟ ΕΠΙΠΕΔΟ:\n" + Colors.RESET_2);
-        budgetRevenue.printSuperCategoriesTopDown();
-        System.out.println();
-        System.out.println(Colors.BOLD + "ΚΑΤΗΓΟΡΙΕΣ ΣΕ ΧΑΜΗΛΟΤΕΡΟ ΕΠΙΠΕΔΟ:\n" + Colors.RESET_2);
-        budgetRevenue.printAllSubCategories();
-        System.out.println();
-    }
-
-    public static void showAfterChanges(BudgetRevenue budgetRevenue) {
-        System.out.println();
-        System.out.println("********************************************************* ΜΕΤΑ *********************************************************");
-        System.out.println();
-        DataOutput.printEntryWithAsciiTable(budgetRevenue);
-        System.out.println();
-        System.out.println(Colors.BOLD + "ΚΑΤΗΓΟΡΙΕΣ ΛΟΓΑΡΙΑΣΜΩΝ ΣΕ ΥΨΗΛΟΤΕΡΟ ΕΠΙΠΕΔΟ:\n" + Colors.RESET_2);
-        budgetRevenue.printSuperCategoriesTopDown();
-        System.out.println();
-        System.out.println(Colors.BOLD + "ΚΑΤΗΓΟΡΙΕΣ ΛΟΓΑΡΙΑΣΜΩΝ ΣΕ ΧΑΜΗΛΟΤΕΡΟ ΕΠΙΠΕΔΟ:\n" + Colors.RESET_2);
-        budgetRevenue.printAllSubCategories();
-        System.out.println();
-        System.out.println(Colors.GREEN + "ΟΙ ΑΛΛΑΓΕΣ ΟΛΟΚΛΗΡΩΘΗΚΑΝ ΜΕ ΕΠΙΤΥΧΙΑ.\n" + Colors.RESET + "ΕΠΙΣΤΡΟΦΗ ΣΤΟ ΚΥΡΙΟ ΜΕΝΟΥ..");
-    }
-
     public static void printTaxChartsSubMenu() {
         Scanner input = new Scanner(System.in);
         System.out.println();

@@ -44,8 +44,8 @@ public class ChangesMenu {
         int choice = input.nextInt();
         input.nextLine();
         switch (choice) {
-            case 1 -> modifyExistingRevenueAccount();
-            case 2 -> showExpensesChangesMenu(budgetType, publicInvestmentType);
+            case 1 -> RevenuesChangeMenu.modifyExistingRevenueAccount();
+            case 2 -> ExpensesChangeMenu.showExpensesChangesMenu(budgetType, publicInvestmentType);
         }
     }
 }
