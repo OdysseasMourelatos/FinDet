@@ -1,7 +1,6 @@
 package com.financial.menu;
 
-import com.financial.entries.BudgetRevenue;
-import com.financial.entries.RegularBudgetRevenue;
+import com.financial.entries.*;
 import com.financial.services.DataOutput;
 
 import static com.financial.menu.Colors.*;
@@ -69,6 +68,53 @@ public class RevenuesPrintingMenu {
                 printRevenue(budgetRevenue);
             }
             default -> System.out.println(RED + "Μη έγκυρη επιλογή" + RESET);
+        }
+    }
+
+    private static void printPublicInvestmentBudgetRevenues(int choice, int publicInvestmentType) {
+        switch (choice) {
+            case 1 -> {
+                switch (publicInvestmentType) {
+                    case 1 -> PublicInvestmentBudgetNationalRevenue.printMainPublicInvestmentBudgetNationalRevenues();
+                    case 2 -> PublicInvestmentBudgetCoFundedRevenue.printMainPublicInvestmentBudgetCoFundedRevenues();
+                    case 3 -> PublicInvestmentBudgetRevenue.printMainPublicInvestmentBudgetRevenues();
+                    default -> System.out.println(RED + "Μη έγκυρη επιλογή" + RESET);
+                }
+            }
+            case 2 -> {
+                switch (publicInvestmentType) {
+                    case 1 -> PublicInvestmentBudgetNationalRevenue.printPublicInvestmentBudgetNationalRevenues();
+                    case 2 -> PublicInvestmentBudgetCoFundedRevenue.printPublicInvestmentBudgetCoFundedRevenues();
+                    case 3 -> PublicInvestmentBudgetRevenue.printPublicInvestmentBudgetRevenuesFiltered();
+                    default -> System.out.println(RED + "Μη έγκυρη επιλογή" + RESET);
+                }
+            }
+            case 3 -> {
+                Scanner input = new Scanner(System.in);
+                System.out.print("Παρακαλούμε εισάγετε τον κωδικό του επιθυμητού λογαριασμού εσόδων: ");
+                String code = input.nextLine();
+                System.out.println();
+                PublicInvestmentBudgetRevenue budgetRevenue = null;
+                boolean isFiltered = false;
+                switch (publicInvestmentType) {
+                    case 1 -> budgetRevenue = PublicInvestmentBudgetNationalRevenue.findPublicInvestmentBudgetNationalRevenueWithCode(code);
+                    case 2 -> budgetRevenue = PublicInvestmentBudgetCoFundedRevenue.findPublicInvestmentBudgetCoFundedRevenueWithCode(code);
+                    case 3 -> {
+                        budgetRevenue = PublicInvestmentBudgetRevenue.findPublicInvestmentBudgetRevenueWithCode(code);
+                        isFiltered = true;
+                    }
+                }
+                if (budgetRevenue != null) {
+                    if (isFiltered) {
+                        DataOutput.printSinglePublicInvestmentBudgetRevenueFilteredWithAsciiTable(budgetRevenue);
+                    } else {
+                        DataOutput.printEntryWithAsciiTable(budgetRevenue);
+                    }
+                    printRevenue(budgetRevenue);
+                } else {
+                    System.out.println(RED + "Δεν βρέθηκε λογαριασμός με τον συγκεκριμένο κωδικό" + RESET);
+                }
+            }
         }
     }
 }
