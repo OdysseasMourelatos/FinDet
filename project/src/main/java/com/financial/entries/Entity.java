@@ -98,11 +98,11 @@ public class Entity {
         return sum;
     }
 
-    public long getSum(String budgetType) {
+    public long getSum(int budgetType) {
         return switch (budgetType) {
-            case "ΚΡΑΤΙΚΟΥ" -> getTotalSum();
-            case "ΤΑΚΤΙΚΟΥ" -> getRegularSum();
-            case "ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ" -> getPublicInvestmentSum();
+            case 0 -> getTotalSum();
+            case 1 -> getRegularSum();
+            case 2 -> getPublicInvestmentSum();
             default -> 0;
         };
     }

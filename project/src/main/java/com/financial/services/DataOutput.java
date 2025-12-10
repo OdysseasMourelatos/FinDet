@@ -107,7 +107,7 @@ public class DataOutput {
         System.out.println(at.render());
     }
 
-    public static void printEntitiesWithAsciiTable(String budgetType) {
+    public static void printEntitiesWithAsciiTable(int budgetType) {
         AsciiTable at = new AsciiTable();
         at.getRenderer().setCWC(new CWC_FixedWidth().add(20).add(70).add(20));
         at.addRule();
@@ -129,7 +129,7 @@ public class DataOutput {
         System.out.println(at.render());
     }
 
-    public static void printEntityWithAsciiTable(Entity entity, String budgetType) {
+    public static void printEntityWithAsciiTable(Entity entity, int budgetType) {
         AsciiTable at = new AsciiTable();
         at.getRenderer().setCWC(new CWC_FixedWidth().add(125));
         at.addRule();
@@ -137,11 +137,11 @@ public class DataOutput {
         at.addRule();
         System.out.println(at.render());
 
-        if (budgetType.equals("ΚΡΑΤΙΚΟΥ")) {
-            //printBudgetExpenseWithAsciiTable(entity.getAllBudgetExpenses()); // Αν υλοποιηθεί
-        } else if (budgetType.equals("ΤΑΚΤΙΚΟΥ")) {
+        if (budgetType == 0) {
+            //printBudgetExpenseWithAsciiTable(entity.getAllBudgetExpenses());
+        } else if (budgetType == 1) {
             printBudgetExpenseWithAsciiTable(entity.getRegularBudgetExpenses());
-        } else if (budgetType.equals("ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ")) {
+        } else if (budgetType == 2) {
             printPublicInvestmentBudgetExpenseWithAsciiTable(entity.getPublicInvestmentExpenses());
         }
     }
