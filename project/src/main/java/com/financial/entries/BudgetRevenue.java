@@ -82,6 +82,10 @@ public class BudgetRevenue extends BudgetEntry implements IBudgetRevenueLogic {
         DataOutput.printBudgetRevenuesWithAsciiTable(getMainBudgetRevenues(), BudgetRevenueHandling.calculateSum(getMainBudgetRevenues()));
     }
 
+    public static BudgetRevenue findBudgetRevenueWithCode(String code) {
+        return BudgetRevenueHandling.findRevenueWithCode(code, budgetRevenuesFiltered);
+    }
+
     public static ArrayList<BudgetRevenue> getBudgetRevenuesStartingWithCode(String code) {
         return BudgetRevenueHandling.getRevenuesStartingWithCode(code, budgetRevenuesFiltered);
     }

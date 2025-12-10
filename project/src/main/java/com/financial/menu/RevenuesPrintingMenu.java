@@ -1,5 +1,8 @@
 package com.financial.menu;
 
+import com.financial.entries.BudgetRevenue;
+import com.financial.services.DataOutput;
+
 import static com.financial.menu.Colors.*;
 import java.util.Scanner;
 
@@ -30,6 +33,23 @@ public class RevenuesPrintingMenu {
             case 1 -> printTotalRevenues(choice);
             case 2 -> printRegularRevenues(choice);
             case 3 -> printPublicInvestmentBudgetRevenues(choice, publicInvestmentType);
+            default -> System.out.println(RED + "Μη έγκυρη επιλογή" + RESET);
+        }
+    }
+
+    private static void printTotalRevenues(int choice) {
+        Scanner input = new Scanner(System.in);
+        switch (choice) {
+            case 1 -> BudgetRevenue.printMainBudgetRevenues();
+            case 2 -> BudgetRevenue.printAllBudgetRevenues();
+            case 3 -> {
+                System.out.print("Παρακαλούμε εισάγετε τον κωδικό του επιθυμητού λογαριασμού εσόδων: ");
+                String code = input.nextLine();
+                System.out.println();
+                BudgetRevenue budgetRevenue = BudgetRevenue.findBudgetRevenueWithCode(code);
+                DataOutput.printSingleBudgetRevenueWithAsciiTable(budgetRevenue);
+                printRevenue(budgetRevenue);
+            }
             default -> System.out.println(RED + "Μη έγκυρη επιλογή" + RESET);
         }
     }

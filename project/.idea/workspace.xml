@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="88d8a661-a47d-4ac5-b89a-2164a467de01" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/BudgetDataView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/menu/BudgetDataView.java" afterDir="false" />
-    </list>
+    <list default="true" id="88d8a661-a47d-4ac5-b89a-2164a467de01" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
