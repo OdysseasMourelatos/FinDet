@@ -71,6 +71,39 @@ public class DataOutput {
         System.out.println(at.render());
     }
 
+    public static void printBudgetRevenuesWithAsciiTable(ArrayList<? extends BudgetRevenue> revenues, long sum) {
+        AsciiTable at = new AsciiTable();
+
+        at.getRenderer().setCWC(new CWC_FixedWidth()
+                .add(20)
+                .add(40)
+                .add(20)
+                .add(20)
+                .add(20)
+        );
+
+        at.addRule();
+        at.addRow("Κωδικός Ταξινόμησης", "Ονομασία", "Τακτικός Προϋπολογισμός", "Προϋπολογισμός Δημόσιων Επενδύσεων", "Σύνολο");
+        at.addRule();
+
+        for (BudgetRevenue revenue : revenues) {
+            at.addRow(
+                    revenue.getCode(),
+                    revenue.getDescription(),
+                    String.format("%,d", revenue.getRegularAmount()),
+                    String.format("%,d", revenue.getPublicInvestmentAmount()),
+                    String.format("%,d", revenue.getAmount())
+            );
+            at.addRule();
+        }
+        if (sum != 0) {
+            at.addRow("", "", String.format("%,d", BudgetRevenueHandling.calculateSum(RegularBudgetRevenue.getAllRegularBudgetRevenues())), String.format("%,d", BudgetRevenueHandling.calculateSum(PublicInvestmentBudgetRevenue.getPublicInvestmentBudgetRevenuesFiltered())) , String.format("%,d", sum));
+            at.addRule();
+        }
+
+        System.out.println(at.render());
+    }
+
     public static <T extends BudgetEntry> void printEntryWithAsciiTable(T entry) {
         AsciiTable at = new AsciiTable();
 
