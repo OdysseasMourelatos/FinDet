@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="88d8a661-a47d-4ac5-b89a-2164a467de01" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/checkstyle-idea.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/project.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/remote-targets.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FinDet.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chart.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/checkstyle.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/financial/charts/PieChartGenerator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/BudgetExpense.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/BudgetRevenue.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/Entity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetCoFundedRevenue.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetExpense.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetNationalRevenue.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetRevenue.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/RegularBudgetExpense.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/RegularBudgetRevenue.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/financial/menu/Menu.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/financial/pdf/BudgetExpenseConvertToPdf.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/financial/pdf/BudgetRevenueConvertToPdf.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/financial/pdf/PdfFormat.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/financial/services/BudgetExpenseHandling.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/financial/services/BudgetRevenueHandling.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/financial/services/DataInput.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/financial/services/DataOutput.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/financial/services/IBudgetRevenueChanges.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/financial/services/IBudgetRevenueLogic.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/financial/strategies/IExpenseAdjustmentStrategy.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/financial/strategies/PercentageAllocationAdjustmentStrategy.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/financial/strategies/filters/AccountFilter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/financial/strategies/filters/ExpenseFilter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/financial/strategies/filters/MatchAllFilter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/financial/strategies/filters/ServiceFilter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/financial/strategies/operations/AdjustmentOperation.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/financial/strategies/operations/FixedAmountOperation.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/financial/strategies/operations/PercentageOperation.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/financial/BudgetEntryTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/financial/BudgetExpenseTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/financial/BudgetRevenueTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/financial/DataInputTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/financial/DataOutputTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/financial/DataUpdateTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/checkstyle-cachefile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/checkstyle-checker.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/checkstyle-result.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/financial/charts/PieChartGenerator.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/financial/entries/BudgetEntry.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/financial/entries/BudgetExpense.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/financial/entries/BudgetRevenue$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/financial/entries/BudgetRevenue.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/financial/entries/Entity.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/financial/entries/PublicInvestmentBudgetExpense.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/financial/entries/PublicInvestmentBudgetRevenue.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/financial/entries/RegularBudgetExpense.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/financial/entries/RegularBudgetRevenue.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/financial/menu/Menu.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/financial/pdf/BudgetRevenueConvertToPdf.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/financial/services/BudgetExpenseHandling.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/financial/services/BudgetRevenueHandling.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/financial/services/DataInput.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/financial/services/DataOutput.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/financial/services/DataUpdate.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/financial/strategies/IExpenseAdjustmentStrategy.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/financial/strategies/PercentageAllocationAdjustmentStrategy.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/financial/strategies/filters/AccountFilter.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/financial/strategies/filters/ExpenseFilter.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/financial/strategies/filters/MatchAllFilter.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/financial/strategies/filters/ServiceFilter.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/financial/strategies/operations/AdjustmentOperation.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/financial/strategies/operations/FixedAmountOperation.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/financial/strategies/operations/PercentageOperation.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.AppTest.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.BudgetEntryTest.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.BudgetExpenseTest.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.BudgetRevenueTest.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.DataInputTest.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.DataOutputTest.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.DataUpdateTest.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.EntityTest.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/surefire-reports/com.financial.AppTest.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/surefire-reports/com.financial.BudgetEntryTest.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/surefire-reports/com.financial.BudgetExpenseTest.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/surefire-reports/com.financial.BudgetRevenueTest.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/surefire-reports/com.financial.DataInputTest.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/surefire-reports/com.financial.DataOutputTest.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/surefire-reports/com.financial.DataUpdateTest.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/surefire-reports/com.financial.EntityTest.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/test-classes/com/financial/AppTest.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/temp_GovernmentBudget.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ΕΣΟΔΑ_ΚΡΑΤΙΚΟΥ_ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΔΗΜΟΣΙΩΝ_ΕΠΕΝΔΥΣΕΩΝ_ΕΣΟΔΑ.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΔΗΜΟΣΙΩΝ_ΕΠΕΝΔΥΣΕΩΝ_ΠΙΣΤΩΣΕΙΣ_ΚΑΤΑ_ΕΙΔΙΚΟ_ΦΟΡΕΑ_ΚΑΙ_ΜΕΙΖΟΝΑ_ΚΑΤΗΓΟΡΙΑ_ΔΑΠΑΝΗΣ.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ΤΑΚΤΙΚΟΣ_ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΠΙΣΤΩΣΕΙΣ_ΚΑΤΑ_ΕΙΔΙΚΟ_ΦΟΡΕΑ_ΚΑΙ_ΜΕΙΖΟΝΑ_ΚΑΤΗΓΟΡΙΑ_ΔΑΠΑΝΗΣ.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/income_expenses_chart.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/BudgetEntry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/BudgetEntry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/BudgetExpense.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/BudgetRevenue.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/Choise1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/menu/CSVDownloadAndSavingMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/Choise6.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/menu/ChartsMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/Colors.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/menu/Colors.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/DataInput.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/DataUpdate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/services/DataUpdate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/Entity.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/FixedAssetsRevenue.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/MainMenu.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/Menu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/OtherCurrentRevenue.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/PublicInvestmentBudgetExpense.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/PublicInvestmentBudgetRevenue.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/RegularBudgetExpense.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/SocialContributionsRevenue.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/TaxRevenue.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/AppTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/AppTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/EntityTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/EntityTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/BudgetRevenue.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/DataInput.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/DataUpdate.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/Entity.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/FixedAssetsRevenue.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/financial/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/PublicInvestmentBudgetExpense.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/PublicInvestmentBudgetRevenue.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/RegularBudgetExpense.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/SocialContributionsRevenue.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/TaxRevenue.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ΚΡΑΤΙΚΟΣ_ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΕΣΟΔΑ.csv" beforeDir="false" afterPath="$PROJECT_DIR$/ΤΑΚΤΙΚΟΣ_ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΕΣΟΔΑ.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ΚΩΔΙΚΟΣ_ΚΑΙ_ΟΝΟΜΑΣΙΑ_ΦΟΡΕΩΝ.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΔΗΜΟΣΙΩΝ_ΕΠΕΝΔΥΣΕΩΝ_ΠΙΣΤΩΣΕΙΣ_ΚΑΤΑ_ΜΕΙΖΟΝΑ_ΚΑΤΗΓΟΡΙΑ_ΔΑΠΑΝΗΣ.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ΤΑΚΤΙΚΟΣ_ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΠΙΣΤΩΣΕΙΣ_ΚΑΤΑ_ΜΕΙΖΟΝΑ_ΚΑΤΗΓΟΡΙΑ_ΔΑΠΑΝΗΣ.csv" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;OdysseasMourelatos&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/OdysseasMourelatos/FinDet.git&quot;,
+    &quot;accountId&quot;: &quot;4a07f5aa-ee66-4335-ac07-0ad25d8bbedf&quot;
+  }
+}</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="35y1zu9Si3D736wt7hwePfp1STv" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Run",
+    "JUnit.BudgetEntryTest.executor": "Run",
+    "JUnit.BudgetExpenseTest.executor": "Run",
+    "JUnit.BudgetRevenueTest.executor": "Run",
+    "JUnit.DataInputTest.executor": "Run",
+    "JUnit.DataOutputTest.executor": "Run",
+    "JUnit.DataUpdateTest.executor": "Run",
+    "JUnit.EntityTest.executor": "Run",
+    "JUnit.java in FinDet.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "Merging feature/thomas-menu",
+    "kotlin-language-version-configured": "true",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "preferences.general"
+  }
+}]]></component>
+  <component name="RunManager" selected="JUnit.BudgetEntryTest">
+    <configuration name="BudgetEntryTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="FinDet" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.financial.entries.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.financial" />
+      <option name="MAIN_CLASS_NAME" value="com.financial.BudgetEntryTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BudgetExpenseTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="FinDet" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.financial.entries.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.financial" />
+      <option name="MAIN_CLASS_NAME" value="com.financial.BudgetExpenseTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="java in FinDet" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="FinDet" />
+      <option name="TEST_OBJECT" value="directory" />
+      <dir value="$PROJECT_DIR$/src/test/java" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="project" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="project" />
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.BudgetEntryTest" />
+        <item itemvalue="JUnit.java in FinDet" />
+        <item itemvalue="JUnit.BudgetExpenseTest" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.27397.103" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="88d8a661-a47d-4ac5-b89a-2164a467de01" name="Changes" comment="" />
+      <created>1764068199423</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1764068199423</updated>
+    </task>
+    <servers />
+  </component>
+</project>
