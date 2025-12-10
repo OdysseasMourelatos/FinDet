@@ -6,6 +6,34 @@ import java.util.ArrayList;
 
 public class BudgetRevenueHandling {
 
+    //Calculates sum based on the main codes (2-digits)
+    public static long calculateSum(ArrayList<? extends BudgetRevenue> budgetRevenues) {
+        long sum = 0;
+        for (BudgetRevenue budgetRevenue : budgetRevenues) {
+            if (budgetRevenue.getCode().length() == 2) {
+                sum += budgetRevenue.getAmount();
+            }
+        }
+        return sum;
+    }
+
+    //Finds super category based on the level of hierarchy of the currentRevenue
+    //e.g. revenue with code 113 has revenue with code 11 as super category
+    public static <T extends BudgetRevenue> T findSuperCategory(T currentRevenue, ArrayList<T> revenues) {
+        int level = currentRevenue.getLevelOfHierarchy();
+        String tempCode;
+
+        switch (level) {
+            case 2 -> tempCode = currentRevenue.getCode().substring(0, 2);
+            case 3 -> tempCode = currentRevenue.getCode().substring(0, 3);
+            case 4 -> tempCode = currentRevenue.getCode().substring(0, 5);
+            case 5 -> tempCode = currentRevenue.getCode().substring(0, 7);
+            default -> tempCode = "0";
+        }
+
+        return findRevenueWithCode(tempCode, revenues);
+    }
+
     // Μέθοδος 1: Εύρεση Εσόδου με Βάση τον Κωδικό
     public static <T extends BudgetRevenue> T findRevenueWithCode(String code, ArrayList<T> revenues) {
         for (T revenue : revenues) {
@@ -27,37 +55,14 @@ public class BudgetRevenueHandling {
         return mainBudgetRevenues;
     }
 
-    // Μέθοδος 3: Υπολογισμός Αθροίσματος
-    public static long calculateSum(ArrayList<? extends BudgetRevenue> budgetRevenues) {
-        long sum = 0;
-        for (BudgetRevenue budgetRevenue : budgetRevenues) {
-            if (budgetRevenue.getCode().length() == 2) {
-                sum += budgetRevenue.getAmount();
-            }
-        }
-        return sum;
-    }
+
 
     // Μέθοδος 4: Εκτύπωση Λογαριασμών
     public static void printMainBudgetRevenues(ArrayList<? extends BudgetRevenue> budgetRevenues) {
         DataOutput.printRevenueWithAsciiTable(getMainBudgetRevenues(budgetRevenues), calculateSum(budgetRevenues));
     }
 
-    // Μέθοδος 5: Εύρεση Γονέα (Super Category)
-    public static <T extends BudgetRevenue> T findSuperCategory(T currentRevenue, ArrayList<T> revenues) {
-        int level = currentRevenue.getLevelOfHierarchy();
-        String tempCode;
 
-        switch (level) {
-            case 2 -> tempCode = currentRevenue.getCode().substring(0, 2);
-            case 3 -> tempCode = currentRevenue.getCode().substring(0, 3);
-            case 4 -> tempCode = currentRevenue.getCode().substring(0, 5);
-            case 5 -> tempCode = currentRevenue.getCode().substring(0, 7);
-            default -> tempCode = "0";
-        }
-
-        return findRevenueWithCode(tempCode, revenues);
-    }
 
     // Μέθοδος 6: Εύρεση Όλων των Υποκατηγοριών
     public static <T extends BudgetRevenue> ArrayList<T> findAllSubCategories(T parent, ArrayList<T> revenues) {
