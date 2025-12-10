@@ -1,6 +1,7 @@
 package com.financial.entries;
 
 import com.financial.services.BudgetRevenueHandling;
+import com.financial.services.DataInput;
 import com.financial.services.DataOutput;
 
 import java.util.ArrayList;
@@ -43,6 +44,33 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue {
                 return b1.getCode().compareTo(b2.getCode());
             }
         });
+    }
+
+    public static void filterPublicInvestmentBudgetRevenues() {
+        ArrayList<Integer> repeatedRevenues = new ArrayList<>();
+
+        //Finds codes that are repeated in the list
+        // Adds to a new list the 2 placements in the list where we have repeated codes
+        for (int i = 1; i < publicInvestmentBudgetRevenuesFiltered.size(); i++) {
+            if (publicInvestmentBudgetRevenuesFiltered.get(i).getCode().equals(publicInvestmentBudgetRevenuesFiltered.get(i-1).getCode())) {
+                repeatedRevenues.add(i);
+            }
+        }
+
+       /*With a loop starting from the end of the list
+         we in a way merge those values that are repeated into a single object
+         then remove the other one
+       */
+        for (int j = repeatedRevenues.size() - 1; j >= 0; j--) {
+            Integer i = repeatedRevenues.get(j);
+            PublicInvestmentBudgetRevenue b1 = publicInvestmentBudgetRevenuesFiltered.get(i);
+            PublicInvestmentBudgetRevenue b2 = publicInvestmentBudgetRevenuesFiltered.get(i-1);
+            publicInvestmentBudgetRevenuesFiltered.remove(b1);
+            b2.setNationalAmount(b2.getNationalAmount() + b1.getNationalAmount());
+            b2.setCoFundedAmount(b2.getCoFundedAmount() + b1.getCoFundedAmount());
+            b2.setAmount(b2.getAmount() + b1.getAmount());
+        }
+        DataInput.createBudgetRevenueFilteredFromPublicInvestmentBudgetRevenue();
     }
 
     public static ArrayList<PublicInvestmentBudgetRevenue> getPublicInvestmentBudgetRevenues() {
