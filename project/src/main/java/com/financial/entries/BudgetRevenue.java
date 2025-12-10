@@ -73,21 +73,19 @@ public class BudgetRevenue extends BudgetEntry implements IBudgetRevenueLogic {
     public long calculateSum() {
         return BudgetRevenueHandling.calculateSum(budgetRevenues);
     }
+    //Supercategories methods
 
+    @Override
     public BudgetRevenue findSuperCategory() {
-        return BudgetRevenueHandling.findSuperCategory(this, BudgetRevenue.budgetRevenues);
+        return BudgetRevenueHandling.findSuperCategory(this, budgetRevenues);
     }
 
+    @Override
     public ArrayList<BudgetRevenue> getSuperCategories() {
-        ArrayList<BudgetRevenue> superCategories = new ArrayList<>();
-        BudgetRevenue superCategory = findSuperCategory();
-        while (superCategory != null) {
-            superCategories.add(superCategory);
-            superCategory = superCategory.findSuperCategory();
-        }
-        return superCategories;
+        return BudgetRevenueHandling.getSuperCategories(this, budgetRevenues);
     }
 
+    @Override
     public void printSuperCategoriesTopDown() {
         ArrayList<BudgetRevenue> superCategories = new ArrayList<>();
         if (getSuperCategories().isEmpty()) {
@@ -100,6 +98,7 @@ public class BudgetRevenue extends BudgetEntry implements IBudgetRevenueLogic {
         }
     }
 
+    @Override
     public void printSuperCategoriesBottomsUp() {
         if (getSuperCategories().isEmpty()) {
             System.out.println("Δεν υπάρχουν κατηγορίες σε υψηλότερη ιεραρχία");
