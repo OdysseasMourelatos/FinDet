@@ -34,8 +34,6 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue {
         publicInvestmentBudgetRevenuesFiltered.add(this);
     }
 
-    //Class Methods
-
     //Creation of PublicInvestmentBudgetRevenuesSorted
     public static void sortPublicInvestmentBudgetRevenuesByCode() {
         Collections.sort(publicInvestmentBudgetRevenuesFiltered, new Comparator<PublicInvestmentBudgetRevenue>() {
@@ -72,6 +70,8 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue {
         }
         DataInput.createBudgetRevenueFilteredFromPublicInvestmentBudgetRevenue();
     }
+
+    //Class Methods
 
     public static ArrayList<PublicInvestmentBudgetRevenue> getPublicInvestmentBudgetRevenues() {
         return publicInvestmentBudgetRevenues;
