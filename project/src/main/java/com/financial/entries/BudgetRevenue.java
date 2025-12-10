@@ -8,18 +8,31 @@ import java.util.*;
 
 public class BudgetRevenue extends BudgetEntry implements IBudgetRevenueLogic {
 
-    protected static ArrayList <BudgetRevenue> budgetRevenues = new ArrayList<>();
+    //Constructors & Fields
+    protected static ArrayList<BudgetRevenue> budgetRevenues = new ArrayList<>();
+    protected static ArrayList <BudgetRevenue> budgetRevenuesFiltered = new ArrayList<>();
 
     public BudgetRevenue(String code, String description, String category, long amount) {
         super(code, description, category, amount);
-    }
-
-    public void addBudgetRevenueToArrayList() {
         budgetRevenues.add(this);
     }
 
+    private long regularAmount;
+    private long publicInvestmentAmount;
+
+    public BudgetRevenue(String code, String description, String category, long regularAmount, long publicInvestmentAmount, long amount) {
+        super(code, description, category, amount);
+        this.regularAmount = regularAmount;
+        this.publicInvestmentAmount = publicInvestmentAmount;
+        budgetRevenuesFiltered.add(this);
+    }
+
+    public void addBudgetRevenueToArrayList() {
+        budgetRevenuesFiltered.add(this);
+    }
+
     public static void sortBudgetRevenuesByCode() {
-        Collections.sort(budgetRevenues, new Comparator<BudgetRevenue>() {
+        Collections.sort(budgetRevenuesFiltered, new Comparator<BudgetRevenue>() {
             @Override
             public int compare(BudgetRevenue b1, BudgetRevenue b2) {
                 return b1.getCode().compareTo(b2.getCode());
@@ -30,11 +43,11 @@ public class BudgetRevenue extends BudgetEntry implements IBudgetRevenueLogic {
     //Class Methods
 
     public static ArrayList<BudgetRevenue> getAllBudgetRevenues() {
-        return budgetRevenues;
+        return budgetRevenuesFiltered;
     }
 
     public static void printAllBudgetRevenues() {
-        DataOutput.printRevenueWithAsciiTable(budgetRevenues, BudgetRevenueHandling.calculateSum(budgetRevenues));
+        DataOutput.printRevenueWithAsciiTable(budgetRevenuesFiltered, BudgetRevenueHandling.calculateSum(budgetRevenuesFiltered));
     }
 
     public static ArrayList<BudgetRevenue> getMainBudgetRevenues() {
@@ -46,7 +59,7 @@ public class BudgetRevenue extends BudgetEntry implements IBudgetRevenueLogic {
     }
 
     public static ArrayList<BudgetRevenue> getBudgetRevenuesStartingWithCode(String code) {
-        return BudgetRevenueHandling.getRevenuesStartingWithCode(code, budgetRevenues);
+        return BudgetRevenueHandling.getRevenuesStartingWithCode(code, budgetRevenuesFiltered);
     }
 
     public static void printBudgetRevenuesStartingWithCode(String code) {
@@ -71,18 +84,18 @@ public class BudgetRevenue extends BudgetEntry implements IBudgetRevenueLogic {
     //Sum Method
     @Override
     public long calculateSum() {
-        return BudgetRevenueHandling.calculateSum(budgetRevenues);
+        return BudgetRevenueHandling.calculateSum(budgetRevenuesFiltered);
     }
     //Supercategories methods
 
     @Override
     public BudgetRevenue findSuperCategory() {
-        return BudgetRevenueHandling.findSuperCategory(this, budgetRevenues);
+        return BudgetRevenueHandling.findSuperCategory(this, budgetRevenuesFiltered);
     }
 
     @Override
     public ArrayList<BudgetRevenue> getSuperCategories() {
-        return BudgetRevenueHandling.getSuperCategories(this, budgetRevenues);
+        return BudgetRevenueHandling.getSuperCategories(this, budgetRevenuesFiltered);
     }
 
     @Override
@@ -111,7 +124,7 @@ public class BudgetRevenue extends BudgetEntry implements IBudgetRevenueLogic {
 
     @Override
     public ArrayList<BudgetRevenue> findAllSubCategories() {
-        return BudgetRevenueHandling.findAllSubCategories(this, budgetRevenues);
+        return BudgetRevenueHandling.findAllSubCategories(this, budgetRevenuesFiltered);
     }
 
     @Override
@@ -121,7 +134,7 @@ public class BudgetRevenue extends BudgetEntry implements IBudgetRevenueLogic {
 
     @Override
     public ArrayList<BudgetRevenue> findNextLevelSubCategories() {
-        return BudgetRevenueHandling.findNextLevelSubCategories(this, budgetRevenues);
+        return BudgetRevenueHandling.findNextLevelSubCategories(this, budgetRevenuesFiltered);
     }
 
     @Override
