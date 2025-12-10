@@ -6,13 +6,29 @@ import com.financial.services.DataOutput;
 import java.util.ArrayList;
 
 public class PublicInvestmentBudgetRevenue extends BudgetRevenue {
+
+    //Constructor & Fields
+
     private final String type;
     protected static ArrayList<PublicInvestmentBudgetRevenue> publicInvestmentBudgetRevenues = new ArrayList<>();
+    protected static ArrayList<PublicInvestmentBudgetRevenue> publicInvestmentBudgetRevenuesFiltered = new ArrayList<>();
 
     public PublicInvestmentBudgetRevenue(String code, String description, String category, String type, long amount) {
         super(code, description, category, amount);
         this.type = type;
         publicInvestmentBudgetRevenues.add(this);
+    }
+
+    //Extra constructor that creates PublicInvestmentBudgetRevenues (filtered)
+    private long nationalAmount;
+    private long coFundedAmount;
+
+    public PublicInvestmentBudgetRevenue(String code, String description, String category, String type, long nationalAmount, long coFundedAmount, long amount) {
+        super(code, description, category, amount);
+        this.type = type;
+        this.nationalAmount = nationalAmount;
+        this.coFundedAmount = coFundedAmount;
+        publicInvestmentBudgetRevenuesFiltered.add(this);
     }
 
     public static ArrayList<PublicInvestmentBudgetRevenue> getAllPublicInvestmentBudgetRevenues() {
@@ -58,6 +74,22 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue {
 
     public String getType() {
         return type;
+    }
+
+    public long getNationalAmount() {
+        return nationalAmount;
+    }
+
+    public long getCoFundedAmount() {
+        return coFundedAmount;
+    }
+
+    private void setNationalAmount(long nationalAmount) {
+        this.nationalAmount = nationalAmount;
+    }
+
+    private void setCoFundedAmount(long coFundedAmount) {
+        this.coFundedAmount = coFundedAmount;
     }
 
     @Override
