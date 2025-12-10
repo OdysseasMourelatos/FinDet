@@ -2,10 +2,11 @@ package com.financial.entries;
 
 import com.financial.services.BudgetRevenueHandling;
 import com.financial.services.DataOutput;
+import com.financial.services.IBudgetRevenueLogic;
 
 import java.util.*;
 
-public class BudgetRevenue extends BudgetEntry {
+public class BudgetRevenue extends BudgetEntry implements IBudgetRevenueLogic {
 
     protected static ArrayList <BudgetRevenue> budgetRevenues = new ArrayList<>();
 
@@ -52,6 +53,8 @@ public class BudgetRevenue extends BudgetEntry {
         DataOutput.printRevenueWithAsciiTable(getBudgetRevenuesStartingWithCode(code), 0);
     }
 
+    //Method that all subclasses easily inherit
+
     public int getLevelOfHierarchy() {
         return switch (getCode().length()) {
             case 2 -> 1;   // "11" - top level
@@ -61,6 +64,14 @@ public class BudgetRevenue extends BudgetEntry {
             case 10 -> 5;  // "1110103001" - fifth level
             default -> 0;  // unknown
         };
+    }
+
+    //*Implementation of methods*
+
+    //Sum Method
+    @Override
+    public long calculateSum() {
+        return BudgetRevenueHandling.calculateSum(budgetRevenues);
     }
 
     public BudgetRevenue findSuperCategory() {
@@ -143,6 +154,8 @@ public class BudgetRevenue extends BudgetEntry {
         ArrayList<BudgetRevenue> nextLevelSubCategories = findNextLevelSubCategories();
         DataOutput.printRevenueWithAsciiTable(findNextLevelSubCategories(), 0);
     }
+
+    //*Change methods (soon to be moved explicitly to subclasses)*
 
     public void setAmountOfNextLevelSubCategoriesWithEqualDistribution(long change) {
         ArrayList<BudgetRevenue> nextLevelSubCategories = findNextLevelSubCategories();
