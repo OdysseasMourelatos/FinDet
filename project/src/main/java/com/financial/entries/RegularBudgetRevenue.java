@@ -14,6 +14,8 @@ public class RegularBudgetRevenue extends BudgetRevenue {
         regularBudgetRevenues.add(this);
     }
 
+    //Class Methods
+
     public static ArrayList<RegularBudgetRevenue> getAllRegularBudgetRevenues() {
         return regularBudgetRevenues;
     }
@@ -22,9 +24,16 @@ public class RegularBudgetRevenue extends BudgetRevenue {
         DataOutput.printRevenueWithAsciiTable(regularBudgetRevenues, BudgetRevenueHandling.calculateSum(regularBudgetRevenues));
     }
 
-    @Override
-    public RegularBudgetRevenue findSuperCategory() {
-        return BudgetRevenueHandling.findSuperCategory(this, regularBudgetRevenues);
+    public static ArrayList<RegularBudgetRevenue> getMainRegularBudgetRevenues() {
+        return BudgetRevenueHandling.getMainBudgetRevenues(getAllRegularBudgetRevenues());
+    }
+
+    public static void printMainRegularBudgetRevenues() {
+        BudgetRevenueHandling.printMainBudgetRevenues(getMainRegularBudgetRevenues());
+    }
+
+    public static RegularBudgetRevenue findRegularBudgetRevenueWithCode(String code) {
+        return BudgetRevenueHandling.findRevenueWithCode(code, regularBudgetRevenues);
     }
 
     @Override
