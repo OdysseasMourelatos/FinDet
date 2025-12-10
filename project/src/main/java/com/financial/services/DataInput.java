@@ -98,24 +98,73 @@ public class DataInput {
     public static void createBudgetRevenueFromCSV() {
         ArrayList<RegularBudgetRevenue> regularBudgetRevenues = RegularBudgetRevenue.getAllRegularBudgetRevenues();
         ArrayList<PublicInvestmentBudgetRevenue> publicInvestmentBudgetRevenues =  PublicInvestmentBudgetRevenue.getPublicInvestmentBudgetRevenues();
-        for (RegularBudgetRevenue revenue : regularBudgetRevenues) {
-            BudgetRevenue budgetRevenue = new BudgetRevenue(revenue.getCode(), revenue.getDescription(), revenue.getCategory(), revenue.getAmount());
-            budgetRevenue.addBudgetRevenueToArrayList();
+        ArrayList<String> distinctCodes = new ArrayList<>();
+        ArrayList<String> repeatedCodes = new ArrayList<>();
+        for (RegularBudgetRevenue regularBudgetRevenue : regularBudgetRevenues) {
+            boolean repeated = false;
+            for (PublicInvestmentBudgetRevenue publicInvestmentBudgetRevenue : publicInvestmentBudgetRevenues) {
+                if (regularBudgetRevenue.getCode().equals(publicInvestmentBudgetRevenue.getCode())) {
+                    repeated = true;
+                }
+            }
+            if (repeated) {
+                repeatedCodes.add(regularBudgetRevenue.getCode());
+            } else {
+                distinctCodes.add(regularBudgetRevenue.getCode());
+                regularBudgetRevenue.addBudgetRevenueToArrayList();
+            }
         }
 
-        for (PublicInvestmentBudgetRevenue revenue : publicInvestmentBudgetRevenues) {
+        for (PublicInvestmentBudgetRevenue publicInvestmentBudgetRevenue : publicInvestmentBudgetRevenues) {
+            boolean repeated = false;
+            for (RegularBudgetRevenue regularBudgetRevenue : regularBudgetRevenues) {
+                if (regularBudgetRevenue.getCode().equals(publicInvestmentBudgetRevenue.getCode())) {
+                    repeated = true;
+                }
+            }
+            if (!repeated) {
+                distinctCodes.add(publicInvestmentBudgetRevenue.getCode());
+                publicInvestmentBudgetRevenue.addBudgetRevenueToArrayList();
+            }
+        }
 
-            BudgetRevenue existingRevenue = BudgetRevenueHandling.findRevenueWithCode(revenue.getCode(), BudgetRevenue.getAllBudgetRevenues());
+        for (String repeatedCode : repeatedCodes) {
+            try {
+                boolean[] activated = {false, false, false};
+                RegularBudgetRevenue regularBudgetRevenue = BudgetRevenueHandling.findRevenueWithCode(repeatedCode, RegularBudgetRevenue.getAllRegularBudgetRevenues());
+                if (regularBudgetRevenue != null) {
 
-            if (existingRevenue != null) {
-                // Περίπτωση Α: Ο κωδικός υπάρχει, Κάνουμε Άθροισμα
-                long newAmount = existingRevenue.getAmount() + revenue.getAmount();
-                existingRevenue.setAmount(newAmount);
+                    activated[0] = true;
+                }
+                PublicInvestmentBudgetRevenue publicInvestmentBudgetRevenue1 = BudgetRevenueHandling.findRevenueWithCode(repeatedCode, PublicInvestmentBudgetNationalRevenue.getPublicInvestmentBudgetNationalRevenues());
+                if (publicInvestmentBudgetRevenue1 != null) {
+                    activated[1] = true;
+                }
+                PublicInvestmentBudgetRevenue publicInvestmentBudgetRevenue2 = BudgetRevenueHandling.findRevenueWithCode(repeatedCode, PublicInvestmentBudgetCoFundedRevenue.getPublicInvestmentBudgetCoFundedRevenues());
+                if (publicInvestmentBudgetRevenue2 != null) {
+                    activated[2] = true;
+                }
 
-            } else {
-                // Περίπτωση Β: Ο κωδικός δεν υπάρχει (Μόνο Π.Δ.Ε.), Δημιουργία Νέου
-                BudgetRevenue budgetRevenue = new BudgetRevenue(revenue.getCode(), revenue.getDescription(), revenue.getCategory(), revenue.getAmount());
+                BudgetRevenue budgetRevenue;
+
+                if (activated[0] && activated[1] && activated[2]) {
+                    budgetRevenue = new BudgetRevenue(regularBudgetRevenue.getCode(), regularBudgetRevenue.getDescription(), regularBudgetRevenue.getCategory(),
+                            regularBudgetRevenue.getAmount() + publicInvestmentBudgetRevenue1.getAmount() + publicInvestmentBudgetRevenue2.getAmount());
+                } else if (activated[0]) {
+                    if (activated[1]) {
+                        budgetRevenue = new BudgetRevenue(regularBudgetRevenue.getCode(), regularBudgetRevenue.getDescription(), regularBudgetRevenue.getCategory(),
+                                regularBudgetRevenue.getAmount() + publicInvestmentBudgetRevenue1.getAmount());
+                    } else {
+                        budgetRevenue = new BudgetRevenue(regularBudgetRevenue.getCode(), regularBudgetRevenue.getDescription(), regularBudgetRevenue.getCategory(),
+                                regularBudgetRevenue.getAmount() + publicInvestmentBudgetRevenue2.getAmount());
+                    }
+                } else {
+                    budgetRevenue = new BudgetRevenue(publicInvestmentBudgetRevenue1.getCode(), publicInvestmentBudgetRevenue1.getDescription(), publicInvestmentBudgetRevenue1.getCategory(),
+                            publicInvestmentBudgetRevenue1.getAmount() + publicInvestmentBudgetRevenue2.getAmount());
+                }
                 budgetRevenue.addBudgetRevenueToArrayList();
+            } catch (NullPointerException e) {
+                return;
             }
         }
         BudgetRevenue.sortBudgetRevenuesByCode();
