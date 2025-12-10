@@ -45,7 +45,23 @@ public class BudgetRevenueHandling {
         return superCategories;
     }
 
-    // Μέθοδος 1: Εύρεση Εσόδου με Βάση τον Κωδικό
+    //Sub Categories
+
+    /*If the parent has its code starting with the same digits as its child,
+    and it's not the same object, then it must be his child
+    e.g. 11 (parent), 113 child, 11311 child*/
+
+    public static <T extends BudgetRevenue> ArrayList<T> findAllSubCategories(T parent, ArrayList<T> revenues) {
+        ArrayList<T> subCategories = new ArrayList<>();
+        for (T budgetRevenue : revenues) {
+            if (budgetRevenue.getCode().startsWith(parent.getCode()) && !(budgetRevenue.equals(parent))) {
+                subCategories.add(budgetRevenue);
+            }
+        }
+        return subCategories;
+    }
+
+    //Finds revenue
     public static <T extends BudgetRevenue> T findRevenueWithCode(String code, ArrayList<T> revenues) {
         for (T revenue : revenues) {
             if (revenue.getCode().equals(code)) {
@@ -55,7 +71,7 @@ public class BudgetRevenueHandling {
         return null;
     }
 
-    // Μέθοδος 2: Εύρεση Bασικών Λογαριασμών
+    //Returns only revenues with 2 digits
     public static ArrayList<BudgetRevenue> getMainBudgetRevenues(ArrayList<? extends BudgetRevenue> budgetRevenues) {
         ArrayList<BudgetRevenue> mainBudgetRevenues = new ArrayList<>();
         for (BudgetRevenue budgetRevenue : budgetRevenues) {
@@ -66,26 +82,7 @@ public class BudgetRevenueHandling {
         return mainBudgetRevenues;
     }
 
-
-
-    // Μέθοδος 4: Εκτύπωση Λογαριασμών
     public static void printMainBudgetRevenues(ArrayList<? extends BudgetRevenue> budgetRevenues) {
         DataOutput.printRevenueWithAsciiTable(getMainBudgetRevenues(budgetRevenues), calculateSum(budgetRevenues));
-    }
-
-
-
-    // Μέθοδος 6: Εύρεση Όλων των Υποκατηγοριών
-    public static <T extends BudgetRevenue> ArrayList<T> findAllSubCategories(T parent, ArrayList<T> revenues) {
-        ArrayList<T> subCategories = new ArrayList<>();
-
-        for (T budgetRevenue : revenues) {
-            if (budgetRevenue.getCode().startsWith(parent.getCode()) &&
-                    !(budgetRevenue.equals(parent))) {
-
-                subCategories.add(budgetRevenue);
-            }
-        }
-        return subCategories;
     }
 }
