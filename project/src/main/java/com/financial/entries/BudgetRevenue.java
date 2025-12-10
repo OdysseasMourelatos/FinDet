@@ -107,6 +107,30 @@ public class BudgetRevenue extends BudgetEntry implements IBudgetRevenueLogic {
         }
     }
 
+    //Subcategories methods
+
+    @Override
+    public ArrayList<BudgetRevenue> findAllSubCategories() {
+        return BudgetRevenueHandling.findAllSubCategories(this, budgetRevenues);
+    }
+
+    @Override
+    public void printAllSubCategories() {
+        DataOutput.printBudgetRevenuesWithAsciiTable(findAllSubCategories(),0);
+    }
+
+    @Override
+    public ArrayList<BudgetRevenue> findNextLevelSubCategories() {
+        return BudgetRevenueHandling.findNextLevelSubCategories(this, budgetRevenues);
+    }
+
+    @Override
+    public void printNextLevelSubCategories() {
+        DataOutput.printRevenueWithAsciiTable(findNextLevelSubCategories(), 0);
+    }
+
+    //*Change methods (soon to be moved explicitly to subclasses)*
+
     public void setAmountOfSuperCategories(long change) {
         ArrayList<BudgetRevenue> superCategories = getSuperCategories();
 
@@ -114,47 +138,6 @@ public class BudgetRevenue extends BudgetEntry implements IBudgetRevenueLogic {
             superCategory.setAmount(superCategory.getAmount() + change);
         }
     }
-
-    public ArrayList<BudgetRevenue> findAllSubCategories() {
-        ArrayList<BudgetRevenue> subCategories = new ArrayList<>();
-        for (BudgetRevenue budgetRevenue : budgetRevenues) {
-            if (budgetRevenue.getCode().startsWith(this.getCode()) && !(budgetRevenue.equals(this))) {
-                subCategories.add(budgetRevenue);
-            }
-        }
-        return subCategories;
-    }
-
-    public void printAllSubCategories() {
-        ArrayList<BudgetRevenue> allSubCategories = findAllSubCategories();
-        DataOutput.printRevenueWithAsciiTable(allSubCategories, 0);
-    }
-
-    public ArrayList<BudgetRevenue> findNextLevelSubCategories() {
-        int level = getLevelOfHierarchy();
-        int subCategoryCodeLength;
-        switch (level) {
-            case 1 -> subCategoryCodeLength = 3;
-            case 2 -> subCategoryCodeLength = 5;
-            case 3 -> subCategoryCodeLength = 7;
-            case 4 -> subCategoryCodeLength = 10;
-            default -> subCategoryCodeLength = 0;
-        }
-        ArrayList<BudgetRevenue> subCategories = new ArrayList<>();
-        for (BudgetRevenue budgetRevenue : budgetRevenues) {
-            if (budgetRevenue.getCode().startsWith(this.getCode()) && (budgetRevenue.getCode().length() == subCategoryCodeLength)) {
-                subCategories.add(budgetRevenue);
-            }
-        }
-        return subCategories;
-    }
-
-    public void printNextLevelSubCategories() {
-        ArrayList<BudgetRevenue> nextLevelSubCategories = findNextLevelSubCategories();
-        DataOutput.printRevenueWithAsciiTable(findNextLevelSubCategories(), 0);
-    }
-
-    //*Change methods (soon to be moved explicitly to subclasses)*
 
     public void setAmountOfNextLevelSubCategoriesWithEqualDistribution(long change) {
         ArrayList<BudgetRevenue> nextLevelSubCategories = findNextLevelSubCategories();
