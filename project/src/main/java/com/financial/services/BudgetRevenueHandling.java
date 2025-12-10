@@ -61,6 +61,26 @@ public class BudgetRevenueHandling {
         return subCategories;
     }
 
+    //Finds only the next level subcategories, by knowing how many digits it's supposed to have
+    public static <T extends BudgetRevenue> ArrayList<T> findNextLevelSubCategories(T parent, ArrayList<T> revenues) {
+        int level = parent.getLevelOfHierarchy();
+        int subCategoryCodeLength;
+        switch (level) {
+            case 1 -> subCategoryCodeLength = 3;
+            case 2 -> subCategoryCodeLength = 5;
+            case 3 -> subCategoryCodeLength = 7;
+            case 4 -> subCategoryCodeLength = 10;
+            default -> subCategoryCodeLength = 0;
+        }
+        ArrayList<T> subCategories = new ArrayList<>();
+        for (T budgetRevenue : revenues) {
+            if (budgetRevenue.getCode().startsWith(parent.getCode()) && (budgetRevenue.getCode().length() == subCategoryCodeLength)) {
+                subCategories.add(budgetRevenue);
+            }
+        }
+        return subCategories;
+    }
+
     //Finds revenue
     public static <T extends BudgetRevenue> T findRevenueWithCode(String code, ArrayList<T> revenues) {
         for (T revenue : revenues) {
