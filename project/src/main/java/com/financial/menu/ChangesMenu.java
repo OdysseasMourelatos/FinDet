@@ -18,24 +18,34 @@ public class ChangesMenu {
         showChangesMenu(budgetType);
     }
 
-    public static void showRegularChangesMenu() {
+    public static void showChangesMenu(int budgetType) {
         Scanner input = new Scanner(System.in);
         System.out.println();
-        System.out.println(BLUE + BOLD
-        + "=== ΕΙΣΑΓΩΓΗ ΑΛΛΑΓΩΝ ΣΕ ΣΤΟΙΧΕΙΑ ΤΑΚΤΙΚΟΥ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ===");
+        int publicInvestmentType = 0;
+        if (budgetType == 1) {
+            System.out.println(BLUE + BOLD + "=== ΕΙΣΑΓΩΓΗ ΑΛΛΑΓΩΝ ΣΕ ΣΤΟΙΧΕΙΑ ΤΑΚΤΙΚΟΥ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ===");
+        } else if (budgetType == 2) {
+            System.out.println(BLUE + BOLD + "=== ΕΙΣΑΓΩΓΗ ΑΛΛΑΓΩΝ ΣΕ ΣΤΟΙΧΕΙΑ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ ===");
+            System.out.println();
+            System.out.println(BLUE + BOLD + "[1] " + RESET + "Εισαγωγή αλλαγών σε στοιχεία εθνικού σκέλους");
+            System.out.println(BLUE + BOLD + "[2] " + RESET + "Εισαγωγή αλλαγών σε στοιχεία συγχρηματοδοτούμενου σκέλους");
+            System.out.println();
+            System.out.print("Επιλογή: ");
+            publicInvestmentType = input.nextInt();
+        } else {
+            throw new IllegalArgumentException();
+        }
         System.out.println();
-        System.out.println(BLUE + BOLD + "[1] " + RESET
-        + "Εισαγωγή αλλαγών σε λογαριασμούς εσόδων");
-        System.out.println(BLUE + BOLD + "[2] " + RESET
-        + "Εισαγωγή αλλαγών σε λογαριασμούς εξόδων");
+        System.out.println(BLUE + BOLD + "[1] " + RESET + "Εισαγωγή αλλαγών σε λογαριασμούς εσόδων");
+        System.out.println(BLUE + BOLD + "[2] " + RESET + "Εισαγωγή αλλαγών σε λογαριασμούς εξόδων");
         System.out.println(BLUE + BOLD + "[0] " + RESET + "Επιστροφή" + RESET_2);
         System.out.println();
         System.out.print("Επιλογή: ");
         int choice = input.nextInt();
         input.nextLine();
         switch (choice) {
-            case 1 -> RevenueChangeMenu.modifyExistingRevenueAccount();
-            case 2 -> showExpensesChangesMenu();
+            case 1 -> modifyExistingRevenueAccount();
+            case 2 -> showExpensesChangesMenu(budgetType, publicInvestmentType);
         }
     }
 }
