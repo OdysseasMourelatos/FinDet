@@ -226,6 +226,24 @@ public class BudgetRevenue extends BudgetEntry implements IBudgetRevenueLogic {
         setAmount((long) (getAmount() * (1 + percentage)));
     }
 
+    //Getters & Setters
+
+    private void setRegularAmount(long amount) {
+        this.regularAmount = amount;
+    }
+
+    public long getRegularAmount() {
+        return regularAmount;
+    }
+
+    public void setPublicInvestmentAmount(long amount) {
+        this.publicInvestmentAmount = amount;
+    }
+
+    public long getPublicInvestmentAmount() {
+        return publicInvestmentAmount;
+    }
+
     @Override
     public String toString () {
         return super.toString();
