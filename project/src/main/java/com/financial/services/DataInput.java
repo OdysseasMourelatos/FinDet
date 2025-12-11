@@ -107,7 +107,7 @@ public class DataInput {
 
     //Activated when all PublicInvestmentBudgetRevenues are filtered
     public static void createBudgetRevenueFilteredFromPublicInvestmentBudgetRevenue() {
-        for (PublicInvestmentBudgetRevenue revenue : PublicInvestmentBudgetRevenue.getPublicInvestmentBudgetRevenuesFiltered()) {
+        for (PublicInvestmentBudgetRevenue revenue : PublicInvestmentBudgetRevenue.getPublicInvestmentBudgetRevenues()) {
             BudgetRevenue budgetRevenue = new BudgetRevenue(revenue.getCode(), revenue.getDescription(), revenue.getCategory(), 0, revenue.getAmount(), revenue.getAmount());
         }
     }

@@ -80,7 +80,7 @@ public class DataOutput {
             at.addRule();
         }
         if (sum != 0) {
-            at.addRow("", "", String.format("%,d", BudgetRevenueHandling.calculateSum(RegularBudgetRevenue.getAllRegularBudgetRevenues())), String.format("%,d", BudgetRevenueHandling.calculateSum(PublicInvestmentBudgetRevenue.getPublicInvestmentBudgetRevenuesFiltered())) , String.format("%,d", sum));
+            at.addRow("", "", String.format("%,d", BudgetRevenueHandling.calculateSum(RegularBudgetRevenue.getAllRegularBudgetRevenues())), String.format("%,d", BudgetRevenueHandling.calculateSum(PublicInvestmentBudgetRevenue.getPublicInvestmentBudgetRevenues())) , String.format("%,d", sum));
             at.addRule();
         }
 
