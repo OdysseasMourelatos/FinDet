@@ -46,7 +46,7 @@ public abstract class BudgetEntry {
 
     public static ArrayList<BudgetEntry> mergeListsOfMainRevenuesAndMainExpenses() {
         ArrayList<BudgetEntry> merged = new ArrayList<>();
-        merged.addAll(BudgetRevenueHandling.getMainBudgetRevenues(BudgetRevenue.budgetRevenuesFiltered));
+        merged.addAll(BudgetRevenueHandling.getMainBudgetRevenues(BudgetRevenue.budgetRevenues));
         merged.addAll(BudgetExpenseHandling.getSumOfEveryCategory(BudgetExpense.expenses));
         return merged;
     }
