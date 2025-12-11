@@ -47,4 +47,24 @@ public class RegularBudgetRevenueTest {
         // For object that does not exist
         assertNull(RegularBudgetRevenue.findRegularBudgetRevenueWithCode("999"));
     }
+
+    @Test
+    void getMainRegularBudgetRevenuesTest() {
+
+        ArrayList<RegularBudgetRevenue> mainRevenues = RegularBudgetRevenue.getMainRegularBudgetRevenues();
+
+        //Only objects with 2-digit codes (11 & 13)
+        assertEquals(2, mainRevenues.size());
+
+        // Checking the codes
+        assertEquals("11", mainRevenues.get(0).getCode());
+        assertEquals("13", mainRevenues.get(1).getCode());
+    }
+
+    @Test
+    void calculateSumTest() {
+        // 62,055,000,000 (11) + 3,906,000,000 (13)
+        long expectedSum = 65961000000L;
+        assertEquals(expectedSum, revenue11.calculateSum());
+    }
 }
