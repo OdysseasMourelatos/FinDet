@@ -3,12 +3,14 @@ package com.financial.entries;
 import com.financial.services.BudgetRevenueHandling;
 import com.financial.services.DataInput;
 import com.financial.services.DataOutput;
+import com.financial.services.IBudgetRevenueLogic;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class PublicInvestmentBudgetRevenue extends BudgetRevenue {
+public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements IBudgetRevenueLogic {
+
 
     //Constructor & Fields
 
@@ -126,5 +128,62 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue {
     @Override
     public String toString() {
         return "Code: " + getCode() + ", Description: " + getDescription() + ", Category: " + getCategory() + ", Type: " + type + ", Amount: " + String.format("%,d", getAmount());
+    }
+
+    @Override
+    public long calculateSum() {
+        return BudgetRevenueHandling.calculateSum(publicInvestmentBudgetRevenuesFiltered);
+    }
+
+    @Override
+    public PublicInvestmentBudgetRevenue findSuperCategory() {
+        return BudgetRevenueHandling.findSuperCategory(this, publicInvestmentBudgetRevenuesFiltered);
+    }
+
+    @Override
+    public ArrayList<BudgetRevenue> getSuperCategories() {
+        return BudgetRevenueHandling.getSuperCategories(this, publicInvestmentBudgetRevenuesFiltered);
+    }
+
+    @Override
+    public void printSuperCategoriesTopDown() {
+        ArrayList<BudgetRevenue> superCategories = new ArrayList<>();
+        if (getSuperCategories().isEmpty()) {
+            System.out.println("Δεν υπάρχουν κατηγορίες σε υψηλότερη ιεραρχία");
+        } else {
+            for (int i = getSuperCategories().size() - 1; i >= 0; i--) {
+                superCategories.add(getSuperCategories().get(i));
+            }
+            DataOutput.printRevenueWithAsciiTable(superCategories, 0);
+        }
+    }
+
+    @Override
+    public void printSuperCategoriesBottomsUp() {
+        if (getSuperCategories().isEmpty()) {
+            System.out.println("Δεν υπάρχουν κατηγορίες σε υψηλότερη ιεραρχία");
+        } else {
+            DataOutput.printRevenueWithAsciiTable(getSuperCategories(), 0);
+        }
+    }
+
+    @Override
+    public ArrayList<BudgetRevenue> findAllSubCategories() {
+        return BudgetRevenueHandling.findAllSubCategories(this, publicInvestmentBudgetRevenuesFiltered);
+    }
+
+    @Override
+    public void printAllSubCategories() {
+        DataOutput.printRevenueWithAsciiTable(findAllSubCategories(),0);
+    }
+
+    @Override
+    public ArrayList<BudgetRevenue> findNextLevelSubCategories() {
+        return BudgetRevenueHandling.findNextLevelSubCategories(this, publicInvestmentBudgetRevenuesFiltered);
+    }
+
+    @Override
+    public void printNextLevelSubCategories() {
+        DataOutput.printRevenueWithAsciiTable(findNextLevelSubCategories(), 0);
     }
 }
