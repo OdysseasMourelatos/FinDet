@@ -8,7 +8,7 @@ public class BudgetRevenueTest {
 
     @BeforeEach
     public void reset() {
-        BudgetRevenue.budgetRevenuesFiltered.clear();
+        BudgetRevenue.budgetRevenues.clear();
     }
 
     @Test
