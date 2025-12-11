@@ -16,12 +16,10 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements IBud
 
     private final String type;
     protected static ArrayList<PublicInvestmentBudgetRevenue> publicInvestmentBudgetRevenues = new ArrayList<>();
-    protected static ArrayList<PublicInvestmentBudgetRevenue> publicInvestmentBudgetRevenuesFiltered = new ArrayList<>();
 
     public PublicInvestmentBudgetRevenue(String code, String description, String category, String type, long amount) {
         super(code, description, category, amount);
         this.type = type;
-        publicInvestmentBudgetRevenues.add(this);
     }
 
     //Extra constructor that creates PublicInvestmentBudgetRevenues (filtered)
@@ -33,12 +31,12 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements IBud
         this.type = type;
         this.nationalAmount = nationalAmount;
         this.coFundedAmount = coFundedAmount;
-        publicInvestmentBudgetRevenuesFiltered.add(this);
+        publicInvestmentBudgetRevenues.add(this);
     }
 
     //Creation of PublicInvestmentBudgetRevenuesSorted
     public static void sortPublicInvestmentBudgetRevenuesByCode() {
-        Collections.sort(publicInvestmentBudgetRevenuesFiltered, new Comparator<PublicInvestmentBudgetRevenue>() {
+        Collections.sort(publicInvestmentBudgetRevenues, new Comparator<PublicInvestmentBudgetRevenue>() {
             @Override
             public int compare(PublicInvestmentBudgetRevenue b1, PublicInvestmentBudgetRevenue b2) {
                 return b1.getCode().compareTo(b2.getCode());
@@ -51,8 +49,8 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements IBud
 
         //Finds codes that are repeated in the list
         // Adds to a new list the 2 placements in the list where we have repeated codes
-        for (int i = 1; i < publicInvestmentBudgetRevenuesFiltered.size(); i++) {
-            if (publicInvestmentBudgetRevenuesFiltered.get(i).getCode().equals(publicInvestmentBudgetRevenuesFiltered.get(i-1).getCode())) {
+        for (int i = 1; i < publicInvestmentBudgetRevenues.size(); i++) {
+            if (publicInvestmentBudgetRevenues.get(i).getCode().equals(publicInvestmentBudgetRevenues.get(i-1).getCode())) {
                 repeatedRevenues.add(i);
             }
         }
@@ -63,9 +61,9 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements IBud
        */
         for (int j = repeatedRevenues.size() - 1; j >= 0; j--) {
             Integer i = repeatedRevenues.get(j);
-            PublicInvestmentBudgetRevenue b1 = publicInvestmentBudgetRevenuesFiltered.get(i);
-            PublicInvestmentBudgetRevenue b2 = publicInvestmentBudgetRevenuesFiltered.get(i-1);
-            publicInvestmentBudgetRevenuesFiltered.remove(b1);
+            PublicInvestmentBudgetRevenue b1 = publicInvestmentBudgetRevenues.get(i);
+            PublicInvestmentBudgetRevenue b2 = publicInvestmentBudgetRevenues.get(i-1);
+            publicInvestmentBudgetRevenues.remove(b1);
             b2.setNationalAmount(b2.getNationalAmount() + b1.getNationalAmount());
             b2.setCoFundedAmount(b2.getCoFundedAmount() + b1.getCoFundedAmount());
             b2.setAmount(b2.getAmount() + b1.getAmount());
@@ -84,23 +82,15 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements IBud
     }
 
     public static ArrayList<PublicInvestmentBudgetRevenue> getMainPublicInvestmentBudgetRevenues() {
-        return BudgetRevenueHandling.getMainBudgetRevenues(publicInvestmentBudgetRevenuesFiltered);
+        return BudgetRevenueHandling.getMainBudgetRevenues(publicInvestmentBudgetRevenues);
     }
 
     public static void printMainPublicInvestmentBudgetRevenues() {
         BudgetRevenueHandling.printMainBudgetRevenues(getMainPublicInvestmentBudgetRevenues());
     }
-
-    public static ArrayList<PublicInvestmentBudgetRevenue> getPublicInvestmentBudgetRevenuesFiltered() {
-        return publicInvestmentBudgetRevenuesFiltered;
-    }
-
-    public static void printPublicInvestmentBudgetRevenuesFiltered() {
-        DataOutput.printPublicInvestmentBudgetRevenuesFilteredWithAsciiTable(getPublicInvestmentBudgetRevenuesFiltered(), BudgetRevenueHandling.calculateSum(getPublicInvestmentBudgetRevenuesFiltered()));
-    }
-
+    
     public static PublicInvestmentBudgetRevenue findPublicInvestmentBudgetRevenueWithCode(String code) {
-        return BudgetRevenueHandling.findRevenueWithCode(code, publicInvestmentBudgetRevenuesFiltered);
+        return BudgetRevenueHandling.findRevenueWithCode(code, publicInvestmentBudgetRevenues);
     }
 
     //Getters & Setters
@@ -132,17 +122,17 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements IBud
 
     @Override
     public long calculateSum() {
-        return BudgetRevenueHandling.calculateSum(publicInvestmentBudgetRevenuesFiltered);
+        return BudgetRevenueHandling.calculateSum(publicInvestmentBudgetRevenues);
     }
 
     @Override
     public PublicInvestmentBudgetRevenue findSuperCategory() {
-        return BudgetRevenueHandling.findSuperCategory(this, publicInvestmentBudgetRevenuesFiltered);
+        return BudgetRevenueHandling.findSuperCategory(this, publicInvestmentBudgetRevenues);
     }
 
     @Override
     public ArrayList<BudgetRevenue> getSuperCategories() {
-        return BudgetRevenueHandling.getSuperCategories(this, publicInvestmentBudgetRevenuesFiltered);
+        return BudgetRevenueHandling.getSuperCategories(this, publicInvestmentBudgetRevenues);
     }
 
     @Override
@@ -169,7 +159,7 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements IBud
 
     @Override
     public ArrayList<BudgetRevenue> findAllSubCategories() {
-        return BudgetRevenueHandling.findAllSubCategories(this, publicInvestmentBudgetRevenuesFiltered);
+        return BudgetRevenueHandling.findAllSubCategories(this, publicInvestmentBudgetRevenues);
     }
 
     @Override
@@ -179,7 +169,7 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements IBud
 
     @Override
     public ArrayList<BudgetRevenue> findNextLevelSubCategories() {
-        return BudgetRevenueHandling.findNextLevelSubCategories(this, publicInvestmentBudgetRevenuesFiltered);
+        return BudgetRevenueHandling.findNextLevelSubCategories(this, publicInvestmentBudgetRevenues);
     }
 
     @Override
