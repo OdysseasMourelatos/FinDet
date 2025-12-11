@@ -77,14 +77,12 @@ public class RegularBudgetRevenueTest {
     }
 
     @Test
-    void findNextLevelSubCategoriesTest() {
-
-        ArrayList<BudgetRevenue> subCategories = revenue13.findNextLevelSubCategories();
-
-        //2 children in the next level - 131 & 132
-        assertEquals(2, subCategories.size());
-        assertTrue(subCategories.contains(revenue131));
-        assertTrue(subCategories.contains(revenue132));
+    void getSuperCategoriesTest() {
+        ArrayList<BudgetRevenue> superCategories = revenue11101.getSuperCategories();
+        assertEquals(2, superCategories.size());
+        //Checking if the list contains all super categories
+        assertTrue(superCategories.contains(revenue11));
+        assertTrue(superCategories.contains(revenue111));
     }
 
     @Test
