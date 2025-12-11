@@ -112,6 +112,7 @@ public class BudgetRevenue extends BudgetEntry implements IBudgetRevenueLogic {
     public long calculateSum() {
         return BudgetRevenueHandling.calculateSum(budgetRevenues);
     }
+
     //Supercategories methods
 
     @Override

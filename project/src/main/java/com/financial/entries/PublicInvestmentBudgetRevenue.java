@@ -93,11 +93,15 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements IBud
         return BudgetRevenueHandling.findRevenueWithCode(code, publicInvestmentBudgetRevenues);
     }
 
+    //*Implementation of methods*
 
+    //Sum Method
     @Override
     public long calculateSum() {
         return BudgetRevenueHandling.calculateSum(publicInvestmentBudgetRevenues);
     }
+
+    //Supercategories methods
 
     @Override
     public PublicInvestmentBudgetRevenue findSuperCategory() {
@@ -127,9 +131,11 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements IBud
         if (getSuperCategories().isEmpty()) {
             System.out.println("Δεν υπάρχουν κατηγορίες σε υψηλότερη ιεραρχία");
         } else {
-            DataOutput.printRevenueWithAsciiTable(getSuperCategories(), 0);
+            //DataOutput.printPublicInvestmentBudgetRevenuesFilteredWithAsciiTable(getSuperCategories(), 0);
         }
     }
+
+    //Subcategories methods
 
     @Override
     public ArrayList<BudgetRevenue> findAllSubCategories() {
@@ -138,7 +144,7 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements IBud
 
     @Override
     public void printAllSubCategories() {
-        DataOutput.printRevenueWithAsciiTable(findAllSubCategories(),0);
+        //DataOutput.printPublicInvestmentBudgetRevenuesFilteredWithAsciiTable(findAllSubCategories(), 0);
     }
 
     @Override
@@ -148,7 +154,7 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements IBud
 
     @Override
     public void printNextLevelSubCategories() {
-        DataOutput.printRevenueWithAsciiTable(findNextLevelSubCategories(), 0);
+        //DataOutput.printPublicInvestmentBudgetRevenuesFilteredWithAsciiTable(findNextLevelSubCategories(), 0);
     }
 
     //Getters & Setters
