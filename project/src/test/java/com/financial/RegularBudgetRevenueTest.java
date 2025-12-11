@@ -67,4 +67,23 @@ public class RegularBudgetRevenueTest {
         long expectedSum = 65961000000L;
         assertEquals(expectedSum, revenue11.calculateSum());
     }
+
+    @Test
+    void findSuperCategoryTest() {
+        RegularBudgetRevenue parent = revenue11101.findSuperCategory();
+        assertNotNull(parent);
+        assertEquals("111", parent.getCode());
+        assertEquals(33667000000L, parent.getAmount());
+    }
+
+    @Test
+    void findNextLevelSubCategoriesTest() {
+
+        ArrayList<BudgetRevenue> subCategories = revenue13.findNextLevelSubCategories();
+
+        //2 children in the next level - 131 & 132
+        assertEquals(2, subCategories.size());
+        assertTrue(subCategories.contains(revenue131));
+        assertTrue(subCategories.contains(revenue132));
+    }
 }
