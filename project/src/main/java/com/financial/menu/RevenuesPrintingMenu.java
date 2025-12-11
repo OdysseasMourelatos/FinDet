@@ -85,7 +85,7 @@ public class RevenuesPrintingMenu {
                 switch (publicInvestmentType) {
                     case 1 -> PublicInvestmentBudgetNationalRevenue.printPublicInvestmentBudgetNationalRevenues();
                     case 2 -> PublicInvestmentBudgetCoFundedRevenue.printPublicInvestmentBudgetCoFundedRevenues();
-                    case 3 -> PublicInvestmentBudgetRevenue.printPublicInvestmentBudgetRevenuesFiltered();
+                    case 3 -> PublicInvestmentBudgetRevenue.printPublicInvestmentBudgetRevenues();
                     default -> System.out.println(RED + "Μη έγκυρη επιλογή" + RESET);
                 }
             }

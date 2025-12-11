@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="88d8a661-a47d-4ac5-b89a-2164a467de01" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/../PublicInvestmentBudgetRevenue.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,7 +67,7 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.general&quot;
   }
 }</component>
-  <component name="RunManager" selected="JUnit.BudgetEntryTest">
+  <component name="RunManager" selected="JUnit.RegularBudgetRevenueTest.findSuperCategoryTest">
     <configuration name="BudgetEntryTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="FinDet" />
       <extension name="coverage">
@@ -99,6 +98,37 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="RegularBudgetRevenueTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="FinDet" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.financial.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.financial" />
+      <option name="MAIN_CLASS_NAME" value="com.financial.RegularBudgetRevenueTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RegularBudgetRevenueTest.findSuperCategoryTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="FinDet" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.financial.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.financial" />
+      <option name="MAIN_CLASS_NAME" value="com.financial.RegularBudgetRevenueTest" />
+      <option name="METHOD_NAME" value="findSuperCategoryTest" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="java in FinDet" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="FinDet" />
       <option name="TEST_OBJECT" value="directory" />
@@ -120,6 +150,8 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.RegularBudgetRevenueTest.findSuperCategoryTest" />
+        <item itemvalue="JUnit.RegularBudgetRevenueTest" />
         <item itemvalue="JUnit.BudgetEntryTest" />
         <item itemvalue="JUnit.java in FinDet" />
         <item itemvalue="JUnit.BudgetExpenseTest" />
