@@ -88,37 +88,11 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements IBud
     public static void printMainPublicInvestmentBudgetRevenues() {
         BudgetRevenueHandling.printMainBudgetRevenues(getMainPublicInvestmentBudgetRevenues());
     }
-    
+
     public static PublicInvestmentBudgetRevenue findPublicInvestmentBudgetRevenueWithCode(String code) {
         return BudgetRevenueHandling.findRevenueWithCode(code, publicInvestmentBudgetRevenues);
     }
 
-    //Getters & Setters
-
-    public String getType() {
-        return type;
-    }
-
-    public long getNationalAmount() {
-        return nationalAmount;
-    }
-
-    public long getCoFundedAmount() {
-        return coFundedAmount;
-    }
-
-    private void setNationalAmount(long nationalAmount) {
-        this.nationalAmount = nationalAmount;
-    }
-
-    private void setCoFundedAmount(long coFundedAmount) {
-        this.coFundedAmount = coFundedAmount;
-    }
-
-    @Override
-    public String toString() {
-        return "Code: " + getCode() + ", Description: " + getDescription() + ", Category: " + getCategory() + ", Type: " + type + ", Amount: " + String.format("%,d", getAmount());
-    }
 
     @Override
     public long calculateSum() {
@@ -175,5 +149,32 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements IBud
     @Override
     public void printNextLevelSubCategories() {
         DataOutput.printRevenueWithAsciiTable(findNextLevelSubCategories(), 0);
+    }
+
+    //Getters & Setters
+
+    public String getType() {
+        return type;
+    }
+
+    public long getNationalAmount() {
+        return nationalAmount;
+    }
+
+    public long getCoFundedAmount() {
+        return coFundedAmount;
+    }
+
+    protected void setNationalAmount(long nationalAmount) {
+        this.nationalAmount = nationalAmount;
+    }
+
+    protected void setCoFundedAmount(long coFundedAmount) {
+        this.coFundedAmount = coFundedAmount;
+    }
+
+    @Override
+    public String toString() {
+        return "Code: " + getCode() + ", Description: " + getDescription() + ", Category: " + getCategory() + ", Type: " + type + ", Amount: " + String.format("%,d", getAmount());
     }
 }
