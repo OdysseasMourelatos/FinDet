@@ -254,7 +254,7 @@ public class BudgetRevenue extends BudgetEntry implements IBudgetRevenueLogic {
 
     //Getters & Setters
 
-    private void setRegularAmount(long amount) {
+    protected void setRegularAmount(long amount) {
         this.regularAmount = amount;
     }
 
@@ -262,7 +262,7 @@ public class BudgetRevenue extends BudgetEntry implements IBudgetRevenueLogic {
         return regularAmount;
     }
 
-    public void setPublicInvestmentAmount(long amount) {
+    protected void setPublicInvestmentAmount(long amount) {
         this.publicInvestmentAmount = amount;
     }
 
