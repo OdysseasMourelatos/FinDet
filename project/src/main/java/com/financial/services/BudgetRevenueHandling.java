@@ -51,8 +51,8 @@ public class BudgetRevenueHandling {
     and it's not the same object, then it must be his child
     e.g. 11 (parent), 113 child, 11311 child*/
 
-    public static <T extends BudgetRevenue> ArrayList<T> findAllSubCategories(T parent, ArrayList<T> revenues) {
-        ArrayList<T> subCategories = new ArrayList<>();
+    public static <T extends BudgetRevenue> ArrayList<BudgetRevenue> findAllSubCategories(T parent, ArrayList<T> revenues) {
+        ArrayList<BudgetRevenue> subCategories = new ArrayList<>();
         for (T budgetRevenue : revenues) {
             if (budgetRevenue.getCode().startsWith(parent.getCode()) && !(budgetRevenue.equals(parent))) {
                 subCategories.add(budgetRevenue);
@@ -62,7 +62,7 @@ public class BudgetRevenueHandling {
     }
 
     //Finds only the next level subcategories, by knowing how many digits it's supposed to have
-    public static <T extends BudgetRevenue> ArrayList<T> findNextLevelSubCategories(T parent, ArrayList<T> revenues) {
+    public static <T extends BudgetRevenue> ArrayList<BudgetRevenue> findNextLevelSubCategories(T parent, ArrayList<T> revenues) {
         int level = parent.getLevelOfHierarchy();
         int subCategoryCodeLength;
         switch (level) {
@@ -72,7 +72,7 @@ public class BudgetRevenueHandling {
             case 4 -> subCategoryCodeLength = 10;
             default -> subCategoryCodeLength = 0;
         }
-        ArrayList<T> subCategories = new ArrayList<>();
+        ArrayList<BudgetRevenue> subCategories = new ArrayList<>();
         for (T budgetRevenue : revenues) {
             if (budgetRevenue.getCode().startsWith(parent.getCode()) && (budgetRevenue.getCode().length() == subCategoryCodeLength)) {
                 subCategories.add(budgetRevenue);
