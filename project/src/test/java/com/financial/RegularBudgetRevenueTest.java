@@ -86,4 +86,25 @@ public class RegularBudgetRevenueTest {
         assertTrue(subCategories.contains(revenue131));
         assertTrue(subCategories.contains(revenue132));
     }
+
+    @Test
+    void findNextLevelSubCategoriesTest() {
+
+        ArrayList<BudgetRevenue> subCategories = revenue13.findNextLevelSubCategories();
+
+        //2 children in the next level - 131 & 132
+        assertEquals(2, subCategories.size());
+        assertTrue(subCategories.contains(revenue131));
+        assertTrue(subCategories.contains(revenue132));
+    }
+
+    @Test
+    void findAllSubCategoriesTest() {
+        ArrayList<BudgetRevenue> allSubCategories = revenue13.findAllSubCategories();
+        //3 children total - 131, 132 & 13108
+        assertEquals(3, allSubCategories.size());
+        assertTrue(allSubCategories.contains(revenue131));
+        assertTrue(allSubCategories.contains(revenue13108));
+        assertTrue(allSubCategories.contains(revenue132));
+    }
 }
