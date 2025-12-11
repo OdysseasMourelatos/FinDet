@@ -37,10 +37,16 @@ public class RegularBudgetRevenue extends BudgetRevenue implements IBudgetRevenu
         return BudgetRevenueHandling.findRevenueWithCode(code, regularBudgetRevenues);
     }
 
+    //*Implementation of methods*
+
+    //Sum Method
+
     @Override
     public long calculateSum() {
         return BudgetRevenueHandling.calculateSum(regularBudgetRevenues);
     }
+
+    //Supercategories methods
 
     @Override
     public RegularBudgetRevenue findSuperCategory() {
@@ -74,6 +80,8 @@ public class RegularBudgetRevenue extends BudgetRevenue implements IBudgetRevenu
         }
     }
 
+    //Subcategories methods
+
     @Override
     public ArrayList<BudgetRevenue> findAllSubCategories() {
         return BudgetRevenueHandling.findAllSubCategories(this, regularBudgetRevenues);
@@ -93,6 +101,8 @@ public class RegularBudgetRevenue extends BudgetRevenue implements IBudgetRevenu
     public void printNextLevelSubCategories() {
         DataOutput.printRevenueWithAsciiTable(findNextLevelSubCategories(), 0);
     }
+
+    //ToString
 
     @Override
     public String toString () {
