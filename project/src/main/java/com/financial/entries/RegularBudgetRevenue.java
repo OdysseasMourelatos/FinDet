@@ -45,14 +45,14 @@ public class RegularBudgetRevenue extends BudgetRevenue implements IBudgetRevenu
         BudgetRevenueLogicService.printRevenuesStartingWithCode(code, regularBudgetRevenues);
     }
 
-    //*Implementation of methods*
-
     //Sum Method
 
-    @Override
-    public long calculateSum() {
+    public static long calculateSum() {
         return BudgetRevenueLogicService.calculateSum(regularBudgetRevenues);
     }
+
+    //*Implementation of methods*
+
 
     //Supercategories methods
 

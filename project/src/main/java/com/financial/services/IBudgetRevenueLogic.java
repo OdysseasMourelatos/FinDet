@@ -6,10 +6,6 @@ import java.util.ArrayList;
 
 public interface IBudgetRevenueLogic {
 
-    //Sum method
-
-    long calculateSum();
-
     //Supercategories methods
 
     BudgetRevenue findSuperCategory();

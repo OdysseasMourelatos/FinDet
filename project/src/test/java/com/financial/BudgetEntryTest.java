@@ -115,7 +115,7 @@ public class BudgetEntryTest {
     public void testToStringFormat() {
         BudgetEntry entry=  new TestBudgetEntry("111", "Description", "ΕΞΟΔΑ", 1234567);
 
-        String text=  entry.toString();
+        String text = entry.toString();
 
         assertTrue(text.contains("111"));
         assertTrue(text.contains("Description"));

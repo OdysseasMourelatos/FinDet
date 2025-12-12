@@ -92,6 +92,11 @@ public class BudgetRevenue extends BudgetEntry implements IBudgetRevenueLogic {
         DataOutput.printRevenueWithAsciiTable(getBudgetRevenuesStartingWithCode(code), 0);
     }
 
+    //Sum Method
+    public static long calculateSum() {
+        return BudgetRevenueLogicService.calculateSum(budgetRevenues);
+    }
+
     //Method that all subclasses easily inherit
 
     public int getLevelOfHierarchy() {
@@ -106,12 +111,6 @@ public class BudgetRevenue extends BudgetEntry implements IBudgetRevenueLogic {
     }
 
     //*Implementation of methods*
-
-    //Sum Method
-    @Override
-    public long calculateSum() {
-        return BudgetRevenueLogicService.calculateSum(budgetRevenues);
-    }
 
     //Supercategories methods
 
