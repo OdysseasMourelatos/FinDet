@@ -36,7 +36,7 @@ public class PublicInvestmentBudgetCoFundedRevenue extends PublicInvestmentBudge
     public static PublicInvestmentBudgetCoFundedRevenue findPublicInvestmentBudgetCoFundedRevenueWithCode(String code) {
         return BudgetRevenueLogicService.findRevenueWithCode(code, publicInvestmentBudgetCoFundedRevenues);
     }
-    
+
     public static ArrayList<BudgetRevenue> getPublicInvestmentBudgetCoFundedRevenuesStartingWithCode(String code) {
         return BudgetRevenueLogicService.getRevenuesStartingWithCode(code, publicInvestmentBudgetCoFundedRevenues);
     }
