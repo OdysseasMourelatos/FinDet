@@ -54,11 +54,11 @@ public class BudgetRevenue extends BudgetEntry implements IBudgetRevenueLogic {
         for (int j = repeatedRevenues.size() - 1; j >= 0; j--) {
             Integer i = repeatedRevenues.get(j);
             BudgetRevenue b1 = budgetRevenues.get(i);
-            BudgetRevenue b2 = budgetRevenues.get(i-1);
+            BudgetRevenue b2 = budgetRevenues.get(i - 1);
             budgetRevenues.remove(b1);
-            b2.setRegularAmount(b2.getRegularAmount() + b1.getRegularAmount());
-            b2.setPublicInvestmentAmount(b2.getPublicInvestmentAmount() + b1.getPublicInvestmentAmount());
-            b2.setAmount(b2.getAmount()+b1.getAmount());
+            b2.setRegularAmount(b2.getRegularAmount() + b1.getRegularAmount(), false);
+            b2.setPublicInvestmentAmount(b2.getPublicInvestmentAmount() + b1.getPublicInvestmentAmount(), false);
+            b2.setAmount(b2.getAmount() + b1.getAmount());
         }
     }
 
@@ -170,18 +170,22 @@ public class BudgetRevenue extends BudgetEntry implements IBudgetRevenueLogic {
 
     //Getters & Setters
 
-    protected void setRegularAmount(long amount) {
+    protected void setRegularAmount(long amount, boolean update) {
         this.regularAmount = amount;
-        this.amount = regularAmount + publicInvestmentAmount;
+        if (update) {
+            this.amount = regularAmount + publicInvestmentAmount;
+        }
     }
 
     public long getRegularAmount() {
         return regularAmount;
     }
 
-    protected void setPublicInvestmentAmount(long amount) {
+    protected void setPublicInvestmentAmount(long amount,  boolean update) {
         this.publicInvestmentAmount = amount;
-        this.amount = regularAmount + publicInvestmentAmount;
+        if (update) {
+            this.amount = regularAmount + publicInvestmentAmount;
+        }
     }
 
     public long getPublicInvestmentAmount() {
