@@ -140,4 +140,19 @@ public class PublicInvestmentBudgetCoFundedRevenue extends PublicInvestmentBudge
         setAmountOfAllSubCategoriesWithPercentageAdjustment(percentage);
         setAmount((long) (getAmount() * (1 + percentage)));
     }
+
+    //Updating the filtered objects in SuperClass
+
+    public void updateAmountOfSuperClassFilteredObjects(long change) {
+        PublicInvestmentBudgetRevenue publicInvestmentBudgetRevenue = PublicInvestmentBudgetRevenue.findPublicInvestmentBudgetRevenueWithCode(this.getCode());
+        if (publicInvestmentBudgetRevenue != null ) {
+            publicInvestmentBudgetRevenue.setCoFundedAmount(amount, true);
+        }
+    }
+
+    @Override
+    public void setAmount(long amount) {
+        this.amount = amount;
+        updateAmountOfSuperClassFilteredObjects(amount);
+    }
 }
