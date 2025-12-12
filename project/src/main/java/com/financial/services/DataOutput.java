@@ -13,7 +13,7 @@ public class DataOutput {
         }
     }
 
-    public static void printRevenueWithAsciiTable(ArrayList<? extends BudgetRevenue> entries, long sum) {
+    public static void printGeneralBudgetEntriesWithAsciiTable(ArrayList<? extends BudgetRevenue> entries, long sum) {
         AsciiTable at = new AsciiTable();
 
         at.getRenderer().setCWC(new CWC_FixedWidth().add(20).add(60).add(15).add(20));

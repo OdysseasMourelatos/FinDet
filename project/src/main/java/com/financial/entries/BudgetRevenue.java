@@ -69,7 +69,7 @@ public class BudgetRevenue extends BudgetEntry implements IBudgetRevenueLogic {
     }
 
     public static void printAllBudgetRevenues() {
-        DataOutput.printRevenueWithAsciiTable(budgetRevenues, BudgetRevenueLogicService.calculateSum(budgetRevenues));
+        DataOutput.printBudgetRevenuesWithAsciiTable(budgetRevenues, BudgetRevenueLogicService.calculateSum(budgetRevenues));
     }
 
     public static ArrayList<BudgetRevenue> getMainBudgetRevenues() {
@@ -89,7 +89,7 @@ public class BudgetRevenue extends BudgetEntry implements IBudgetRevenueLogic {
     }
 
     public static void printBudgetRevenuesStartingWithCode(String code) {
-        DataOutput.printRevenueWithAsciiTable(getBudgetRevenuesStartingWithCode(code), 0);
+        DataOutput.printBudgetRevenuesWithAsciiTable(getBudgetRevenuesStartingWithCode(code), 0);
     }
 
     //Sum Method
@@ -133,7 +133,7 @@ public class BudgetRevenue extends BudgetEntry implements IBudgetRevenueLogic {
             for (int i = getSuperCategories().size() - 1; i >= 0; i--) {
                 superCategories.add(getSuperCategories().get(i));
             }
-            DataOutput.printRevenueWithAsciiTable(superCategories, 0);
+            DataOutput.printBudgetRevenuesWithAsciiTable(superCategories, 0);
         }
     }
 
@@ -142,7 +142,7 @@ public class BudgetRevenue extends BudgetEntry implements IBudgetRevenueLogic {
         if (getSuperCategories().isEmpty()) {
             System.out.println("Δεν υπάρχουν κατηγορίες σε υψηλότερη ιεραρχία");
         } else {
-            DataOutput.printRevenueWithAsciiTable(getSuperCategories(), 0);
+            DataOutput.printBudgetRevenuesWithAsciiTable(getSuperCategories(), 0);
         }
     }
 
@@ -165,7 +165,7 @@ public class BudgetRevenue extends BudgetEntry implements IBudgetRevenueLogic {
 
     @Override
     public void printNextLevelSubCategories() {
-        DataOutput.printRevenueWithAsciiTable(findNextLevelSubCategories(), 0);
+        DataOutput.printBudgetRevenuesWithAsciiTable(findNextLevelSubCategories(), 0);
     }
 
     //Getters & Setters
@@ -181,7 +181,7 @@ public class BudgetRevenue extends BudgetEntry implements IBudgetRevenueLogic {
         return regularAmount;
     }
 
-    protected void setPublicInvestmentAmount(long amount,  boolean update) {
+    protected void setPublicInvestmentAmount(long amount, boolean update) {
         this.publicInvestmentAmount = amount;
         if (update) {
             this.amount = regularAmount + publicInvestmentAmount;

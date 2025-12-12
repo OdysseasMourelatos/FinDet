@@ -103,7 +103,7 @@ public class BudgetRevenueLogicService {
     }
 
     public static void printMainBudgetRevenues(ArrayList<? extends BudgetRevenue> budgetRevenues) {
-        DataOutput.printRevenueWithAsciiTable(getMainBudgetRevenues(budgetRevenues), calculateSum(budgetRevenues));
+        DataOutput.printGeneralBudgetEntriesWithAsciiTable(getMainBudgetRevenues(budgetRevenues), calculateSum(budgetRevenues));
     }
 
     //Get & Print certain revenues
@@ -119,6 +119,6 @@ public class BudgetRevenueLogicService {
     }
 
     public static void printRevenuesStartingWithCode(String code, ArrayList<? extends BudgetRevenue> revenues) {
-        DataOutput.printRevenueWithAsciiTable(getRevenuesStartingWithCode(code, revenues), 0);
+        DataOutput.printGeneralBudgetEntriesWithAsciiTable(getRevenuesStartingWithCode(code, revenues), 0);
     }
 }
