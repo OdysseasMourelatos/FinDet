@@ -12,6 +12,11 @@ public class RegularBudgetRevenueTest {
     private RegularBudgetRevenue revenue11;
     private RegularBudgetRevenue revenue111;
     private RegularBudgetRevenue revenue11101;
+    private RegularBudgetRevenue revenue12;
+    private RegularBudgetRevenue revenue122;
+    private RegularBudgetRevenue revenue12201;
+    private RegularBudgetRevenue revenue1220101;
+    private RegularBudgetRevenue revenue1220102;
     private RegularBudgetRevenue revenue13;
     private RegularBudgetRevenue revenue131;
     private RegularBudgetRevenue revenue13108;
@@ -23,6 +28,11 @@ public class RegularBudgetRevenueTest {
         revenue11 = new RegularBudgetRevenue("11", "Φόροι", "ΕΣΟΔΑ", 62055000000L);
         revenue111 = new RegularBudgetRevenue("111", "Φόροι επί αγαθών και υπηρεσιών", "ΕΣΟΔΑ", 33667000000L);
         revenue11101 = new RegularBudgetRevenue("11101", "Φόροι προστιθέμενης αξίας που εισπράττονται μέσω Δ.Ο.Υ", "ΕΣΟΔΑ", 14635000000L);
+        revenue12 = new RegularBudgetRevenue("12", "Κοινωνικές εισφορές", "ΕΣΟΔΑ", 60000000L);
+        revenue122 = new RegularBudgetRevenue("122", "Λοιπές κοινωνικές εισφορές", "ΕΣΟΔΑ", 60000000L);
+        revenue12201 = new RegularBudgetRevenue("12201", "Εισφορές εργαζομένων", "ΕΣΟΔΑ", 60000000L);
+        revenue1220101 = new RegularBudgetRevenue("1220101", "Εισφορές εργαζομένων για συνταξιοδότηση από το Δημόσιο", "ΕΣΟΔΑ", 1000000L);
+        revenue1220102 = new RegularBudgetRevenue("1220102", "Εισφορές εργαζομένων για παροχές υγείας από το Δημόσιο", "ΕΣΟΔΑ", 59000000L);
         revenue13 = new RegularBudgetRevenue("13", "Μεταβιβάσεις", "ΕΣΟΔΑ", 3906000000L);
         revenue131 = new RegularBudgetRevenue("131", "Τρέχουσες εγχώριες μεταβιβάσεις", "ΕΣΟΔΑ", 322000000L);
         revenue13108 = new RegularBudgetRevenue("13108", "Μεταβιβάσεις από λοιπά νομικά πρόσωπα", "ΕΣΟΔΑ", 322000000L);
