@@ -161,4 +161,35 @@ public class RegularBudgetRevenueTest {
         // 3 - Checking if an object with no correlation has indeed not changed
         assertEquals(62055000000L, revenue11.getAmount());
     }
+
+    @Test
+    void ImplementChangesOfPercentageAdjustmentTest2() {
+        double percentage = 0.1; // +10% applied to 131 (Middle Level)
+
+        // Initial amounts
+        long initial13 = revenue13.getAmount();
+        long initial131 = revenue131.getAmount();
+        long initial132 = revenue132.getAmount();
+        long initial13108 = revenue13108.getAmount();
+
+        //Change of itself (13)
+        long changeOnSelf = (long) (initial131 * percentage);
+
+        //Implementation
+        revenue131.implementChangesOfPercentageAdjustment(percentage);
+
+        // 1- Checking the same account
+        assertEquals(initial131 + changeOnSelf, revenue131.getAmount());
+
+        // 2. Checking the supercategories
+        assertEquals(initial13 + changeOnSelf, revenue13.getAmount());
+
+        // 3 - Checking the subcategories
+        long expected13108 = (long) (initial13108 * (1 + percentage));
+        assertEquals(expected13108, revenue13108.getAmount());
+
+        // 4 - Checking if objects with no correlation have indeed not changed
+        assertEquals(initial132, revenue132.getAmount());
+        assertEquals(62055000000L, revenue11.getAmount());
+    }
 }
