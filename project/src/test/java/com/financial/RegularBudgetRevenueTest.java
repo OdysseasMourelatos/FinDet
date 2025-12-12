@@ -5,6 +5,8 @@ import com.financial.entries.RegularBudgetRevenue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
+
+import static com.financial.entries.RegularBudgetRevenue.calculateSum;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class RegularBudgetRevenueTest {
@@ -99,7 +101,7 @@ public class RegularBudgetRevenueTest {
     void calculateSumTest() {
         // 62,055,000,000 (11) + 60,000,000 (12) + 3,906,000,000 (13)
         long expectedSum = 66021000000L;
-        assertEquals(expectedSum, revenue11.calculateSum());
+        assertEquals(expectedSum, calculateSum());
     }
 
     @Test

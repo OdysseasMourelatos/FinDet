@@ -93,13 +93,12 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements IBud
         return BudgetRevenueLogicService.findRevenueWithCode(code, publicInvestmentBudgetRevenues);
     }
 
-    //*Implementation of methods*
-
     //Sum Method
-    @Override
-    public long calculateSum() {
+    public static long calculateSum() {
         return BudgetRevenueLogicService.calculateSum(publicInvestmentBudgetRevenues);
     }
+
+    //*Implementation of methods*
 
     //Supercategories methods
 
