@@ -73,6 +73,19 @@ public class RegularBudgetRevenueTest {
     }
 
     @Test
+    void getRegularBudgetRevenuesStartingWithCode() {
+        ArrayList<BudgetRevenue> revenues = RegularBudgetRevenue.getRegularBudgetRevenuesStartingWithCode("11");
+
+        //Only objects with codes starting with 13
+        assertEquals(3, revenues.size());
+
+        // Checking the codes
+        assertTrue(revenues.contains(revenue11));
+        assertTrue(revenues.contains(revenue111));
+        assertTrue(revenues.contains(revenue11101));
+    }
+
+    @Test
     void calculateSumTest() {
         // 62,055,000,000 (11) + 60,000,000 (12) + 3,906,000,000 (13)
         long expectedSum = 66021000000L;
