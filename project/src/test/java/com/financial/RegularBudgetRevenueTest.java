@@ -22,6 +22,10 @@ public class RegularBudgetRevenueTest {
     private RegularBudgetRevenue revenue13108;
     private RegularBudgetRevenue revenue132;
 
+    private BudgetRevenue budget11;
+    private BudgetRevenue budget111;
+    private BudgetRevenue budget11101;
+
     @BeforeEach
     void setUp() {
         RegularBudgetRevenue.getAllRegularBudgetRevenues().clear();
@@ -37,6 +41,12 @@ public class RegularBudgetRevenueTest {
         revenue131 = new RegularBudgetRevenue("131", "Τρέχουσες εγχώριες μεταβιβάσεις", "ΕΣΟΔΑ", 322000000L);
         revenue13108 = new RegularBudgetRevenue("13108", "Μεταβιβάσεις από λοιπά νομικά πρόσωπα", "ΕΣΟΔΑ", 322000000L);
         revenue132 = new RegularBudgetRevenue("132", "Τρέχουσες μεταβιβάσεις από οργανισμούς και κράτη-μέλη της Ε.Ε.", "ΕΣΟΔΑ", 15000000L);
+
+        BudgetRevenue.getAllBudgetRevenues().clear();
+
+        budget11 = new BudgetRevenue("11", "Φόροι", "ΕΣΟΔΑ", 62055000000L, 0, 62055000000L);
+        budget111 = new BudgetRevenue("111", "Φόροι επί αγαθών και υπηρεσιών", "ΕΣΟΔΑ", 33667000000L, 0, 33667000000L);
+        budget11101 = new BudgetRevenue("11101", "Φόροι προστιθέμενης αξίας που εισπράττονται μέσω Δ.Ο.Υ", "ΕΣΟΔΑ", 14635000000L, 0, 14635000000L);
     }
 
     @Test
@@ -260,5 +270,33 @@ public class RegularBudgetRevenueTest {
 
         // 4 - Checking if an object with no correlation has indeed not changed
         assertEquals(62055000000L, revenue11.getAmount());
+    }
+
+    @Test
+    void updateAmountOfSuperClassFilteredObjectsTest1() {
+        long change = 1000000L; // 1 million change in regular revenue 11
+
+        // Initial amounts of filtered objects
+        long initialBR11Amount = budget11.getRegularAmount();
+        long initialBR111Amount = budget111.getRegularAmount();
+        long initialBR11101Amount = budget11101.getRegularAmount();
+
+        // Implementation
+        revenue11.implementChangesOfEqualDistribution(change);
+
+        // Checking Filtered List Of SuperClass
+
+        // BR 11
+        assertEquals(initialBR11Amount + change, budget11.getRegularAmount());
+        assertEquals(initialBR11Amount + change + budget11.getPublicInvestmentAmount(), budget11.getAmount());
+
+
+        // BR 111
+        assertEquals(initialBR111Amount + change, budget111.getRegularAmount());
+        assertEquals(initialBR111Amount + change + budget111.getPublicInvestmentAmount(), budget111.getAmount());
+
+        // BR 11101
+        assertEquals(initialBR11101Amount + change, budget11101.getRegularAmount());
+        assertEquals(initialBR11101Amount + change + budget11101.getPublicInvestmentAmount(), budget11101.getAmount());
     }
 }
