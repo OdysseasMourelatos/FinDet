@@ -36,6 +36,15 @@ public class PublicInvestmentBudgetNationalRevenue extends PublicInvestmentBudge
         return BudgetRevenueLogicService.findRevenueWithCode(code, publicInvestmentBudgetNationalRevenues);
     }
 
+    public static ArrayList<BudgetRevenue> getPublicInvestmentBudgetNationalRevenuesStartingWithCode(String code) {
+        return BudgetRevenueLogicService.getRevenuesStartingWithCode(code, publicInvestmentBudgetNationalRevenues);
+    }
+
+    public static void printPublicInvestmentBudgetNationalRevenuesStartingWithCode(String code) {
+        DataOutput.printGeneralBudgetEntriesWithAsciiTable(getPublicInvestmentBudgetNationalRevenuesStartingWithCode(code), 0);
+    }
+
+
     //Sum Method
 
     public static long calculateSum() {
