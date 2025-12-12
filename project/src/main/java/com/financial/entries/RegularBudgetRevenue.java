@@ -133,6 +133,26 @@ public class RegularBudgetRevenue extends BudgetRevenue implements IBudgetRevenu
         BudgetRevenueChangesService.setAmountOfAllSubCategoriesWithPercentageAdjustment(this, regularBudgetRevenues, percentage);
     }
 
+    //Updating the filtered objects in SuperClass
+
+    public void updateAmountOfSuperClassFilteredObjects(long change) {
+        ArrayList<BudgetRevenue> objectsThatChanged = new ArrayList<>();
+        //SuperCategories, SubCategories & the object itself
+        objectsThatChanged.addAll(findAllSubCategories());
+        objectsThatChanged.addAll(getSuperCategories());
+        objectsThatChanged.add(this);
+
+        //We update the objects that are filtered in BudgetRevenue class
+        for (BudgetRevenue b : objectsThatChanged) {
+            //By finding the right object
+            BudgetRevenue budgetRevenue = BudgetRevenue.findBudgetRevenueWithCode(b.getCode());
+            if (budgetRevenue != null) {
+                //And changing its regular amount
+                budgetRevenue.setRegularAmount(b.getAmount());
+            }
+        }
+    }
+
     //ToString
 
     @Override
