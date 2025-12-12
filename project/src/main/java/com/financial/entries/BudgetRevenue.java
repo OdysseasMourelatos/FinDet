@@ -1,6 +1,6 @@
 package com.financial.entries;
 
-import com.financial.services.BudgetRevenueHandling;
+import com.financial.services.BudgetRevenueLogicService;
 import com.financial.services.DataOutput;
 import com.financial.services.IBudgetRevenueLogic;
 
@@ -69,23 +69,23 @@ public class BudgetRevenue extends BudgetEntry implements IBudgetRevenueLogic {
     }
 
     public static void printAllBudgetRevenues() {
-        DataOutput.printRevenueWithAsciiTable(budgetRevenues, BudgetRevenueHandling.calculateSum(budgetRevenues));
+        DataOutput.printRevenueWithAsciiTable(budgetRevenues, BudgetRevenueLogicService.calculateSum(budgetRevenues));
     }
 
     public static ArrayList<BudgetRevenue> getMainBudgetRevenues() {
-        return BudgetRevenueHandling.getMainBudgetRevenues(getAllBudgetRevenues());
+        return BudgetRevenueLogicService.getMainBudgetRevenues(getAllBudgetRevenues());
     }
 
     public static void printMainBudgetRevenues() {
-        DataOutput.printBudgetRevenuesWithAsciiTable(getMainBudgetRevenues(), BudgetRevenueHandling.calculateSum(getMainBudgetRevenues()));
+        DataOutput.printBudgetRevenuesWithAsciiTable(getMainBudgetRevenues(), BudgetRevenueLogicService.calculateSum(getMainBudgetRevenues()));
     }
 
     public static BudgetRevenue findBudgetRevenueWithCode(String code) {
-        return BudgetRevenueHandling.findRevenueWithCode(code, budgetRevenues);
+        return BudgetRevenueLogicService.findRevenueWithCode(code, budgetRevenues);
     }
 
     public static ArrayList<BudgetRevenue> getBudgetRevenuesStartingWithCode(String code) {
-        return BudgetRevenueHandling.getRevenuesStartingWithCode(code, budgetRevenues);
+        return BudgetRevenueLogicService.getRevenuesStartingWithCode(code, budgetRevenues);
     }
 
     public static void printBudgetRevenuesStartingWithCode(String code) {
@@ -110,19 +110,19 @@ public class BudgetRevenue extends BudgetEntry implements IBudgetRevenueLogic {
     //Sum Method
     @Override
     public long calculateSum() {
-        return BudgetRevenueHandling.calculateSum(budgetRevenues);
+        return BudgetRevenueLogicService.calculateSum(budgetRevenues);
     }
 
     //Supercategories methods
 
     @Override
     public BudgetRevenue findSuperCategory() {
-        return BudgetRevenueHandling.findSuperCategory(this, budgetRevenues);
+        return BudgetRevenueLogicService.findSuperCategory(this, budgetRevenues);
     }
 
     @Override
     public ArrayList<BudgetRevenue> getSuperCategories() {
-        return BudgetRevenueHandling.getSuperCategories(this, budgetRevenues);
+        return BudgetRevenueLogicService.getSuperCategories(this, budgetRevenues);
     }
 
     @Override
@@ -151,7 +151,7 @@ public class BudgetRevenue extends BudgetEntry implements IBudgetRevenueLogic {
 
     @Override
     public ArrayList<BudgetRevenue> findAllSubCategories() {
-        return BudgetRevenueHandling.findAllSubCategories(this, budgetRevenues);
+        return BudgetRevenueLogicService.findAllSubCategories(this, budgetRevenues);
     }
 
     @Override
@@ -161,7 +161,7 @@ public class BudgetRevenue extends BudgetEntry implements IBudgetRevenueLogic {
 
     @Override
     public ArrayList<BudgetRevenue> findNextLevelSubCategories() {
-        return BudgetRevenueHandling.findNextLevelSubCategories(this, budgetRevenues);
+        return BudgetRevenueLogicService.findNextLevelSubCategories(this, budgetRevenues);
     }
 
     @Override

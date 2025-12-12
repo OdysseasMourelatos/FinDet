@@ -4,7 +4,7 @@ import com.financial.entries.BudgetRevenue;
 
 import java.util.ArrayList;
 
-public class BudgetRevenueHandling {
+public class BudgetRevenueLogicService {
 
     //Calculates sum based on the main codes (2-digits)
     public static long calculateSum(ArrayList<? extends BudgetRevenue> budgetRevenues) {

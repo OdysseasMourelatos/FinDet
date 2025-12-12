@@ -80,7 +80,7 @@ public class DataOutput {
             at.addRule();
         }
         if (sum != 0) {
-            at.addRow("", "", String.format("%,d", BudgetRevenueHandling.calculateSum(RegularBudgetRevenue.getAllRegularBudgetRevenues())), String.format("%,d", BudgetRevenueHandling.calculateSum(PublicInvestmentBudgetRevenue.getPublicInvestmentBudgetRevenues())) , String.format("%,d", sum));
+            at.addRow("", "", String.format("%,d", BudgetRevenueLogicService.calculateSum(RegularBudgetRevenue.getAllRegularBudgetRevenues())), String.format("%,d", BudgetRevenueLogicService.calculateSum(PublicInvestmentBudgetRevenue.getPublicInvestmentBudgetRevenues())) , String.format("%,d", sum));
             at.addRule();
         }
 
@@ -269,7 +269,7 @@ public class DataOutput {
             at.addRule();
         }
         if (sum != 0) {
-            at.addRow("", "", String.format("%,d", BudgetRevenueHandling.calculateSum(PublicInvestmentBudgetNationalRevenue.getPublicInvestmentBudgetNationalRevenues())), String.format("%,d", BudgetRevenueHandling.calculateSum(PublicInvestmentBudgetCoFundedRevenue.getPublicInvestmentBudgetCoFundedRevenues())), String.format("%,d", BudgetRevenueHandling.calculateSum(revenues)));
+            at.addRow("", "", String.format("%,d", BudgetRevenueLogicService.calculateSum(PublicInvestmentBudgetNationalRevenue.getPublicInvestmentBudgetNationalRevenues())), String.format("%,d", BudgetRevenueLogicService.calculateSum(PublicInvestmentBudgetCoFundedRevenue.getPublicInvestmentBudgetCoFundedRevenues())), String.format("%,d", BudgetRevenueLogicService.calculateSum(revenues)));
             at.addRule();
         }
 

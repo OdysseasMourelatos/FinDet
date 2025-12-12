@@ -1,6 +1,6 @@
 package com.financial.entries;
 
-import com.financial.services.BudgetRevenueHandling;
+import com.financial.services.BudgetRevenueLogicService;
 import com.financial.services.DataOutput;
 import com.financial.services.*;
 
@@ -22,19 +22,27 @@ public class RegularBudgetRevenue extends BudgetRevenue implements IBudgetRevenu
     }
 
     public static void printAllRegularBudgetRevenues() {
-        DataOutput.printRevenueWithAsciiTable(regularBudgetRevenues, BudgetRevenueHandling.calculateSum(regularBudgetRevenues));
+        DataOutput.printRevenueWithAsciiTable(regularBudgetRevenues, BudgetRevenueLogicService.calculateSum(regularBudgetRevenues));
     }
 
     public static ArrayList<RegularBudgetRevenue> getMainRegularBudgetRevenues() {
-        return BudgetRevenueHandling.getMainBudgetRevenues(getAllRegularBudgetRevenues());
+        return BudgetRevenueLogicService.getMainBudgetRevenues(getAllRegularBudgetRevenues());
     }
 
     public static void printMainRegularBudgetRevenues() {
-        BudgetRevenueHandling.printMainBudgetRevenues(getMainRegularBudgetRevenues());
+        BudgetRevenueLogicService.printMainBudgetRevenues(getMainRegularBudgetRevenues());
     }
 
     public static RegularBudgetRevenue findRegularBudgetRevenueWithCode(String code) {
-        return BudgetRevenueHandling.findRevenueWithCode(code, regularBudgetRevenues);
+        return BudgetRevenueLogicService.findRevenueWithCode(code, regularBudgetRevenues);
+    }
+
+    public static ArrayList<BudgetRevenue> getRegularBudgetRevenuesStartingWithCode(String code) {
+        return BudgetRevenueLogicService.getRevenuesStartingWithCode(code, regularBudgetRevenues);
+    }
+
+    public static void printRegularRevenuesStartingWithCode(String code) {
+        BudgetRevenueLogicService.printRevenuesStartingWithCode(code, regularBudgetRevenues);
     }
 
     //*Implementation of methods*
@@ -43,19 +51,19 @@ public class RegularBudgetRevenue extends BudgetRevenue implements IBudgetRevenu
 
     @Override
     public long calculateSum() {
-        return BudgetRevenueHandling.calculateSum(regularBudgetRevenues);
+        return BudgetRevenueLogicService.calculateSum(regularBudgetRevenues);
     }
 
     //Supercategories methods
 
     @Override
     public RegularBudgetRevenue findSuperCategory() {
-        return BudgetRevenueHandling.findSuperCategory(this, regularBudgetRevenues);
+        return BudgetRevenueLogicService.findSuperCategory(this, regularBudgetRevenues);
     }
 
     @Override
     public ArrayList<BudgetRevenue> getSuperCategories() {
-        return BudgetRevenueHandling.getSuperCategories(this, regularBudgetRevenues);
+        return BudgetRevenueLogicService.getSuperCategories(this, regularBudgetRevenues);
     }
 
     @Override
@@ -84,7 +92,7 @@ public class RegularBudgetRevenue extends BudgetRevenue implements IBudgetRevenu
 
     @Override
     public ArrayList<BudgetRevenue> findAllSubCategories() {
-        return BudgetRevenueHandling.findAllSubCategories(this, regularBudgetRevenues);
+        return BudgetRevenueLogicService.findAllSubCategories(this, regularBudgetRevenues);
     }
 
     @Override
@@ -94,7 +102,7 @@ public class RegularBudgetRevenue extends BudgetRevenue implements IBudgetRevenu
 
     @Override
     public ArrayList<BudgetRevenue> findNextLevelSubCategories() {
-        return BudgetRevenueHandling.findNextLevelSubCategories(this, regularBudgetRevenues);
+        return BudgetRevenueLogicService.findNextLevelSubCategories(this, regularBudgetRevenues);
     }
 
     @Override

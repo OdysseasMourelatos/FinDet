@@ -41,17 +41,17 @@ public class ChartsMenu {
         int choice = input.nextInt();
         input.nextLine();
         if (choice == 1) {
-            PieChartGenerator.generateChart(BudgetRevenueHandling.getMainBudgetRevenues(BudgetRevenue.getAllBudgetRevenues()), "Κατανομή Εσόδων");
+            PieChartGenerator.generateChart(BudgetRevenueLogicService.getMainBudgetRevenues(BudgetRevenue.getAllBudgetRevenues()), "Κατανομή Εσόδων");
         } else if (choice == 2) {
             printTaxChartsSubMenu();
         } else if (choice == 3) {
-            BudgetRevenue budgetRevenue = BudgetRevenueHandling.findRevenueWithCode("13", BudgetRevenue.getAllBudgetRevenues());
+            BudgetRevenue budgetRevenue = BudgetRevenueLogicService.findRevenueWithCode("13", BudgetRevenue.getAllBudgetRevenues());
             PieChartGenerator.generateChart(budgetRevenue.findNextLevelSubCategories(), "Κατανομή Μεταβιβάσεων");
         } else if (choice == 4) {
-            BudgetRevenue budgetRevenue = BudgetRevenueHandling.findRevenueWithCode("14", BudgetRevenue.getAllBudgetRevenues());
+            BudgetRevenue budgetRevenue = BudgetRevenueLogicService.findRevenueWithCode("14", BudgetRevenue.getAllBudgetRevenues());
             PieChartGenerator.generateChart(budgetRevenue.findNextLevelSubCategories(), "Κατανομή Πωλήσεων Αγαθών & Υπηρεσιών");
         } else if (choice == 5) {
-            BudgetRevenue budgetRevenue = BudgetRevenueHandling.findRevenueWithCode("15", BudgetRevenue.getAllBudgetRevenues());
+            BudgetRevenue budgetRevenue = BudgetRevenueLogicService.findRevenueWithCode("15", BudgetRevenue.getAllBudgetRevenues());
             PieChartGenerator.generateChart(budgetRevenue.findNextLevelSubCategories(), "Κατανομή Λοιπών Τρεχόντων Εσόδων");
         }
     }
@@ -71,15 +71,15 @@ public class ChartsMenu {
         input.nextLine();
         switch (choice) {
             case 1 -> {
-                BudgetRevenue budgetRevenue = BudgetRevenueHandling.findRevenueWithCode("11", BudgetRevenue.getAllBudgetRevenues());
+                BudgetRevenue budgetRevenue = BudgetRevenueLogicService.findRevenueWithCode("11", BudgetRevenue.getAllBudgetRevenues());
                 PieChartGenerator.generateChart(budgetRevenue.findNextLevelSubCategories(), "Κατανομή Φόρων");
             }
             case 2 -> {
-                BudgetRevenue budgetRevenue = BudgetRevenueHandling.findRevenueWithCode("111", BudgetRevenue.getAllBudgetRevenues());
+                BudgetRevenue budgetRevenue = BudgetRevenueLogicService.findRevenueWithCode("111", BudgetRevenue.getAllBudgetRevenues());
                 PieChartGenerator.generateChart(budgetRevenue.findNextLevelSubCategories(), "Κατανομή Φόρων επί αγαθών και υπηρεσιών");
             }
             case 3 -> {
-                BudgetRevenue budgetRevenue = BudgetRevenueHandling.findRevenueWithCode("115", BudgetRevenue.getAllBudgetRevenues());
+                BudgetRevenue budgetRevenue = BudgetRevenueLogicService.findRevenueWithCode("115", BudgetRevenue.getAllBudgetRevenues());
                 PieChartGenerator.generateChart(budgetRevenue.findNextLevelSubCategories(), "Κατανομή Φόρων Εισοδήματος");
             }
         }

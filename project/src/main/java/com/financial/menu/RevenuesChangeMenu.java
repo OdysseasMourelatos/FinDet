@@ -13,7 +13,7 @@ public class RevenuesChangeMenu {
         System.out.println();
         System.out.print("Εισάγετε τον κωδικό του λογαριασμού εσόδων του οποίου το ποσό επιθυμείτε να αλλάξει: ");
         String code = input.nextLine();
-        BudgetRevenue budgetRevenue = BudgetRevenueHandling.findRevenueWithCode(code, BudgetRevenue.getAllBudgetRevenues());
+        BudgetRevenue budgetRevenue = BudgetRevenueLogicService.findRevenueWithCode(code, BudgetRevenue.getAllBudgetRevenues());
 
         if (budgetRevenue != null) {
             selectChangeMethodAndApply(budgetRevenue);
