@@ -100,9 +100,9 @@ public class RevenuesChangeMenu {
             } else {
                 change = changeAmount;
             }
-            budgetRevenue.implementChangesOfEqualDistribution(change);
+            //budgetRevenue.implementChangesOfEqualDistribution(change);
         } else if (changeMethod == 2) {
-            budgetRevenue.implementChangesOfPercentageAdjustment(percentage);
+            //budgetRevenue.implementChangesOfPercentageAdjustment(percentage);
         } else if (changeMethod == 3) {
             return;
         }
