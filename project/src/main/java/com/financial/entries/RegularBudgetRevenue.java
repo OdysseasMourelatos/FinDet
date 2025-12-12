@@ -110,6 +110,29 @@ public class RegularBudgetRevenue extends BudgetRevenue implements IBudgetRevenu
         DataOutput.printRevenueWithAsciiTable(findNextLevelSubCategories(), 0);
     }
 
+    //*Implementation Of Methods (Changes)*
+
+    //SuperCategories update
+
+    @Override
+    public void setAmountOfSuperCategories(long change) {
+        BudgetRevenueChangesService.setAmountOfSuperCategories(getSuperCategories(), change);
+    }
+
+    //SubCategories update
+
+    @Override
+    public void setAmountOfAllSubCategoriesWithEqualDistribution(long change) {
+        // Delegation: Περιλαμβάνει την Master List για την αναδρομή
+        BudgetRevenueChangesService.setAmountOfAllSubCategoriesWithEqualDistribution(this, regularBudgetRevenues, change);
+    }
+
+    @Override
+    public void setAmountOfAllSubCategoriesWithPercentageAdjustment(double percentage) {
+        // Delegation: Περιλαμβάνει την Master List για την αναδρομή
+        BudgetRevenueChangesService.setAmountOfAllSubCategoriesWithPercentageAdjustment(this, regularBudgetRevenues, percentage);
+    }
+
     //ToString
 
     @Override
