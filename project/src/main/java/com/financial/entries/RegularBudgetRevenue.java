@@ -153,6 +153,19 @@ public class RegularBudgetRevenue extends BudgetRevenue implements IBudgetRevenu
         }
     }
 
+    //Methods that are called from outside for mass changes
+    //1 - Update SuperCategories
+    //2 - Update SubCategories with certain strategy
+    //3 - Update the account itself
+
+    @Override
+    public void implementChangesOfEqualDistribution(long change) {
+        setAmountOfSuperCategories(change);
+        setAmountOfAllSubCategoriesWithEqualDistribution(change);
+        setAmount(getAmount() + change);
+        updateAmountOfSuperClassFilteredObjects(change);
+    }
+
     //ToString
 
     @Override
