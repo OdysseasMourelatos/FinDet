@@ -11,7 +11,6 @@ import java.util.Comparator;
 
 public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements IBudgetRevenueLogic {
 
-
     //Constructor & Fields
 
     private final String type;
@@ -64,8 +63,8 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements IBud
             PublicInvestmentBudgetRevenue b1 = publicInvestmentBudgetRevenues.get(i);
             PublicInvestmentBudgetRevenue b2 = publicInvestmentBudgetRevenues.get(i-1);
             publicInvestmentBudgetRevenues.remove(b1);
-            b2.setNationalAmount(b2.getNationalAmount() + b1.getNationalAmount());
-            b2.setCoFundedAmount(b2.getCoFundedAmount() + b1.getCoFundedAmount());
+            b2.setNationalAmount(b2.getNationalAmount() + b1.getNationalAmount(), false);
+            b2.setCoFundedAmount(b2.getCoFundedAmount() + b1.getCoFundedAmount(), false);
             b2.setAmount(b2.getAmount() + b1.getAmount());
         }
         DataInput.createBudgetRevenueFilteredFromPublicInvestmentBudgetRevenue();
