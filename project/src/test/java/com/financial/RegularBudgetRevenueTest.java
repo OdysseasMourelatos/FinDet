@@ -192,4 +192,39 @@ public class RegularBudgetRevenueTest {
         assertEquals(initial132, revenue132.getAmount());
         assertEquals(62055000000L, revenue11.getAmount());
     }
+
+    @Test
+    void ImplementChangesOfEqualDistributionTest1() {
+        long change = 10000000L; // +10 Million applied to 12
+
+        // Initial amounts
+        long initial12 = revenue12.getAmount();
+        long initial122 = revenue122.getAmount();
+        long initial12201 = revenue12201.getAmount();
+        long initial1220101 = revenue1220101.getAmount();
+        long initial1220102 = revenue1220102.getAmount();
+
+        // Implementation
+        revenue12.implementChangesOfEqualDistribution(change);
+
+        // 1- Checking the same account
+        assertEquals(initial12 + change, revenue12.getAmount());
+
+        // 2 - Checking the subcategories
+        // 12 -> 122 (1 child: 10M / 1 = 10M)
+        long changeLevel1 = 10000000L;
+        assertEquals(initial122 + changeLevel1, revenue122.getAmount());
+
+        // 122 -> 12201 (1 child: 10M / 1 = 10M)
+        long changeLevel2 = 10000000L;
+        assertEquals(initial12201 + changeLevel2, revenue12201.getAmount());
+
+        // 12201 -> (1220101 & 1220102). (Change: 10M / 2 children = 5M each)
+        long changeLevel3 = 5000000L;
+        assertEquals(initial1220101 + changeLevel3, revenue1220101.getAmount());
+        assertEquals(initial1220102 + changeLevel3, revenue1220102.getAmount());
+
+        // 3 - Checking if ab object with no correlation has indeed not changed
+        assertEquals(62055000000L, revenue11.getAmount());
+    }
 }
