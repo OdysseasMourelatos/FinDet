@@ -42,7 +42,7 @@ public class RegularBudgetRevenueTest {
     @Test
     void getAllRegularBudgetRevenuesTest() {
         ArrayList<RegularBudgetRevenue> allRevenues = RegularBudgetRevenue.getAllRegularBudgetRevenues();
-        assertEquals(7, allRevenues.size());
+        assertEquals(12, allRevenues.size());
         assertTrue(allRevenues.get(0) instanceof RegularBudgetRevenue);
     }
 
@@ -63,18 +63,19 @@ public class RegularBudgetRevenueTest {
 
         ArrayList<RegularBudgetRevenue> mainRevenues = RegularBudgetRevenue.getMainRegularBudgetRevenues();
 
-        //Only objects with 2-digit codes (11 & 13)
-        assertEquals(2, mainRevenues.size());
+        //Only objects with 2-digit codes (11, 12 & 13)
+        assertEquals(3, mainRevenues.size());
 
         // Checking the codes
-        assertEquals("11", mainRevenues.get(0).getCode());
-        assertEquals("13", mainRevenues.get(1).getCode());
+        assertTrue(mainRevenues.contains(revenue11));
+        assertTrue(mainRevenues.contains(revenue12));
+        assertTrue(mainRevenues.contains(revenue13));
     }
 
     @Test
     void calculateSumTest() {
-        // 62,055,000,000 (11) + 3,906,000,000 (13)
-        long expectedSum = 65961000000L;
+        // 62,055,000,000 (11) + 60,000,000 (12) + 3,906,000,000 (13)
+        long expectedSum = 66021000000L;
         assertEquals(expectedSum, revenue11.calculateSum());
     }
 
