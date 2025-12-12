@@ -166,6 +166,14 @@ public class RegularBudgetRevenue extends BudgetRevenue implements IBudgetRevenu
         updateAmountOfSuperClassFilteredObjects(change);
     }
 
+    @Override
+    public void implementChangesOfPercentageAdjustment(double percentage) {
+        setAmountOfSuperCategories((long) (getAmount() * (percentage)));
+        setAmountOfAllSubCategoriesWithPercentageAdjustment(percentage);
+        setAmount((long) (getAmount() * (1 + percentage)));
+        updateAmountOfSuperClassFilteredObjects((long) (getAmount() * (percentage)));
+    }
+
     //ToString
 
     @Override
