@@ -121,7 +121,7 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements IBud
             for (int i = getSuperCategories().size() - 1; i >= 0; i--) {
                 superCategories.add(getSuperCategories().get(i));
             }
-            DataOutput.printRevenueWithAsciiTable(superCategories, 0);
+            DataOutput.printGeneralBudgetEntriesWithAsciiTable(superCategories, 0);
         }
     }
 

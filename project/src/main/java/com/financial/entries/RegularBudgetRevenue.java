@@ -22,7 +22,7 @@ public class RegularBudgetRevenue extends BudgetRevenue implements IBudgetRevenu
     }
 
     public static void printAllRegularBudgetRevenues() {
-        DataOutput.printRevenueWithAsciiTable(regularBudgetRevenues, BudgetRevenueLogicService.calculateSum(regularBudgetRevenues));
+        DataOutput.printGeneralBudgetEntriesWithAsciiTable(regularBudgetRevenues, BudgetRevenueLogicService.calculateSum(regularBudgetRevenues));
     }
 
     public static ArrayList<RegularBudgetRevenue> getMainRegularBudgetRevenues() {
@@ -75,7 +75,7 @@ public class RegularBudgetRevenue extends BudgetRevenue implements IBudgetRevenu
             for (int i = getSuperCategories().size() - 1; i >= 0; i--) {
                 superCategories.add((RegularBudgetRevenue) getSuperCategories().get(i));
             }
-            DataOutput.printRevenueWithAsciiTable(superCategories, 0);
+            DataOutput.printGeneralBudgetEntriesWithAsciiTable(superCategories, 0);
         }
     }
 
@@ -84,7 +84,7 @@ public class RegularBudgetRevenue extends BudgetRevenue implements IBudgetRevenu
         if (getSuperCategories().isEmpty()) {
             System.out.println("Δεν υπάρχουν κατηγορίες σε υψηλότερη ιεραρχία");
         } else {
-            DataOutput.printRevenueWithAsciiTable(getSuperCategories(), 0);
+            DataOutput.printGeneralBudgetEntriesWithAsciiTable(getSuperCategories(), 0);
         }
     }
 
@@ -97,7 +97,7 @@ public class RegularBudgetRevenue extends BudgetRevenue implements IBudgetRevenu
 
     @Override
     public void printAllSubCategories() {
-        DataOutput.printRevenueWithAsciiTable(findAllSubCategories(), 0);
+        DataOutput.printGeneralBudgetEntriesWithAsciiTable(findAllSubCategories(), 0);
     }
 
     @Override
@@ -107,7 +107,7 @@ public class RegularBudgetRevenue extends BudgetRevenue implements IBudgetRevenu
 
     @Override
     public void printNextLevelSubCategories() {
-        DataOutput.printRevenueWithAsciiTable(findNextLevelSubCategories(), 0);
+        DataOutput.printGeneralBudgetEntriesWithAsciiTable(findNextLevelSubCategories(), 0);
     }
 
     //*Implementation Of Methods (Changes)*
