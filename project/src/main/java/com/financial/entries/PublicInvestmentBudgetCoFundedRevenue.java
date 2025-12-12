@@ -1,11 +1,10 @@
 package com.financial.entries;
 
-import com.financial.services.BudgetRevenueLogicService;
-import com.financial.services.DataOutput;
+import com.financial.services.*;
 
 import java.util.ArrayList;
 
-public class PublicInvestmentBudgetCoFundedRevenue extends PublicInvestmentBudgetRevenue {
+public class PublicInvestmentBudgetCoFundedRevenue extends PublicInvestmentBudgetRevenue implements IBudgetRevenueLogic, IBudgetRevenueChanges {
 
     //Constructor & Fields
 
@@ -100,5 +99,45 @@ public class PublicInvestmentBudgetCoFundedRevenue extends PublicInvestmentBudge
     @Override
     public void printNextLevelSubCategories() {
         DataOutput.printGeneralBudgetEntriesWithAsciiTable(findNextLevelSubCategories(), 0);
+    }
+
+    //*Implementation Of Methods (Changes)*
+
+    //SuperCategories update
+
+    @Override
+    public void setAmountOfSuperCategories(long change) {
+        BudgetRevenueChangesService.setAmountOfSuperCategories(getSuperCategories(), change);
+    }
+
+    //SubCategories update
+
+    @Override
+    public void setAmountOfAllSubCategoriesWithEqualDistribution(long change) {
+        BudgetRevenueChangesService.setAmountOfAllSubCategoriesWithEqualDistribution(this, publicInvestmentBudgetCoFundedRevenues, change);
+    }
+
+    @Override
+    public void setAmountOfAllSubCategoriesWithPercentageAdjustment(double percentage) {
+        BudgetRevenueChangesService.setAmountOfAllSubCategoriesWithPercentageAdjustment(this, publicInvestmentBudgetCoFundedRevenues, percentage);
+    }
+
+    //Methods that are called from outside for mass changes
+    //1 - Update SuperCategories
+    //2 - Update SubCategories with certain strategy
+    //3 - Update the account itself
+
+    @Override
+    public void implementChangesOfEqualDistribution(long change) {
+        setAmountOfSuperCategories(change);
+        setAmountOfAllSubCategoriesWithEqualDistribution(change);
+        setAmount(getAmount() + change);
+    }
+
+    @Override
+    public void implementChangesOfPercentageAdjustment(double percentage) {
+        setAmountOfSuperCategories((long) (getAmount() * (percentage)));
+        setAmountOfAllSubCategoriesWithPercentageAdjustment(percentage);
+        setAmount((long) (getAmount() * (1 + percentage)));
     }
 }
