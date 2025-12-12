@@ -154,4 +154,9 @@ public class PublicInvestmentBudgetNationalRevenue extends PublicInvestmentBudge
         this.amount = amount;
         updateAmountOfSuperClassFilteredObjects(amount);
     }
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }
