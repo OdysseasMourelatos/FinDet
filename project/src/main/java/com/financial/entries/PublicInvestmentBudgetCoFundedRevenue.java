@@ -38,4 +38,10 @@ public class PublicInvestmentBudgetCoFundedRevenue extends PublicInvestmentBudge
         return BudgetRevenueLogicService.findRevenueWithCode(code, publicInvestmentBudgetCoFundedRevenues);
     }
 
+    //Sum Method
+
+    public static long calculateSum() {
+        return BudgetRevenueLogicService.calculateSum(publicInvestmentBudgetCoFundedRevenues);
+    }
+
 }
