@@ -155,4 +155,9 @@ public class PublicInvestmentBudgetCoFundedRevenue extends PublicInvestmentBudge
         this.amount = amount;
         updateAmountOfSuperClassFilteredObjects(amount);
     }
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }
