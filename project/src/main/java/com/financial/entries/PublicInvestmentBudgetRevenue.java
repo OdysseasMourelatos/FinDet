@@ -78,7 +78,7 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements IBud
     }
 
     public static void printPublicInvestmentBudgetRevenues() {
-        DataOutput.printPublicInvestmentBudgetRevenueWithAsciiTable(publicInvestmentBudgetRevenues);
+        DataOutput.printPublicInvestmentBudgetRevenuesFilteredWithAsciiTable(publicInvestmentBudgetRevenues, calculateSum());
     }
 
     public static ArrayList<PublicInvestmentBudgetRevenue> getMainPublicInvestmentBudgetRevenues() {
@@ -86,11 +86,19 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements IBud
     }
 
     public static void printMainPublicInvestmentBudgetRevenues() {
-        BudgetRevenueLogicService.printMainBudgetRevenues(getMainPublicInvestmentBudgetRevenues());
+        DataOutput.printPublicInvestmentBudgetRevenuesFilteredWithAsciiTable(getMainPublicInvestmentBudgetRevenues(), calculateSum());
     }
 
     public static PublicInvestmentBudgetRevenue findPublicInvestmentBudgetRevenueWithCode(String code) {
         return BudgetRevenueLogicService.findRevenueWithCode(code, publicInvestmentBudgetRevenues);
+    }
+
+    public static ArrayList<BudgetRevenue> getPublicInvestmentBudgetRevenuesStartingWithCode(String code) {
+        return BudgetRevenueLogicService.getRevenuesStartingWithCode(code, publicInvestmentBudgetRevenues);
+    }
+
+    public static void printPublicInvestmentRevenuesStartingWithCode(String code) {
+        DataOutput.printGeneralBudgetEntriesWithAsciiTable(getPublicInvestmentBudgetRevenuesStartingWithCode(code), 0);
     }
 
     //Sum Method
@@ -130,7 +138,7 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements IBud
         if (getSuperCategories().isEmpty()) {
             System.out.println("Δεν υπάρχουν κατηγορίες σε υψηλότερη ιεραρχία");
         } else {
-            //DataOutput.printPublicInvestmentBudgetRevenuesFilteredWithAsciiTable(getSuperCategories(), 0);
+            DataOutput.printGeneralBudgetEntriesWithAsciiTable(getSuperCategories(), 0);
         }
     }
 
@@ -143,7 +151,7 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements IBud
 
     @Override
     public void printAllSubCategories() {
-        //DataOutput.printPublicInvestmentBudgetRevenuesFilteredWithAsciiTable(findAllSubCategories(), 0);
+        DataOutput.printGeneralBudgetEntriesWithAsciiTable(findAllSubCategories(), 0);
     }
 
     @Override
@@ -153,7 +161,7 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements IBud
 
     @Override
     public void printNextLevelSubCategories() {
-        //DataOutput.printPublicInvestmentBudgetRevenuesFilteredWithAsciiTable(findNextLevelSubCategories(), 0);
+        DataOutput.printGeneralBudgetEntriesWithAsciiTable(findNextLevelSubCategories(), 0);
     }
 
     //Getters & Setters
@@ -170,12 +178,29 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements IBud
         return coFundedAmount;
     }
 
-    protected void setNationalAmount(long nationalAmount) {
+    protected void setNationalAmount(long nationalAmount, boolean update) {
         this.nationalAmount = nationalAmount;
+        if (update) {
+            this.amount = nationalAmount + coFundedAmount;
+            updateAmountOfSuperClassFilteredObjects(amount);
+        }
     }
 
-    protected void setCoFundedAmount(long coFundedAmount) {
+    protected void setCoFundedAmount(long coFundedAmount, boolean update) {
         this.coFundedAmount = coFundedAmount;
+        if (update) {
+            this.amount = nationalAmount + coFundedAmount;
+            updateAmountOfSuperClassFilteredObjects(amount);
+        }
+    }
+
+    //Updating the filtered objects in SuperClass
+
+    public void updateAmountOfSuperClassFilteredObjects(long change) {
+        BudgetRevenue budgetRevenue = BudgetRevenue.findBudgetRevenueWithCode(this.getCode());
+        if (budgetRevenue != null ) {
+            budgetRevenue.setPublicInvestmentAmount(change, true);
+        }
     }
 
     @Override
