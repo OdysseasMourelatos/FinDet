@@ -299,4 +299,38 @@ public class RegularBudgetRevenueTest {
         assertEquals(initialBR11101Amount + change, budget11101.getRegularAmount());
         assertEquals(initialBR11101Amount + change + budget11101.getPublicInvestmentAmount(), budget11101.getAmount());
     }
+
+    @Test
+    void updateAmountOfSuperClassFilteredObjects2() {
+        double percentage = 0.1; // 10% change applied to regular revenue 11
+
+        // Initial amounts of filtered objects
+        long initialBR11Amount = budget11.getRegularAmount();
+        long initialBR111Amount = budget111.getRegularAmount();
+        long initialBR11101Amount = budget11101.getRegularAmount();
+
+        // Implementation
+        revenue11.implementChangesOfPercentageAdjustment(percentage);
+
+        // Expected change
+        long expectedBR11Amount = (long) (initialBR11Amount * (1 + percentage));
+        long expectedBR111Amount = (long) (initialBR111Amount * (1 + percentage));
+        long expectedBR11101Amount = (long) (initialBR11101Amount * (1 + percentage));
+
+
+        // Checking Filtered List Of SuperClass
+
+        // BR 11
+        assertEquals(expectedBR11Amount, budget11.getRegularAmount());
+        assertEquals(expectedBR11Amount + budget11.getPublicInvestmentAmount(), budget11.getAmount());
+
+
+        // BR 111
+        assertEquals(expectedBR111Amount, budget111.getRegularAmount());
+        assertEquals(expectedBR111Amount + budget111.getPublicInvestmentAmount(), budget111.getAmount());
+
+        // BR 11101
+        assertEquals(expectedBR11101Amount, budget11101.getRegularAmount());
+        assertEquals(expectedBR11101Amount + budget11101.getPublicInvestmentAmount(), budget11101.getAmount());
+    }
 }
