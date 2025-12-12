@@ -1,6 +1,6 @@
 package com.financial.entries;
 
-import com.financial.services.BudgetRevenueHandling;
+import com.financial.services.BudgetRevenueLogicService;
 import com.financial.services.DataInput;
 import com.financial.services.DataOutput;
 import com.financial.services.IBudgetRevenueLogic;
@@ -82,15 +82,15 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements IBud
     }
 
     public static ArrayList<PublicInvestmentBudgetRevenue> getMainPublicInvestmentBudgetRevenues() {
-        return BudgetRevenueHandling.getMainBudgetRevenues(publicInvestmentBudgetRevenues);
+        return BudgetRevenueLogicService.getMainBudgetRevenues(publicInvestmentBudgetRevenues);
     }
 
     public static void printMainPublicInvestmentBudgetRevenues() {
-        BudgetRevenueHandling.printMainBudgetRevenues(getMainPublicInvestmentBudgetRevenues());
+        BudgetRevenueLogicService.printMainBudgetRevenues(getMainPublicInvestmentBudgetRevenues());
     }
 
     public static PublicInvestmentBudgetRevenue findPublicInvestmentBudgetRevenueWithCode(String code) {
-        return BudgetRevenueHandling.findRevenueWithCode(code, publicInvestmentBudgetRevenues);
+        return BudgetRevenueLogicService.findRevenueWithCode(code, publicInvestmentBudgetRevenues);
     }
 
     //*Implementation of methods*
@@ -98,19 +98,19 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements IBud
     //Sum Method
     @Override
     public long calculateSum() {
-        return BudgetRevenueHandling.calculateSum(publicInvestmentBudgetRevenues);
+        return BudgetRevenueLogicService.calculateSum(publicInvestmentBudgetRevenues);
     }
 
     //Supercategories methods
 
     @Override
     public PublicInvestmentBudgetRevenue findSuperCategory() {
-        return BudgetRevenueHandling.findSuperCategory(this, publicInvestmentBudgetRevenues);
+        return BudgetRevenueLogicService.findSuperCategory(this, publicInvestmentBudgetRevenues);
     }
 
     @Override
     public ArrayList<BudgetRevenue> getSuperCategories() {
-        return BudgetRevenueHandling.getSuperCategories(this, publicInvestmentBudgetRevenues);
+        return BudgetRevenueLogicService.getSuperCategories(this, publicInvestmentBudgetRevenues);
     }
 
     @Override
@@ -139,7 +139,7 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements IBud
 
     @Override
     public ArrayList<BudgetRevenue> findAllSubCategories() {
-        return BudgetRevenueHandling.findAllSubCategories(this, publicInvestmentBudgetRevenues);
+        return BudgetRevenueLogicService.findAllSubCategories(this, publicInvestmentBudgetRevenues);
     }
 
     @Override
@@ -149,7 +149,7 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements IBud
 
     @Override
     public ArrayList<BudgetRevenue> findNextLevelSubCategories() {
-        return BudgetRevenueHandling.findNextLevelSubCategories(this, publicInvestmentBudgetRevenues);
+        return BudgetRevenueLogicService.findNextLevelSubCategories(this, publicInvestmentBudgetRevenues);
     }
 
     @Override

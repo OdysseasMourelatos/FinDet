@@ -1,6 +1,6 @@
 package com.financial.entries;
 
-import com.financial.services.BudgetRevenueHandling;
+import com.financial.services.BudgetRevenueLogicService;
 import com.financial.services.DataOutput;
 
 import java.util.ArrayList;
@@ -26,14 +26,14 @@ public class PublicInvestmentBudgetNationalRevenue extends PublicInvestmentBudge
     }
 
     public static ArrayList<PublicInvestmentBudgetNationalRevenue> getMainPublicInvestmentBudgetNationalRevenues() {
-        return BudgetRevenueHandling.getMainBudgetRevenues(publicInvestmentBudgetNationalRevenues);
+        return BudgetRevenueLogicService.getMainBudgetRevenues(publicInvestmentBudgetNationalRevenues);
     }
 
     public static void printMainPublicInvestmentBudgetNationalRevenues() {
-        BudgetRevenueHandling.printMainBudgetRevenues(getMainPublicInvestmentBudgetNationalRevenues());
+        BudgetRevenueLogicService.printMainBudgetRevenues(getMainPublicInvestmentBudgetNationalRevenues());
     }
 
     public static PublicInvestmentBudgetNationalRevenue findPublicInvestmentBudgetNationalRevenueWithCode(String code) {
-        return BudgetRevenueHandling.findRevenueWithCode(code, publicInvestmentBudgetNationalRevenues);
+        return BudgetRevenueLogicService.findRevenueWithCode(code, publicInvestmentBudgetNationalRevenues);
     }
 }

@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="88d8a661-a47d-4ac5-b89a-2164a467de01" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/../PublicInvestmentBudgetRevenue.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,6 +57,8 @@
     &quot;JUnit.DataOutputTest.executor&quot;: &quot;Run&quot;,
     &quot;JUnit.DataUpdateTest.executor&quot;: &quot;Run&quot;,
     &quot;JUnit.EntityTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.RegularBudgetRevenueTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.RegularBudgetRevenueTest.findSuperCategoryTest.executor&quot;: &quot;Run&quot;,
     &quot;JUnit.java in FinDet.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
