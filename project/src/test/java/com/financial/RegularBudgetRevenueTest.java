@@ -227,4 +227,38 @@ public class RegularBudgetRevenueTest {
         // 3 - Checking if ab object with no correlation has indeed not changed
         assertEquals(62055000000L, revenue11.getAmount());
     }
+
+    @Test
+    void ImplementChangesOfEqualDistributionTest2() {
+        long change = 4000000L; // +4 Million applied to 12201
+
+        // Initial amounts (Supercategories for checking upward propagation)
+        long initial12 = revenue12.getAmount();
+        long initial122 = revenue122.getAmount();
+        long initial12201 = revenue12201.getAmount();
+
+        // Initial amounts (Subcategories for checking downward propagation)
+        long initial1220101 = revenue1220101.getAmount();
+        long initial1220102 = revenue1220102.getAmount();
+
+        // Implementation
+        revenue12201.implementChangesOfEqualDistribution(change);
+
+        // 1. ΕΛΕΓΧΟΣ: SuperCategories (12 and 122 must increase by 4M)
+        assertEquals(initial12 + change, revenue12.getAmount());
+        assertEquals(initial122 + change, revenue122.getAmount());
+
+        // 2 - Checking the same account
+        assertEquals(initial12201 + change, revenue12201.getAmount());
+
+        // 3 - Checking the subcategories (Change: 4M / 2 children = 2M each)
+        long changeToBranch = 2000000L;
+
+        // 1220101 and 1220102 receive 2M each
+        assertEquals(initial1220101 + changeToBranch, revenue1220101.getAmount());
+        assertEquals(initial1220102 + changeToBranch, revenue1220102.getAmount());
+
+        // 4 - Checking if an object with no correlation has indeed not changed
+        assertEquals(62055000000L, revenue11.getAmount());
+    }
 }
