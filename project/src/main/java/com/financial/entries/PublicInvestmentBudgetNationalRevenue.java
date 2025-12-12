@@ -36,4 +36,11 @@ public class PublicInvestmentBudgetNationalRevenue extends PublicInvestmentBudge
     public static PublicInvestmentBudgetNationalRevenue findPublicInvestmentBudgetNationalRevenueWithCode(String code) {
         return BudgetRevenueLogicService.findRevenueWithCode(code, publicInvestmentBudgetNationalRevenues);
     }
+
+    //Sum Method
+
+    public static long calculateSum() {
+        return BudgetRevenueLogicService.calculateSum(publicInvestmentBudgetNationalRevenues);
+    }
+
 }
