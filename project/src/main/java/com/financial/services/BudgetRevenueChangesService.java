@@ -57,4 +57,34 @@ public class BudgetRevenueChangesService {
             return;
         }
     }
+
+    public static <T extends BudgetRevenue> void setAmountOfNextLevelSubCategoriesWithPercentageAdjustment(T parent, ArrayList<T> revenues, double percentage) {
+        ArrayList<BudgetRevenue> nextLevelSubCategories = findNextLevelSubCategories(parent, revenues);
+        if (!nextLevelSubCategories.isEmpty()) {
+            for (BudgetRevenue subCategory : nextLevelSubCategories) {
+                subCategory.setAmount((long) (subCategory.getAmount() * (1 + percentage)));
+            }
+        }
+    }
+
+    public static <T extends BudgetRevenue> void setAmountOfAllSubCategoriesWithPercentageAdjustment(T parent, ArrayList<T> revenues, double percentage) {
+        try {
+            // Ανανεώνω τα ποσά της κάθε επόμενης κατηγορίας (Βασική εφαρμογή αλλαγής)
+            setAmountOfNextLevelSubCategoriesWithPercentageAdjustment(parent, revenues, percentage);
+
+            // Αν δεν υπάρχουν άλλες υποκατηγορίες τερματίζει
+            // Σημείωση: Υποθέτουμε ότι το μήκος 10 είναι το τελικό επίπεδο
+            if (parent.getCode().length() == 10) {
+                throw new RuntimeException();
+            }
+
+            // Για κάθε υποκατηγορία σε επόμενο επίπεδο (Αναδρομή)
+            ArrayList<BudgetRevenue> nextLevelSubCategories = findNextLevelSubCategories(parent, revenues);
+            for (BudgetRevenue subCategory : nextLevelSubCategories) {
+                setAmountOfAllSubCategoriesWithPercentageAdjustment((T) subCategory, revenues, percentage);
+            }
+        } catch (RuntimeException e) {
+            return;
+        }
+    }
 }
