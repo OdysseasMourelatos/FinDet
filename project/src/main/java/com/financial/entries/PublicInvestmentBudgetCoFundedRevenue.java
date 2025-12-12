@@ -36,6 +36,14 @@ public class PublicInvestmentBudgetCoFundedRevenue extends PublicInvestmentBudge
     public static PublicInvestmentBudgetCoFundedRevenue findPublicInvestmentBudgetCoFundedRevenueWithCode(String code) {
         return BudgetRevenueLogicService.findRevenueWithCode(code, publicInvestmentBudgetCoFundedRevenues);
     }
+    
+    public static ArrayList<BudgetRevenue> getPublicInvestmentBudgetCoFundedRevenuesStartingWithCode(String code) {
+        return BudgetRevenueLogicService.getRevenuesStartingWithCode(code, publicInvestmentBudgetCoFundedRevenues);
+    }
+
+    public static void printPublicInvestmentBudgetCoFundedRevenuesStartingWithCode(String code) {
+        DataOutput.printGeneralBudgetEntriesWithAsciiTable(getPublicInvestmentBudgetCoFundedRevenuesStartingWithCode(code), 0);
+    }
 
     //Sum Method
 
