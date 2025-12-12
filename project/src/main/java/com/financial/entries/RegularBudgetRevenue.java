@@ -22,7 +22,7 @@ public class RegularBudgetRevenue extends BudgetRevenue implements IBudgetRevenu
     }
 
     public static void printAllRegularBudgetRevenues() {
-        DataOutput.printGeneralBudgetEntriesWithAsciiTable(regularBudgetRevenues, BudgetRevenueLogicService.calculateSum(regularBudgetRevenues));
+        DataOutput.printGeneralBudgetEntriesWithAsciiTable(regularBudgetRevenues, calculateSum());
     }
 
     public static ArrayList<RegularBudgetRevenue> getMainRegularBudgetRevenues() {
@@ -30,7 +30,7 @@ public class RegularBudgetRevenue extends BudgetRevenue implements IBudgetRevenu
     }
 
     public static void printMainRegularBudgetRevenues() {
-        BudgetRevenueLogicService.printMainBudgetRevenues(getMainRegularBudgetRevenues());
+        DataOutput.printGeneralBudgetEntriesWithAsciiTable(getMainRegularBudgetRevenues(), calculateSum());
     }
 
     public static RegularBudgetRevenue findRegularBudgetRevenueWithCode(String code) {
@@ -42,7 +42,7 @@ public class RegularBudgetRevenue extends BudgetRevenue implements IBudgetRevenu
     }
 
     public static void printRegularRevenuesStartingWithCode(String code) {
-        BudgetRevenueLogicService.printRevenuesStartingWithCode(code, regularBudgetRevenues);
+        DataOutput.printGeneralBudgetEntriesWithAsciiTable(getBudgetRevenuesStartingWithCode(code), 0);
     }
 
     //Sum Method
@@ -51,8 +51,7 @@ public class RegularBudgetRevenue extends BudgetRevenue implements IBudgetRevenu
         return BudgetRevenueLogicService.calculateSum(regularBudgetRevenues);
     }
 
-    //*Implementation of methods*
-
+    //*Implementation of methods (Logic)*
 
     //Supercategories methods
 
@@ -123,34 +122,12 @@ public class RegularBudgetRevenue extends BudgetRevenue implements IBudgetRevenu
 
     @Override
     public void setAmountOfAllSubCategoriesWithEqualDistribution(long change) {
-        // Delegation: Περιλαμβάνει την Master List για την αναδρομή
         BudgetRevenueChangesService.setAmountOfAllSubCategoriesWithEqualDistribution(this, regularBudgetRevenues, change);
     }
 
     @Override
     public void setAmountOfAllSubCategoriesWithPercentageAdjustment(double percentage) {
-        // Delegation: Περιλαμβάνει την Master List για την αναδρομή
         BudgetRevenueChangesService.setAmountOfAllSubCategoriesWithPercentageAdjustment(this, regularBudgetRevenues, percentage);
-    }
-
-    //Updating the filtered objects in SuperClass
-
-    public void updateAmountOfSuperClassFilteredObjects(long change) {
-        ArrayList<BudgetRevenue> objectsThatChanged = new ArrayList<>();
-        //SuperCategories, SubCategories & the object itself
-        objectsThatChanged.addAll(findAllSubCategories());
-        objectsThatChanged.addAll(getSuperCategories());
-        objectsThatChanged.add(this);
-
-        //We update the objects that are filtered in BudgetRevenue class
-        for (BudgetRevenue b : objectsThatChanged) {
-            //By finding the right object
-            BudgetRevenue budgetRevenue = BudgetRevenue.findBudgetRevenueWithCode(b.getCode());
-            if (budgetRevenue != null) {
-                //And changing its regular amount
-                budgetRevenue.setRegularAmount(b.getAmount());
-            }
-        }
     }
 
     //Methods that are called from outside for mass changes
@@ -163,7 +140,6 @@ public class RegularBudgetRevenue extends BudgetRevenue implements IBudgetRevenu
         setAmountOfSuperCategories(change);
         setAmountOfAllSubCategoriesWithEqualDistribution(change);
         setAmount(getAmount() + change);
-        updateAmountOfSuperClassFilteredObjects(change);
     }
 
     @Override
@@ -171,7 +147,21 @@ public class RegularBudgetRevenue extends BudgetRevenue implements IBudgetRevenu
         setAmountOfSuperCategories((long) (getAmount() * (percentage)));
         setAmountOfAllSubCategoriesWithPercentageAdjustment(percentage);
         setAmount((long) (getAmount() * (1 + percentage)));
-        updateAmountOfSuperClassFilteredObjects((long) (getAmount() * (percentage)));
+    }
+
+    //Updating the filtered objects in SuperClass
+
+    public void updateAmountOfSuperClassFilteredObjects(long change) {
+        BudgetRevenue budgetRevenue = BudgetRevenue.findBudgetRevenueWithCode(this.getCode());
+        if (budgetRevenue != null) {
+            budgetRevenue.setRegularAmount(amount, true);
+        }
+    }
+
+    @Override
+    public void setAmount(long amount) {
+        this.amount = amount;
+        updateAmountOfSuperClassFilteredObjects(amount);
     }
 
     //ToString
