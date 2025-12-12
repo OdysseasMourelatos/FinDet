@@ -168,11 +168,12 @@ public class BudgetRevenue extends BudgetEntry implements IBudgetRevenueLogic {
     public void printNextLevelSubCategories() {
         DataOutput.printRevenueWithAsciiTable(findNextLevelSubCategories(), 0);
     }
-    
+
     //Getters & Setters
 
     protected void setRegularAmount(long amount) {
         this.regularAmount = amount;
+        this.amount = regularAmount + publicInvestmentAmount;
     }
 
     public long getRegularAmount() {
@@ -181,6 +182,7 @@ public class BudgetRevenue extends BudgetEntry implements IBudgetRevenueLogic {
 
     protected void setPublicInvestmentAmount(long amount) {
         this.publicInvestmentAmount = amount;
+        this.amount = regularAmount + publicInvestmentAmount;
     }
 
     public long getPublicInvestmentAmount() {

@@ -9,7 +9,7 @@ public abstract class BudgetEntry {
     private final String code;
     private final String description;
     private final String category;
-    private long amount;
+    protected long amount;
     protected static ArrayList<BudgetEntry> budgetEntries = new ArrayList<>();
 
     public BudgetEntry(String code, String description, String category, long amount) {
