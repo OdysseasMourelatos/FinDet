@@ -1,7 +1,14 @@
+package com.financial.services;
+
+import com.financial.entries.BudgetRevenue;
+
 import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.Map;
 
 public class UndoButton implements Command {
-    public static Deque<Map<String,code>> historyDeque = new ArrayDeque<>();
+    public static Deque<Map<String,Long>> historyDeque = new ArrayDeque<>();
     public static Deque<BudgetType> typeDeque = new ArrayDeque<>();
 
     @Override execute(int times) {
@@ -24,7 +31,7 @@ public class UndoButton implements Command {
         return typeDeque.getFirst();
     }
 
-    public static Map<String,code> getHistory() {
+    public static Map<String,Long> getHistory() {
         return historyDeque.getFirst();
     }
     
