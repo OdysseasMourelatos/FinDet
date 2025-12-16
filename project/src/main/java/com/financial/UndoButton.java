@@ -1,10 +1,31 @@
 import java.util.ArrayDeque;
 
-public class UndoButton implements Command{
-    public static Deque<ArrayList<? extends BudgetExpense>> historyList = new ArrayDeque<>();
-    public static Deque<? extends ExpeneseFilter> historyFilter = new ArrayDeque<>();
-    public setState(){
-        
+public class UndoButton implements Command {
+    public static Deque<Map<String,code>> historyDeque = new ArrayDeque<>();
+    public static Deque<BudgetType> typeDeque = new ArrayDeque<>();
+
+    @Override execute(int times) {
+        if (times ==1) {
+        BudgetType type = typeDeque.getFirst();
+        }     
     }
-    @Override execute(int times){};
+
+    public static void keepHistory(ArrayList<? extends BudgetRevenue> revenues, BudgetType type) {
+        Map<String, Long> modifiedElement = new HashMap<>();
+        for(BudgetRevenue revenue : revenues) {
+            revenueMap.put(revenue.getDescription(), revenue.getAmount());
+        }
+
+        historyDeque.addFirst(modifiedElement);
+        typeDeque.addFirst(type);
+    }
+
+    public static BudgetType getPreviousType () {
+        return typeDeque.getFirst();
+    }
+
+    public static Map<String,code> getHistory() {
+        return historyDeque.getFirst();
+    }
+    
 }
