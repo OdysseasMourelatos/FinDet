@@ -10,4 +10,7 @@ public interface IBudgetRevenueChanges {
     void setAmountOfSuperCategories(long change);
     void setAmountOfAllSubCategoriesWithEqualDistribution(long change);
     void setAmountOfAllSubCategoriesWithPercentageAdjustment(double percentage);
+
+    //Update all filtered objects in superclass
+    void updateAmountOfSuperClassFilteredObjects(long change);
 }

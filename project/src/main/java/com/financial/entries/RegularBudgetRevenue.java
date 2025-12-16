@@ -150,7 +150,7 @@ public class RegularBudgetRevenue extends BudgetRevenue implements IBudgetRevenu
     }
 
     //Updating the filtered objects in SuperClass
-
+    @Override
     public void updateAmountOfSuperClassFilteredObjects(long change) {
         BudgetRevenue budgetRevenue = BudgetRevenue.findBudgetRevenueWithCode(this.getCode());
         if (budgetRevenue != null) {
