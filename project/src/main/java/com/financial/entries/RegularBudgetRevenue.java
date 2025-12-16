@@ -149,6 +149,15 @@ public class RegularBudgetRevenue extends BudgetRevenue implements BudgetRevenue
         setAmount((long) (getAmount() * (1 + percentage)));
     }
 
+    @Override
+    public void keepAccountsAndBudgetTypeBeforeChange() {
+        ArrayList<BudgetRevenue> accountsForChange = new ArrayList<>();
+        accountsForChange.addAll(getSuperCategories());
+        accountsForChange.add(this);
+        accountsForChange.addAll(findAllSubCategories());
+        RevenuesHistory.keepHistory(accountsForChange, BudgetType.REGULAR_BUDGET);
+    }
+
     //Updating the filtered objects in SuperClass
     @Override
     public void updateAmountOfSuperClassFilteredObjects(long change) {
