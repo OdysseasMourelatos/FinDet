@@ -4,7 +4,7 @@ import com.financial.services.*;
 
 import java.util.ArrayList;
 
-public class PublicInvestmentBudgetCoFundedRevenue extends PublicInvestmentBudgetRevenue implements IBudgetRevenueLogic, IBudgetRevenueChanges {
+public class PublicInvestmentBudgetCoFundedRevenue extends PublicInvestmentBudgetRevenue implements BudgetRevenueLogic, BudgetRevenueChanges {
 
     //Constructor & Fields
 

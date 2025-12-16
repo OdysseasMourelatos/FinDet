@@ -3,13 +3,13 @@ package com.financial.entries;
 import com.financial.services.BudgetRevenueLogicService;
 import com.financial.services.DataInput;
 import com.financial.services.DataOutput;
-import com.financial.services.IBudgetRevenueLogic;
+import com.financial.services.BudgetRevenueLogic;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements IBudgetRevenueLogic {
+public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements BudgetRevenueLogic {
 
     //Constructor & Fields
 

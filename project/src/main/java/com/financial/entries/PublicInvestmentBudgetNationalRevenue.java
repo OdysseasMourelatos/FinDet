@@ -4,7 +4,7 @@ import com.financial.services.*;
 
 import java.util.ArrayList;
 
-public class PublicInvestmentBudgetNationalRevenue extends PublicInvestmentBudgetRevenue implements IBudgetRevenueLogic, IBudgetRevenueChanges {
+public class PublicInvestmentBudgetNationalRevenue extends PublicInvestmentBudgetRevenue implements BudgetRevenueLogic, BudgetRevenueChanges {
 
     //Constructor & Fields
     protected static ArrayList<PublicInvestmentBudgetNationalRevenue> publicInvestmentBudgetNationalRevenues = new ArrayList<>();
