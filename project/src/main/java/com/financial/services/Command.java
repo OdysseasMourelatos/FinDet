@@ -1,5 +1,5 @@
 package com.financial.services;
 
-interface Command{
+interface Command {
     void execute();
 }
