@@ -137,6 +137,7 @@ public class RegularBudgetRevenue extends BudgetRevenue implements BudgetRevenue
 
     @Override
     public void implementChangesOfEqualDistribution(long change) {
+        keepAccountsAndBudgetTypeBeforeChange();
         setAmountOfSuperCategories(change);
         setAmountOfAllSubCategoriesWithEqualDistribution(change);
         setAmount(getAmount() + change);
@@ -144,6 +145,7 @@ public class RegularBudgetRevenue extends BudgetRevenue implements BudgetRevenue
 
     @Override
     public void implementChangesOfPercentageAdjustment(double percentage) {
+        keepAccountsAndBudgetTypeBeforeChange();
         setAmountOfSuperCategories((long) (getAmount() * (percentage)));
         setAmountOfAllSubCategoriesWithPercentageAdjustment(percentage);
         setAmount((long) (getAmount() * (1 + percentage)));
