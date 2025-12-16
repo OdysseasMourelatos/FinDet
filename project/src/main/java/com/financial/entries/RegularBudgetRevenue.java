@@ -6,7 +6,7 @@ import com.financial.services.*;
 
 import java.util.ArrayList;
 
-public class RegularBudgetRevenue extends BudgetRevenue implements IBudgetRevenueLogic, IBudgetRevenueChanges {
+public class RegularBudgetRevenue extends BudgetRevenue implements BudgetRevenueLogic, BudgetRevenueChanges {
 
     protected static ArrayList<RegularBudgetRevenue> regularBudgetRevenues = new ArrayList<>();
 

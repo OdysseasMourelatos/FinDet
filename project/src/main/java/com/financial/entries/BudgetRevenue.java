@@ -2,11 +2,11 @@ package com.financial.entries;
 
 import com.financial.services.BudgetRevenueLogicService;
 import com.financial.services.DataOutput;
-import com.financial.services.IBudgetRevenueLogic;
+import com.financial.services.BudgetRevenueLogic;
 
 import java.util.*;
 
-public class BudgetRevenue extends BudgetEntry implements IBudgetRevenueLogic {
+public class BudgetRevenue extends BudgetEntry implements BudgetRevenueLogic {
 
     //Constructors & Fields
     protected static ArrayList <BudgetRevenue> budgetRevenues = new ArrayList<>();

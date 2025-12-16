@@ -1,6 +1,6 @@
 package com.financial.services;
 
-public interface IBudgetRevenueChanges {
+public interface BudgetRevenueChanges {
 
     //Implementation Methods
     void implementChangesOfEqualDistribution(long change);
@@ -13,4 +13,7 @@ public interface IBudgetRevenueChanges {
 
     //Update all filtered objects in superclass
     void updateAmountOfSuperClassFilteredObjects(long change);
+
+    //Keep accounts that will change for history
+    void keepAccountsAndBudgetTypeBeforeChange();
 }

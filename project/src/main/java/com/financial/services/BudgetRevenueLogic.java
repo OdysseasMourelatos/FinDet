@@ -4,7 +4,7 @@ import com.financial.entries.BudgetRevenue;
 
 import java.util.ArrayList;
 
-public interface IBudgetRevenueLogic {
+public interface BudgetRevenueLogic {
 
     //Supercategories methods
 
