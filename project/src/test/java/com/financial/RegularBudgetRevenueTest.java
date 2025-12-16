@@ -143,7 +143,7 @@ public class RegularBudgetRevenueTest {
     }
 
     @Test
-    void ImplementChangesOfPercentageAdjustmentTest1() {
+    void implementChangesOfPercentageAdjustmentTest1() {
         double percentage = 0.1; // +10% applied to 13 (Top Level)
 
         // Initial amounts
@@ -175,7 +175,7 @@ public class RegularBudgetRevenueTest {
     }
 
     @Test
-    void ImplementChangesOfPercentageAdjustmentTest2() {
+    void implementChangesOfPercentageAdjustmentTest2() {
         double percentage = 0.1; // +10% applied to 131 (Middle Level)
 
         // Initial amounts
@@ -206,7 +206,7 @@ public class RegularBudgetRevenueTest {
     }
 
     @Test
-    void ImplementChangesOfEqualDistributionTest1() {
+    void implementChangesOfEqualDistributionTest1() {
         long change = 10000000L; // +10 Million applied to 12
 
         // Initial amounts
@@ -241,7 +241,7 @@ public class RegularBudgetRevenueTest {
     }
 
     @Test
-    void ImplementChangesOfEqualDistributionTest2() {
+    void implementChangesOfEqualDistributionTest2() {
         long change = 4000000L; // +4 Million applied to 12201
 
         // Initial amounts (Supercategories for checking upward propagation)
