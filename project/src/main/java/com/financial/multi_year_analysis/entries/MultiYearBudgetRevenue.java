@@ -14,6 +14,16 @@ public class MultiYearBudgetRevenue extends MultiYearBudgetEntry {
         return historicalBudgetRevenues;
     }
 
+    public static List<MultiYearBudgetRevenue> getHistoricalBudgetRevenuesOfSpecificYear(int year) {
+        List<MultiYearBudgetRevenue> historicalBudgetRevenuesOfSpecificYear = new ArrayList<>();
+        for (MultiYearBudgetRevenue hbr : historicalBudgetRevenues) {
+            if (hbr.getYear() == year) {
+                historicalBudgetRevenuesOfSpecificYear.add(hbr);
+            }
+        }
+        return historicalBudgetRevenuesOfSpecificYear;
+    }
+
     @Override
     public String toString () {
         return super.toString();
