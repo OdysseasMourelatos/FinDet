@@ -14,4 +14,29 @@ public abstract class MultiYearBudgetEntry {
         this.amount = amount;
         this.year = year;
     }
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public long getAmount() {
+        return amount;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    @Override
+    public String toString() {
+        return "Code: " + code + ", Description: " + description + ", Category: " + category + ", Amount: " + String.format("%,d", amount) + ", Year: " + year;
+    }
 }
