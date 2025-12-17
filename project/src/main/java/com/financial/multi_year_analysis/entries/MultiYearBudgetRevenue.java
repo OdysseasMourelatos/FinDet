@@ -34,6 +34,16 @@ public class MultiYearBudgetRevenue extends MultiYearBudgetEntry {
         return historicalBudgetRevenuesOfSpecificCode;
     }
 
+    public static long getSumOfSpecificYear(int year) {
+        long sum = 0;
+        for (MultiYearBudgetRevenue hbr : historicalBudgetRevenues) {
+            if (hbr.getYear() == year) {
+                sum += hbr.getAmount();
+            }
+        }
+        return sum;
+    }
+
     @Override
     public String toString () {
         return super.toString();
