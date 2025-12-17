@@ -1,6 +1,10 @@
 package com.financial.multi_year_analysis.entries;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class MultiYearBudgetRevenue extends MultiYearBudgetEntry {
     protected static List<MultiYearBudgetRevenue> historicalBudgetRevenues = new ArrayList<>();
@@ -42,6 +46,15 @@ public class MultiYearBudgetRevenue extends MultiYearBudgetEntry {
             }
         }
         return sum;
+    }
+
+    public static Map<Integer, Long> getSumOfAllYears() {
+        Map<Integer, Long> sumOfAllYears = new HashMap<>();
+        List<Integer> uniqueYears = historicalBudgetRevenues.stream().map(MultiYearBudgetRevenue::getYear).distinct().sorted().collect(Collectors.toList());
+        for (Integer year : uniqueYears) {
+            sumOfAllYears.put(year, getSumOfSpecificYear(year));
+        }
+        return sumOfAllYears;
     }
 
     @Override
