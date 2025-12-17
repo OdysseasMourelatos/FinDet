@@ -7,6 +7,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import com.financial.entries.*;
+import com.financial.multi_year_analysis.entries.MultiYearBudgetRevenue;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 
@@ -80,6 +81,8 @@ public class DataInput {
             return "REGULAR_EXPENSES_PER_SERVICE";
         } else if (headerSet.size() == 3) {
             return "REGULAR_REVENUES";
+        } else if (headerSet.size() == 4) {
+            return "HISTORICAL_BUDGET_REVENUES";
         }
         return "UNKNOWN";
     }
@@ -90,6 +93,7 @@ public class DataInput {
             case "PUBLIC_INVESTMENT_REVENUES" -> createPublicInvestmentBudgetRevenueFromCSV(values);
             case "REGULAR_EXPENSES_PER_SERVICE" -> createRegularBudgetExpenseFromCSV(values);
             case "PUBLIC_INVESTMENT_EXPENSES_PER_SERVICE" -> createPublicInvestmentBudgetExpenseFromCSV(values);
+            case "HISTORICAL_BUDGET_REVENUES" -> createHistoricalBudgetRevenueFromCSV(values);
             case "UNKNOWN" -> System.out.println("Σφάλμα: Άγνωστος τύπος CSV.");
             default -> System.out.println("Σφάλμα στη γραμμή: " + Arrays.toString(values));
         }
@@ -139,8 +143,6 @@ public class DataInput {
         BudgetExpense regularBudgetExpense = new RegularBudgetExpense(entityCode, entityName, serviceCode, serviceName, expenseCode, description, category, amount);
     }
 
-
-
     private static void createPublicInvestmentBudgetExpenseFromCSV(String [] values) {
         String entityCode = values[0];
         String entityName = values[1];
@@ -157,5 +159,14 @@ public class DataInput {
     public static void createEntityFromCSV() {
         Map<String, String> entityMap = BudgetExpense.getExpenses().stream().collect(Collectors.toMap(BudgetExpense::getEntityCode, BudgetExpense::getEntityName, (existing, replacement) -> existing));
         entityMap.keySet().stream().sorted().forEach(entityCode -> new Entity(entityCode, entityMap.get(entityCode)));
+    }
+
+    private static void createHistoricalBudgetRevenueFromCSV(String [] values) {
+        String code = values[0];
+        String description = values[1];
+        String category = "ΕΣΟΔΑ";
+        long amount = Long.parseLong(values[2]);
+        int year = Integer.parseInt(values[3]);
+        MultiYearBudgetRevenue multiYearBudgetRevenue = new MultiYearBudgetRevenue(code, description, category, amount, year);
     }
 }
