@@ -13,4 +13,9 @@ public class MultiYearBudgetRevenue extends MultiYearBudgetEntry {
     public static List<MultiYearBudgetRevenue> getHistoricalBudgetRevenues() {
         return historicalBudgetRevenues;
     }
+
+    @Override
+    public String toString () {
+        return super.toString();
+    }
 }
