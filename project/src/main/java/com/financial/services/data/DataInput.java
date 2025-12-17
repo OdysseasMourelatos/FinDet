@@ -169,4 +169,10 @@ public class DataInput {
         int year = Integer.parseInt(values[3]);
         MultiYearBudgetRevenue multiYearBudgetRevenue = new MultiYearBudgetRevenue(code, description, category, amount, year);
     }
+
+    public static void mergeBudgetRevenuesOfBaseYearWithMultiYearBudgetRevenues(int baseYear) {
+        for (BudgetRevenue br : BudgetRevenue.getMainBudgetRevenues()) {
+            MultiYearBudgetRevenue multiYearBudgetRevenue = new MultiYearBudgetRevenue(br.getCode(), br.getDescription(), br.getCategory(), br.getAmount(), baseYear);
+        }
+    }
 }
