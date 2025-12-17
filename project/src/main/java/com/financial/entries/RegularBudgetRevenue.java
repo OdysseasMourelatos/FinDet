@@ -1,7 +1,7 @@
 package com.financial.entries;
 
-import com.financial.services.BudgetRevenueLogicService;
-import com.financial.services.DataOutput;
+import com.financial.services.revenues.*;
+import com.financial.services.data.DataOutput;
 import com.financial.services.*;
 
 import java.util.ArrayList;

@@ -1,7 +1,7 @@
 package com.financial;
 
 import com.financial.entries.BudgetRevenue;
-import com.financial.services.DataOutput;
+import com.financial.services.data.DataOutput;
 import org.junit.jupiter.api.*;
 
 import java.io.ByteArrayOutputStream;

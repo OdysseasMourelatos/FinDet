@@ -4,7 +4,34 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="88d8a661-a47d-4ac5-b89a-2164a467de01" name="Changes" comment="" />
+    <list default="true" id="88d8a661-a47d-4ac5-b89a-2164a467de01" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/entries/BudgetEntry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/BudgetEntry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/entries/BudgetRevenue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/BudgetRevenue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/entries/Entity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/Entity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetCoFundedRevenue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetCoFundedRevenue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetExpense.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetExpense.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetNationalRevenue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetNationalRevenue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetRevenue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetRevenue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/entries/RegularBudgetExpense.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/RegularBudgetExpense.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/entries/RegularBudgetRevenue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/RegularBudgetRevenue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/menu/CSVDownloadAndSavingMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/menu/CSVDownloadAndSavingMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/menu/ChartsMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/menu/ChartsMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/menu/ExpensesChangeMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/menu/ExpensesChangeMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/menu/ExpensesPrintingMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/menu/ExpensesPrintingMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/menu/RevenuesChangeMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/menu/RevenuesChangeMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/menu/RevenuesPrintingMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/menu/RevenuesPrintingMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/services/BudgetExpenseHandling.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/services/expenses/BudgetExpenseHandling.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/services/BudgetRevenueChanges.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/services/revenues/BudgetRevenueChanges.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/services/BudgetRevenueChangesService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/services/revenues/BudgetRevenueChangesService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/services/BudgetRevenueLogic.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/services/revenues/BudgetRevenueLogic.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/services/BudgetRevenueLogicService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/services/revenues/BudgetRevenueLogicService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/services/DataInput.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/services/data/DataInput.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/services/DataOutput.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/services/data/DataOutput.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/services/DataUpdate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/services/data/DataUpdate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/services/RevenuesHistory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/services/revenues/RevenuesHistory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/DataInputTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/DataInputTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/DataOutputTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/DataOutputTest.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -64,7 +91,7 @@
     "JUnit.java in FinDet.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "multi-year-analysis",
     "kotlin-language-version-configured": "true",
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.15",

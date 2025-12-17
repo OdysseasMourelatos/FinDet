@@ -2,7 +2,7 @@ package com.financial.menu;
 
 import com.financial.entries.BudgetRevenue;
 import com.financial.entries.PublicInvestmentBudgetRevenue;
-import com.financial.services.DataInput;
+import com.financial.services.data.DataInput;
 
 import java.util.Scanner;
 

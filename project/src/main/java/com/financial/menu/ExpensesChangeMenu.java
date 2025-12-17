@@ -1,8 +1,8 @@
 package com.financial.menu;
 
 import com.financial.entries.*;
-import com.financial.services.BudgetExpenseHandling;
-import com.financial.services.DataOutput;
+import com.financial.services.expenses.BudgetExpenseHandling;
+import com.financial.services.data.DataOutput;
 import com.financial.strategies.*;
 import java.util.ArrayList;
 import java.util.Scanner;

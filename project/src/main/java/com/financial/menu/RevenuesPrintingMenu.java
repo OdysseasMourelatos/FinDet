@@ -1,7 +1,7 @@
 package com.financial.menu;
 
 import com.financial.entries.*;
-import com.financial.services.DataOutput;
+import com.financial.services.data.DataOutput;
 
 import static com.financial.menu.Colors.*;
 import java.util.Scanner;

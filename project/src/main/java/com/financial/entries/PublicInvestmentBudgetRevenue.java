@@ -1,9 +1,9 @@
 package com.financial.entries;
 
-import com.financial.services.BudgetRevenueLogicService;
-import com.financial.services.DataInput;
-import com.financial.services.DataOutput;
-import com.financial.services.BudgetRevenueLogic;
+import com.financial.services.revenues.BudgetRevenueLogicService;
+import com.financial.services.data.DataInput;
+import com.financial.services.data.DataOutput;
+import com.financial.services.revenues.BudgetRevenueLogic;
 
 import java.util.ArrayList;
 import java.util.Collections;

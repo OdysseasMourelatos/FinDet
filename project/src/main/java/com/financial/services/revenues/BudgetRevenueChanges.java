@@ -1,4 +1,4 @@
-package com.financial.services;
+package com.financial.services.revenues;
 
 public interface BudgetRevenueChanges {
 

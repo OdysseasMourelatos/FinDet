@@ -3,7 +3,7 @@ package com.financial.menu;
 import java.util.Scanner;
 import com.financial.charts.PieChartGenerator;
 import com.financial.entries.*;
-import com.financial.services.*;
+import com.financial.services.revenues.BudgetRevenueLogicService;
 
 public class ChartsMenu {
     public static void printChartsMenu() {

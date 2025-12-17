@@ -1,6 +1,8 @@
 package com.financial.entries;
 
 import com.financial.services.*;
+import com.financial.services.data.DataOutput;
+import com.financial.services.revenues.*;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.financial.services;
+package com.financial.services.revenues;
 
 import com.financial.entries.BudgetRevenue;
 
@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.financial.services.BudgetRevenueLogicService.findNextLevelSubCategories;
+import static com.financial.services.revenues.BudgetRevenueLogicService.findNextLevelSubCategories;
 
 public class BudgetRevenueChangesService {
     public static <T extends BudgetRevenue> void setAmountOfSuperCategories(ArrayList<T> superCategories, long change) {

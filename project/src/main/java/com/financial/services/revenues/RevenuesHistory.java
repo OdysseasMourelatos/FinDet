@@ -1,9 +1,10 @@
-package com.financial.services;
+package com.financial.services.revenues;
 
 import com.financial.entries.BudgetRevenue;
 import com.financial.entries.PublicInvestmentBudgetCoFundedRevenue;
 import com.financial.entries.PublicInvestmentBudgetNationalRevenue;
 import com.financial.entries.RegularBudgetRevenue;
+import com.financial.services.BudgetType;
 
 import java.util.*;
 

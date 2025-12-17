@@ -2,8 +2,8 @@ package com.financial.menu;
 
 import java.util.Scanner;
 import com.financial.entries.*;
-import com.financial.services.BudgetExpenseHandling;
-import com.financial.services.DataOutput;
+import com.financial.services.expenses.BudgetExpenseHandling;
+import com.financial.services.data.DataOutput;
 
 import static com.financial.menu.Colors.*;
 

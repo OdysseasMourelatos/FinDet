@@ -2,7 +2,9 @@ package com.financial.menu;
 
 import java.util.Scanner;
 import com.financial.entries.*;
-import com.financial.services.*;
+import com.financial.services.data.DataOutput;
+import com.financial.services.revenues.BudgetRevenueLogicService;
+
 import static com.financial.menu.Colors.*;
 
 public class RevenuesChangeMenu {

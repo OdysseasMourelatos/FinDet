@@ -1,8 +1,9 @@
-package com.financial.services;
+package com.financial.services.data;
 
 import java.util.ArrayList;
 
 import com.financial.entries.*;
+import com.financial.services.revenues.BudgetRevenueLogicService;
 import de.vandermeer.asciitable.AsciiTable;
 import de.vandermeer.asciitable.CWC_FixedWidth;
 
