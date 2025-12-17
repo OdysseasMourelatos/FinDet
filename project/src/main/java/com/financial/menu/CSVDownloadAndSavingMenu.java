@@ -31,16 +31,16 @@ public class CSVDownloadAndSavingMenu {
             System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου" + Colors.BLUE + " (ΕΞΟΔΑ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ): " + Colors.RESET);
             filePath = input.nextLine();
             DataInput.advancedCSVReader(filePath);
-            System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου" + Colors.BLUE + " (ΕΣΟΔΑ ΠΕΝΤΑΕΤΙΑΣ): " + Colors.RESET);
-            filePath = input.nextLine();
-            DataInput.advancedCSVReader(filePath);
-            System.out.println(Colors.GREEN + "Η ΦΟΡΤΩΣΗ ΤΩΝ ΑΡΧΕΙΩΝ ΠΡΑΓΜΑΤΟΠΟΙΗΘΗΚΕ ΕΠΙΤΥΧΩΣ!" + Colors.RESET);
             DataInput.createEntityFromCSV();
             PublicInvestmentBudgetRevenue.sortPublicInvestmentBudgetRevenuesByCode();
             PublicInvestmentBudgetRevenue.filterPublicInvestmentBudgetRevenues();
             BudgetRevenue.sortBudgetRevenuesByCode();
             BudgetRevenue.filterBudgetRevenues();
             DataInput.mergeBudgetRevenuesOfBaseYearWithMultiYearBudgetRevenues(2025);
+            System.out.print("Παρακαλούμε εισάγετε το file path του csv αρχείου" + Colors.BLUE + " (ΕΣΟΔΑ ΠΕΝΤΑΕΤΙΑΣ): " + Colors.RESET);
+            filePath = input.nextLine();
+            DataInput.advancedCSVReader(filePath);
+            System.out.println(Colors.GREEN + "Η ΦΟΡΤΩΣΗ ΤΩΝ ΑΡΧΕΙΩΝ ΠΡΑΓΜΑΤΟΠΟΙΗΘΗΚΕ ΕΠΙΤΥΧΩΣ!" + Colors.RESET);
         }
     }
 }
