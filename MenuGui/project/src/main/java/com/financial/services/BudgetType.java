@@ -1,0 +1,10 @@
+package com.financial.services;
+
+public enum BudgetType {
+    GENERAL_BUDGET,
+    REGULAR_BUDGET,
+    PUBLIC_INVESTMENT_BUDGET,
+    PUBLIC_INVESTMENT_BUDGET_NATIONAL,
+    PUBLIC_INVESTMENT_BUDGET_COFUNDED
+}
+
