@@ -93,4 +93,54 @@ public class PublicInvestmentBudgetNationalRevenueTest {
         assertTrue(allSubCategories.contains(revenue134));
         assertTrue(allSubCategories.contains(revenue13409));
     }
+
+    @Test
+    void implementChangesOfPercentageAdjustmentTest() {
+        double percentage = 0.2; // +20% applied to 13 (Top Level)
+
+        long initial13 = revenue13.getAmount();
+        long initial134 = revenue134.getAmount();
+        long initial13409 = revenue13409.getAmount();
+
+        long changeOnSelf = (long) (initial13 * percentage);
+
+        // Εφαρμογή μόνο στο 13
+        revenue13.implementChangesOfPercentageAdjustment(percentage);
+
+        assertEquals(initial13 + changeOnSelf, revenue13.getAmount());
+
+        // 2 - Checking the subcategories
+        long expected134 = (long) (initial134 * (1 + percentage));
+        long expected13409 = (long) (initial13409 * (1 + percentage));
+        assertEquals(expected134, revenue134.getAmount());
+        assertEquals(expected13409, revenue13409.getAmount());
+
+        // 2. Το 15 μένει ανεπηρέαστο
+        assertEquals(265000000L, revenue15.getAmount());
+    }
+
+    @Test
+    void implementChangesOfPercentageAdjustmentTest2() {
+        double percentage = 0.1; // +10% applied to 134 (Middle Level)
+
+        long initial13 = revenue13.getAmount();
+        long initial134 = revenue134.getAmount();
+        long initial13409 = revenue13409.getAmount();
+
+        long changeOnSelf = (long) (initial134 * percentage);
+
+        // Εφαρμογή μόνο στο 13
+        revenue134.implementChangesOfPercentageAdjustment(percentage);
+
+        assertEquals(initial134 + changeOnSelf, revenue134.getAmount());
+
+        assertEquals(initial13 + changeOnSelf, revenue13.getAmount());
+
+        // 2 - Checking the subcategories
+        long expected13409 = (long) (initial13409 * (1 + percentage));
+        assertEquals(expected13409, revenue13409.getAmount());
+
+        // 2. Το 15 μένει ανεπηρέαστο
+        assertEquals(265000000L, revenue15.getAmount());
+    }
 }
