@@ -55,4 +55,42 @@ public class PublicInvestmentBudgetNationalRevenueTest {
         long expectedSum = 300000000L;
         assertEquals(expectedSum, calculateSum());
     }
+
+    @Test
+    void findSuperCategoryTest() {
+        BudgetRevenue parent = revenue13409.findSuperCategory();
+        assertNotNull(parent);
+        assertEquals("134", parent.getCode());
+        assertEquals(35000000L, parent.getAmount());
+    }
+
+
+    @Test
+    void getSuperCategoriesTest() {
+        ArrayList<BudgetRevenue> superCategories = revenue13409.getSuperCategories();
+        assertEquals(2, superCategories.size());
+        //Checking if the list contains all super categories
+        assertTrue(superCategories.contains(revenue13));
+        assertTrue(superCategories.contains(revenue134));
+    }
+
+    @Test
+    void findNextLevelSubCategoriesTest() {
+
+        ArrayList<BudgetRevenue> subCategories = revenue13.findNextLevelSubCategories();
+
+        //One children in the next level - 134
+        assertEquals(1, subCategories.size());
+        assertTrue(subCategories.contains(revenue134));
+    }
+
+
+    @Test
+    void findAllSubCategoriesTest() {
+        ArrayList<BudgetRevenue> allSubCategories = revenue13.findAllSubCategories();
+        //2 children total - 134, 13409
+        assertEquals(2, allSubCategories.size());
+        assertTrue(allSubCategories.contains(revenue134));
+        assertTrue(allSubCategories.contains(revenue13409));
+    }
 }
