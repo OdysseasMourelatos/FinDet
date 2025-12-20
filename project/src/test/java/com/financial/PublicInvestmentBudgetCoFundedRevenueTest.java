@@ -25,6 +25,31 @@ public class PublicInvestmentBudgetCoFundedRevenueTest {
         revenue13501 = new PublicInvestmentBudgetCoFundedRevenue("13501", "Υποκατηγορία 13501", "ΕΣΟΔΑ", 4190000000L);
         revenue1350101 = new PublicInvestmentBudgetCoFundedRevenue("1350101", "Υποκατηγορία 1350101", "ΕΣΟΔΑ", 1308000000L);
     }
+
+    @Test
+    void getAllPublicInvestmentBudgetCoFundedRevenuesTest() {
+        ArrayList<PublicInvestmentBudgetCoFundedRevenue> allRevenues = PublicInvestmentBudgetCoFundedRevenue.getAllPublicInvestmentBudgetCoFundedRevenues();
+        assertEquals(4, allRevenues.size());
+        assertTrue(allRevenues.get(0) instanceof PublicInvestmentBudgetCoFundedRevenue);
+    }
+
+
+    @Test
+    void getMainPublicInvestmentBudgetCoFundedRevenueTest() {
+        ArrayList<PublicInvestmentBudgetCoFundedRevenue> mainRevenues = PublicInvestmentBudgetCoFundedRevenue.getMainPublicInvestmentBudgetCoFundedRevenues();
+        // Μόνο το 13 είναι root (2 ψηφία)
+        assertEquals(1, mainRevenues.size());
+        assertTrue(mainRevenues.contains(revenue13));
+    }
+
+
+    @Test
+    void calculateSumTest() {
+        // Υπολογισμός αθροίσματος των Main (μόνο το 13)
+        long expectedSum = 4190000000L;
+        assertEquals(expectedSum, calculateSum());
+    }
+
     @Test
     void findSuperCategoryTest() {
         BudgetRevenue parent = revenue13501.findSuperCategory();
