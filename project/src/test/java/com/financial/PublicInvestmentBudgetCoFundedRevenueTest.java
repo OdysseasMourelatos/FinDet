@@ -146,4 +146,44 @@ public class PublicInvestmentBudgetCoFundedRevenueTest {
         long expected1350101 = (long) (initial1350101 * (1 + percentage)); // ΔΙΟΡΘΩΣΗ: Χρήση σωστής βάσης υπολογισμού
         assertEquals(expected1350101, revenue1350101.getAmount());
     }
+
+    @Test
+    void implementChangesOfEqualDistributionTest() {
+        // Εφαρμογή αλλαγής στο ανώτατο επίπεδο (13)
+        long change = 6000000L;
+        long initial13 = revenue13.getAmount();
+        long initial135 = revenue135.getAmount();
+        long initial13501 = revenue13501.getAmount();
+        long initial1350101 = revenue1350101.getAmount();
+
+        revenue13.implementChangesOfEqualDistribution(change);
+
+        // 1 - Checking the same account
+        assertEquals(initial13 + change, revenue13.getAmount());
+
+        // 2 - Checking the subcategories
+        assertEquals(initial135 + change, revenue135.getAmount());
+        assertEquals(initial13501 + change, revenue13501.getAmount());
+        assertEquals(initial1350101 + change, revenue1350101.getAmount());
+    }
+
+    @Test
+    void implementChangesOfEqualDistributionTest2() {
+        // Εφαρμογή αλλαγής στο κατώτατο επίπεδο (1350101)
+        long change = 5000000L;
+        long initial13 = revenue13.getAmount();
+        long initial135 = revenue135.getAmount();
+        long initial13501 = revenue13501.getAmount();
+        long initial1350101 = revenue1350101.getAmount();
+
+        revenue1350101.implementChangesOfEqualDistribution(change);
+
+        // 1. Έλεγχος στο ίδιο
+        assertEquals(initial1350101 + change, revenue1350101.getAmount());
+
+        // 2. Έλεγχος προς τα πάνω (όλοι οι γονείς πρέπει να αυξηθούν κατά το ίδιο ποσό)
+        assertEquals(initial13 + change, revenue13.getAmount());
+        assertEquals(initial135 + change, revenue135.getAmount());
+        assertEquals(initial13501 + change, revenue13501.getAmount());
+    }
 }
