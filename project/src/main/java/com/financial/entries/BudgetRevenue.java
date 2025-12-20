@@ -43,7 +43,7 @@ public class BudgetRevenue extends BudgetEntry implements BudgetRevenueLogic {
         //Finds codes that are repeated in the list
         // Adds to a new list the 2 placements in the list where we have repeated codes
         for (int i = 1; i < budgetRevenues.size(); i++) {
-            if (budgetRevenues.get(i).getCode().equals(budgetRevenues.get(i-1).getCode())) {
+            if (budgetRevenues.get(i).getCode().equals(budgetRevenues.get(i - 1).getCode())) {
                 repeatedRevenues.add(i);
             }
         }
@@ -155,7 +155,7 @@ public class BudgetRevenue extends BudgetEntry implements BudgetRevenueLogic {
 
     @Override
     public void printAllSubCategories() {
-        DataOutput.printBudgetRevenuesWithAsciiTable(findAllSubCategories(),0);
+        DataOutput.printBudgetRevenuesWithAsciiTable(findAllSubCategories(), 0);
     }
 
     @Override
