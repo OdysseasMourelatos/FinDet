@@ -32,4 +32,27 @@ public class PublicInvestmentBudgetNationalRevenueTest {
         revenue156 = new PublicInvestmentBudgetNationalRevenue("156", "Υποκατηγορία 156", "ΕΣΟΔΑ", 1000000L);
         revenue15609 = new PublicInvestmentBudgetNationalRevenue("15609", "Υποκατηγορία 15609", "ΕΣΟΔΑ", 1000000L);
     }
+
+
+    @Test
+    void getAllPublicInvestmentBudgetNationalRevenuesTest() {
+        ArrayList<PublicInvestmentBudgetNationalRevenue> allRevenues = PublicInvestmentBudgetNationalRevenue.getAllPublicInvestmentBudgetNationalRevenues();
+        assertEquals(6, allRevenues.size());
+        assertTrue(allRevenues.get(0) instanceof PublicInvestmentBudgetNationalRevenue);
+    }
+    @Test
+    void getMainPublicInvestmentBudgetNationalRevenuesTest() {
+        ArrayList<PublicInvestmentBudgetNationalRevenue> mainRevenues = PublicInvestmentBudgetNationalRevenue.getMainPublicInvestmentBudgetNationalRevenues();
+        // Εδώ έχουμε 2 roots (13 και 15)
+        assertEquals(2, mainRevenues.size());
+        assertTrue(mainRevenues.contains(revenue13));
+        assertTrue(mainRevenues.contains(revenue15));
+    }
+
+    @Test
+    void calculateSumTest() {
+        // 35,000,000 (13) + 265,000,000 (15)
+        long expectedSum = 300000000L;
+        assertEquals(expectedSum, calculateSum());
+    }
 }
