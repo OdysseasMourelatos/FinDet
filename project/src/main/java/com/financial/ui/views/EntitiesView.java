@@ -66,7 +66,7 @@ public class EntitiesView {
         TableColumn<Entity, String> regularExpenseCol = new TableColumn<>("Τακτικά Έξοδα");
         regularExpenseCol.setCellValueFactory(data -> {
             long total = data.getValue().getRegularBudgetExpenses().stream().
-                mapToLong(e -> e.getAmount()).sum();
+                filter(e -> e.getCode().charAt(0) <= '3').mapToLong(e -> e.getAmount()).sum();
             return new SimpleStringProperty(String.format("%,d €", total));
         });
         regularExpenseCol.setPrefWidth(150);
@@ -74,7 +74,7 @@ public class EntitiesView {
         TableColumn<Entity, String> investmentExpenseCol = new TableColumn<>("Έξοδα ΠΔΕ");
         investmentExpenseCol.setCellValueFactory(data -> {
             long total = data.getValue().getPublicInvestmentExpenses().stream().
-                mapToLong(e -> e.getAmount()).sum();
+                filter(e -> e.getCode().charAt(0) <= '3').mapToLong(e -> e.getAmount()).sum();
             return new SimpleStringProperty(String.format("%,d €", total));
         });
         investmentExpenseCol.setPrefWidth(150);
@@ -82,9 +82,9 @@ public class EntitiesView {
         TableColumn<Entity, String> totalCol = new TableColumn<>("Σύνολο");
         totalCol.setCellValueFactory(data -> {
             long regular = data.getValue().getRegularBudgetExpenses().stream().
-                mapToLong(e -> e.getAmount()).sum();
+                filter(e -> e.getCode().charAt(0) <= '3').mapToLong(e -> e.getAmount()).sum();
             long investment = data.getValue().getPublicInvestmentExpenses().stream().
-                mapToLong(e -> e.getAmount()).sum();
+                filter(e -> e.getCode().charAt(0) <= '3').mapToLong(e -> e.getAmount()).sum();
             return new SimpleStringProperty(String.format("%,d €", regular + investment));
         });
         totalCol.setPrefWidth(150);
