@@ -82,7 +82,7 @@ public class ExpensesChangeMenu {
                 String serviceCode = input.nextLine();
                 System.out.println();
                 System.out.print("Εισάγετε το ποσοστό (%) μεταβολής του ειδικού φορέα " + BOLD + entity.findRegularServiceNameWithCode(serviceCode).toUpperCase() + RESET_2 + " : ");
-                double percentage = input.nextDouble()/100;
+                double percentage = input.nextDouble() / 100;
                 showExpensesOfEntity(entity, budgetType, true);
                 IExpenseAdjustmentStrategy strategy = new PercentageAllocationAdjustmentStrategy(new ServiceFilter(serviceCode), new PercentageOperation());
                 strategy.applyAdjustment(entity.getRegularBudgetExpenses(), percentage, 0);

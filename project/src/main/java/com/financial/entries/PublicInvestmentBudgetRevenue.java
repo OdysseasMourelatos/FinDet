@@ -49,7 +49,7 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements Budg
         //Finds codes that are repeated in the list
         // Adds to a new list the 2 placements in the list where we have repeated codes
         for (int i = 1; i < publicInvestmentBudgetRevenues.size(); i++) {
-            if (publicInvestmentBudgetRevenues.get(i).getCode().equals(publicInvestmentBudgetRevenues.get(i-1).getCode())) {
+            if (publicInvestmentBudgetRevenues.get(i).getCode().equals(publicInvestmentBudgetRevenues.get(i - 1).getCode())) {
                 repeatedRevenues.add(i);
             }
         }
@@ -61,7 +61,7 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements Budg
         for (int j = repeatedRevenues.size() - 1; j >= 0; j--) {
             Integer i = repeatedRevenues.get(j);
             PublicInvestmentBudgetRevenue b1 = publicInvestmentBudgetRevenues.get(i);
-            PublicInvestmentBudgetRevenue b2 = publicInvestmentBudgetRevenues.get(i-1);
+            PublicInvestmentBudgetRevenue b2 = publicInvestmentBudgetRevenues.get(i - 1);
             publicInvestmentBudgetRevenues.remove(b1);
             b2.setNationalAmount(b2.getNationalAmount() + b1.getNationalAmount(), false);
             b2.setCoFundedAmount(b2.getCoFundedAmount() + b1.getCoFundedAmount(), false);
@@ -177,16 +177,16 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements Budg
         return coFundedAmount;
     }
 
-    protected void setNationalAmount(long nationalAmount, boolean update) {
-        this.nationalAmount = nationalAmount;
+    protected void setNationalAmount(long newNationalAmount, boolean update) {
+        this.nationalAmount = newNationalAmount;
         if (update) {
             this.amount = nationalAmount + coFundedAmount;
             updateAmountOfSuperClassFilteredObjects(amount);
         }
     }
 
-    protected void setCoFundedAmount(long coFundedAmount, boolean update) {
-        this.coFundedAmount = coFundedAmount;
+    protected void setCoFundedAmount(long newCoFundedAmount, boolean update) {
+        this.coFundedAmount = newCoFundedAmount;
         if (update) {
             this.amount = nationalAmount + coFundedAmount;
             updateAmountOfSuperClassFilteredObjects(amount);
