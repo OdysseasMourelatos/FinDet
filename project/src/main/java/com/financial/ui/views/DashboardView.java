@@ -131,23 +131,25 @@ public class DashboardView {
 
     private long calculateTotalRegularRevenue() {
         return RegularBudgetRevenue.getAllRegularBudgetRevenues().stream().
-            filter(r -> r.getCode().length() == 2).mapToLong(RegularBudgetRevenue::getAmount).
-            sum();
+            filter(r -> r.getCode().length() == 2 && r.getCode().charAt(0) <= '3').
+            mapToLong(RegularBudgetRevenue::getAmount).sum();
     }
 
     private long calculateTotalPublicInvestmentRevenue() {
         return PublicInvestmentBudgetRevenue.getPublicInvestmentBudgetRevenues().stream().
-            filter(r -> r.getCode().length() == 2).
+            filter(r -> r.getCode().length() == 2 && r.getCode().charAt(0) <= '3').
             mapToLong(r -> r.getCoFundedAmount() + r.getNationalAmount()).sum();
     }
 
     private long calculateTotalRegularExpense() {
         return RegularBudgetExpense.getAllRegularBudgetExpenses().stream().
+            filter(e -> e.getCode().charAt(0) <= '3').
             mapToLong(RegularBudgetExpense::getAmount).sum();
     }
 
     private long calculateTotalPublicInvestmentExpense() {
         return PublicInvestmentBudgetExpense.getAllPublicInvestmentBudgetExpenses().stream().
+            filter(e -> e.getCode().charAt(0) <= '3').
             mapToLong(PublicInvestmentBudgetExpense::getAmount).sum();
     }
 
