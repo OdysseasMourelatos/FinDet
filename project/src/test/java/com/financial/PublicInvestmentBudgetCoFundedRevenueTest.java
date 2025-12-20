@@ -89,4 +89,61 @@ public class PublicInvestmentBudgetCoFundedRevenueTest {
         assertTrue(allSubCategories.contains(revenue13501));
         assertTrue(allSubCategories.contains(revenue1350101));
     }
+
+    @Test
+    void implementChangesOfPercentageAdjustmentTest() {
+        // Εφαρμογή +10% στο ανωτατο επίπεδο (13)
+        double percentage = 0.1;
+
+        long initial13 = revenue13.getAmount();
+        long initial135 = revenue135.getAmount();
+        long initial13501 = revenue13501.getAmount();
+        long initial1350101 = revenue1350101.getAmount();
+
+        long changeOnSelf = (long) (initial13 * percentage);
+
+        revenue13.implementChangesOfPercentageAdjustment(percentage);
+
+
+        // 1- Checking the same account
+        assertEquals(initial13 + changeOnSelf, revenue13.getAmount());
+
+        // 2 - Checking the subcategories
+        long expected135 = (long) (initial135 * (1 + percentage));
+        long expected13501 = (long) (initial13501 * (1 + percentage));
+        long expected1350101 = (long) (initial1350101 * (1 + percentage));
+
+        assertEquals(expected135, revenue135.getAmount());
+        assertEquals(expected13501, revenue13501.getAmount());
+        assertEquals(expected1350101, revenue1350101.getAmount());
+    }
+
+    @Test
+    void implementChangesOfPercentageAdjustmentTest2() {
+        // Εφαρμογή +10% στο μεσαίο επίπεδο (135)
+        double percentage = 0.1;
+
+        long initial13 = revenue13.getAmount();
+        long initial135 = revenue135.getAmount();
+        long initial13501 = revenue13501.getAmount();
+        long initial1350101 = revenue1350101.getAmount();
+
+        long changeOnSelf = (long) (initial135 * percentage);
+
+        revenue135.implementChangesOfPercentageAdjustment(percentage);
+
+
+        // 1- Checking the same account
+        assertEquals(initial135 + changeOnSelf, revenue135.getAmount());
+
+        // 2 - Checking the supercategories
+        assertEquals(initial13 + changeOnSelf, revenue13.getAmount());
+
+
+        // 3 - Checking the subcategories
+        long expected13501 = (long) (initial13501 * (1 + percentage));
+        assertEquals(expected13501, revenue13501.getAmount());
+        long expected1350101 = (long) (initial1350101 * (1 + percentage)); // ΔΙΟΡΘΩΣΗ: Χρήση σωστής βάσης υπολογισμού
+        assertEquals(expected1350101, revenue1350101.getAmount());
+    }
 }
