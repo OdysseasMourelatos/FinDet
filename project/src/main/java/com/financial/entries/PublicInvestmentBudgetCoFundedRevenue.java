@@ -19,12 +19,12 @@ public class PublicInvestmentBudgetCoFundedRevenue extends PublicInvestmentBudge
 
     //Class Methods
 
-    public static ArrayList<PublicInvestmentBudgetCoFundedRevenue> getPublicInvestmentBudgetCoFundedRevenues() {
+    public static ArrayList<PublicInvestmentBudgetCoFundedRevenue> getAllPublicInvestmentBudgetCoFundedRevenues() {
         return publicInvestmentBudgetCoFundedRevenues;
     }
 
-    public static void printPublicInvestmentBudgetCoFundedRevenues() {
-        DataOutput.printPublicInvestmentBudgetRevenueWithAsciiTable(getPublicInvestmentBudgetCoFundedRevenues());
+    public static void printAllPublicInvestmentBudgetCoFundedRevenues() {
+        DataOutput.printPublicInvestmentBudgetRevenueWithAsciiTable(getAllPublicInvestmentBudgetCoFundedRevenues());
     }
 
     public static ArrayList<PublicInvestmentBudgetCoFundedRevenue> getMainPublicInvestmentBudgetCoFundedRevenues() {

@@ -24,13 +24,13 @@ public class PublicInvestmentBudgetNationalRevenueTest {
         BudgetRevenue.getAllBudgetRevenues().clear();
 
         // Δεδομένα που αρχικά ήταν για CoFunded (2 Κλάδοι: 13 και 15)
-        revenue13 = new PublicInvestmentBudgetNationalRevenue("13", "Κατηγορία 13", "ΕΣΟΔΑ", 35000000L);
-        revenue134 = new PublicInvestmentBudgetNationalRevenue("134", "Υποκατηγορία 134", "ΕΣΟΔΑ", 35000000L);
-        revenue13409 = new PublicInvestmentBudgetNationalRevenue("13409", "Υποκατηγορία 13409", "ΕΣΟΔΑ", 35000000L);
+        revenue13 = new PublicInvestmentBudgetNationalRevenue("13", "Κατηγορία 13", "ΕΣΟΔΑ", "ΕΘΝΙΚΟ", 35000000L);
+        revenue134 = new PublicInvestmentBudgetNationalRevenue("134", "Υποκατηγορία 134", "ΕΣΟΔΑ", "ΕΘΝΙΚΟ", 35000000L);
+        revenue13409 = new PublicInvestmentBudgetNationalRevenue("13409", "Υποκατηγορία 13409", "ΕΣΟΔΑ", "ΕΘΝΙΚΟ", 35000000L);
 
-        revenue15 = new PublicInvestmentBudgetNationalRevenue("15", "Κατηγορία 15", "ΕΣΟΔΑ", 265000000L);
-        revenue156 = new PublicInvestmentBudgetNationalRevenue("156", "Υποκατηγορία 156", "ΕΣΟΔΑ", 1000000L);
-        revenue15609 = new PublicInvestmentBudgetNationalRevenue("15609", "Υποκατηγορία 15609", "ΕΣΟΔΑ", 1000000L);
+        revenue15 = new PublicInvestmentBudgetNationalRevenue("15", "Κατηγορία 15", "ΕΣΟΔΑ", "ΕΘΝΙΚΟ", 265000000L);
+        revenue156 = new PublicInvestmentBudgetNationalRevenue("156", "Υποκατηγορία 156", "ΕΣΟΔΑ", "ΕΘΝΙΚΟ", 1000000L);
+        revenue15609 = new PublicInvestmentBudgetNationalRevenue("15609", "Υποκατηγορία 15609", "ΕΣΟΔΑ", "ΕΘΝΙΚΟ", 1000000L);
     }
 
 
@@ -144,7 +144,7 @@ public class PublicInvestmentBudgetNationalRevenueTest {
         assertEquals(265000000L, revenue15.getAmount());
     }
     @Test
-    void implementChangesOfPercentageAdjustmentTest() {
+    void implementChangesOfEqualDistributionTest() {
         double percentage = 0.2; // +20% applied to 13 (Top Level)
 
         long initial13 = revenue13.getAmount();
@@ -169,7 +169,7 @@ public class PublicInvestmentBudgetNationalRevenueTest {
     }
 
     @Test
-    void implementChangesOfPercentageAdjustmentTest2() {
+    void implementChangesOfEqualDistributionTest2() {
         double percentage = 0.1; // +10% applied to 134 (Middle Level)
 
         long initial13 = revenue13.getAmount();

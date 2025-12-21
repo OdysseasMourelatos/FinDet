@@ -3,7 +3,6 @@ package com.financial.pdf;
 import com.financial.entries.BudgetRevenue;
 import com.financial.entries.PublicInvestmentBudgetCoFundedRevenue;
 import com.financial.entries.PublicInvestmentBudgetNationalRevenue;
-import com.financial.entries.PublicInvestmentBudgetRevenue;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import java.io.FileOutputStream;
@@ -16,8 +15,8 @@ public class BudgetRevenueConvertToPdf {
         try {
             ArrayList<BudgetRevenue> br = BudgetRevenue.getAllBudgetRevenues();
             ArrayList<BudgetRevenue> brm = BudgetRevenue.getMainBudgetRevenues();
-            ArrayList<PublicInvestmentBudgetCoFundedRevenue> brcf = PublicInvestmentBudgetCoFundedRevenue.getPublicInvestmentBudgetCoFundedRevenues();
-            ArrayList<PublicInvestmentBudgetNationalRevenue> brn = PublicInvestmentBudgetNationalRevenue.getPublicInvestmentBudgetNationalRevenues();
+            ArrayList<PublicInvestmentBudgetCoFundedRevenue> brcf = PublicInvestmentBudgetCoFundedRevenue.getAllPublicInvestmentBudgetCoFundedRevenues();
+            ArrayList<PublicInvestmentBudgetNationalRevenue> brn = PublicInvestmentBudgetNationalRevenue.getAllPublicInvestmentBudgetNationalRevenues();
 
 
             Document document = new Document();

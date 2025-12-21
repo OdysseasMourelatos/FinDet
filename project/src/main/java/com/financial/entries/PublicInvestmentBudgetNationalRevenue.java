@@ -18,12 +18,12 @@ public class PublicInvestmentBudgetNationalRevenue extends PublicInvestmentBudge
 
     //Class Methods
 
-    public static ArrayList<PublicInvestmentBudgetNationalRevenue> getPublicInvestmentBudgetNationalRevenues() {
+    public static ArrayList<PublicInvestmentBudgetNationalRevenue> getAllPublicInvestmentBudgetNationalRevenues() {
         return publicInvestmentBudgetNationalRevenues;
     }
 
-    public static void printPublicInvestmentBudgetNationalRevenues() {
-        DataOutput.printPublicInvestmentBudgetRevenueWithAsciiTable(getPublicInvestmentBudgetNationalRevenues());
+    public static void printAllPublicInvestmentBudgetNationalRevenues() {
+        DataOutput.printPublicInvestmentBudgetRevenueWithAsciiTable(getAllPublicInvestmentBudgetNationalRevenues());
     }
 
     public static ArrayList<PublicInvestmentBudgetNationalRevenue> getMainPublicInvestmentBudgetNationalRevenues() {

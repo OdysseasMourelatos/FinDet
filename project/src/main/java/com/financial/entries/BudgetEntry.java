@@ -10,14 +10,12 @@ public abstract class BudgetEntry {
     private final String description;
     private final String category;
     protected long amount;
-    protected static ArrayList<BudgetEntry> budgetEntries = new ArrayList<>();
 
     public BudgetEntry(String code, String description, String category, long amount) {
         this.code = code;
         this.description = description;
         this.category = category;
         this.amount = amount;
-        budgetEntries.add(this);
     }
 
     public String getCode() {
