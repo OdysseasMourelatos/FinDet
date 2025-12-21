@@ -6,12 +6,25 @@
   <component name="ChangeListManager">
     <list default="true" id="88d8a661-a47d-4ac5-b89a-2164a467de01" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/entries/BudgetEntry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/BudgetEntry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/entries/BudgetRevenue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/BudgetRevenue.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetCoFundedRevenue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetCoFundedRevenue.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetNationalRevenue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetNationalRevenue.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/menu/RevenuesPrintingMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/menu/RevenuesPrintingMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetRevenue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetRevenue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/entries/RegularBudgetRevenue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/RegularBudgetRevenue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/menu/ChartsMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/menu/ChartsMenu.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/pdf/BudgetRevenueConvertToPdf.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/pdf/BudgetRevenueConvertToPdf.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/services/data/DataInput.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/services/data/DataInput.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/services/data/DataOutput.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/services/data/DataOutput.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/services/revenues/BudgetRevenueChangesService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/services/revenues/BudgetRevenueChangesService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/services/revenues/BudgetRevenueLogic.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/services/revenues/BudgetRevenueLogic.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/services/revenues/BudgetRevenueLogicService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/services/revenues/BudgetRevenueLogicService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/ui/views/DashboardView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/ui/views/DashboardView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/BudgetRevenueTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/BudgetRevenueTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/RegularBudgetRevenueTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/RegularBudgetRevenueTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/checkstyle-cachefile" beforeDir="false" afterPath="$PROJECT_DIR$/target/checkstyle-cachefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/checkstyle-result.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/checkstyle-result.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/entries/PublicInvestmentBudgetRevenue.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/financial/entries/PublicInvestmentBudgetRevenue.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/pdf/BudgetRevenueConvertToPdf.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/financial/pdf/BudgetRevenueConvertToPdf.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,7 +85,7 @@
     "JUnit.java in FinDet.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "tests",
+    "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.15",
@@ -80,7 +93,7 @@
     "settings.editor.selected.configurable": "preferences.general"
   }
 }]]></component>
-  <component name="RunManager" selected="JUnit.BudgetEntryTest">
+  <component name="RunManager">
     <configuration name="BudgetEntryTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="FinDet" />
       <extension name="coverage">
@@ -91,21 +104,6 @@
       </extension>
       <option name="PACKAGE_NAME" value="com.financial" />
       <option name="MAIN_CLASS_NAME" value="com.financial.BudgetEntryTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="BudgetExpenseTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="FinDet" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.financial.entries.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.financial" />
-      <option name="MAIN_CLASS_NAME" value="com.financial.BudgetExpenseTest" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -126,7 +124,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="RegularBudgetRevenueTest.findSuperCategoryTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="RegularBudgetRevenueTest.getAboveLevelSuperCategoryTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="FinDet" />
       <extension name="coverage">
         <pattern>
@@ -136,7 +134,23 @@
       </extension>
       <option name="PACKAGE_NAME" value="com.financial" />
       <option name="MAIN_CLASS_NAME" value="com.financial.RegularBudgetRevenueTest" />
-      <option name="METHOD_NAME" value="findSuperCategoryTest" />
+      <option name="METHOD_NAME" value="getAboveLevelSuperCategoryTest" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RegularBudgetRevenueTest.getAllSubCategoriesTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="FinDet" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.financial.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.financial" />
+      <option name="MAIN_CLASS_NAME" value="com.financial.RegularBudgetRevenueTest" />
+      <option name="METHOD_NAME" value="getAllSubCategoriesTest" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -163,11 +177,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.RegularBudgetRevenueTest.findSuperCategoryTest" />
+        <item itemvalue="JUnit.RegularBudgetRevenueTest.getAllSubCategoriesTest" />
+        <item itemvalue="JUnit.BudgetEntryTest" />
+        <item itemvalue="JUnit.RegularBudgetRevenueTest.getAboveLevelSuperCategoryTest" />
         <item itemvalue="JUnit.RegularBudgetRevenueTest" />
         <item itemvalue="JUnit.java in FinDet" />
-        <item itemvalue="JUnit.BudgetExpenseTest" />
-        <item itemvalue="JUnit.BudgetEntryTest" />
       </list>
     </recent_temporary>
   </component>
