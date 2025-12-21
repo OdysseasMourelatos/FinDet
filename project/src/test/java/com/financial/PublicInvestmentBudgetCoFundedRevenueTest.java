@@ -51,17 +51,17 @@ public class PublicInvestmentBudgetCoFundedRevenueTest {
     }
 
     @Test
-    void findSuperCategoryTest() {
-        BudgetRevenue parent = revenue13501.findSuperCategory();
+    void getAboveLevelSuperCategoryTest() {
+        BudgetRevenue parent = revenue13501.getAboveLevelSuperCategory();
         assertNotNull(parent);
         assertEquals("135", parent.getCode());
         assertEquals(4190000000L, parent.getAmount());
     }
 
     @Test
-    void getSuperCategoriesTest() {
+    void getAllSuperCategoriesTest() {
         // Έλεγχος γονέων για το βαθύτερο κόμβο (1350101)
-        ArrayList<BudgetRevenue> superCategories = revenue1350101.getSuperCategories();
+        ArrayList<BudgetRevenue> superCategories = revenue1350101.getAllSuperCategories();
 
         // Πρέπει να περιέχει 13, 135, 13501
         assertEquals(3, superCategories.size());
@@ -71,9 +71,9 @@ public class PublicInvestmentBudgetCoFundedRevenueTest {
     }
 
     @Test
-    void findNextLevelSubCategoriesTest() {
+    void getNextLevelSubCategoriesTest() {
 
-        ArrayList<BudgetRevenue> subCategories = revenue13.findNextLevelSubCategories();
+        ArrayList<BudgetRevenue> subCategories = revenue13.getNextLevelSubCategories();
 
         //One children in the next level - 135
         assertEquals(1, subCategories.size());
@@ -81,8 +81,8 @@ public class PublicInvestmentBudgetCoFundedRevenueTest {
     }
 
     @Test
-    void findAllSubCategoriesTest() {
-        ArrayList<BudgetRevenue> allSubCategories = revenue13.findAllSubCategories();
+    void getAllSubCategoriesTest() {
+        ArrayList<BudgetRevenue> allSubCategories = revenue13.getAllSubCategories();
         //3 children total - 135, 13501 & 1350101
         assertEquals(3, allSubCategories.size());
         assertTrue(allSubCategories.contains(revenue135));

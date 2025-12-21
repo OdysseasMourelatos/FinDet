@@ -6,25 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="88d8a661-a47d-4ac5-b89a-2164a467de01" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/entries/BudgetRevenue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/BudgetRevenue.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetCoFundedRevenue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetCoFundedRevenue.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetNationalRevenue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetNationalRevenue.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetRevenue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetRevenue.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/entries/RegularBudgetRevenue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/RegularBudgetRevenue.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/menu/ChartsMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/menu/ChartsMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/pdf/BudgetRevenueConvertToPdf.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/pdf/BudgetRevenueConvertToPdf.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/services/data/DataInput.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/services/data/DataInput.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/services/data/DataOutput.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/services/data/DataOutput.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/services/revenues/BudgetRevenueChangesService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/services/revenues/BudgetRevenueChangesService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/services/revenues/BudgetRevenueLogic.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/services/revenues/BudgetRevenueLogic.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/services/revenues/BudgetRevenueLogicService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/services/revenues/BudgetRevenueLogicService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/ui/views/DashboardView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/ui/views/DashboardView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/BudgetRevenueTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/BudgetRevenueTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/RegularBudgetRevenueTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/RegularBudgetRevenueTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/checkstyle-cachefile" beforeDir="false" afterPath="$PROJECT_DIR$/target/checkstyle-cachefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/checkstyle-result.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/checkstyle-result.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/entries/PublicInvestmentBudgetRevenue.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/financial/entries/PublicInvestmentBudgetRevenue.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/financial/pdf/BudgetRevenueConvertToPdf.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/financial/pdf/BudgetRevenueConvertToPdf.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/PublicInvestmentBudgetCoFundedRevenueTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/PublicInvestmentBudgetCoFundedRevenueTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/PublicInvestmentBudgetNationalRevenueTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/PublicInvestmentBudgetNationalRevenueTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,6 +57,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.Main.executor": "Run",
+    "JUnit.AppTest.executor": "Run",
     "JUnit.BudgetEntryTest.executor": "Run",
     "JUnit.BudgetExpenseTest.executor": "Run",
     "JUnit.BudgetRevenueTest.executor": "Run",
@@ -80,6 +65,8 @@
     "JUnit.DataOutputTest.executor": "Run",
     "JUnit.DataUpdateTest.executor": "Run",
     "JUnit.EntityTest.executor": "Run",
+    "JUnit.PublicInvestmentBudgetCoFundedRevenueTest.executor": "Run",
+    "JUnit.PublicInvestmentBudgetNationalRevenueTest.executor": "Run",
     "JUnit.RegularBudgetRevenueTest.executor": "Run",
     "JUnit.RegularBudgetRevenueTest.findSuperCategoryTest.executor": "Run",
     "JUnit.java in FinDet.executor": "Run",
@@ -177,8 +164,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.RegularBudgetRevenueTest.getAllSubCategoriesTest" />
         <item itemvalue="JUnit.BudgetEntryTest" />
+        <item itemvalue="JUnit.RegularBudgetRevenueTest.getAllSubCategoriesTest" />
         <item itemvalue="JUnit.RegularBudgetRevenueTest.getAboveLevelSuperCategoryTest" />
         <item itemvalue="JUnit.RegularBudgetRevenueTest" />
         <item itemvalue="JUnit.java in FinDet" />

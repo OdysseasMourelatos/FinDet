@@ -57,8 +57,8 @@ public class PublicInvestmentBudgetNationalRevenueTest {
     }
 
     @Test
-    void findSuperCategoryTest() {
-        BudgetRevenue parent = revenue13409.findSuperCategory();
+    void getAboveLevelSuperCategoryTest() {
+        BudgetRevenue parent = revenue13409.getAboveLevelSuperCategory();
         assertNotNull(parent);
         assertEquals("134", parent.getCode());
         assertEquals(35000000L, parent.getAmount());
@@ -66,8 +66,8 @@ public class PublicInvestmentBudgetNationalRevenueTest {
 
 
     @Test
-    void getSuperCategoriesTest() {
-        ArrayList<BudgetRevenue> superCategories = revenue13409.getSuperCategories();
+    void getAllSuperCategoriesTest() {
+        ArrayList<BudgetRevenue> superCategories = revenue13409.getAllSuperCategories();
         assertEquals(2, superCategories.size());
         //Checking if the list contains all super categories
         assertTrue(superCategories.contains(revenue13));
@@ -75,9 +75,9 @@ public class PublicInvestmentBudgetNationalRevenueTest {
     }
 
     @Test
-    void findNextLevelSubCategoriesTest() {
+    void getNextLevelSubCategoriesTest() {
 
-        ArrayList<BudgetRevenue> subCategories = revenue13.findNextLevelSubCategories();
+        ArrayList<BudgetRevenue> subCategories = revenue13.getNextLevelSubCategories();
 
         //One children in the next level - 134
         assertEquals(1, subCategories.size());
@@ -86,8 +86,8 @@ public class PublicInvestmentBudgetNationalRevenueTest {
 
 
     @Test
-    void findAllSubCategoriesTest() {
-        ArrayList<BudgetRevenue> allSubCategories = revenue13.findAllSubCategories();
+    void getllSubCategoriesTest() {
+        ArrayList<BudgetRevenue> allSubCategories = revenue13.getAllSubCategories();
         //2 children total - 134, 13409
         assertEquals(2, allSubCategories.size());
         assertTrue(allSubCategories.contains(revenue134));

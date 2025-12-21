@@ -1,8 +1,4 @@
-/home/odysseasmourelatos/FinDet/project/src/test/java/com/financial/BudgetEntryTest.java
 /home/odysseasmourelatos/FinDet/project/src/test/java/com/financial/AppTest.java
-/home/odysseasmourelatos/FinDet/project/src/test/java/com/financial/BudgetRevenueTest.java
-/home/odysseasmourelatos/FinDet/project/src/test/java/com/financial/DataOutputTest.java
-/home/odysseasmourelatos/FinDet/project/src/test/java/com/financial/DataUpdateTest.java
-/home/odysseasmourelatos/FinDet/project/src/test/java/com/financial/DataInputTest.java
-/home/odysseasmourelatos/FinDet/project/src/test/java/com/financial/EntityTest.java
-/home/odysseasmourelatos/FinDet/project/src/test/java/com/financial/BudgetExpenseTest.java
+/home/odysseasmourelatos/FinDet/project/src/test/java/com/financial/PublicInvestmentBudgetNationalRevenueTest.java
+/home/odysseasmourelatos/FinDet/project/src/test/java/com/financial/RegularBudgetRevenueTest.java
+/home/odysseasmourelatos/FinDet/project/src/test/java/com/financial/PublicInvestmentBudgetCoFundedRevenueTest.java
