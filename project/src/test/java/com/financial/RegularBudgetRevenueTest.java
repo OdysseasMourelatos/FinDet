@@ -105,16 +105,16 @@ public class RegularBudgetRevenueTest {
     }
 
     @Test
-    void findSuperCategoryTest() {
-        RegularBudgetRevenue parent = revenue11101.findSuperCategory();
+    void getAboveLevelSuperCategoryTest() {
+        RegularBudgetRevenue parent = revenue11101.getAboveLevelSuperCategory();
         assertNotNull(parent);
         assertEquals("111", parent.getCode());
         assertEquals(33667000000L, parent.getAmount());
     }
 
     @Test
-    void getSuperCategoriesTest() {
-        ArrayList<BudgetRevenue> superCategories = revenue11101.getSuperCategories();
+    void getAllSuperCategoriesTest() {
+        ArrayList<BudgetRevenue> superCategories = revenue11101.getAllSuperCategories();
         assertEquals(2, superCategories.size());
         //Checking if the list contains all super categories
         assertTrue(superCategories.contains(revenue11));
@@ -122,9 +122,9 @@ public class RegularBudgetRevenueTest {
     }
 
     @Test
-    void findNextLevelSubCategoriesTest() {
+    void getNextLevelSubCategoriesTest() {
 
-        ArrayList<BudgetRevenue> subCategories = revenue13.findNextLevelSubCategories();
+        ArrayList<BudgetRevenue> subCategories = revenue13.getNextLevelSubCategories();
 
         //2 children in the next level - 131 & 132
         assertEquals(2, subCategories.size());
@@ -133,8 +133,8 @@ public class RegularBudgetRevenueTest {
     }
 
     @Test
-    void findAllSubCategoriesTest() {
-        ArrayList<BudgetRevenue> allSubCategories = revenue13.findAllSubCategories();
+    void getAllSubCategoriesTest() {
+        ArrayList<BudgetRevenue> allSubCategories = revenue13.getAllSubCategories();
         //3 children total - 131, 132 & 13108
         assertEquals(3, allSubCategories.size());
         assertTrue(allSubCategories.contains(revenue131));
@@ -292,7 +292,6 @@ public class RegularBudgetRevenueTest {
         assertEquals(initialBR11Amount + change, budget11.getRegularAmount());
         assertEquals(initialBR11Amount + change + budget11.getPublicInvestmentAmount(), budget11.getAmount());
 
-
         // BR 111
         assertEquals(initialBR111Amount + change, budget111.getRegularAmount());
         assertEquals(initialBR111Amount + change + budget111.getPublicInvestmentAmount(), budget111.getAmount());
@@ -325,7 +324,6 @@ public class RegularBudgetRevenueTest {
         // BR 11
         assertEquals(expectedBR11Amount, budget11.getRegularAmount());
         assertEquals(expectedBR11Amount + budget11.getPublicInvestmentAmount(), budget11.getAmount());
-
 
         // BR 111
         assertEquals(expectedBR111Amount, budget111.getRegularAmount());

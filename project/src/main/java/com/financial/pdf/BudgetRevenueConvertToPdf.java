@@ -16,7 +16,7 @@ public class BudgetRevenueConvertToPdf {
             ArrayList<BudgetRevenue> br = BudgetRevenue.getAllBudgetRevenues();
             ArrayList<BudgetRevenue> brm = BudgetRevenue.getMainBudgetRevenues();
             ArrayList<PublicInvestmentBudgetCoFundedRevenue> brcf = PublicInvestmentBudgetCoFundedRevenue.getPublicInvestmentBudgetCoFundedRevenues();
-            ArrayList<PublicInvestmentBudgetNationalRevenue> brn = PublicInvestmentBudgetNationalRevenue.getPublicInvestmentBudgetNationalRevenues();
+            ArrayList<PublicInvestmentBudgetNationalRevenue> brn = PublicInvestmentBudgetNationalRevenue.getAllPublicInvestmentBudgetNationalRevenues();
 
 
             Document document = new Document();

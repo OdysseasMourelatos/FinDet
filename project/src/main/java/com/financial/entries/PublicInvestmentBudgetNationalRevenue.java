@@ -1,7 +1,6 @@
 package com.financial.entries;
 
 import com.financial.services.*;
-import com.financial.services.data.DataOutput;
 import com.financial.services.revenues.*;
 
 import java.util.ArrayList;
@@ -18,21 +17,15 @@ public class PublicInvestmentBudgetNationalRevenue extends PublicInvestmentBudge
 
     //Class Methods
 
-    public static ArrayList<PublicInvestmentBudgetNationalRevenue> getPublicInvestmentBudgetNationalRevenues() {
+    public static ArrayList<PublicInvestmentBudgetNationalRevenue> getAllPublicInvestmentBudgetNationalRevenues() {
         return publicInvestmentBudgetNationalRevenues;
     }
 
-    public static void printPublicInvestmentBudgetNationalRevenues() {
-        DataOutput.printPublicInvestmentBudgetRevenueWithAsciiTable(getPublicInvestmentBudgetNationalRevenues());
-    }
 
     public static ArrayList<PublicInvestmentBudgetNationalRevenue> getMainPublicInvestmentBudgetNationalRevenues() {
         return BudgetRevenueLogicService.getMainBudgetRevenues(publicInvestmentBudgetNationalRevenues);
     }
 
-    public static void printMainPublicInvestmentBudgetNationalRevenues() {
-        BudgetRevenueLogicService.printMainBudgetRevenues(getMainPublicInvestmentBudgetNationalRevenues());
-    }
 
     public static PublicInvestmentBudgetNationalRevenue findPublicInvestmentBudgetNationalRevenueWithCode(String code) {
         return BudgetRevenueLogicService.findRevenueWithCode(code, publicInvestmentBudgetNationalRevenues);
@@ -41,11 +34,6 @@ public class PublicInvestmentBudgetNationalRevenue extends PublicInvestmentBudge
     public static ArrayList<BudgetRevenue> getPublicInvestmentBudgetNationalRevenuesStartingWithCode(String code) {
         return BudgetRevenueLogicService.getRevenuesStartingWithCode(code, publicInvestmentBudgetNationalRevenues);
     }
-
-    public static void printPublicInvestmentBudgetNationalRevenuesStartingWithCode(String code) {
-        DataOutput.printGeneralBudgetEntriesWithAsciiTable(getPublicInvestmentBudgetNationalRevenuesStartingWithCode(code), 0);
-    }
-
 
     //Sum Method
 
@@ -58,57 +46,25 @@ public class PublicInvestmentBudgetNationalRevenue extends PublicInvestmentBudge
     //Supercategories methods
 
     @Override
-    public PublicInvestmentBudgetNationalRevenue findSuperCategory() {
-        return BudgetRevenueLogicService.findSuperCategory(this, publicInvestmentBudgetNationalRevenues);
+    public PublicInvestmentBudgetNationalRevenue getAboveLevelSuperCategory() {
+        return BudgetRevenueLogicService.getAboveLevelSuperCategory(this, publicInvestmentBudgetNationalRevenues);
     }
 
     @Override
-    public ArrayList<BudgetRevenue> getSuperCategories() {
-        return BudgetRevenueLogicService.getSuperCategories(this, publicInvestmentBudgetNationalRevenues);
-    }
-
-    @Override
-    public void printSuperCategoriesTopDown() {
-        ArrayList<RegularBudgetRevenue> superCategories = new ArrayList<>();
-        if (getSuperCategories().isEmpty()) {
-            System.out.println("Δεν υπάρχουν κατηγορίες σε υψηλότερη ιεραρχία");
-        } else {
-            for (int i = getSuperCategories().size() - 1; i >= 0; i--) {
-                superCategories.add((RegularBudgetRevenue) getSuperCategories().get(i));
-            }
-            DataOutput.printGeneralBudgetEntriesWithAsciiTable(superCategories, 0);
-        }
-    }
-
-    @Override
-    public void printSuperCategoriesBottomsUp() {
-        if (getSuperCategories().isEmpty()) {
-            System.out.println("Δεν υπάρχουν κατηγορίες σε υψηλότερη ιεραρχία");
-        } else {
-            DataOutput.printGeneralBudgetEntriesWithAsciiTable(getSuperCategories(), 0);
-        }
+    public ArrayList<BudgetRevenue> getAllSuperCategories() {
+        return BudgetRevenueLogicService.getAllSuperCategories(this, publicInvestmentBudgetNationalRevenues);
     }
 
     //Subcategories methods
 
     @Override
-    public ArrayList<BudgetRevenue> findAllSubCategories() {
-        return BudgetRevenueLogicService.findAllSubCategories(this, publicInvestmentBudgetNationalRevenues);
+    public ArrayList<BudgetRevenue> getNextLevelSubCategories() {
+        return BudgetRevenueLogicService.getNextLevelSubCategories(this, publicInvestmentBudgetNationalRevenues);
     }
 
     @Override
-    public void printAllSubCategories() {
-        DataOutput.printGeneralBudgetEntriesWithAsciiTable(findAllSubCategories(), 0);
-    }
-
-    @Override
-    public ArrayList<BudgetRevenue> findNextLevelSubCategories() {
-        return BudgetRevenueLogicService.findNextLevelSubCategories(this, publicInvestmentBudgetNationalRevenues);
-    }
-
-    @Override
-    public void printNextLevelSubCategories() {
-        DataOutput.printGeneralBudgetEntriesWithAsciiTable(findNextLevelSubCategories(), 0);
+    public ArrayList<BudgetRevenue> getAllSubCategories() {
+        return BudgetRevenueLogicService.getAllSubCategories(this, publicInvestmentBudgetNationalRevenues);
     }
 
     //*Implementation Of Methods (Changes)*
@@ -117,7 +73,7 @@ public class PublicInvestmentBudgetNationalRevenue extends PublicInvestmentBudge
 
     @Override
     public void setAmountOfSuperCategories(long change) {
-        BudgetRevenueChangesService.setAmountOfSuperCategories(getSuperCategories(), change);
+        BudgetRevenueChangesService.setAmountOfSuperCategories(this.getAllSuperCategories(), change);
     }
 
     //SubCategories update
@@ -156,9 +112,9 @@ public class PublicInvestmentBudgetNationalRevenue extends PublicInvestmentBudge
     @Override
     public void keepAccountsAndBudgetTypeBeforeChange() {
         ArrayList<BudgetRevenue> accountsForChange = new ArrayList<>();
-        accountsForChange.addAll(getSuperCategories());
+        accountsForChange.addAll(this.getAllSuperCategories());
         accountsForChange.add(this);
-        accountsForChange.addAll(findAllSubCategories());
+        accountsForChange.addAll(getAllSubCategories());
         RevenuesHistory.keepHistory(accountsForChange, BudgetType.PUBLIC_INVESTMENT_BUDGET_NATIONAL);
     }
 
@@ -170,6 +126,8 @@ public class PublicInvestmentBudgetNationalRevenue extends PublicInvestmentBudge
             publicInvestmentBudgetRevenue.setNationalAmount(amount, true);
         }
     }
+
+    //Setter Override
 
     @Override
     public void setAmount(long amount) {

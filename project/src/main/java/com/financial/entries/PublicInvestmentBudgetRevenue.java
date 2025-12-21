@@ -2,7 +2,6 @@ package com.financial.entries;
 
 import com.financial.services.revenues.BudgetRevenueLogicService;
 import com.financial.services.data.DataInput;
-import com.financial.services.data.DataOutput;
 import com.financial.services.revenues.BudgetRevenueLogic;
 
 import java.util.ArrayList;
@@ -72,20 +71,12 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements Budg
 
     //Class Methods
 
-    public static ArrayList<PublicInvestmentBudgetRevenue> getPublicInvestmentBudgetRevenues() {
+    public static ArrayList<PublicInvestmentBudgetRevenue> getAllPublicInvestmentBudgetRevenues() {
         return publicInvestmentBudgetRevenues;
-    }
-
-    public static void printPublicInvestmentBudgetRevenues() {
-        DataOutput.printPublicInvestmentBudgetRevenuesFilteredWithAsciiTable(publicInvestmentBudgetRevenues, calculateSum());
     }
 
     public static ArrayList<PublicInvestmentBudgetRevenue> getMainPublicInvestmentBudgetRevenues() {
         return BudgetRevenueLogicService.getMainBudgetRevenues(publicInvestmentBudgetRevenues);
-    }
-
-    public static void printMainPublicInvestmentBudgetRevenues() {
-        DataOutput.printPublicInvestmentBudgetRevenuesFilteredWithAsciiTable(getMainPublicInvestmentBudgetRevenues(), calculateSum());
     }
 
     public static PublicInvestmentBudgetRevenue findPublicInvestmentBudgetRevenueWithCode(String code) {
@@ -96,71 +87,45 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements Budg
         return BudgetRevenueLogicService.getRevenuesStartingWithCode(code, publicInvestmentBudgetRevenues);
     }
 
-    public static void printPublicInvestmentRevenuesStartingWithCode(String code) {
-        DataOutput.printGeneralBudgetEntriesWithAsciiTable(getPublicInvestmentBudgetRevenuesStartingWithCode(code), 0);
-    }
-
     //Sum Method
+
     public static long calculateSum() {
         return BudgetRevenueLogicService.calculateSum(publicInvestmentBudgetRevenues);
     }
 
-    //*Implementation of methods*
+    //*Implementation of methods (Logic)*
 
     //Supercategories methods
 
     @Override
-    public PublicInvestmentBudgetRevenue findSuperCategory() {
-        return BudgetRevenueLogicService.findSuperCategory(this, publicInvestmentBudgetRevenues);
+    public PublicInvestmentBudgetRevenue getAboveLevelSuperCategory() {
+        return BudgetRevenueLogicService.getAboveLevelSuperCategory(this, publicInvestmentBudgetRevenues);
     }
 
     @Override
-    public ArrayList<BudgetRevenue> getSuperCategories() {
-        return BudgetRevenueLogicService.getSuperCategories(this, publicInvestmentBudgetRevenues);
-    }
-
-    @Override
-    public void printSuperCategoriesTopDown() {
-        ArrayList<BudgetRevenue> superCategories = new ArrayList<>();
-        if (getSuperCategories().isEmpty()) {
-            System.out.println("Δεν υπάρχουν κατηγορίες σε υψηλότερη ιεραρχία");
-        } else {
-            for (int i = getSuperCategories().size() - 1; i >= 0; i--) {
-                superCategories.add(getSuperCategories().get(i));
-            }
-            DataOutput.printGeneralBudgetEntriesWithAsciiTable(superCategories, 0);
-        }
-    }
-
-    @Override
-    public void printSuperCategoriesBottomsUp() {
-        if (getSuperCategories().isEmpty()) {
-            System.out.println("Δεν υπάρχουν κατηγορίες σε υψηλότερη ιεραρχία");
-        } else {
-            DataOutput.printGeneralBudgetEntriesWithAsciiTable(getSuperCategories(), 0);
-        }
+    public ArrayList<BudgetRevenue> getAllSuperCategories() {
+        return BudgetRevenueLogicService.getAllSuperCategories(this, publicInvestmentBudgetRevenues);
     }
 
     //Subcategories methods
 
     @Override
-    public ArrayList<BudgetRevenue> findAllSubCategories() {
-        return BudgetRevenueLogicService.findAllSubCategories(this, publicInvestmentBudgetRevenues);
+    public ArrayList<BudgetRevenue> getNextLevelSubCategories() {
+        return BudgetRevenueLogicService.getNextLevelSubCategories(this, publicInvestmentBudgetRevenues);
     }
 
     @Override
-    public void printAllSubCategories() {
-        DataOutput.printGeneralBudgetEntriesWithAsciiTable(findAllSubCategories(), 0);
+    public ArrayList<BudgetRevenue> getAllSubCategories() {
+        return BudgetRevenueLogicService.getAllSubCategories(this, publicInvestmentBudgetRevenues);
     }
 
-    @Override
-    public ArrayList<BudgetRevenue> findNextLevelSubCategories() {
-        return BudgetRevenueLogicService.findNextLevelSubCategories(this, publicInvestmentBudgetRevenues);
-    }
+    //Updating the filtered objects in SuperClass
 
-    @Override
-    public void printNextLevelSubCategories() {
-        DataOutput.printGeneralBudgetEntriesWithAsciiTable(findNextLevelSubCategories(), 0);
+    public void updateAmountOfSuperClassFilteredObjects(long change) {
+        BudgetRevenue budgetRevenue = BudgetRevenue.findBudgetRevenueWithCode(this.getCode());
+        if (budgetRevenue != null ) {
+            budgetRevenue.setPublicInvestmentAmount(change, true);
+        }
     }
 
     //Getters & Setters
@@ -190,15 +155,6 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements Budg
         if (update) {
             this.amount = nationalAmount + coFundedAmount;
             updateAmountOfSuperClassFilteredObjects(amount);
-        }
-    }
-
-    //Updating the filtered objects in SuperClass
-
-    public void updateAmountOfSuperClassFilteredObjects(long change) {
-        BudgetRevenue budgetRevenue = BudgetRevenue.findBudgetRevenueWithCode(this.getCode());
-        if (budgetRevenue != null ) {
-            budgetRevenue.setPublicInvestmentAmount(change, true);
         }
     }
 

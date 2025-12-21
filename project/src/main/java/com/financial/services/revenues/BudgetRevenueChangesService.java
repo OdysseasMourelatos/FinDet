@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.financial.services.revenues.BudgetRevenueLogicService.findNextLevelSubCategories;
+import static com.financial.services.revenues.BudgetRevenueLogicService.getNextLevelSubCategories;
 
 public class BudgetRevenueChangesService {
     public static <T extends BudgetRevenue> void setAmountOfSuperCategories(ArrayList<T> superCategories, long change) {
@@ -16,7 +16,7 @@ public class BudgetRevenueChangesService {
     }
 
     public static <T extends BudgetRevenue> void setAmountOfNextLevelSubCategoriesWithEqualDistribution(T parent, ArrayList<T> revenues, long change) {
-        ArrayList<BudgetRevenue> nextLevelSubCategories = findNextLevelSubCategories(parent, revenues);
+        ArrayList<BudgetRevenue> nextLevelSubCategories = getNextLevelSubCategories(parent, revenues);
         if (!nextLevelSubCategories.isEmpty()) {
             long changeOfCategory = change / nextLevelSubCategories.size();
             for (BudgetRevenue subCategory : nextLevelSubCategories) {
@@ -26,7 +26,7 @@ public class BudgetRevenueChangesService {
     }
 
     public static <T extends BudgetRevenue> void setAmountOfAllSubCategoriesWithEqualDistribution(T parent, ArrayList<T> revenues, long change) {
-        ArrayList<BudgetRevenue> nextLevelSubCategories = findNextLevelSubCategories(parent, revenues);
+        ArrayList<BudgetRevenue> nextLevelSubCategories = getNextLevelSubCategories(parent, revenues);
         long changeOfSubCategory = change;
 
         try {
@@ -59,7 +59,7 @@ public class BudgetRevenueChangesService {
     }
 
     public static <T extends BudgetRevenue> void setAmountOfNextLevelSubCategoriesWithPercentageAdjustment(T parent, ArrayList<T> revenues, double percentage) {
-        ArrayList<BudgetRevenue> nextLevelSubCategories = findNextLevelSubCategories(parent, revenues);
+        ArrayList<BudgetRevenue> nextLevelSubCategories = getNextLevelSubCategories(parent, revenues);
         if (!nextLevelSubCategories.isEmpty()) {
             for (BudgetRevenue subCategory : nextLevelSubCategories) {
                 subCategory.setAmount((long) (subCategory.getAmount() * (1 + percentage)));
@@ -79,7 +79,7 @@ public class BudgetRevenueChangesService {
             }
 
             // Για κάθε υποκατηγορία σε επόμενο επίπεδο (Αναδρομή)
-            ArrayList<BudgetRevenue> nextLevelSubCategories = findNextLevelSubCategories(parent, revenues);
+            ArrayList<BudgetRevenue> nextLevelSubCategories = getNextLevelSubCategories(parent, revenues);
             for (BudgetRevenue subCategory : nextLevelSubCategories) {
                 setAmountOfAllSubCategoriesWithPercentageAdjustment((T) subCategory, revenues, percentage);
             }

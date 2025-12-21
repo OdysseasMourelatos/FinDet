@@ -105,7 +105,7 @@ public class DashboardView {
         int revenueCount = BudgetRevenue.getAllBudgetRevenues().size();
         int regularRevenueCount = RegularBudgetRevenue.getAllRegularBudgetRevenues().size();
         int publicInvestmentRevenueCount =
-            PublicInvestmentBudgetRevenue.getPublicInvestmentBudgetRevenues().size();
+            PublicInvestmentBudgetRevenue.getAllPublicInvestmentBudgetRevenues().size();
 
         addInfoRow(grid, 0, "Εγγραφές Εσόδων:", String.valueOf(revenueCount));
         addInfoRow(grid, 1, "Τακτικά Έσοδα:", String.valueOf(regularRevenueCount));
@@ -136,7 +136,7 @@ public class DashboardView {
     }
 
     private long calculateTotalPublicInvestmentRevenue() {
-        return PublicInvestmentBudgetRevenue.getPublicInvestmentBudgetRevenues().stream().
+        return PublicInvestmentBudgetRevenue.getAllPublicInvestmentBudgetRevenues().stream().
             filter(r -> r.getCode().length() == 2 && r.getCode().charAt(0) <= '3').
             mapToLong(r -> r.getCoFundedAmount() + r.getNationalAmount()).sum();
     }

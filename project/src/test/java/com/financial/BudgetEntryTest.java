@@ -19,11 +19,6 @@ public class BudgetEntryTest {
         }
     }
 
-    @BeforeEach
-    public void setup() {
-       BudgetEntry.budgetEntries.clear();
-    }
-
     @Test
     public void testConstructorStoresValues() {
         BudgetEntry entry=  new TestBudgetEntry("111", "Test Description", "ΕΣΟΔΑ", 1000);
@@ -34,12 +29,6 @@ public class BudgetEntryTest {
         assertEquals(1000, entry.getAmount());
     }
 
-    @Test
-    public void testStaticListAddsEntriesAutomatically() {
-        int initialSize=  BudgetEntry.budgetEntries.size();
-        new TestBudgetEntry("001", "A", "ΕΣΟΔΑ", 500);
-        assertEquals(initialSize + 1, BudgetEntry.budgetEntries.size());
-    }
 
     @Test
     public void testSetAmountWorksForPositiveValues() {

@@ -1,7 +1,6 @@
 package com.financial.entries;
 
 import com.financial.services.revenues.*;
-import com.financial.services.data.DataOutput;
 import com.financial.services.*;
 
 import java.util.ArrayList;
@@ -21,16 +20,8 @@ public class RegularBudgetRevenue extends BudgetRevenue implements BudgetRevenue
         return regularBudgetRevenues;
     }
 
-    public static void printAllRegularBudgetRevenues() {
-        DataOutput.printGeneralBudgetEntriesWithAsciiTable(regularBudgetRevenues, calculateSum());
-    }
-
     public static ArrayList<RegularBudgetRevenue> getMainRegularBudgetRevenues() {
         return BudgetRevenueLogicService.getMainBudgetRevenues(getAllRegularBudgetRevenues());
-    }
-
-    public static void printMainRegularBudgetRevenues() {
-        DataOutput.printGeneralBudgetEntriesWithAsciiTable(getMainRegularBudgetRevenues(), calculateSum());
     }
 
     public static RegularBudgetRevenue findRegularBudgetRevenueWithCode(String code) {
@@ -39,10 +30,6 @@ public class RegularBudgetRevenue extends BudgetRevenue implements BudgetRevenue
 
     public static ArrayList<BudgetRevenue> getRegularBudgetRevenuesStartingWithCode(String code) {
         return BudgetRevenueLogicService.getRevenuesStartingWithCode(code, regularBudgetRevenues);
-    }
-
-    public static void printRegularRevenuesStartingWithCode(String code) {
-        DataOutput.printGeneralBudgetEntriesWithAsciiTable(getBudgetRevenuesStartingWithCode(code), 0);
     }
 
     //Sum Method
@@ -56,57 +43,25 @@ public class RegularBudgetRevenue extends BudgetRevenue implements BudgetRevenue
     //Supercategories methods
 
     @Override
-    public RegularBudgetRevenue findSuperCategory() {
-        return BudgetRevenueLogicService.findSuperCategory(this, regularBudgetRevenues);
+    public RegularBudgetRevenue getAboveLevelSuperCategory() {
+        return BudgetRevenueLogicService.getAboveLevelSuperCategory(this, regularBudgetRevenues);
     }
 
     @Override
-    public ArrayList<BudgetRevenue> getSuperCategories() {
-        return BudgetRevenueLogicService.getSuperCategories(this, regularBudgetRevenues);
-    }
-
-    @Override
-    public void printSuperCategoriesTopDown() {
-        ArrayList<RegularBudgetRevenue> superCategories = new ArrayList<>();
-        if (getSuperCategories().isEmpty()) {
-            System.out.println("Δεν υπάρχουν κατηγορίες σε υψηλότερη ιεραρχία");
-        } else {
-            for (int i = getSuperCategories().size() - 1; i >= 0; i--) {
-                superCategories.add((RegularBudgetRevenue) getSuperCategories().get(i));
-            }
-            DataOutput.printGeneralBudgetEntriesWithAsciiTable(superCategories, 0);
-        }
-    }
-
-    @Override
-    public void printSuperCategoriesBottomsUp() {
-        if (getSuperCategories().isEmpty()) {
-            System.out.println("Δεν υπάρχουν κατηγορίες σε υψηλότερη ιεραρχία");
-        } else {
-            DataOutput.printGeneralBudgetEntriesWithAsciiTable(getSuperCategories(), 0);
-        }
+    public ArrayList<BudgetRevenue> getAllSuperCategories() {
+        return BudgetRevenueLogicService.getAllSuperCategories(this, regularBudgetRevenues);
     }
 
     //Subcategories methods
 
     @Override
-    public ArrayList<BudgetRevenue> findAllSubCategories() {
-        return BudgetRevenueLogicService.findAllSubCategories(this, regularBudgetRevenues);
+    public ArrayList<BudgetRevenue> getNextLevelSubCategories() {
+        return BudgetRevenueLogicService.getNextLevelSubCategories(this, regularBudgetRevenues);
     }
 
     @Override
-    public void printAllSubCategories() {
-        DataOutput.printGeneralBudgetEntriesWithAsciiTable(findAllSubCategories(), 0);
-    }
-
-    @Override
-    public ArrayList<BudgetRevenue> findNextLevelSubCategories() {
-        return BudgetRevenueLogicService.findNextLevelSubCategories(this, regularBudgetRevenues);
-    }
-
-    @Override
-    public void printNextLevelSubCategories() {
-        DataOutput.printGeneralBudgetEntriesWithAsciiTable(findNextLevelSubCategories(), 0);
+    public ArrayList<BudgetRevenue> getAllSubCategories() {
+        return BudgetRevenueLogicService.getAllSubCategories(this, regularBudgetRevenues);
     }
 
     //*Implementation Of Methods (Changes)*
@@ -115,7 +70,7 @@ public class RegularBudgetRevenue extends BudgetRevenue implements BudgetRevenue
 
     @Override
     public void setAmountOfSuperCategories(long change) {
-        BudgetRevenueChangesService.setAmountOfSuperCategories(getSuperCategories(), change);
+        BudgetRevenueChangesService.setAmountOfSuperCategories(getAllSuperCategories(), change);
     }
 
     //SubCategories update
@@ -154,9 +109,9 @@ public class RegularBudgetRevenue extends BudgetRevenue implements BudgetRevenue
     @Override
     public void keepAccountsAndBudgetTypeBeforeChange() {
         ArrayList<BudgetRevenue> accountsForChange = new ArrayList<>();
-        accountsForChange.addAll(getSuperCategories());
+        accountsForChange.addAll(getAllSuperCategories());
         accountsForChange.add(this);
-        accountsForChange.addAll(findAllSubCategories());
+        accountsForChange.addAll(getAllSubCategories());
         RevenuesHistory.keepHistory(accountsForChange, BudgetType.REGULAR_BUDGET);
     }
 
