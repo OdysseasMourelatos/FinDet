@@ -6,9 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="88d8a661-a47d-4ac5-b89a-2164a467de01" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/services/data/DataOutput.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/services/data/DataOutput.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/PublicInvestmentBudgetCoFundedRevenueTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/PublicInvestmentBudgetCoFundedRevenueTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/PublicInvestmentBudgetNationalRevenueTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/PublicInvestmentBudgetNationalRevenueTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetCoFundedRevenue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetCoFundedRevenue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetNationalRevenue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetNationalRevenue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetRevenue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetRevenue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/services/data/DataInput.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/services/data/DataInput.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,6 +58,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.Main.executor": "Run",
+    "Application.MainApp.executor": "Run",
     "JUnit.AppTest.executor": "Run",
     "JUnit.BudgetEntryTest.executor": "Run",
     "JUnit.BudgetExpenseTest.executor": "Run",
@@ -67,6 +69,7 @@
     "JUnit.EntityTest.executor": "Run",
     "JUnit.PublicInvestmentBudgetCoFundedRevenueTest.executor": "Run",
     "JUnit.PublicInvestmentBudgetNationalRevenueTest.executor": "Run",
+    "JUnit.PublicInvestmentBudgetRevenueTest.executor": "Run",
     "JUnit.RegularBudgetRevenueTest.executor": "Run",
     "JUnit.RegularBudgetRevenueTest.findSuperCategoryTest.executor": "Run",
     "JUnit.java in FinDet.executor": "Run",
@@ -80,7 +83,7 @@
     "settings.editor.selected.configurable": "preferences.general"
   }
 }]]></component>
-  <component name="RunManager">
+  <component name="RunManager" selected="JUnit.PublicInvestmentBudgetRevenueTest">
     <configuration name="BudgetEntryTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="FinDet" />
       <extension name="coverage">
@@ -91,6 +94,21 @@
       </extension>
       <option name="PACKAGE_NAME" value="com.financial" />
       <option name="MAIN_CLASS_NAME" value="com.financial.BudgetEntryTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PublicInvestmentBudgetRevenueTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="FinDet" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.financial.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.financial" />
+      <option name="MAIN_CLASS_NAME" value="com.financial.PublicInvestmentBudgetRevenueTest" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -143,14 +161,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="java in FinDet" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="FinDet" />
-      <option name="TEST_OBJECT" value="directory" />
-      <dir value="$PROJECT_DIR$/src/test/java" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration default="true" type="JetRunConfigurationType">
       <module name="project" />
       <method v="2">
@@ -164,11 +174,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.PublicInvestmentBudgetRevenueTest" />
         <item itemvalue="JUnit.BudgetEntryTest" />
         <item itemvalue="JUnit.RegularBudgetRevenueTest.getAllSubCategoriesTest" />
         <item itemvalue="JUnit.RegularBudgetRevenueTest.getAboveLevelSuperCategoryTest" />
         <item itemvalue="JUnit.RegularBudgetRevenueTest" />
-        <item itemvalue="JUnit.java in FinDet" />
       </list>
     </recent_temporary>
   </component>

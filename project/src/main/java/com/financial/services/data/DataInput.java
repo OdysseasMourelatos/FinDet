@@ -124,10 +124,8 @@ public class DataInput {
         long amount = Long.parseLong(values[3]);
         if (type.equals("ΕΘΝΙΚΟ") || type.equals("ΕΘΝΙΚΟ ΣΚΕΛΟΣ")) {
             PublicInvestmentBudgetRevenue publicInvestmentBudgetRevenue = new PublicInvestmentBudgetNationalRevenue(code, description, category, type, amount);
-            PublicInvestmentBudgetRevenue publicInvestmentBudgetRevenueFiltered = new PublicInvestmentBudgetRevenue(code, description, category, type, amount, 0, amount);
         } else if (type.equals("ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ") || type.equals("ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ ΣΚΕΛΟΣ") ) {
             PublicInvestmentBudgetRevenue publicInvestmentBudgetRevenue = new PublicInvestmentBudgetCoFundedRevenue(code, description, category, type, amount);
-            PublicInvestmentBudgetRevenue publicInvestmentBudgetRevenueFiltered = new PublicInvestmentBudgetRevenue(code, description, category, type, 0, amount, amount);
         }
     }
 

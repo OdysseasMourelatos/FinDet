@@ -14,6 +14,9 @@ public class PublicInvestmentBudgetCoFundedRevenue extends PublicInvestmentBudge
     public PublicInvestmentBudgetCoFundedRevenue(String code, String description, String category, String type, long amount) {
         super(code, description, category, type, amount);
         publicInvestmentBudgetCoFundedRevenues.add(this);
+
+        //SuperClass Filtered Object
+        PublicInvestmentBudgetRevenue publicInvestmentBudgetRevenueFiltered = new PublicInvestmentBudgetRevenue(code, description, category, type, 0, amount, amount);
     }
 
     //Class Methods

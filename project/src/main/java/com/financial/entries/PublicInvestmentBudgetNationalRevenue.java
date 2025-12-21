@@ -13,6 +13,9 @@ public class PublicInvestmentBudgetNationalRevenue extends PublicInvestmentBudge
     public PublicInvestmentBudgetNationalRevenue(String code, String description, String category, String type, long amount) {
         super(code, description, category, type, amount);
         publicInvestmentBudgetNationalRevenues.add(this);
+
+        //FilteredObject of SuperClass
+        PublicInvestmentBudgetRevenue publicInvestmentBudgetRevenueFiltered = new PublicInvestmentBudgetRevenue(code, description, category, type, amount, 0, amount);
     }
 
     //Class Methods
