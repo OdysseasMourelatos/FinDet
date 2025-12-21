@@ -1,6 +1,7 @@
 package com.financial.entries;
 
 import com.financial.services.*;
+import com.financial.services.data.DataOutput;
 import com.financial.services.revenues.*;
 
 import java.util.ArrayList;
@@ -22,8 +23,16 @@ public class PublicInvestmentBudgetCoFundedRevenue extends PublicInvestmentBudge
         return publicInvestmentBudgetCoFundedRevenues;
     }
 
+    public static void printAllPublicInvestmentBudgetCoFundedRevenues() {
+        DataOutput.printPublicInvestmentBudgetRevenueWithAsciiTable(getAllPublicInvestmentBudgetCoFundedRevenues());
+    }
+
     public static ArrayList<PublicInvestmentBudgetCoFundedRevenue> getMainPublicInvestmentBudgetCoFundedRevenues() {
         return BudgetRevenueLogicService.getMainBudgetRevenues(publicInvestmentBudgetCoFundedRevenues);
+    }
+
+    public static void printMainPublicInvestmentBudgetCoFundedRevenues() {
+        BudgetRevenueLogicService.printMainBudgetRevenues(getMainPublicInvestmentBudgetCoFundedRevenues());
     }
 
     public static PublicInvestmentBudgetCoFundedRevenue findPublicInvestmentBudgetCoFundedRevenueWithCode(String code) {
@@ -32,6 +41,10 @@ public class PublicInvestmentBudgetCoFundedRevenue extends PublicInvestmentBudge
 
     public static ArrayList<BudgetRevenue> getPublicInvestmentBudgetCoFundedRevenuesStartingWithCode(String code) {
         return BudgetRevenueLogicService.getRevenuesStartingWithCode(code, publicInvestmentBudgetCoFundedRevenues);
+    }
+
+    public static void printPublicInvestmentBudgetCoFundedRevenuesStartingWithCode(String code) {
+        DataOutput.printGeneralBudgetEntriesWithAsciiTable(getPublicInvestmentBudgetCoFundedRevenuesStartingWithCode(code), 0);
     }
 
     //Sum Method
@@ -45,25 +58,57 @@ public class PublicInvestmentBudgetCoFundedRevenue extends PublicInvestmentBudge
     //Supercategories methods
 
     @Override
-    public PublicInvestmentBudgetCoFundedRevenue getAboveLevelSuperCategory() {
-        return BudgetRevenueLogicService.getAboveLevelSuperCategory(this, publicInvestmentBudgetCoFundedRevenues);
+    public PublicInvestmentBudgetCoFundedRevenue findSuperCategory() {
+        return BudgetRevenueLogicService.findSuperCategory(this, publicInvestmentBudgetCoFundedRevenues);
     }
 
     @Override
-    public ArrayList<BudgetRevenue> getAllSuperCategories() {
-        return BudgetRevenueLogicService.getAllSuperCategories(this, publicInvestmentBudgetCoFundedRevenues);
+    public ArrayList<BudgetRevenue> getSuperCategories() {
+        return BudgetRevenueLogicService.getSuperCategories(this, publicInvestmentBudgetCoFundedRevenues);
+    }
+
+    @Override
+    public void printSuperCategoriesTopDown() {
+        ArrayList<RegularBudgetRevenue> superCategories = new ArrayList<>();
+        if (getSuperCategories().isEmpty()) {
+            System.out.println("Δεν υπάρχουν κατηγορίες σε υψηλότερη ιεραρχία");
+        } else {
+            for (int i = getSuperCategories().size() - 1; i >= 0; i--) {
+                superCategories.add((RegularBudgetRevenue) getSuperCategories().get(i));
+            }
+            DataOutput.printGeneralBudgetEntriesWithAsciiTable(superCategories, 0);
+        }
+    }
+
+    @Override
+    public void printSuperCategoriesBottomsUp() {
+        if (getSuperCategories().isEmpty()) {
+            System.out.println("Δεν υπάρχουν κατηγορίες σε υψηλότερη ιεραρχία");
+        } else {
+            DataOutput.printGeneralBudgetEntriesWithAsciiTable(getSuperCategories(), 0);
+        }
     }
 
     //Subcategories methods
 
     @Override
-    public ArrayList<BudgetRevenue> getNextLevelSubCategories() {
-        return BudgetRevenueLogicService.getNextLevelSubCategories(this, publicInvestmentBudgetCoFundedRevenues);
+    public ArrayList<BudgetRevenue> findAllSubCategories() {
+        return BudgetRevenueLogicService.findAllSubCategories(this, publicInvestmentBudgetCoFundedRevenues);
     }
 
     @Override
-    public ArrayList<BudgetRevenue> getAllSubCategories() {
-        return BudgetRevenueLogicService.getAllSubCategories(this, publicInvestmentBudgetCoFundedRevenues);
+    public void printAllSubCategories() {
+        DataOutput.printGeneralBudgetEntriesWithAsciiTable(findAllSubCategories(), 0);
+    }
+
+    @Override
+    public ArrayList<BudgetRevenue> findNextLevelSubCategories() {
+        return BudgetRevenueLogicService.findNextLevelSubCategories(this, publicInvestmentBudgetCoFundedRevenues);
+    }
+
+    @Override
+    public void printNextLevelSubCategories() {
+        DataOutput.printGeneralBudgetEntriesWithAsciiTable(findNextLevelSubCategories(), 0);
     }
 
     //*Implementation Of Methods (Changes)*
@@ -72,7 +117,7 @@ public class PublicInvestmentBudgetCoFundedRevenue extends PublicInvestmentBudge
 
     @Override
     public void setAmountOfSuperCategories(long change) {
-        BudgetRevenueChangesService.setAmountOfSuperCategories(this.getAllSuperCategories(), change);
+        BudgetRevenueChangesService.setAmountOfSuperCategories(getSuperCategories(), change);
     }
 
     //SubCategories update
@@ -111,9 +156,9 @@ public class PublicInvestmentBudgetCoFundedRevenue extends PublicInvestmentBudge
     @Override
     public void keepAccountsAndBudgetTypeBeforeChange() {
         ArrayList<BudgetRevenue> accountsForChange = new ArrayList<>();
-        accountsForChange.addAll(this.getAllSuperCategories());
+        accountsForChange.addAll(getSuperCategories());
         accountsForChange.add(this);
-        accountsForChange.addAll(getAllSubCategories());
+        accountsForChange.addAll(findAllSubCategories());
         RevenuesHistory.keepHistory(accountsForChange, BudgetType.PUBLIC_INVESTMENT_BUDGET_COFUNDED);
     }
 
@@ -125,8 +170,6 @@ public class PublicInvestmentBudgetCoFundedRevenue extends PublicInvestmentBudge
             publicInvestmentBudgetRevenue.setCoFundedAmount(amount, true);
         }
     }
-
-    //Setter Override
 
     @Override
     public void setAmount(long amount) {

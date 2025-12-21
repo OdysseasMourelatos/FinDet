@@ -20,10 +20,10 @@ public class PublicInvestmentBudgetCoFundedRevenueTest {
     void setUp() {
         PublicInvestmentBudgetCoFundedRevenue.getAllPublicInvestmentBudgetCoFundedRevenues().clear();
         BudgetRevenue.getAllBudgetRevenues().clear();
-        revenue13 = new PublicInvestmentBudgetCoFundedRevenue("13", "Κατηγορία 13", "ΕΣΟΔΑ", 4190000000L);
-        revenue135 = new PublicInvestmentBudgetCoFundedRevenue("135", "Υποκατηγορία 135", "ΕΣΟΔΑ", 4190000000L);
-        revenue13501 = new PublicInvestmentBudgetCoFundedRevenue("13501", "Υποκατηγορία 13501", "ΕΣΟΔΑ", 4190000000L);
-        revenue1350101 = new PublicInvestmentBudgetCoFundedRevenue("1350101", "Υποκατηγορία 1350101", "ΕΣΟΔΑ", 1308000000L);
+        revenue13 = new PublicInvestmentBudgetCoFundedRevenue("13", "Κατηγορία 13", "ΕΣΟΔΑ","ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ",  4190000000L);
+        revenue135 = new PublicInvestmentBudgetCoFundedRevenue("135", "Υποκατηγορία 135", "ΕΣΟΔΑ","ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ",  4190000000L);
+        revenue13501 = new PublicInvestmentBudgetCoFundedRevenue("13501", "Υποκατηγορία 13501", "ΕΣΟΔΑ","ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ",  4190000000L);
+        revenue1350101 = new PublicInvestmentBudgetCoFundedRevenue("1350101", "Υποκατηγορία 1350101", "ΕΣΟΔΑ","ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ",  1308000000L);
     }
 
     @Test
