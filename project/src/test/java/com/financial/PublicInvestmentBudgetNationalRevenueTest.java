@@ -58,6 +58,31 @@ public class PublicInvestmentBudgetNationalRevenueTest {
     }
 
     @Test
+    void findPublicInvestmentBudgetNationalRevenueWithCodeTest() {
+        // Έλεγχος για υπάρχοντα κωδικό
+        PublicInvestmentBudgetNationalRevenue found = PublicInvestmentBudgetNationalRevenue.findPublicInvestmentBudgetNationalRevenueWithCode("13");
+        assertNotNull(found);
+        assertEquals(revenue13.getAmount(), found.getAmount());
+
+        // Έλεγχος για κωδικό που δεν υπάρχει
+        assertNull(PublicInvestmentBudgetNationalRevenue.findPublicInvestmentBudgetNationalRevenueWithCode("999"));
+    }
+
+    @Test
+    void getPublicInvestmentBudgetNationalRevenuesStartingWithCodeTest() {
+        // Αναζήτηση όλων των εσόδων που ξεκινούν από "13" (13, 134, 13409)
+        ArrayList<BudgetRevenue> results = PublicInvestmentBudgetNationalRevenue.getPublicInvestmentBudgetNationalRevenuesStartingWithCode("13");
+        assertEquals(3, results.size());
+        assertTrue(results.contains(revenue13));
+        assertTrue(results.contains(revenue134));
+        assertTrue(results.contains(revenue13409));
+
+        // Αναζήτηση που δεν επιστρέφει τίποτα
+        ArrayList<BudgetRevenue> emptyResults = PublicInvestmentBudgetNationalRevenue.getPublicInvestmentBudgetNationalRevenuesStartingWithCode("9");
+        assertEquals(0, emptyResults.size());
+    }
+
+    @Test
     void calculateSumTest() {
         // 35,000,000 (13) + 265,000,000 (15)
         long expectedSum = 300000000L;
@@ -245,4 +270,33 @@ public class PublicInvestmentBudgetNationalRevenueTest {
         assertEquals(expectedPIB13Amount, pib13.getNationalAmount());
         assertEquals(expectedPIB134Amount, pib134.getNationalAmount());
     }
+
+    @Test
+    void testUpdateSuperClassBranchCoverage() {
+        // Δημιουργούμε ένα προσωρινό αντικείμενο
+        PublicInvestmentBudgetNationalRevenue tempRevenue = new PublicInvestmentBudgetNationalRevenue("99", "Temp", "ΕΣΟΔΑ", "ΕΘΝΙΚΟ", 100L);
+
+        // Αφαιρούμε το αντίστοιχο αντικείμενο από την υπερκλάση για να αναγκάσουμε το lookup να αποτύχει (null)
+        // Αυτό θα καλύψει το "κίτρινο" branch στην updateAmountOfSuperClassFilteredObjects
+        PublicInvestmentBudgetRevenue pib99 = PublicInvestmentBudgetRevenue.findPublicInvestmentBudgetRevenueWithCode("99");
+        PublicInvestmentBudgetRevenue.getAllPublicInvestmentBudgetRevenues().remove(pib99);
+
+        // Καλούμε την ενημέρωση - η μέθοδος θα μπει στο branch όπου η find επιστρέφει null
+        tempRevenue.implementChangesOfEqualDistribution(50L);
+
+        // Δεν περιμένουμε crash, απλώς επιβεβαιώνουμε ότι το τοπικό amount άλλαξε
+        assertEquals(150L, tempRevenue.getAmount());
+    }
+
+    @Test
+    void testToStringFormat() {
+        String output = revenue15.toString();
+        // Έλεγχος αν η toString περιέχει τα βασικά στοιχεία
+        assertTrue(output.contains("Code: 15"));
+        assertTrue(output.contains("ΕΘΝΙΚΟ"));
+        // Έλεγχος για το σωστό formatting του ποσού (265.000.000)
+        assertTrue(output.contains("265.000.000") || output.contains("265,000,000"));
+    }
+
+
 }
