@@ -157,6 +157,36 @@ public class PublicInvestmentBudgetRevenueTest {
     }
 
     @Test
+    void testUpdateAmountOfSuperClassFilteredObjects() {
+        BudgetRevenue.getAllBudgetRevenues().clear();
+        // Δημιουργία αντικειμένων BudgetRevenue (Τακτικός + ΠΔΕ)
+        // Για τον κωδικό 15: Τακτικός 2.510.000.000 + ΠΔΕ 265.000.000 = 2.775.000.000
+        BudgetRevenue br15 = new BudgetRevenue("15", "Λοιπά τρέχοντα έσοδα", "ΕΣΟΔΑ", 2510000000L, 265000000L, 2775000000L);
+
+        //Εύρεση του αντικειμένου ΠΔΕ που αντιστοιχεί στον 15
+        PublicInvestmentBudgetRevenue pib15 = PublicInvestmentBudgetRevenue.findPublicInvestmentBudgetRevenueWithCode("15");
+        assertNotNull(pib15);
+
+        // Αλλαγή ποσού στο ΠΔΕ
+        // Έστω ότι το National Amount του ΠΔΕ 15 αυξάνεται κατά 10.000.000
+        long oldPibAmount = pib15.getAmount(); // 265.000.000
+        long increment = 10000000L;
+        long newPibAmount = oldPibAmount + increment;
+
+        // Η setNationalAmount καλεί εσωτερικά την updateAmountOfSuperClassFilteredObjects
+        pib15.setNationalAmount(pib15.getNationalAmount() + increment, true);
+
+        // 4. ΕΛΕΓΧΟΣ ΣΥΓΧΡΟΝΙΣΜΟΥ
+        // Το αντικείμενο BudgetRevenue πρέπει να έχει ενημερωθεί
+        // Νέο σύνολο: 2.775.000.000 + 10.000.000 = 2.785.000.000
+
+        assertEquals(newPibAmount, br15.getPublicInvestmentAmount());
+
+        // Αν η setPublicInvestmentAmount της BudgetRevenue ενημερώνει και το συνολικό amount:
+        assertEquals(2785000000L, br15.getAmount());
+    }
+
+    @Test
     void gettersTest() {
         PublicInvestmentBudgetRevenue merged13 = PublicInvestmentBudgetRevenue.findPublicInvestmentBudgetRevenueWithCode("13");
 

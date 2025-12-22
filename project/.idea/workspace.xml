@@ -5,7 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="88d8a661-a47d-4ac5-b89a-2164a467de01" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetRevenue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetRevenue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/entries/BudgetRevenue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/BudgetRevenue.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/PublicInvestmentBudgetRevenueTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/PublicInvestmentBudgetRevenueTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -67,6 +68,7 @@
     "JUnit.PublicInvestmentBudgetCoFundedRevenueTest.executor": "Run",
     "JUnit.PublicInvestmentBudgetNationalRevenueTest.executor": "Run",
     "JUnit.PublicInvestmentBudgetRevenueTest.executor": "Run",
+    "JUnit.PublicInvestmentBudgetRevenueTest.testUpdateAmountOfSuperClassFilteredObjects.executor": "Run",
     "JUnit.RegularBudgetRevenueTest.executor": "Run",
     "JUnit.RegularBudgetRevenueTest.findSuperCategoryTest.executor": "Run",
     "JUnit.financial in FinDet.executor": "Run",
@@ -112,7 +114,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="RegularBudgetRevenueTest.getAboveLevelSuperCategoryTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="PublicInvestmentBudgetRevenueTest.testUpdateAmountOfSuperClassFilteredObjects" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="FinDet" />
       <extension name="coverage">
         <pattern>
@@ -121,8 +123,8 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="com.financial" />
-      <option name="MAIN_CLASS_NAME" value="com.financial.RegularBudgetRevenueTest" />
-      <option name="METHOD_NAME" value="getAboveLevelSuperCategoryTest" />
+      <option name="MAIN_CLASS_NAME" value="com.financial.PublicInvestmentBudgetRevenueTest" />
+      <option name="METHOD_NAME" value="testUpdateAmountOfSuperClassFilteredObjects" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -166,10 +168,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.PublicInvestmentBudgetRevenueTest" />
+        <item itemvalue="JUnit.PublicInvestmentBudgetRevenueTest.testUpdateAmountOfSuperClassFilteredObjects" />
         <item itemvalue="JUnit.financial in FinDet" />
         <item itemvalue="JUnit.BudgetEntryTest" />
         <item itemvalue="JUnit.RegularBudgetRevenueTest.getAllSubCategoriesTest" />
-        <item itemvalue="JUnit.RegularBudgetRevenueTest.getAboveLevelSuperCategoryTest" />
       </list>
     </recent_temporary>
   </component>
