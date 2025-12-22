@@ -100,11 +100,42 @@ public class BudgetRevenueTest {
     }
 
     @Test
+    void getNextLevelSubCategoriesTest() {
+        // Ο 13 (Μεταβιβάσεις) έχει παιδιά τους 131 και 134
+        BudgetRevenue merged13 = BudgetRevenue.findBudgetRevenueWithCode("13");
+        ArrayList<BudgetRevenue> subs = merged13.getNextLevelSubCategories();
+
+        assertEquals(2, subs.size());
+        assertTrue(subs.stream().anyMatch(r -> r.getCode().equals("131")));
+        assertTrue(subs.stream().anyMatch(r -> r.getCode().equals("134")));
+    }
+
+    @Test
+    void getAllSubCategoriesTest() {
+        // Ο 13 έχει ως συνολικούς απογόνους τους: 131, 13108, 134
+        BudgetRevenue merged13 = BudgetRevenue.findBudgetRevenueWithCode("13");
+        ArrayList<BudgetRevenue> allSubs = merged13.getAllSubCategories();
+
+        assertEquals(3, allSubs.size());
+    }
+
+    @Test
     void getAboveLevelSuperCategoryTest() {
         BudgetRevenue child = BudgetRevenue.findBudgetRevenueWithCode("13108");
         BudgetRevenue parent = child.getAboveLevelSuperCategory();
 
         assertNotNull(parent);
         assertEquals("131", parent.getCode());
+    }
+
+    @Test
+    void getAllSuperCategoriesTest() {
+        // Για τον 13108, οι γονείς είναι [131, 13]
+        BudgetRevenue rev13108 = BudgetRevenue.findBudgetRevenueWithCode("13108");
+        ArrayList<BudgetRevenue> supers = rev13108.getAllSuperCategories();
+
+        assertEquals(2, supers.size());
+        assertTrue(supers.stream().anyMatch(r -> r.getCode().equals("131")));
+        assertTrue(supers.stream().anyMatch(r -> r.getCode().equals("13")));
     }
 }
