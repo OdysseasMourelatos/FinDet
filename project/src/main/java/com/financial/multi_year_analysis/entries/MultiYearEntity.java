@@ -16,4 +16,30 @@ public class MultiYearEntity {
         this.multiYearExpensesOfEntity = MultiYearBudgetExpense.getMultiYearExpensesOfEntityWithEntityCode(entityCode);
         multiYearEntities.add(this);
     }
+
+    public static MultiYearEntity findMultiYearEntityWithCode(String entityCode) {
+        for (MultiYearEntity multiYearEntity : multiYearEntities) {
+            if (multiYearEntity.getEntityCode().equals(entityCode)) {
+                return multiYearEntity;
+            }
+        }
+        return null;
+    }
+
+    public String getEntityCode() {
+        return entityCode;
+    }
+
+    public String getEntityName() {
+        return entityName;
+    }
+
+    public List<MultiYearBudgetExpense> getMultiYearExpensesOfEntity() {
+        return multiYearExpensesOfEntity;
+    }
+
+    @Override
+    public String toString() {
+        return "EntityCode: " + entityCode + ", EntityName: " + entityName;
+    }
 }
