@@ -1,7 +1,9 @@
 package com.financial.multi_year_analysis.entries;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MultiYearEntity {
     protected List<MultiYearBudgetExpense> multiYearExpensesOfEntity = new ArrayList<>();
@@ -24,6 +26,30 @@ public class MultiYearEntity {
             }
         }
         return null;
+    }
+
+    public Map<Integer, Long> getTotalExpensesOfEntityPerYear() {
+        Map<Integer, Long> totalExpensesOfEntity = new HashMap<>();
+        for (MultiYearBudgetExpense multiYearBudgetExpense : multiYearExpensesOfEntity) {
+            totalExpensesOfEntity.put(multiYearBudgetExpense.getYear(), multiYearBudgetExpense.getAmount());
+        }
+        return totalExpensesOfEntity;
+    }
+
+    public Map<Integer, Long> getTotalRegularExpensesOfEntityPerYear() {
+        Map<Integer, Long> totalRegularExpensesOfEntity = new HashMap<>();
+        for (MultiYearBudgetExpense multiYearBudgetExpense : multiYearExpensesOfEntity) {
+            totalRegularExpensesOfEntity.put(multiYearBudgetExpense.getYear(), multiYearBudgetExpense.getRegularAmount());
+        }
+        return totalRegularExpensesOfEntity;
+    }
+
+    public Map<Integer, Long> getTotalPublicInvestmentExpensesOfEntityPerYear() {
+        Map<Integer, Long> totalPublicInvestmentExpensesOfEntity = new HashMap<>();
+        for (MultiYearBudgetExpense multiYearBudgetExpense : multiYearExpensesOfEntity) {
+            totalPublicInvestmentExpensesOfEntity.put(multiYearBudgetExpense.getYear(), multiYearBudgetExpense.getPublicInvestmentAmount());
+        }
+        return totalPublicInvestmentExpensesOfEntity;
     }
 
     public String getEntityCode() {
