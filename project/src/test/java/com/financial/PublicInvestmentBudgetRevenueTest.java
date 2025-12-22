@@ -57,7 +57,7 @@ public class PublicInvestmentBudgetRevenueTest {
         long expectedTotal13 = 35000000L + 4190000000L;
         assertEquals(expectedTotal13, merged13.getAmount());
 
-        // --- ΕΛΕΓΧΟΣ ΚΛΑΔΟΥ 15 ---
+        // --- ΕΛΕΓΧΟΣ ΓΙΑ ΚΩΔΙΚΟ 15 ---
         PublicInvestmentBudgetRevenue rev15 = PublicInvestmentBudgetRevenue.findPublicInvestmentBudgetRevenueWithCode("15");
         assertEquals(265000000L, rev15.getAmount());
         assertEquals(265000000L, rev15.getNationalAmount());
