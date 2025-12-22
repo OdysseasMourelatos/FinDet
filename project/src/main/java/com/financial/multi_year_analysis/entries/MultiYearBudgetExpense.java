@@ -31,6 +31,36 @@ public class MultiYearBudgetExpense extends MultiYearBudgetEntry {
         multiYearBudgetExpenses.add(this);
     }
 
+    public static List<MultiYearBudgetExpense> getMultiYearBudgetExpensesOfSpecificYear(int year) {
+        List<MultiYearBudgetExpense> multiYearBudgetExpensesOfSpecificYear = new ArrayList<>();
+        for (MultiYearBudgetExpense multiYearBudgetExpense : multiYearBudgetExpenses) {
+            if (multiYearBudgetExpense.getYear() == year) {
+                multiYearBudgetExpensesOfSpecificYear.add(multiYearBudgetExpense);
+            }
+        }
+        return multiYearBudgetExpensesOfSpecificYear;
+    }
+
+    public static List<MultiYearBudgetExpense> getMultiYearBudgetExpensesOfSpecificCode(String code) {
+        List<MultiYearBudgetExpense> multiYearBudgetExpensesOfSpecificCode = new ArrayList<>();
+        for (MultiYearBudgetExpense multiYearBudgetExpense : multiYearBudgetExpenses) {
+            if (multiYearBudgetExpense.getCode().equals(code)) {
+                multiYearBudgetExpensesOfSpecificCode.add(multiYearBudgetExpense);
+            }
+        }
+        return multiYearBudgetExpensesOfSpecificCode;
+    }
+
+    public static List<MultiYearBudgetExpense> getMultiYearExpensesOfEntityWithEntityCode(String entityCode) {
+        List<MultiYearBudgetExpense> multiYearExpensesOfEntity = new ArrayList<>();
+        for (MultiYearBudgetExpense multiYearBudgetExpense : multiYearBudgetExpensesOfEntities) {
+            if (multiYearBudgetExpense.entityCode.equals(entityCode)) {
+                multiYearExpensesOfEntity.add(multiYearBudgetExpense);
+            }
+        }
+        return multiYearExpensesOfEntity;
+    }
+
     public long getRegularAmount() {
         return regularAmount;
     }
