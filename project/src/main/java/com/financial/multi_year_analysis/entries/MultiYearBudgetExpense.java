@@ -15,6 +15,30 @@ public class MultiYearBudgetExpense extends MultiYearBudgetEntry {
         return multiYearBudgetExpenses;
     }
 
+    protected static List<MultiYearBudgetExpense> multiYearBudgetExpensesOfEntities = new ArrayList<>();
+
+    private String entityCode;
+    private String entityName;
+    private long regularAmount;
+    private long publicInvestmentAmount;
+
+    public MultiYearBudgetExpense(String entityCode, String entityName, String code, String description, String category, long regularAmount, long publicInvestmentAmount, int year) {
+        super(code, description, category, regularAmount + publicInvestmentAmount,  year);
+        this.entityCode = entityCode;
+        this.entityName = entityName;
+        this.regularAmount = regularAmount;
+        this.publicInvestmentAmount = publicInvestmentAmount;
+        multiYearBudgetExpenses.add(this);
+    }
+
+    public long getRegularAmount() {
+        return regularAmount;
+    }
+
+    public long getPublicInvestmentAmount() {
+        return publicInvestmentAmount;
+    }
+
     @Override
     public String toString () {
         return super.toString();
