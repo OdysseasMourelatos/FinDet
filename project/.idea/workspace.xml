@@ -5,28 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="88d8a661-a47d-4ac5-b89a-2164a467de01" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/PublicInvestmentBudgetCoFundedRevenueTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/PublicInvestmentBudgetCoFundedRevenueTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/PublicInvestmentBudgetNationalRevenueTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/PublicInvestmentBudgetNationalRevenueTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/checkstyle-cachefile" beforeDir="false" afterPath="$PROJECT_DIR$/target/checkstyle-cachefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/checkstyle-result.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/checkstyle-result.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.AppTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.AppTest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.BudgetEntryTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.BudgetExpenseTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.BudgetRevenueTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.BudgetRevenueTest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.DataInputTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.DataOutputTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.DataUpdateTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.EntityTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.financial.AppTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.financial.AppTest.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.financial.BudgetEntryTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.financial.BudgetExpenseTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.financial.BudgetRevenueTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.financial.BudgetRevenueTest.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.financial.DataInputTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.financial.DataOutputTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.financial.DataUpdateTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.financial.EntityTest.txt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,7 +83,7 @@
     "settings.editor.selected.configurable": "preferences.general"
   }
 }]]></component>
-  <component name="RunManager" selected="JUnit.PublicInvestmentBudgetNationalRevenueTest.testUpdateSuperClassBranchCoverage">
+  <component name="RunManager" selected="JUnit.PublicInvestmentBudgetCoFundedRevenueTest">
     <configuration name="BudgetRevenueTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="FinDet" />
       <extension name="coverage">
@@ -193,8 +173,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.PublicInvestmentBudgetNationalRevenueTest.testUpdateSuperClassBranchCoverage" />
         <item itemvalue="JUnit.PublicInvestmentBudgetCoFundedRevenueTest" />
+        <item itemvalue="JUnit.PublicInvestmentBudgetNationalRevenueTest.testUpdateSuperClassBranchCoverage" />
         <item itemvalue="JUnit.PublicInvestmentBudgetNationalRevenueTest" />
         <item itemvalue="JUnit.RegularBudgetRevenueTest" />
         <item itemvalue="JUnit.BudgetRevenueTest" />

@@ -272,7 +272,7 @@ public class PublicInvestmentBudgetNationalRevenueTest {
     }
 
     @Test
-    void testUpdateSuperClassBranchCoverage() {
+    void updateSuperClassBranchCoverageTest() {
         // Δημιουργούμε ένα προσωρινό αντικείμενο
         PublicInvestmentBudgetNationalRevenue tempRevenue = new PublicInvestmentBudgetNationalRevenue("99", "Temp", "ΕΣΟΔΑ", "ΕΘΝΙΚΟ", 100L);
 
@@ -297,6 +297,4 @@ public class PublicInvestmentBudgetNationalRevenueTest {
         // Έλεγχος για το σωστό formatting του ποσού (265.000.000)
         assertTrue(output.contains("265.000.000") || output.contains("265,000,000"));
     }
-
-
 }
