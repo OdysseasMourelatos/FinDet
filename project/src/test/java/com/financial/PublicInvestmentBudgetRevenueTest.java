@@ -66,6 +66,49 @@ public class PublicInvestmentBudgetRevenueTest {
     }
 
     @Test
+    void testGetAllPublicInvestmentBudgetRevenues() {
+        // Επιβεβαιώνουμε ότι η λίστα περιέχει τα φιλτραρισμένα αντικείμενα (6 μοναδικοί κωδικοί)
+        ArrayList<PublicInvestmentBudgetRevenue> all = PublicInvestmentBudgetRevenue.getAllPublicInvestmentBudgetRevenues();
+        assertEquals(6, all.size(), "Η getAll πρέπει να επιστρέφει τη λίστα μετά το merge.");
+    }
+
+    @Test
+    void testGetMainPublicInvestmentBudgetRevenues() {
+        // "Main" θεωρούνται οι ρίζες (π.χ. κωδικοί με 2 ψηφία όπως 13 και 15)
+        ArrayList<PublicInvestmentBudgetRevenue> main = PublicInvestmentBudgetRevenue.getMainPublicInvestmentBudgetRevenues();
+
+
+        assertEquals(2, main.size());
+        assertTrue(main.stream().anyMatch(r -> r.getCode().equals("13")));
+        assertTrue(main.stream().anyMatch(r -> r.getCode().equals("15")));
+    }
+
+    @Test
+    void testFindPublicInvestmentBudgetRevenueWithCode() {
+        // Έλεγχος για υπάρχοντα κωδικό
+        PublicInvestmentBudgetRevenue found = PublicInvestmentBudgetRevenue.findPublicInvestmentBudgetRevenueWithCode("134");
+        assertNotNull(found);
+        assertEquals(found.getCode(), "134");
+
+        // Έλεγχος για κωδικό που δεν υπάρχει
+        PublicInvestmentBudgetRevenue notFound = PublicInvestmentBudgetRevenue.findPublicInvestmentBudgetRevenueWithCode("999");
+        assertSame(notFound, null);
+    }
+
+    @Test
+    void testGetPublicInvestmentBudgetRevenuesStartingWithCode() {
+        // Αναζήτηση όλων των εσόδων που ξεκινούν από "15"
+        // Πρέπει να βρει: 15, 156, 15609
+        ArrayList<BudgetRevenue> results = PublicInvestmentBudgetRevenue.getPublicInvestmentBudgetRevenuesStartingWithCode("15");
+
+        assertEquals(3, results.size());
+
+        // Αναζήτηση που δεν επιστρέφει τίποτα
+        ArrayList<BudgetRevenue> emptyResults = PublicInvestmentBudgetRevenue.getPublicInvestmentBudgetRevenuesStartingWithCode("9");
+        assertEquals(0, emptyResults.size());
+    }
+
+    @Test
     void calculateSumTest() {
         // Το calculateSum() πρέπει να αθροίζει μόνο τις "Main" κατηγορίες (13 και 15)
         // 4,225,000,000 (13) + 265,000,000 (15) = 4,490,000,000
