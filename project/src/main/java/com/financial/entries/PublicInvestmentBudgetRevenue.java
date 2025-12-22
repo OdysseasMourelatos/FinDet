@@ -142,7 +142,7 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements Budg
         return coFundedAmount;
     }
 
-    protected void setNationalAmount(long newNationalAmount, boolean update) {
+    public void setNationalAmount(long newNationalAmount, boolean update) {
         this.nationalAmount = newNationalAmount;
         if (update) {
             this.amount = nationalAmount + coFundedAmount;
@@ -150,7 +150,7 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements Budg
         }
     }
 
-    protected void setCoFundedAmount(long newCoFundedAmount, boolean update) {
+    public void setCoFundedAmount(long newCoFundedAmount, boolean update) {
         this.coFundedAmount = newCoFundedAmount;
         if (update) {
             this.amount = nationalAmount + coFundedAmount;
