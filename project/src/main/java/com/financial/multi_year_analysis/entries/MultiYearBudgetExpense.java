@@ -1,7 +1,10 @@
 package com.financial.multi_year_analysis.entries;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class MultiYearBudgetExpense extends MultiYearBudgetEntry {
     protected static List<MultiYearBudgetExpense> multiYearBudgetExpenses = new ArrayList<>();
@@ -59,6 +62,29 @@ public class MultiYearBudgetExpense extends MultiYearBudgetEntry {
             }
         }
         return multiYearExpensesOfEntity;
+    }
+
+    public static long getSumOfSpecificYear(int year) {
+        long sum = 0;
+        for (MultiYearBudgetExpense multiYearBudgetExpense : multiYearBudgetExpenses) {
+            if (multiYearBudgetExpense.getYear() == year) {
+                sum += multiYearBudgetExpense.getAmount();
+            }
+        }
+        return sum;
+    }
+
+    public static Map<Integer, Long> getSumOfAllYears() {
+        Map<Integer, Long> sumOfAllYears = new HashMap<>();
+        List<Integer> uniqueYears = multiYearBudgetExpenses.stream()
+                .map(MultiYearBudgetExpense::getYear)
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+        for (Integer year : uniqueYears) {
+            sumOfAllYears.put(year, getSumOfSpecificYear(year));
+        }
+        return sumOfAllYears;
     }
 
     public long getRegularAmount() {
