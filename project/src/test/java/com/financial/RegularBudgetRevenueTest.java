@@ -32,7 +32,7 @@ public class RegularBudgetRevenueTest {
     void setUp() {
         BudgetRevenue.getAllBudgetRevenues().clear();
         RegularBudgetRevenue.getAllRegularBudgetRevenues().clear();
-        
+
         revenue11 = new RegularBudgetRevenue("11", "Φόροι", "ΕΣΟΔΑ", 62055000000L);
         revenue111 = new RegularBudgetRevenue("111", "Φόροι επί αγαθών και υπηρεσιών", "ΕΣΟΔΑ", 33667000000L);
         revenue11101 = new RegularBudgetRevenue("11101", "Φόροι προστιθέμενης αξίας που εισπράττονται μέσω Δ.Ο.Υ", "ΕΣΟΔΑ", 14635000000L);
@@ -332,5 +332,13 @@ public class RegularBudgetRevenueTest {
         // BR 11101
         assertEquals(expectedBR11101Amount, budget11101.getRegularAmount());
         assertEquals(expectedBR11101Amount + budget11101.getPublicInvestmentAmount(), budget11101.getAmount());
+    }
+
+    @Test
+    void toStringFormatTest() {
+        String output = revenue11.toString();
+        // Έλεγχος αν η toString περιέχει τα βασικά στοιχεία
+        assertTrue(output.contains("Code: 11"));
+        assertTrue(output.contains("Φόροι"));
     }
 }

@@ -289,7 +289,7 @@ public class PublicInvestmentBudgetNationalRevenueTest {
     }
 
     @Test
-    void testToStringFormat() {
+    void toStringFormatTest() {
         String output = revenue15.toString();
         // Έλεγχος αν η toString περιέχει τα βασικά στοιχεία
         assertTrue(output.contains("Code: 15"));

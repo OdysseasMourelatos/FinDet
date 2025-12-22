@@ -229,7 +229,7 @@ public class PublicInvestmentBudgetRevenueTest {
     }
 
     @Test
-    void testToStringFormat() {
+    void toStringFormatTest() {
         PublicInvestmentBudgetRevenue rev15 = PublicInvestmentBudgetRevenue.findPublicInvestmentBudgetRevenueWithCode("15");
         String output = rev15.toString();
 
