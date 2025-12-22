@@ -30,7 +30,9 @@ public class RegularBudgetRevenueTest {
 
     @BeforeEach
     void setUp() {
+        BudgetRevenue.getAllBudgetRevenues().clear();
         RegularBudgetRevenue.getAllRegularBudgetRevenues().clear();
+        
         revenue11 = new RegularBudgetRevenue("11", "Φόροι", "ΕΣΟΔΑ", 62055000000L);
         revenue111 = new RegularBudgetRevenue("111", "Φόροι επί αγαθών και υπηρεσιών", "ΕΣΟΔΑ", 33667000000L);
         revenue11101 = new RegularBudgetRevenue("11101", "Φόροι προστιθέμενης αξίας που εισπράττονται μέσω Δ.Ο.Υ", "ΕΣΟΔΑ", 14635000000L);
@@ -44,11 +46,9 @@ public class RegularBudgetRevenueTest {
         revenue13108 = new RegularBudgetRevenue("13108", "Μεταβιβάσεις από λοιπά νομικά πρόσωπα", "ΕΣΟΔΑ", 322000000L);
         revenue132 = new RegularBudgetRevenue("132", "Τρέχουσες μεταβιβάσεις από οργανισμούς και κράτη-μέλη της Ε.Ε.", "ΕΣΟΔΑ", 15000000L);
 
-        BudgetRevenue.getAllBudgetRevenues().clear();
-
-        budget11 = new BudgetRevenue("11", "Φόροι", "ΕΣΟΔΑ", 62055000000L, 0, 62055000000L);
-        budget111 = new BudgetRevenue("111", "Φόροι επί αγαθών και υπηρεσιών", "ΕΣΟΔΑ", 33667000000L, 0, 33667000000L);
-        budget11101 = new BudgetRevenue("11101", "Φόροι προστιθέμενης αξίας που εισπράττονται μέσω Δ.Ο.Υ", "ΕΣΟΔΑ", 14635000000L, 0, 14635000000L);
+        budget11 = BudgetRevenue.findBudgetRevenueWithCode("11");
+        budget111 = BudgetRevenue.findBudgetRevenueWithCode("111");
+        budget11101 = BudgetRevenue.findBudgetRevenueWithCode("11101");
     }
 
     @Test

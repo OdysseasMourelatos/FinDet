@@ -2,6 +2,7 @@ package com.financial;
 
 import com.financial.entries.BudgetRevenue;
 import com.financial.entries.PublicInvestmentBudgetNationalRevenue;
+import com.financial.entries.PublicInvestmentBudgetRevenue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
@@ -18,12 +19,15 @@ public class PublicInvestmentBudgetNationalRevenueTest {
     private PublicInvestmentBudgetNationalRevenue revenue156;
     private PublicInvestmentBudgetNationalRevenue revenue15609;
 
+    private PublicInvestmentBudgetRevenue pib13;
+    private PublicInvestmentBudgetRevenue pib134;
+    private PublicInvestmentBudgetRevenue pib13409;
+
     @BeforeEach
     void setUp() {
+        PublicInvestmentBudgetRevenue.getAllPublicInvestmentBudgetRevenues().clear();
         PublicInvestmentBudgetNationalRevenue.getAllPublicInvestmentBudgetNationalRevenues().clear();
-        BudgetRevenue.getAllBudgetRevenues().clear();
 
-        // Δεδομένα που αρχικά ήταν για CoFunded (2 Κλάδοι: 13 και 15)
         revenue13 = new PublicInvestmentBudgetNationalRevenue("13", "Κατηγορία 13", "ΕΣΟΔΑ", "ΕΘΝΙΚΟ", 35000000L);
         revenue134 = new PublicInvestmentBudgetNationalRevenue("134", "Υποκατηγορία 134", "ΕΣΟΔΑ", "ΕΘΝΙΚΟ", 35000000L);
         revenue13409 = new PublicInvestmentBudgetNationalRevenue("13409", "Υποκατηγορία 13409", "ΕΣΟΔΑ", "ΕΘΝΙΚΟ", 35000000L);
@@ -31,8 +35,11 @@ public class PublicInvestmentBudgetNationalRevenueTest {
         revenue15 = new PublicInvestmentBudgetNationalRevenue("15", "Κατηγορία 15", "ΕΣΟΔΑ", "ΕΘΝΙΚΟ", 265000000L);
         revenue156 = new PublicInvestmentBudgetNationalRevenue("156", "Υποκατηγορία 156", "ΕΣΟΔΑ", "ΕΘΝΙΚΟ", 1000000L);
         revenue15609 = new PublicInvestmentBudgetNationalRevenue("15609", "Υποκατηγορία 15609", "ΕΣΟΔΑ", "ΕΘΝΙΚΟ", 1000000L);
-    }
 
+        pib13 = PublicInvestmentBudgetRevenue.findPublicInvestmentBudgetRevenueWithCode("13");
+        pib134 = PublicInvestmentBudgetRevenue.findPublicInvestmentBudgetRevenueWithCode("134");
+        pib13409 = PublicInvestmentBudgetRevenue.findPublicInvestmentBudgetRevenueWithCode("13409");
+    }
 
     @Test
     void getAllPublicInvestmentBudgetNationalRevenuesTest() {
@@ -40,6 +47,7 @@ public class PublicInvestmentBudgetNationalRevenueTest {
         assertEquals(6, allRevenues.size());
         assertTrue(allRevenues.get(0) instanceof PublicInvestmentBudgetNationalRevenue);
     }
+
     @Test
     void getMainPublicInvestmentBudgetNationalRevenuesTest() {
         ArrayList<PublicInvestmentBudgetNationalRevenue> mainRevenues = PublicInvestmentBudgetNationalRevenue.getMainPublicInvestmentBudgetNationalRevenues();
@@ -191,5 +199,50 @@ public class PublicInvestmentBudgetNationalRevenueTest {
 
         // 2. Το 15 μένει ανεπηρέαστο
         assertEquals(265000000L, revenue15.getAmount());
+    }
+
+    @Test
+    void updateAmountOfSuperClassFilteredObjectsTest1() {
+        long change = 5000000L; // +5 Million change
+
+        // Αρχικά ποσά των filtered αντικειμένων (PIB)
+        long initialPIB13Amount = pib13.getNationalAmount();
+        long initialPIB134Amount = pib134.getNationalAmount();
+        long initialPIB13409Amount = pib13409.getNationalAmount();
+
+        // Implementation (Equal Distribution στο 134)
+        revenue134.implementChangesOfEqualDistribution(change);
+
+        // Έλεγχος στην PublicInvestmentBudgetRevenue (SuperClass)
+
+        // PIB 13 (Upward - γονέας)
+        assertEquals(initialPIB13Amount + change, pib13.getNationalAmount());
+        assertEquals(pib13.getNationalAmount() + pib13.getCoFundedAmount(), pib13.getAmount());
+
+        // PIB 134 (Self)
+        assertEquals(initialPIB134Amount + change, pib134.getNationalAmount());
+
+        // PIB 13409 (Downward - παιδί)
+        assertEquals(initialPIB13409Amount + change, pib13409.getNationalAmount());
+    }
+
+    @Test
+    void updateAmountOfSuperClassFilteredObjectsTest2() {
+        double percentage = 0.1; // +10% change
+
+        // Αρχικά ποσά των filtered αντικειμένων (PIB)
+        long initialPIB13Amount = pib13.getNationalAmount();
+        long initialPIB134Amount = pib134.getNationalAmount();
+
+        // Implementation (Percentage Adjustment στο 13)
+        revenue13.implementChangesOfPercentageAdjustment(percentage);
+
+        // Αναμενόμενες τιμές
+        long expectedPIB13Amount = (long) (initialPIB13Amount * (1 + percentage));
+        long expectedPIB134Amount = (long) (initialPIB134Amount * (1 + percentage));
+
+        // Έλεγχος στην PublicInvestmentBudgetRevenue (SuperClass)
+        assertEquals(expectedPIB13Amount, pib13.getNationalAmount());
+        assertEquals(expectedPIB134Amount, pib134.getNationalAmount());
     }
 }
