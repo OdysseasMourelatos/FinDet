@@ -96,10 +96,16 @@ public class BudgetRevenueTest {
         BudgetRevenue br12 = BudgetRevenue.findBudgetRevenueWithCode("12");
         BudgetRevenue br131 = BudgetRevenue.findBudgetRevenueWithCode("131");
         BudgetRevenue br13108 = BudgetRevenue.findBudgetRevenueWithCode("13108");
+        BudgetRevenue temp1 = new BudgetRevenue("1110103", "Level 4", "ΕΣΟΔΑ", 200L);
+        BudgetRevenue temp2 = new BudgetRevenue("1110103001", "Level 5", "ΕΣΟΔΑ", 100L);
+        RegularBudgetRevenue unknown = new RegularBudgetRevenue("1", "Unknown", "ΕΣΟΔΑ", 100L);
 
         assertEquals(1, br12.getLevelOfHierarchy());    // 2 ψηφία
         assertEquals(2, br131.getLevelOfHierarchy());   // 3 ψηφία
         assertEquals(3, br13108.getLevelOfHierarchy()); // 5 ψηφία
+        assertEquals(4, temp1.getLevelOfHierarchy());   // 7 ψηφία
+        assertEquals(5, temp2.getLevelOfHierarchy());   // 10 ψηφία
+        assertEquals(0, unknown.getLevelOfHierarchy()); // Unknown
     }
 
     @Test

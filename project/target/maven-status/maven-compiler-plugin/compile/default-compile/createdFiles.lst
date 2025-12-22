@@ -16,7 +16,6 @@ com/financial/strategies/filters/ServiceFilter.class
 com/financial/ui/views/RevenuesView.class
 com/financial/charts/BarChartGenerator.class
 com/financial/strategies/filters/AccountFilter.class
-com/financial/Main.class
 com/financial/services/expenses/BudgetExpenseHandling.class
 com/financial/services/Command.class
 com/financial/services/data/DataUpdate.class

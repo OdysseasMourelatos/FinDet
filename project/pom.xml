@@ -61,7 +61,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <mainClass>com.financial.Main</mainClass>
+                    <mainClass>com.financial.MainApp</mainClass>
                 </configuration>
             </plugin>
             <plugin>
@@ -87,6 +87,8 @@
                                 <exclude>com/financial/pdf/**/*</exclude>
                                 <exclude>com/financial/charts/**/*</exclude>
                                 <exclude>com/financial/menu/**/*</exclude>
+                                <exclude>com/financial/MainApp.class</exclude>
+                                <exclude>com/financial/Main.class</exclude>
                             </excludes>
                         </configuration>
                     </execution>
@@ -96,7 +98,6 @@
     </build>
 
     <dependencies>
-        <!-- JavaFX -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
@@ -108,7 +109,6 @@
             <version>21</version>
         </dependency>
 
-        <!-- AtlantaFX - Modern theme -->
         <dependency>
             <groupId>io.github.mkpaz</groupId>
             <artifactId>atlantafx-base</artifactId>
