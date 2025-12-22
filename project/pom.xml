@@ -81,6 +81,14 @@
                         <goals>
                             <goal>report</goal>
                         </goals>
+                        <configuration>
+                            <excludes>
+                                <exclude>com/financial/ui/**/*</exclude>
+                                <exclude>com/financial/pdf/**/*</exclude>
+                                <exclude>com/financial/charts/**/*</exclude>
+                                <exclude>com/financial/menu/**/*</exclude>
+                            </excludes>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
