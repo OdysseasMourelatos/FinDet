@@ -12,6 +12,9 @@ public class RegularBudgetRevenue extends BudgetRevenue implements BudgetRevenue
     public RegularBudgetRevenue(String code, String description, String category, long amount) {
         super(code, description, category, amount);
         regularBudgetRevenues.add(this);
+
+        //New filtered object of BudgetRevenue class
+        BudgetRevenue budgetRevenue = new BudgetRevenue(code, description, category, amount, 0, amount);
     }
 
     //Class Methods

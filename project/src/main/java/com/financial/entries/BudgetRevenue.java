@@ -137,7 +137,7 @@ public class BudgetRevenue extends BudgetEntry implements BudgetRevenueLogic {
         }
     }
 
-    protected void setRegularAmount(long amount, boolean update) {
+    public void setRegularAmount(long amount, boolean update) {
         this.regularAmount = amount;
         if (update) {
             this.amount = regularAmount + publicInvestmentAmount;

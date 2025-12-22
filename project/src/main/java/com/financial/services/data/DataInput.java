@@ -105,8 +105,6 @@ public class DataInput {
         String category = "ΕΣΟΔΑ";
         long amount = Long.parseLong(values[2]);
         BudgetRevenue regularBudgetRevenue = new RegularBudgetRevenue(code, description, category, amount);
-        //New filtered object of BudgetRevenue class
-        BudgetRevenue budgetRevenue = new BudgetRevenue(code, description, category, amount, 0, amount);
     }
 
     //Activated when all PublicInvestmentBudgetRevenues are filtered

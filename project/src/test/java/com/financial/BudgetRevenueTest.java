@@ -1,6 +1,7 @@
 package com.financial;
 
 import com.financial.entries.*;
+import com.financial.services.data.DataInput;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ public class BudgetRevenueTest {
     void setUp() {
         // Καθαρισμός λιστών
         BudgetRevenue.getAllBudgetRevenues().clear();
+        RegularBudgetRevenue.getAllRegularBudgetRevenues().clear();
         PublicInvestmentBudgetRevenue.getAllPublicInvestmentBudgetRevenues().clear();
 
         // --- REGULAR BUDGET REVENUE (Τακτικός) ---
@@ -31,6 +33,7 @@ public class BudgetRevenueTest {
         pib134 = new PublicInvestmentBudgetRevenue("134", "Επιχορηγήσεις επενδύσεων εσωτερικού", "ΕΣΟΔΑ", "ΠΔΕ", 35000000L, 0L, 35000000L);
 
         // Διαδικασία Merge στην Υπερκλάση BudgetRevenue
+        DataInput.createBudgetRevenueFilteredFromPublicInvestmentBudgetRevenue();
         BudgetRevenue.sortBudgetRevenuesByCode();
         BudgetRevenue.filterBudgetRevenues();
     }
@@ -137,5 +140,50 @@ public class BudgetRevenueTest {
         assertEquals(2, supers.size());
         assertTrue(supers.stream().anyMatch(r -> r.getCode().equals("131")));
         assertTrue(supers.stream().anyMatch(r -> r.getCode().equals("13")));
+    }
+
+    @Test
+    void gettersTest() {
+        BudgetRevenue merged13 = BudgetRevenue.findBudgetRevenueWithCode("13");
+
+        // Έλεγχος αν οι getters επιστρέφουν τα αρχικά ποσά από το setUp
+        assertEquals(3906000000L, merged13.getRegularAmount());
+        assertEquals(4225000000L, merged13.getPublicInvestmentAmount());
+    }
+
+    @Test
+    void setPublicInvestmentAmountTest() {
+        BudgetRevenue br12 = BudgetRevenue.findBudgetRevenueWithCode("12");
+        long initialRegular = br12.getRegularAmount(); // 60.000.000
+        long newPIB = 15000000L; // 15 εκ.
+
+        // Ενημέρωση με update = true: Πρέπει να αλλάξει και το συνολικό amount
+        br12.setPublicInvestmentAmount(newPIB, true);
+
+        assertEquals(newPIB, br12.getPublicInvestmentAmount());
+        assertEquals(initialRegular + newPIB, br12.getAmount(), "Το συνολικό ποσό (amount) δεν ενημερώθηκε σωστά.");
+    }
+
+    @Test
+    void setRegularAmountTest() {
+        BudgetRevenue br12 = BudgetRevenue.findBudgetRevenueWithCode("12");
+        long initialPIB = br12.getPublicInvestmentAmount(); // 0
+        long newRegular = 70000000L;
+
+        // Ενημέρωση Regular ποσού με update = true
+        br12.setRegularAmount(newRegular, true);
+
+        assertEquals(newRegular, br12.getRegularAmount());
+        assertEquals(newRegular + initialPIB, br12.getAmount());
+    }
+
+    @Test
+    void toStringFormattingTest() {
+        BudgetRevenue br13 = BudgetRevenue.findBudgetRevenueWithCode("13");
+        String output = br13.toString();
+
+        // Έλεγχος αν η toString περιέχει τα πεδία της super (BudgetEntry)
+        assertTrue(output.contains("Code: 13"));
+        assertTrue(output.contains("Description: Μεταβιβάσεις"));
     }
 }
