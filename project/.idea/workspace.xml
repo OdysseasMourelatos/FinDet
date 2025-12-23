@@ -75,6 +75,7 @@
     "JUnit.RegularBudgetRevenueTest.executor": "Run",
     "JUnit.RegularBudgetRevenueTest.findSuperCategoryTest.executor": "Run",
     "JUnit.RegularBudgetRevenueTest.implementChangesOfEqualDistributionReductionTest13.executor": "Run",
+    "JUnit.RegularBudgetRevenueTest.implementChangesOfPercentageAdjustmentReductionTest131.executor": "Run",
     "JUnit.financial in FinDet.executor": "Run",
     "JUnit.java in FinDet.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",

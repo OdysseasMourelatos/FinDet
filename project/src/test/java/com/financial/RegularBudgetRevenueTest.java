@@ -275,7 +275,7 @@ public class RegularBudgetRevenueTest {
     }
 
     @Test
-    void implementChangesOfEqualDistributionReductionTest13() {
+    void implementChangesOfEqualDistributionReductionTest1() {
         // Σενάριο: Μείωση 60.000.000€ απευθείας στη Ρίζα (13)
         long reduction = -60000000L;
 
@@ -301,7 +301,33 @@ public class RegularBudgetRevenueTest {
     }
 
     @Test
-    void implementChangesOfPercentageAdjustmentReductionTest131() {
+    void implementChangesOfEqualDistributionReductionTest2() {
+        // Σενάριο: Ισόποση μείωση 4.000.000€ στις Εισφορές Εργαζομένων (12201)
+        long reduction = -4000000L;
+
+        long initial12 = revenue12.getAmount();
+        long initial12201 = revenue12201.getAmount();
+        long initial1220101 = revenue1220101.getAmount();
+        long initial1220102 = revenue1220102.getAmount();
+
+        // Εκτέλεση
+        revenue12201.implementChangesOfEqualDistribution(reduction);
+
+        // 1. Upward Propagation (Οι γονείς 122 και 12 μειώνονται κατά 4M)
+        assertEquals(initial12 + reduction, revenue12.getAmount());
+
+        // 2. Target (12201)
+        assertEquals(initial12201 + reduction, revenue12201.getAmount());
+
+        // 3. Downward Propagation (Η μείωση -4M μοιράζεται στα 2 παιδιά: -2M το καθένα)
+        long split = reduction / 2;
+        assertEquals(initial1220101 + split, revenue1220101.getAmount());
+        assertEquals(initial1220102 + split, revenue1220102.getAmount());
+    }
+
+
+    @Test
+    void implementChangesOfPercentageAdjustmentReductionTest1() {
         // Σενάριο: Ποσοστιαία μείωση 10% στο μεσαίο επίπεδο (131)
         double percentage = -0.1;
 
@@ -327,6 +353,29 @@ public class RegularBudgetRevenueTest {
 
         // 4. Isolation Check (Το 132 δεν πρέπει να αλλάξει)
         assertEquals(initial132, revenue132.getAmount());
+    }
+
+    @Test
+    void implementChangesOfPercentageAdjustmentReductionTest2() {
+        // Σενάριο: Ποσοστιαία μείωση 50% στη Ρίζα (12) - Επηρεάζει όλο το δέντρο
+        double percentage = -0.5;
+
+        long initial12 = revenue12.getAmount();           // 60M
+        long initial122 = revenue122.getAmount();         // 60M
+        long initial1220101 = revenue1220101.getAmount(); // 1M
+        long initial1220102 = revenue1220102.getAmount(); // 59M
+
+        revenue12.implementChangesOfPercentageAdjustment(percentage);
+
+        // 1. Έλεγχος Ρίζας
+        assertEquals((long)(initial12 * 0.5), revenue12.getAmount());
+
+        // 2. Έλεγχος Ενδιάμεσου Επιπέδου (122)
+        assertEquals((long)(initial122 * 0.5), revenue122.getAmount());
+
+        // 3. Έλεγχος Βαθύτερων επιπέδων
+        assertEquals((long)(initial1220101 * 0.5), revenue1220101.getAmount());
+        assertEquals((long)(initial1220102 * 0.5), revenue1220102.getAmount());
     }
 
     @Test
