@@ -134,7 +134,7 @@ public class RegularBudgetRevenue extends BudgetRevenue implements BudgetRevenue
             updateAmountOfSuperClassFilteredObjects(amount);
         } else {
             RevenuesHistory.returnToPreviousState();
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Αποτυχία Πραγματοποίησης Αλλαγών");
         }
     }
 

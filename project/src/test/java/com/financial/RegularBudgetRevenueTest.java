@@ -454,6 +454,56 @@ public class RegularBudgetRevenueTest {
     }
 
     @Test
+    void updateAmountOfSuperClassFilteredObjectsReductionTest1() {
+        // Σενάριο: Ισόποση μείωση 100.000.000€ στους Φόρους (11)
+        long reduction = -100000000L;
+
+        // Αρχικά ποσά από την υπερκλάση BudgetRevenue
+        long initialBR11Regular = budget11.getRegularAmount();
+        long initialBR111Regular = budget111.getRegularAmount();
+        long initialBR11101Regular = budget11101.getRegularAmount();
+
+        // Εκτέλεση της μείωσης μέσω του RegularBudgetRevenue αντικειμένου
+        revenue11.implementChangesOfEqualDistribution(reduction);
+
+        // Έλεγχος αν η υπερκλάση BudgetRevenue ενημερώθηκε σωστά
+
+        // Για τον κωδικό 11
+        assertEquals(initialBR11Regular + reduction, budget11.getRegularAmount());
+        assertEquals(budget11.getRegularAmount() + budget11.getPublicInvestmentAmount(), budget11.getAmount());
+
+        // Για τον κωδικό 111 (Downward Propagation στην υπερκλάση)
+        assertEquals(initialBR111Regular + reduction, budget111.getRegularAmount());
+
+        // Για τον κωδικό 11101
+        assertEquals(initialBR11101Regular + reduction, budget11101.getRegularAmount());
+    }
+
+    @Test
+    void updateAmountOfSuperClassFilteredObjectsReductionTest2() {
+        // Σενάριο: Ποσοστιαία μείωση 20% στους Φόρους (11)
+        double percentage = -0.2;
+
+        // Αρχικά ποσά
+        long initialBR11Regular = budget11.getRegularAmount();
+        long initialBR111Regular = budget111.getRegularAmount();
+
+        // Εκτέλεση
+        revenue11.implementChangesOfPercentageAdjustment(percentage);
+
+        // Υπολογισμός αναμενόμενου ποσού
+        long expectedBR11Regular = (long) (initialBR11Regular * (1 + percentage));
+        long expectedBR111Regular = (long) (initialBR111Regular * (1 + percentage));
+
+        // Έλεγχος συγχρονισμού στην υπερκλάση
+        assertEquals(expectedBR11Regular, budget11.getRegularAmount());
+        assertEquals(expectedBR111Regular, budget111.getRegularAmount());
+
+        // Έλεγχος ότι το συνολικό ποσό (Amount) της BudgetRevenue παραμένει συνεπές
+        assertEquals(budget11.getRegularAmount() + budget11.getPublicInvestmentAmount(), budget11.getAmount());
+    }
+
+    @Test
     void toStringFormatTest() {
         String output = revenue11.toString();
         // Έλεγχος αν η toString περιέχει τα βασικά στοιχεία

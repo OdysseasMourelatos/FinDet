@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="88d8a661-a47d-4ac5-b89a-2164a467de01" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/entries/RegularBudgetRevenue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/RegularBudgetRevenue.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/RegularBudgetRevenueTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/RegularBudgetRevenueTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -88,7 +89,22 @@
     "settings.editor.selected.configurable": "preferences.general"
   }
 }]]></component>
-  <component name="RunManager" selected="JUnit.RegularBudgetRevenueTest.implementChangesOfEqualDistributionRollbackTest">
+  <component name="RunManager" selected="JUnit.RegularBudgetRevenueTest">
+    <configuration name="RegularBudgetRevenueTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="FinDet" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.financial.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.financial" />
+      <option name="MAIN_CLASS_NAME" value="com.financial.RegularBudgetRevenueTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="RegularBudgetRevenueTest.implementChangesOfEqualDistributionReductionTest1" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="FinDet" />
       <extension name="coverage">
@@ -153,22 +169,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="RegularBudgetRevenueTest.implementChangesOfPercentageAdjustmentReductionTest131" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="FinDet" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.financial.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.financial" />
-      <option name="MAIN_CLASS_NAME" value="com.financial.RegularBudgetRevenueTest" />
-      <option name="METHOD_NAME" value="implementChangesOfPercentageAdjustmentReductionTest131" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration default="true" type="JetRunConfigurationType">
       <module name="project" />
       <method v="2">
@@ -182,11 +182,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.RegularBudgetRevenueTest" />
         <item itemvalue="JUnit.RegularBudgetRevenueTest.implementChangesOfEqualDistributionRollbackTest" />
         <item itemvalue="JUnit.RegularBudgetRevenueTest.implementChangesOfEqualDistributionReductionTest2" />
         <item itemvalue="JUnit.RegularBudgetRevenueTest.implementChangesOfEqualDistributionReductionTest1" />
         <item itemvalue="JUnit.RegularBudgetRevenueTest.implementChangesOfEqualDistributionReductionTest13" />
-        <item itemvalue="JUnit.RegularBudgetRevenueTest.implementChangesOfPercentageAdjustmentReductionTest131" />
       </list>
     </recent_temporary>
   </component>
