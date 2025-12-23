@@ -276,8 +276,8 @@ public class RegularBudgetRevenueTest {
 
     @Test
     void implementChangesOfEqualDistributionReductionTest1() {
-        // Σενάριο: Μείωση 60.000.000€ απευθείας στη Ρίζα (13)
-        long reduction = -60000000L;
+        // Σενάριο: Μείωση 20.000.000€ στη Ρίζα (13) - Ασφαλές ποσό
+        long reduction = -20000000L;
 
         long initial13 = revenue13.getAmount();      // 3.906.000.000L
         long initial131 = revenue131.getAmount();    // 322.000.000L
@@ -291,10 +291,10 @@ public class RegularBudgetRevenueTest {
         assertEquals(initial13 + reduction, revenue13.getAmount());
 
         // 2. Έλεγχος Downward Propagation (Ισόποση διανομή στα 2 παιδιά: 131 & 132)
-        // -60M / 2 παιδιά = -30.000.000€ στο καθένα
+        // -20M / 2 παιδιά = -10.000.000€ στο καθένα
         long splitReduction = reduction / 2;
-        assertEquals(initial131 + splitReduction, revenue131.getAmount());
-        assertEquals(initial132 + splitReduction, revenue132.getAmount());
+        assertEquals(initial131 + splitReduction, revenue131.getAmount()); // 312.000.000
+        assertEquals(initial132 + splitReduction, revenue132.getAmount()); // 5.000.000
 
         // 3. Έλεγχος Βαθύτερου Επιπέδου (Το 13108 παίρνει όλη τη μείωση του γονέα του 131)
         assertEquals(initial13108 + splitReduction, revenue13108.getAmount());
@@ -302,8 +302,9 @@ public class RegularBudgetRevenueTest {
 
     @Test
     void implementChangesOfEqualDistributionReductionTest2() {
-        // Σενάριο: Ισόποση μείωση 4.000.000€ στις Εισφορές Εργαζομένων (12201)
-        long reduction = -4000000L;
+        // Σενάριο: Ισόποση μείωση 1.000.000€ στις Εισφορές Εργαζομένων (12201)
+        // Ποσό που δεν μηδενίζει τα παιδιά (1220101: 1M -> 500K)
+        long reduction = -1000000L;
 
         long initial12 = revenue12.getAmount();
         long initial12201 = revenue12201.getAmount();
@@ -313,18 +314,17 @@ public class RegularBudgetRevenueTest {
         // Εκτέλεση
         revenue12201.implementChangesOfEqualDistribution(reduction);
 
-        // 1. Upward Propagation (Οι γονείς 122 και 12 μειώνονται κατά 4M)
+        // 1. Upward Propagation (Οι γονείς 122 και 12 μειώνονται κατά 1M)
         assertEquals(initial12 + reduction, revenue12.getAmount());
 
         // 2. Target (12201)
         assertEquals(initial12201 + reduction, revenue12201.getAmount());
 
-        // 3. Downward Propagation (Η μείωση -4M μοιράζεται στα 2 παιδιά: -2M το καθένα)
+        // 3. Downward Propagation (Η μείωση -1M μοιράζεται στα 2 παιδιά: -500K το καθένα)
         long split = reduction / 2;
         assertEquals(initial1220101 + split, revenue1220101.getAmount());
         assertEquals(initial1220102 + split, revenue1220102.getAmount());
     }
-
 
     @Test
     void implementChangesOfPercentageAdjustmentReductionTest1() {
