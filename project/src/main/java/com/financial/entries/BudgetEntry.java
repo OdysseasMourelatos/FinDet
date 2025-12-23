@@ -1,10 +1,5 @@
 package com.financial.entries;
 
-import com.financial.services.expenses.BudgetExpenseHandling;
-import com.financial.services.revenues.BudgetRevenueLogicService;
-
-import java.util.ArrayList;
-
 public abstract class BudgetEntry {
     private final String code;
     private final String description;
@@ -41,7 +36,7 @@ public abstract class BudgetEntry {
             throw new IllegalArgumentException();
         }
     }
-    
+
     @Override
     public String toString() {
         return "Code: " + code + ", Description: " + description + ", Category: " + category + ", Amount: " + String.format("%,d", amount);

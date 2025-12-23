@@ -1,6 +1,6 @@
 package com.financial.entries;
 
-import com.financial.services.expenses.BudgetExpenseHandling;
+import com.financial.services.expenses.BudgetExpenseLogicService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,8 +18,8 @@ public class Entity {
     public Entity(String entityCode, String entityName) {
         this.entityCode = entityCode;
         this.entityName = entityName;
-        regularBudgetExpenses = BudgetExpenseHandling.getExpensesOfEntityWithCode(entityCode, RegularBudgetExpense.getAllRegularBudgetExpenses());
-        publicInvestmentBudgetExpenses = BudgetExpenseHandling.getExpensesOfEntityWithCode(entityCode, PublicInvestmentBudgetExpense.getAllPublicInvestmentBudgetExpenses());
+        regularBudgetExpenses = RegularBudgetExpense.getRegularBudgetExpensesOfEntityWithCode(entityCode);
+        publicInvestmentBudgetExpenses = BudgetExpenseLogicService.getExpensesOfEntityWithCode(entityCode, PublicInvestmentBudgetExpense.getAllPublicInvestmentBudgetExpenses());
         entities.add(this);
     }
 

@@ -5,7 +5,7 @@ import com.financial.strategies.operations.AdjustmentOperation;
 import com.financial.entries.BudgetExpense;
 import java.util.ArrayList;
 
-public class PercentageAllocationAdjustmentStrategy implements IExpenseAdjustmentStrategy {
+public class PercentageAllocationAdjustmentStrategy implements ExpenseAdjustmentStrategy {
 
     private final ExpenseFilter filter;
     private final AdjustmentOperation operation;

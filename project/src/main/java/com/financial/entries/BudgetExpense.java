@@ -8,7 +8,7 @@ public class BudgetExpense extends BudgetEntry {
     private String entityName;
     private String serviceCode;
     private String serviceName;
-    protected static ArrayList <BudgetExpense> expenses = new ArrayList<>();
+    protected static ArrayList <BudgetExpense> budgetExpenses = new ArrayList<>();
 
     public BudgetExpense(String entityCode, String entityName, String serviceCode, String serviceName, String code, String description, String category, long amount) {
         super(code, description, category, amount);
@@ -16,7 +16,7 @@ public class BudgetExpense extends BudgetEntry {
         this.entityName = entityName;
         this.serviceCode = serviceCode;
         this.serviceName = serviceName;
-        expenses.add(this);
+        budgetExpenses.add(this);
     }
 
     public BudgetExpense(String code, String description, String category, long amount) {
@@ -39,8 +39,8 @@ public class BudgetExpense extends BudgetEntry {
         return serviceName;
     }
 
-    public static ArrayList <BudgetExpense> getExpenses() {
-        return expenses;
+    public static ArrayList <BudgetExpense> getBudgetExpenses() {
+        return budgetExpenses;
     }
 
     @Override
