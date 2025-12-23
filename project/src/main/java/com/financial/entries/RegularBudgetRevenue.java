@@ -130,6 +130,7 @@ public class RegularBudgetRevenue extends BudgetRevenue implements BudgetRevenue
     @Override
     public void setAmount(long amount) {
         if (amount >= 0) {
+            amount = BudgetRevenueChangesService.roundToNearestHundred(amount);
             this.amount = amount;
             updateAmountOfSuperClassFilteredObject(amount);
         } else {

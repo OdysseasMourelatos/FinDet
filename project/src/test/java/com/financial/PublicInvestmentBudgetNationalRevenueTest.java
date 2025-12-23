@@ -274,7 +274,7 @@ public class PublicInvestmentBudgetNationalRevenueTest {
     @Test
     void updateAmountOfSuperClassFilteredObjectNullBranchTest() {
         // Δημιουργούμε ένα προσωρινό αντικείμενο
-        PublicInvestmentBudgetNationalRevenue tempRevenue = new PublicInvestmentBudgetNationalRevenue("99", "Temp", "ΕΣΟΔΑ", "ΕΘΝΙΚΟ", 100L);
+        PublicInvestmentBudgetNationalRevenue tempRevenue = new PublicInvestmentBudgetNationalRevenue("99", "Temp", "ΕΣΟΔΑ", "ΕΘΝΙΚΟ", 1000L);
 
         // Αφαιρούμε το αντίστοιχο αντικείμενο από την υπερκλάση για να αναγκάσουμε το lookup να αποτύχει (null)
         // Αυτό θα καλύψει το "κίτρινο" branch στην updateAmountOfSuperClassFilteredObjects
@@ -282,10 +282,10 @@ public class PublicInvestmentBudgetNationalRevenueTest {
         PublicInvestmentBudgetRevenue.getAllPublicInvestmentBudgetRevenues().remove(pib99);
 
         // Καλούμε την ενημέρωση - η μέθοδος θα μπει στο branch όπου η find επιστρέφει null
-        tempRevenue.implementChangesOfEqualDistribution(50L);
+        tempRevenue.implementChangesOfEqualDistribution(500L);
 
         // Δεν περιμένουμε crash, απλώς επιβεβαιώνουμε ότι το τοπικό amount άλλαξε
-        assertEquals(150L, tempRevenue.getAmount());
+        assertEquals(1500L, tempRevenue.getAmount());
     }
 
     @Test

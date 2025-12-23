@@ -9,6 +9,11 @@ import java.util.Map;
 import static com.financial.services.revenues.BudgetRevenueLogicService.getNextLevelSubCategories;
 
 public class BudgetRevenueChangesService {
+
+    private BudgetRevenueChangesService() {
+        // utility class – no instances
+    }
+
     public static <T extends BudgetRevenue> void setAmountOfSuperCategories(ArrayList<T> superCategories, long change) {
         for (BudgetRevenue superCategory : superCategories) {
             superCategory.setAmount(superCategory.getAmount() + change);
@@ -42,7 +47,7 @@ public class BudgetRevenueChangesService {
             // Αν δεν υπάρχουν άλλες υποκατηγορίες, τερματίζει.
             // Σημείωση: Υποθέτουμε ότι το μήκος 10 είναι το τελικό επίπεδο
             if (parent.getCode().length() == 10) {
-                throw new RuntimeException();
+                return;
             }
 
             // Για κάθε υποκατηγορία σε επόμενο επίπεδο (Αναδρομή)
@@ -86,5 +91,9 @@ public class BudgetRevenueChangesService {
         } catch (RuntimeException e) {
             return;
         }
+    }
+
+    public static long roundToNearestHundred(long amount) {
+        return Math.round(amount / 100.0) * 100;
     }
 }

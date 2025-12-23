@@ -12,6 +12,10 @@ public class RevenuesHistory {
     public static Deque<Map<String, Long>> historyDeque = new ArrayDeque<>();
     public static Deque<BudgetType> typeDeque = new ArrayDeque<>();
 
+    private RevenuesHistory() {
+        // utility class – no instances
+    }
+
     public static void keepHistory(ArrayList<? extends BudgetRevenue> revenues, BudgetType type) {
         Map<String, Long> modifiedElement = new HashMap<>();
         for (BudgetRevenue revenue : revenues) {

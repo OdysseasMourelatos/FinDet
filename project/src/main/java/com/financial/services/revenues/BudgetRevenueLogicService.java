@@ -6,6 +6,10 @@ import java.util.ArrayList;
 
 public class BudgetRevenueLogicService {
 
+    private BudgetRevenueLogicService() {
+        // utility class – no instances
+    }
+
     //Returns only revenues with 2 digits
     public static <T extends BudgetRevenue> ArrayList<T> getMainBudgetRevenues(ArrayList<T> budgetRevenues) {
         ArrayList<T> mainBudgetRevenues = new ArrayList<>();

@@ -6,16 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="88d8a661-a47d-4ac5-b89a-2164a467de01" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/entries/BudgetRevenue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/BudgetRevenue.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetCoFundedRevenue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetCoFundedRevenue.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetNationalRevenue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetNationalRevenue.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/entries/RegularBudgetRevenue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/RegularBudgetRevenue.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/services/revenues/BudgetRevenueChanges.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/services/revenues/BudgetRevenueChanges.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/services/revenues/BudgetRevenueChangesService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/services/revenues/BudgetRevenueChangesService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/services/revenues/BudgetRevenueLogicService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/services/revenues/BudgetRevenueLogicService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/services/revenues/RevenuesHistory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/services/revenues/RevenuesHistory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/BudgetRevenueTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/BudgetRevenueTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/PublicInvestmentBudgetCoFundedRevenueTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/PublicInvestmentBudgetCoFundedRevenueTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/PublicInvestmentBudgetNationalRevenueTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/PublicInvestmentBudgetNationalRevenueTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/RegularBudgetRevenueTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/RegularBudgetRevenueTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/checkstyle-cachefile" beforeDir="false" afterPath="$PROJECT_DIR$/target/checkstyle-cachefile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.AppTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.AppTest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.BudgetRevenueTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.BudgetRevenueTest.xml" afterDir="false" />
@@ -86,6 +83,7 @@
     "JUnit.PublicInvestmentBudgetCoFundedRevenueTest.executor": "Run",
     "JUnit.PublicInvestmentBudgetNationalRevenueTest.executor": "Run",
     "JUnit.PublicInvestmentBudgetNationalRevenueTest.testUpdateSuperClassBranchCoverage.executor": "Run",
+    "JUnit.PublicInvestmentBudgetNationalRevenueTest.updateAmountOfSuperClassFilteredObjectNullBranchTest.executor": "Run",
     "JUnit.PublicInvestmentBudgetRevenueTest.executor": "Run",
     "JUnit.PublicInvestmentBudgetRevenueTest.testUpdateAmountOfSuperClassFilteredObjects.executor": "Run",
     "JUnit.RegularBudgetRevenueTest.executor": "Run",
@@ -98,12 +96,13 @@
     "JUnit.RegularBudgetRevenueTest.implementChangesOfEqualDistributionRollbackTest122.executor": "Run",
     "JUnit.RegularBudgetRevenueTest.implementChangesOfPercentageAdjustmentReductionTest131.executor": "Run",
     "JUnit.RegularBudgetRevenueTest.setAmountNullPointerExceptionCatchTest.executor": "Run",
+    "JUnit.RegularBudgetRevenueTest.updateAmountOfSuperClassFilteredObjectReductionTest2.executor": "Run",
     "JUnit.RegularBudgetRevenueTest.updateAmountOfSuperClassFilteredObjectsNullBranchTest.executor": "Run",
     "JUnit.financial in FinDet.executor": "Run",
     "JUnit.java in FinDet.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "tests",
     "kotlin-language-version-configured": "true",
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.15",
@@ -111,7 +110,7 @@
     "settings.editor.selected.configurable": "preferences.general"
   }
 }]]></component>
-  <component name="RunManager" selected="JUnit.BudgetRevenueTest.setRegularAmountNegativeTest">
+  <component name="RunManager">
     <configuration name="BudgetRevenueTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="FinDet" />
       <extension name="coverage">
@@ -123,38 +122,6 @@
       <option name="PACKAGE_NAME" value="com.financial" />
       <option name="MAIN_CLASS_NAME" value="com.financial.BudgetRevenueTest" />
       <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="BudgetRevenueTest.setPublicInvestmentAmountNegativeTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="FinDet" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.financial.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.financial" />
-      <option name="MAIN_CLASS_NAME" value="com.financial.BudgetRevenueTest" />
-      <option name="METHOD_NAME" value="setPublicInvestmentAmountNegativeTest" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="BudgetRevenueTest.setPublicInvestmentAmountTryCoverageTest13" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="FinDet" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.financial.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.financial" />
-      <option name="MAIN_CLASS_NAME" value="com.financial.BudgetRevenueTest" />
-      <option name="METHOD_NAME" value="setPublicInvestmentAmountTryCoverageTest13" />
-      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -175,7 +142,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="BudgetRevenueTest.setRegularAmountTryCoverageTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="PublicInvestmentBudgetNationalRevenueTest.updateAmountOfSuperClassFilteredObjectNullBranchTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="FinDet" />
       <extension name="coverage">
         <pattern>
@@ -184,9 +151,33 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="com.financial" />
-      <option name="MAIN_CLASS_NAME" value="com.financial.BudgetRevenueTest" />
-      <option name="METHOD_NAME" value="setRegularAmountTryCoverageTest" />
+      <option name="MAIN_CLASS_NAME" value="com.financial.PublicInvestmentBudgetNationalRevenueTest" />
+      <option name="METHOD_NAME" value="updateAmountOfSuperClassFilteredObjectNullBranchTest" />
       <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RegularBudgetRevenueTest.updateAmountOfSuperClassFilteredObjectReductionTest2" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="FinDet" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.financial.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.financial" />
+      <option name="MAIN_CLASS_NAME" value="com.financial.RegularBudgetRevenueTest" />
+      <option name="METHOD_NAME" value="updateAmountOfSuperClassFilteredObjectReductionTest2" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="financial in FinDet" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="FinDet" />
+      <option name="TEST_OBJECT" value="directory" />
+      <dir value="$PROJECT_DIR$/src/test/java/com/financial" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -204,11 +195,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.RegularBudgetRevenueTest.updateAmountOfSuperClassFilteredObjectReductionTest2" />
+        <item itemvalue="JUnit.PublicInvestmentBudgetNationalRevenueTest.updateAmountOfSuperClassFilteredObjectNullBranchTest" />
+        <item itemvalue="JUnit.financial in FinDet" />
         <item itemvalue="JUnit.BudgetRevenueTest.setRegularAmountNegativeTest" />
         <item itemvalue="JUnit.BudgetRevenueTest" />
-        <item itemvalue="JUnit.BudgetRevenueTest.setPublicInvestmentAmountTryCoverageTest13" />
-        <item itemvalue="JUnit.BudgetRevenueTest.setRegularAmountTryCoverageTest" />
-        <item itemvalue="JUnit.BudgetRevenueTest.setPublicInvestmentAmountNegativeTest" />
       </list>
     </recent_temporary>
   </component>
