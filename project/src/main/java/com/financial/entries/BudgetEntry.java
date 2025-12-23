@@ -41,18 +41,7 @@ public abstract class BudgetEntry {
             throw new IllegalArgumentException();
         }
     }
-
-    public static ArrayList<BudgetEntry> mergeListsOfMainRevenuesAndMainExpenses() {
-        ArrayList<BudgetEntry> merged = new ArrayList<>();
-        merged.addAll(BudgetRevenueLogicService.getMainBudgetRevenues(BudgetRevenue.budgetRevenues));
-        merged.addAll(BudgetExpenseHandling.getSumOfEveryCategory(BudgetExpense.expenses));
-        return merged;
-    }
-
-    public static void printMergedListsOfMainRevenuesAndMainExpenses() {
-        //DataOutput.printWithAsciiTable(mergeListsOfMainRevenuesAndMainExpenses());
-    }
-
+    
     @Override
     public String toString() {
         return "Code: " + code + ", Description: " + description + ", Category: " + category + ", Amount: " + String.format("%,d", amount);

@@ -188,7 +188,6 @@ public class BudgetRevenueTest {
         assertEquals(newRegular + initialPIB, br12.getAmount());
     }
 
-
     @Test
     void setRegularAmountNegativeTest() {
         BudgetRevenue br12 = BudgetRevenue.findBudgetRevenueWithCode("12");
@@ -199,7 +198,7 @@ public class BudgetRevenueTest {
     }
 
     @Test
-    void setPublicInvestmentAmountTryCoverageTest13() {
+    void setPublicInvestmentAmountNegativeTest() {
         BudgetRevenue br13 = BudgetRevenue.findBudgetRevenueWithCode("13");
 
         br13.setPublicInvestmentAmount(-5L, false);

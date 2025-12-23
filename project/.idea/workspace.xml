@@ -5,12 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="88d8a661-a47d-4ac5-b89a-2164a467de01" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/RegularBudgetRevenueTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/RegularBudgetRevenueTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/checkstyle-cachefile" beforeDir="false" afterPath="$PROJECT_DIR$/target/checkstyle-cachefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.AppTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.AppTest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.BudgetRevenueTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.BudgetRevenueTest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.financial.AppTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.financial.AppTest.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.financial.BudgetRevenueTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.financial.BudgetRevenueTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/BudgetRevenueTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/BudgetRevenueTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/PublicInvestmentBudgetRevenueTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/PublicInvestmentBudgetRevenueTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,6 +74,7 @@
     "JUnit.PublicInvestmentBudgetNationalRevenueTest.testUpdateSuperClassBranchCoverage.executor": "Run",
     "JUnit.PublicInvestmentBudgetNationalRevenueTest.updateAmountOfSuperClassFilteredObjectNullBranchTest.executor": "Run",
     "JUnit.PublicInvestmentBudgetRevenueTest.executor": "Run",
+    "JUnit.PublicInvestmentBudgetRevenueTest.setCoFundedAmountNegativeTest.executor": "Run",
     "JUnit.PublicInvestmentBudgetRevenueTest.testUpdateAmountOfSuperClassFilteredObjects.executor": "Run",
     "JUnit.RegularBudgetRevenueTest.executor": "Run",
     "JUnit.RegularBudgetRevenueTest.findSuperCategoryTest.executor": "Run",
@@ -104,23 +101,7 @@
     "settings.editor.selected.configurable": "preferences.general"
   }
 }]]></component>
-  <component name="RunManager" selected="JUnit.RegularBudgetRevenueTest.getAboveLevelSuperCategoryTest">
-    <configuration name="BudgetRevenueTest.setRegularAmountNegativeTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="FinDet" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.financial.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.financial" />
-      <option name="MAIN_CLASS_NAME" value="com.financial.BudgetRevenueTest" />
-      <option name="METHOD_NAME" value="setRegularAmountNegativeTest" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="JUnit.PublicInvestmentBudgetRevenueTest.setNationalAmountNegativeTest">
     <configuration name="PublicInvestmentBudgetNationalRevenueTest.updateAmountOfSuperClassFilteredObjectNullBranchTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="FinDet" />
       <extension name="coverage">
@@ -132,6 +113,38 @@
       <option name="PACKAGE_NAME" value="com.financial" />
       <option name="MAIN_CLASS_NAME" value="com.financial.PublicInvestmentBudgetNationalRevenueTest" />
       <option name="METHOD_NAME" value="updateAmountOfSuperClassFilteredObjectNullBranchTest" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PublicInvestmentBudgetRevenueTest.setCoFundedAmountNegativeTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="FinDet" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.financial.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.financial" />
+      <option name="MAIN_CLASS_NAME" value="com.financial.PublicInvestmentBudgetRevenueTest" />
+      <option name="METHOD_NAME" value="setCoFundedAmountNegativeTest" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PublicInvestmentBudgetRevenueTest.setNationalAmountNegativeTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="FinDet" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.financial.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.financial" />
+      <option name="MAIN_CLASS_NAME" value="com.financial.PublicInvestmentBudgetRevenueTest" />
+      <option name="METHOD_NAME" value="setNationalAmountNegativeTest" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -169,14 +182,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="financial in FinDet" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="FinDet" />
-      <option name="TEST_OBJECT" value="directory" />
-      <dir value="$PROJECT_DIR$/src/test/java/com/financial" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration default="true" type="JetRunConfigurationType">
       <module name="project" />
       <method v="2">
@@ -190,11 +195,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.PublicInvestmentBudgetRevenueTest.setNationalAmountNegativeTest" />
+        <item itemvalue="JUnit.PublicInvestmentBudgetRevenueTest.setCoFundedAmountNegativeTest" />
         <item itemvalue="JUnit.RegularBudgetRevenueTest.getAboveLevelSuperCategoryTest" />
         <item itemvalue="JUnit.RegularBudgetRevenueTest.updateAmountOfSuperClassFilteredObjectReductionTest2" />
         <item itemvalue="JUnit.PublicInvestmentBudgetNationalRevenueTest.updateAmountOfSuperClassFilteredObjectNullBranchTest" />
-        <item itemvalue="JUnit.financial in FinDet" />
-        <item itemvalue="JUnit.BudgetRevenueTest.setRegularAmountNegativeTest" />
       </list>
     </recent_temporary>
   </component>

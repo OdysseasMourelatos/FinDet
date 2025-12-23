@@ -3,7 +3,6 @@ package com.financial.entries;
 import com.financial.services.revenues.BudgetRevenueLogicService;
 import com.financial.services.data.DataInput;
 import com.financial.services.revenues.BudgetRevenueLogic;
-import com.financial.services.revenues.RevenuesHistory;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -150,9 +149,6 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements Budg
                 this.amount = nationalAmount + coFundedAmount;
                 updateAmountOfSuperClassFilteredObjects(amount);
             }
-        } else {
-            RevenuesHistory.returnToPreviousState();
-            throw new IllegalArgumentException();
         }
     }
 
@@ -163,9 +159,6 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements Budg
                 this.amount = nationalAmount + coFundedAmount;
                 updateAmountOfSuperClassFilteredObjects(amount);
             }
-        } else {
-            RevenuesHistory.returnToPreviousState();
-            throw new IllegalArgumentException();
         }
     }
 

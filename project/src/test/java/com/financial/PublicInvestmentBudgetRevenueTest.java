@@ -229,6 +229,30 @@ public class PublicInvestmentBudgetRevenueTest {
     }
 
     @Test
+    void setNationalAmountNegativeTest() {
+        PublicInvestmentBudgetRevenue merged13 = PublicInvestmentBudgetRevenue.findPublicInvestmentBudgetRevenueWithCode("13");
+        long initialNational = merged13.getNationalAmount();
+
+        // Απόπειρα για αρνητικό ποσό
+        merged13.setNationalAmount(-1000L, true);
+
+        // Έλεγχος: Δεν άλλαξε κάτι
+        assertEquals(initialNational, merged13.getNationalAmount());
+    }
+
+    @Test
+    void setCoFundedAmountNegativeTest() {
+        PublicInvestmentBudgetRevenue merged13 = PublicInvestmentBudgetRevenue.findPublicInvestmentBudgetRevenueWithCode("13");
+        long initialCoFunded = merged13.getCoFundedAmount();
+
+        // Απόπειρα για αρνητικό ποσό
+        merged13.setCoFundedAmount(-5000L, true);
+
+        // Έλεγχος: Δεν άλλαξε κάτι
+        assertEquals(initialCoFunded, merged13.getCoFundedAmount());
+    }
+
+    @Test
     void toStringFormatTest() {
         PublicInvestmentBudgetRevenue rev15 = PublicInvestmentBudgetRevenue.findPublicInvestmentBudgetRevenueWithCode("15");
         String output = rev15.toString();
