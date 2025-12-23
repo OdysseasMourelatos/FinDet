@@ -1,7 +1,6 @@
 package com.financial.entries;
 
 import com.financial.services.revenues.BudgetRevenueLogicService;
-import com.financial.services.data.DataOutput;
 import com.financial.services.revenues.BudgetRevenueLogic;
 
 import java.util.*;
@@ -25,10 +24,6 @@ public class BudgetRevenue extends BudgetEntry implements BudgetRevenueLogic {
         budgetRevenues.add(this);
     }
 
-    public void addBudgetRevenueToArrayList() {
-        budgetRevenues.add(this);
-    }
-
     public static void sortBudgetRevenuesByCode() {
         Collections.sort(budgetRevenues, new Comparator<BudgetRevenue>() {
             @Override
@@ -43,7 +38,7 @@ public class BudgetRevenue extends BudgetEntry implements BudgetRevenueLogic {
         //Finds codes that are repeated in the list
         // Adds to a new list the 2 placements in the list where we have repeated codes
         for (int i = 1; i < budgetRevenues.size(); i++) {
-            if (budgetRevenues.get(i).getCode().equals(budgetRevenues.get(i-1).getCode())) {
+            if (budgetRevenues.get(i).getCode().equals(budgetRevenues.get(i - 1).getCode())) {
                 repeatedRevenues.add(i);
             }
         }
@@ -68,16 +63,8 @@ public class BudgetRevenue extends BudgetEntry implements BudgetRevenueLogic {
         return budgetRevenues;
     }
 
-    public static void printAllBudgetRevenues() {
-        DataOutput.printBudgetRevenuesWithAsciiTable(budgetRevenues, BudgetRevenueLogicService.calculateSum(budgetRevenues));
-    }
-
     public static ArrayList<BudgetRevenue> getMainBudgetRevenues() {
         return BudgetRevenueLogicService.getMainBudgetRevenues(getAllBudgetRevenues());
-    }
-
-    public static void printMainBudgetRevenues() {
-        DataOutput.printBudgetRevenuesWithAsciiTable(getMainBudgetRevenues(), BudgetRevenueLogicService.calculateSum(getMainBudgetRevenues()));
     }
 
     public static BudgetRevenue findBudgetRevenueWithCode(String code) {
@@ -86,10 +73,6 @@ public class BudgetRevenue extends BudgetEntry implements BudgetRevenueLogic {
 
     public static ArrayList<BudgetRevenue> getBudgetRevenuesStartingWithCode(String code) {
         return BudgetRevenueLogicService.getRevenuesStartingWithCode(code, budgetRevenues);
-    }
-
-    public static void printBudgetRevenuesStartingWithCode(String code) {
-        DataOutput.printBudgetRevenuesWithAsciiTable(getBudgetRevenuesStartingWithCode(code), 0);
     }
 
     //Sum Method
@@ -110,86 +93,59 @@ public class BudgetRevenue extends BudgetEntry implements BudgetRevenueLogic {
         };
     }
 
-    //*Implementation of methods*
+    //*Implementation of methods (Logic)*
 
     //Supercategories methods
 
     @Override
-    public BudgetRevenue findSuperCategory() {
-        return BudgetRevenueLogicService.findSuperCategory(this, budgetRevenues);
+    public BudgetRevenue getAboveLevelSuperCategory() {
+        return BudgetRevenueLogicService.getAboveLevelSuperCategory(this, budgetRevenues);
     }
 
     @Override
-    public ArrayList<BudgetRevenue> getSuperCategories() {
-        return BudgetRevenueLogicService.getSuperCategories(this, budgetRevenues);
+    public ArrayList<BudgetRevenue> getAllSuperCategories() {
+        return BudgetRevenueLogicService.getAllSuperCategories(this, budgetRevenues);
     }
 
-    @Override
-    public void printSuperCategoriesTopDown() {
-        ArrayList<BudgetRevenue> superCategories = new ArrayList<>();
-        if (getSuperCategories().isEmpty()) {
-            System.out.println("Δεν υπάρχουν κατηγορίες σε υψηλότερη ιεραρχία");
-        } else {
-            for (int i = getSuperCategories().size() - 1; i >= 0; i--) {
-                superCategories.add(getSuperCategories().get(i));
-            }
-            DataOutput.printBudgetRevenuesWithAsciiTable(superCategories, 0);
-        }
-    }
-
-    @Override
-    public void printSuperCategoriesBottomsUp() {
-        if (getSuperCategories().isEmpty()) {
-            System.out.println("Δεν υπάρχουν κατηγορίες σε υψηλότερη ιεραρχία");
-        } else {
-            DataOutput.printBudgetRevenuesWithAsciiTable(getSuperCategories(), 0);
-        }
-    }
 
     //Subcategories methods
 
     @Override
-    public ArrayList<BudgetRevenue> findAllSubCategories() {
-        return BudgetRevenueLogicService.findAllSubCategories(this, budgetRevenues);
+    public ArrayList<BudgetRevenue> getNextLevelSubCategories() {
+        return BudgetRevenueLogicService.getNextLevelSubCategories(this, budgetRevenues);
     }
 
     @Override
-    public void printAllSubCategories() {
-        DataOutput.printBudgetRevenuesWithAsciiTable(findAllSubCategories(),0);
-    }
-
-    @Override
-    public ArrayList<BudgetRevenue> findNextLevelSubCategories() {
-        return BudgetRevenueLogicService.findNextLevelSubCategories(this, budgetRevenues);
-    }
-
-    @Override
-    public void printNextLevelSubCategories() {
-        DataOutput.printBudgetRevenuesWithAsciiTable(findNextLevelSubCategories(), 0);
+    public ArrayList<BudgetRevenue> getAllSubCategories() {
+        return BudgetRevenueLogicService.getAllSubCategories(this, budgetRevenues);
     }
 
     //Getters & Setters
-
-    protected void setRegularAmount(long amount, boolean update) {
-        this.regularAmount = amount;
-        if (update) {
-            this.amount = regularAmount + publicInvestmentAmount;
-        }
-    }
 
     public long getRegularAmount() {
         return regularAmount;
     }
 
-    protected void setPublicInvestmentAmount(long amount, boolean update) {
-        this.publicInvestmentAmount = amount;
-        if (update) {
-            this.amount = regularAmount + publicInvestmentAmount;
+    public long getPublicInvestmentAmount() {
+        return publicInvestmentAmount;
+    }
+
+    public void setPublicInvestmentAmount(long amount, boolean update) {
+        if (amount >= 0) {
+            this.publicInvestmentAmount = amount;
+            if (update) {
+                this.amount = regularAmount + publicInvestmentAmount;
+            }
         }
     }
 
-    public long getPublicInvestmentAmount() {
-        return publicInvestmentAmount;
+    public void setRegularAmount(long amount, boolean update) {
+        if (amount >= 0) {
+            this.regularAmount = amount;
+            if (update) {
+                this.amount = regularAmount + publicInvestmentAmount;
+            }
+        }
     }
 
     @Override

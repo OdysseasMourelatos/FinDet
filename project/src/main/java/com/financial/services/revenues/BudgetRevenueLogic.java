@@ -8,15 +8,11 @@ public interface BudgetRevenueLogic {
 
     //Supercategories methods
 
-    BudgetRevenue findSuperCategory();
-    ArrayList<BudgetRevenue> getSuperCategories();
-    void printSuperCategoriesTopDown();
-    void printSuperCategoriesBottomsUp();
+    BudgetRevenue getAboveLevelSuperCategory();
+    ArrayList<BudgetRevenue> getAllSuperCategories();
 
     //Subcategories methods
 
-    ArrayList<BudgetRevenue> findAllSubCategories();
-    void printAllSubCategories();
-    ArrayList<BudgetRevenue> findNextLevelSubCategories();
-    void printNextLevelSubCategories();
+    ArrayList<BudgetRevenue> getNextLevelSubCategories();
+    ArrayList<BudgetRevenue> getAllSubCategories();
 }

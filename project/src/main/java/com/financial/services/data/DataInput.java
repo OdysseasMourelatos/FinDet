@@ -105,13 +105,11 @@ public class DataInput {
         String category = "ΕΣΟΔΑ";
         long amount = Long.parseLong(values[2]);
         BudgetRevenue regularBudgetRevenue = new RegularBudgetRevenue(code, description, category, amount);
-        //New filtered object of BudgetRevenue class
-        BudgetRevenue budgetRevenue = new BudgetRevenue(code, description, category, amount, 0, amount);
     }
 
     //Activated when all PublicInvestmentBudgetRevenues are filtered
     public static void createBudgetRevenueFilteredFromPublicInvestmentBudgetRevenue() {
-        for (PublicInvestmentBudgetRevenue revenue : PublicInvestmentBudgetRevenue.getPublicInvestmentBudgetRevenues()) {
+        for (PublicInvestmentBudgetRevenue revenue : PublicInvestmentBudgetRevenue.getAllPublicInvestmentBudgetRevenues()) {
             BudgetRevenue budgetRevenue = new BudgetRevenue(revenue.getCode(), revenue.getDescription(), revenue.getCategory(), 0, revenue.getAmount(), revenue.getAmount());
         }
     }
@@ -124,10 +122,8 @@ public class DataInput {
         long amount = Long.parseLong(values[3]);
         if (type.equals("ΕΘΝΙΚΟ") || type.equals("ΕΘΝΙΚΟ ΣΚΕΛΟΣ")) {
             PublicInvestmentBudgetRevenue publicInvestmentBudgetRevenue = new PublicInvestmentBudgetNationalRevenue(code, description, category, type, amount);
-            PublicInvestmentBudgetRevenue publicInvestmentBudgetRevenueFiltered = new PublicInvestmentBudgetRevenue(code, description, category, type, amount, 0, amount);
         } else if (type.equals("ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ") || type.equals("ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ ΣΚΕΛΟΣ") ) {
             PublicInvestmentBudgetRevenue publicInvestmentBudgetRevenue = new PublicInvestmentBudgetCoFundedRevenue(code, description, category, type, amount);
-            PublicInvestmentBudgetRevenue publicInvestmentBudgetRevenueFiltered = new PublicInvestmentBudgetRevenue(code, description, category, type, 0, amount, amount);
         }
     }
 

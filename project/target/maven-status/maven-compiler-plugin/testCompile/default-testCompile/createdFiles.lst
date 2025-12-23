@@ -1,10 +1,6 @@
 com/financial/BudgetRevenueTest.class
-com/financial/DataUpdateTest$DataUpdate.class
-com/financial/BudgetExpenseTest.class
-com/financial/BudgetEntryTest$TestBudgetEntry.class
-com/financial/EntityTest.class
-com/financial/DataOutputTest.class
+com/financial/PublicInvestmentBudgetRevenueTest.class
+com/financial/PublicInvestmentBudgetNationalRevenueTest.class
 com/financial/AppTest.class
-com/financial/DataInputTest.class
-com/financial/BudgetEntryTest.class
-com/financial/DataUpdateTest.class
+com/financial/RegularBudgetRevenueTest.class
+com/financial/PublicInvestmentBudgetCoFundedRevenueTest.class

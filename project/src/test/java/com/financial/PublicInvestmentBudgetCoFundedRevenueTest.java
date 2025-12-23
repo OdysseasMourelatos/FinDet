@@ -2,6 +2,7 @@ package com.financial;
 
 import com.financial.entries.BudgetRevenue;
 import com.financial.entries.PublicInvestmentBudgetCoFundedRevenue;
+import com.financial.entries.PublicInvestmentBudgetRevenue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
@@ -16,14 +17,24 @@ public class PublicInvestmentBudgetCoFundedRevenueTest {
     private PublicInvestmentBudgetCoFundedRevenue revenue13501;
     private PublicInvestmentBudgetCoFundedRevenue revenue1350101;
 
+    private PublicInvestmentBudgetRevenue pib13;
+    private PublicInvestmentBudgetRevenue pib135;
+    private PublicInvestmentBudgetRevenue pib13501;
+    private PublicInvestmentBudgetRevenue pib1350101;
+
     @BeforeEach
     void setUp() {
         PublicInvestmentBudgetCoFundedRevenue.getAllPublicInvestmentBudgetCoFundedRevenues().clear();
-        BudgetRevenue.getAllBudgetRevenues().clear();
+        PublicInvestmentBudgetRevenue.getAllPublicInvestmentBudgetRevenues().clear();
         revenue13 = new PublicInvestmentBudgetCoFundedRevenue("13", "Κατηγορία 13", "ΕΣΟΔΑ","ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ",  4190000000L);
         revenue135 = new PublicInvestmentBudgetCoFundedRevenue("135", "Υποκατηγορία 135", "ΕΣΟΔΑ","ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ",  4190000000L);
         revenue13501 = new PublicInvestmentBudgetCoFundedRevenue("13501", "Υποκατηγορία 13501", "ΕΣΟΔΑ","ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ",  4190000000L);
         revenue1350101 = new PublicInvestmentBudgetCoFundedRevenue("1350101", "Υποκατηγορία 1350101", "ΕΣΟΔΑ","ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ",  1308000000L);
+
+        pib13 = PublicInvestmentBudgetRevenue.findPublicInvestmentBudgetRevenueWithCode("13");
+        pib135 = PublicInvestmentBudgetRevenue.findPublicInvestmentBudgetRevenueWithCode("135");
+        pib13501 = PublicInvestmentBudgetRevenue.findPublicInvestmentBudgetRevenueWithCode("13501");
+        pib1350101 = PublicInvestmentBudgetRevenue.findPublicInvestmentBudgetRevenueWithCode("1350101");
     }
 
     @Test
@@ -42,6 +53,32 @@ public class PublicInvestmentBudgetCoFundedRevenueTest {
         assertTrue(mainRevenues.contains(revenue13));
     }
 
+    @Test
+    void findPublicInvestmentBudgetCoFundedRevenueWithCodeTest() {
+        // Έλεγχος για υπάρχοντα κωδικό
+        PublicInvestmentBudgetCoFundedRevenue found = PublicInvestmentBudgetCoFundedRevenue.findPublicInvestmentBudgetCoFundedRevenueWithCode("13");
+        assertNotNull(found);
+        assertEquals(revenue13.getAmount(), found.getAmount());
+
+        // Έλεγχος για κωδικό που δεν υπάρχει
+        assertNull(PublicInvestmentBudgetCoFundedRevenue.findPublicInvestmentBudgetCoFundedRevenueWithCode("999"));
+    }
+
+    @Test
+    void getPublicInvestmentBudgetCoFundedRevenuesStartingWithCodeTest() {
+        // Αναζήτηση όλων των εσόδων που ξεκινούν από "135" (135, 13501, 1350101)
+        ArrayList<BudgetRevenue> results = PublicInvestmentBudgetCoFundedRevenue.getPublicInvestmentBudgetCoFundedRevenuesStartingWithCode("135");
+
+        // Αναμένουμε 3 αντικείμενα βάσει του setUp
+        assertEquals(3, results.size());
+        assertTrue(results.contains(revenue135));
+        assertTrue(results.contains(revenue13501));
+        assertTrue(results.contains(revenue1350101));
+
+        // Αναζήτηση που δεν επιστρέφει τίποτα
+        ArrayList<BudgetRevenue> emptyResults = PublicInvestmentBudgetCoFundedRevenue.getPublicInvestmentBudgetCoFundedRevenuesStartingWithCode("8");
+        assertEquals(0, emptyResults.size());
+    }
 
     @Test
     void calculateSumTest() {
@@ -51,17 +88,17 @@ public class PublicInvestmentBudgetCoFundedRevenueTest {
     }
 
     @Test
-    void findSuperCategoryTest() {
-        BudgetRevenue parent = revenue13501.findSuperCategory();
+    void getAboveLevelSuperCategoryTest() {
+        BudgetRevenue parent = revenue13501.getAboveLevelSuperCategory();
         assertNotNull(parent);
         assertEquals("135", parent.getCode());
         assertEquals(4190000000L, parent.getAmount());
     }
 
     @Test
-    void getSuperCategoriesTest() {
+    void getAllSuperCategoriesTest() {
         // Έλεγχος γονέων για το βαθύτερο κόμβο (1350101)
-        ArrayList<BudgetRevenue> superCategories = revenue1350101.getSuperCategories();
+        ArrayList<BudgetRevenue> superCategories = revenue1350101.getAllSuperCategories();
 
         // Πρέπει να περιέχει 13, 135, 13501
         assertEquals(3, superCategories.size());
@@ -71,9 +108,9 @@ public class PublicInvestmentBudgetCoFundedRevenueTest {
     }
 
     @Test
-    void findNextLevelSubCategoriesTest() {
+    void getNextLevelSubCategoriesTest() {
 
-        ArrayList<BudgetRevenue> subCategories = revenue13.findNextLevelSubCategories();
+        ArrayList<BudgetRevenue> subCategories = revenue13.getNextLevelSubCategories();
 
         //One children in the next level - 135
         assertEquals(1, subCategories.size());
@@ -81,8 +118,8 @@ public class PublicInvestmentBudgetCoFundedRevenueTest {
     }
 
     @Test
-    void findAllSubCategoriesTest() {
-        ArrayList<BudgetRevenue> allSubCategories = revenue13.findAllSubCategories();
+    void getAllSubCategoriesTest() {
+        ArrayList<BudgetRevenue> allSubCategories = revenue13.getAllSubCategories();
         //3 children total - 135, 13501 & 1350101
         assertEquals(3, allSubCategories.size());
         assertTrue(allSubCategories.contains(revenue135));
@@ -185,5 +222,78 @@ public class PublicInvestmentBudgetCoFundedRevenueTest {
         assertEquals(initial13 + change, revenue13.getAmount());
         assertEquals(initial135 + change, revenue135.getAmount());
         assertEquals(initial13501 + change, revenue13501.getAmount());
+    }
+
+    @Test
+    void updateAmountOfSuperClassFilteredObjectTest1() {
+        long change = 20000000L; // +20 Million αλλαγή
+
+        // Αρχικά ποσά των filtered αντικειμένων στην υπερκλάση PIB
+        long initialPIB13CoFunded = pib13.getCoFundedAmount();
+        long initialPIB135CoFunded = pib135.getCoFundedAmount();
+        long initialPIB13501CoFunded = pib13501.getCoFundedAmount();
+        long initialPIB1350101CoFunded = pib1350101.getCoFundedAmount();
+
+        // Implementation (Equal Distribution στο 135)
+        revenue135.implementChangesOfEqualDistribution(change);
+
+        // --- ΕΛΕΓΧΟΣ ΣΤΗΝ PublicInvestmentBudgetRevenue (SuperClass) ---
+
+        // 1. Έλεγχος στον γονέα (13) - Upward Propagation
+        assertEquals(initialPIB13CoFunded + change, pib13.getCoFundedAmount());
+
+        // 2. Έλεγχος στο ίδιο το επίπεδο (135) - Self
+        assertEquals(initialPIB135CoFunded + change, pib135.getCoFundedAmount());
+
+        // 3. Έλεγχος στα παιδιά (13501 & 1350101) - Downward Propagation
+        assertEquals(initialPIB13501CoFunded + change, pib13501.getCoFundedAmount());
+        assertEquals(initialPIB1350101CoFunded + change, pib1350101.getCoFundedAmount());
+
+        // 4. Έλεγχος αν το συνολικό amount της PIB υπερκλάσης συγχρονίστηκε (Amount = CoFunded + National)
+        assertEquals(pib13.getCoFundedAmount() + pib13.getNationalAmount(), pib13.getAmount());
+    }
+
+    @Test
+    void updateAmountOfSuperClassFilteredObjectTest2() {
+        double percentage = 0.1; // +10% αλλαγή
+
+        // Αρχικά ποσά
+        long initialPIB13CoFunded = pib13.getCoFundedAmount();
+        long expectedChange = (long) (initialPIB13CoFunded * percentage);
+
+        // Implementation (Percentage Adjustment στο 13)
+        revenue13.implementChangesOfPercentageAdjustment(percentage);
+
+        // Έλεγχος αν η αλλαγή πέρασε στην υπερκλάση PIB για όλο το δέντρο
+        assertEquals(initialPIB13CoFunded + expectedChange, pib13.getCoFundedAmount());
+
+        long expectedChildPIB1350101 = (long) (pib1350101.getAmount()); // Το αντικείμενο υποκλάσης έχει ήδη ενημερωθεί
+        assertEquals(expectedChildPIB1350101, pib1350101.getCoFundedAmount());
+    }
+
+    @Test
+    void updateAmountOfSuperClassFilteredObjectNullBranchTest() {
+        // Δημιουργούμε ένα προσωρινό αντικείμενο
+        PublicInvestmentBudgetCoFundedRevenue tempRevenue = new PublicInvestmentBudgetCoFundedRevenue("97", "Temp", "ΕΣΟΔΑ", "ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ", 200L);
+
+        // Αφαιρούμε το αντίστοιχο αντικείμενο από την υπερκλάση PIB για να αναγκάσουμε το lookup να αποτύχει
+        PublicInvestmentBudgetRevenue pib97 = PublicInvestmentBudgetRevenue.findPublicInvestmentBudgetRevenueWithCode("97");
+        PublicInvestmentBudgetRevenue.getAllPublicInvestmentBudgetRevenues().remove(pib97);
+
+        // Καλούμε την ενημέρωση - καλύπτει το branch όπου το filteredObject είναι null
+        tempRevenue.implementChangesOfEqualDistribution(100L);
+
+        // Το τοπικό ποσό πρέπει να έχει αλλάξει κανονικά
+        assertEquals(300L, tempRevenue.getAmount());
+    }
+
+    @Test
+    void testToStringFormatCoFunded() {
+        String output = revenue13.toString();
+        // Έλεγχος αν η toString περιέχει τα βασικά στοιχεία της CoFunded
+        assertTrue(output.contains("Code: 13"));
+        assertTrue(output.contains("ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ"));
+        // Έλεγχος για το σωστό formatting του ποσού (4.190.000.000)
+        assertTrue(output.contains("4.190.000.000") || output.contains("4,190,000,000"));
     }
 }

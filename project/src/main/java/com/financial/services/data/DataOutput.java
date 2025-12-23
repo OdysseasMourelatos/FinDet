@@ -81,7 +81,7 @@ public class DataOutput {
             at.addRule();
         }
         if (sum != 0) {
-            at.addRow("", "", String.format("%,d", BudgetRevenueLogicService.calculateSum(RegularBudgetRevenue.getAllRegularBudgetRevenues())), String.format("%,d", BudgetRevenueLogicService.calculateSum(PublicInvestmentBudgetRevenue.getPublicInvestmentBudgetRevenues())) , String.format("%,d", sum));
+            at.addRow("", "", String.format("%,d", BudgetRevenueLogicService.calculateSum(RegularBudgetRevenue.getAllRegularBudgetRevenues())), String.format("%,d", BudgetRevenueLogicService.calculateSum(PublicInvestmentBudgetRevenue.getAllPublicInvestmentBudgetRevenues())), String.format("%,d", sum));
             at.addRule();
         }
 
@@ -130,7 +130,7 @@ public class DataOutput {
         System.out.println(at.render());
     }
 
-    public static void printEntityWithAsciiTable(Entity entity, int budgetType) {
+    /*public static void printEntityWithAsciiTable(Entity entity, int budgetType) {
         AsciiTable at = new AsciiTable();
         at.getRenderer().setCWC(new CWC_FixedWidth().add(125));
         at.addRule();
@@ -145,7 +145,7 @@ public class DataOutput {
         } else if (budgetType == 2) {
             printPublicInvestmentBudgetExpenseWithAsciiTable(entity.getPublicInvestmentExpenses());
         }
-    }
+    }*/
 
     public static void printExpenseWithAsciiTable(ArrayList<? extends BudgetExpense> expenses) {
         AsciiTable at = new AsciiTable();

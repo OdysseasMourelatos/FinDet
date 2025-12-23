@@ -29,13 +29,13 @@ public class BarChartGenerator {
         return barMap;
     }
 
-    public static JFreeChart createBarChart(Map<String, Long> barMap, String title, String Xaxis, String Yaxis) throws IOException {
+    public static JFreeChart createBarChart(Map<String, Long> chartMap, String title, String xAxis, String yAxis) throws IOException {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         String series = title;
-        for (Map.Entry<String, Long> entry: barMap.entrySet()) {
+        for (Map.Entry<String, Long> entry: chartMap.entrySet()) {
             dataset.setValue(entry.getValue(), series, entry.getKey());
         }
-        JFreeChart barChart3d = ChartFactory.createBarChart(title, Xaxis, Yaxis, dataset, PlotOrientation.VERTICAL, true, true, false);
+        JFreeChart barChart3d = ChartFactory.createBarChart(title, xAxis, yAxis, dataset, PlotOrientation.VERTICAL, true, true, false);
         File barChart3dFile = new File("BarChart3d.jpeg");
         ChartUtils.saveChartAsJPEG(barChart3dFile, barChart3d, 650, 500);
         ChartFrame frame = new ChartFrame(title, barChart3d);
@@ -45,9 +45,9 @@ public class BarChartGenerator {
         return barChart3d;
     }
 
-    public static void generateChart(ArrayList<? extends BudgetEntry> entries, String title, String Xaxis, String Yaxis) {
+    public static void generateChart(ArrayList<? extends BudgetEntry> entries, String title, String xAxis, String yAxis) {
         try {
-            createBarChart(BarChartGenerator.fillMap(entries), title, Xaxis, Yaxis);
+            createBarChart(BarChartGenerator.fillMap(entries), title, xAxis, yAxis);
             System.out.println();
             System.out.println(GREEN + "Το διάγραμμα δημιουργήθηκε επιτυχώς" + RESET);
         } catch (IOException e) {

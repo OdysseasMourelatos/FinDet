@@ -35,10 +35,10 @@ public abstract class BudgetEntry {
     }
 
     public void setAmount(long amount) {
-        if (amount > 0) {
+        if (amount >= 0) {
             this.amount = amount;
         } else {
-            System.out.println("Το ποσό δεν μπορεί να είναι αρνητικό");
+            throw new IllegalArgumentException();
         }
     }
 
