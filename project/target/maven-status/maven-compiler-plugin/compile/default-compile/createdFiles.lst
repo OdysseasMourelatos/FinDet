@@ -1,13 +1,1 @@
-com/financial/PublicInvestmentBudgetRevenue.class
-com/financial/DataInput.class
 com/financial/Main.class
-com/financial/BudgetExpense.class
-com/financial/TaxRevenue.class
-com/financial/FixedAssetsRevenue.class
-com/financial/RegularBudgetExpense.class
-com/financial/DataUpdate.class
-com/financial/PublicInvestmentBudgetExpense.class
-com/financial/BudgetRevenue.class
-com/financial/Entity.class
-com/financial/BudgetEntry.class
-com/financial/SocialContributionsRevenue.class
