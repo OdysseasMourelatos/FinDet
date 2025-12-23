@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <checkstyle version="9.3">
-<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/multi_year_analysis/entries/MultiYearBudgetExpense.java">
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/entries/BudgetEntry.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/entries/BudgetRevenue.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/entries/RegularBudgetRevenue.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/entries/PublicInvestmentBudgetNationalRevenue.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/entries/PublicInvestmentBudgetCoFundedRevenue.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/entries/PublicInvestmentBudgetRevenue.java">
 </file>
 </checkstyle>

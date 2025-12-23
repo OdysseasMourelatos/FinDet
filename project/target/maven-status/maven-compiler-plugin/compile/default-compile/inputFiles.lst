@@ -14,6 +14,7 @@
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/pdf/BudgetRevenueConvertToPdf.java
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/menu/Colors.java
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/services/Command.java
+/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/multi_year_analysis/entries/MultiYearEntity.java
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/services/revenues/BudgetRevenueChangesService.java
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/strategies/filters/MatchAllFilter.java
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/services/data/DataOutput.java
@@ -21,6 +22,7 @@
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/ui/MainWindow.java
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/charts/PieChartGenerator.java
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/entries/BudgetRevenue.java
+/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/multi_year_analysis/entries/MultiYearBudgetExpense.java
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/MainApp.java
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/entries/PublicInvestmentBudgetCoFundedRevenue.java
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/multi_year_analysis/entries/MultiYearBudgetRevenue.java

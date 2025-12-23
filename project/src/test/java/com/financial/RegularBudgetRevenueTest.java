@@ -143,7 +143,7 @@ public class RegularBudgetRevenueTest {
     }
 
     @Test
-    void implementChangesOfPercentageAdjustmentTest1() {
+    void implementChangesOfPercentageAdjustmentIncreaseTest1() {
         double percentage = 0.1; // +10% applied to 13 (Top Level)
 
         // Initial amounts
@@ -175,7 +175,7 @@ public class RegularBudgetRevenueTest {
     }
 
     @Test
-    void implementChangesOfPercentageAdjustmentTest2() {
+    void implementChangesOfPercentageAdjustmentIncreaseTest2() {
         double percentage = 0.1; // +10% applied to 131 (Middle Level)
 
         // Initial amounts
@@ -206,7 +206,7 @@ public class RegularBudgetRevenueTest {
     }
 
     @Test
-    void implementChangesOfEqualDistributionTest1() {
+    void implementChangesOfEqualDistributionIncreaseTest1() {
         long change = 10000000L; // +10 Million applied to 12
 
         // Initial amounts
@@ -241,7 +241,7 @@ public class RegularBudgetRevenueTest {
     }
 
     @Test
-    void implementChangesOfEqualDistributionTest2() {
+    void implementChangesOfEqualDistributionIncreaseTest2() {
         long change = 4000000L; // +4 Million applied to 12201
 
         // Initial amounts (Supercategories for checking upward propagation)
@@ -275,7 +275,62 @@ public class RegularBudgetRevenueTest {
     }
 
     @Test
-    void updateAmountOfSuperClassFilteredObjectsTest1() {
+    void implementChangesOfEqualDistributionReductionTest13() {
+        // Σενάριο: Μείωση 60.000.000€ απευθείας στη Ρίζα (13)
+        long reduction = -60000000L;
+
+        long initial13 = revenue13.getAmount();      // 3.906.000.000L
+        long initial131 = revenue131.getAmount();    // 322.000.000L
+        long initial132 = revenue132.getAmount();    // 15.000.000L
+        long initial13108 = revenue13108.getAmount(); // 322.000.000L
+
+        // Εκτέλεση
+        revenue13.implementChangesOfEqualDistribution(reduction);
+
+        // 1. Έλεγχος Ρίζας
+        assertEquals(initial13 + reduction, revenue13.getAmount());
+
+        // 2. Έλεγχος Downward Propagation (Ισόποση διανομή στα 2 παιδιά: 131 & 132)
+        // -60M / 2 παιδιά = -30.000.000€ στο καθένα
+        long splitReduction = reduction / 2;
+        assertEquals(initial131 + splitReduction, revenue131.getAmount());
+        assertEquals(initial132 + splitReduction, revenue132.getAmount());
+
+        // 3. Έλεγχος Βαθύτερου Επιπέδου (Το 13108 παίρνει όλη τη μείωση του γονέα του 131)
+        assertEquals(initial13108 + splitReduction, revenue13108.getAmount());
+    }
+
+    @Test
+    void implementChangesOfPercentageAdjustmentReductionTest131() {
+        // Σενάριο: Ποσοστιαία μείωση 10% στο μεσαίο επίπεδο (131)
+        double percentage = -0.1;
+
+        long initial13 = revenue13.getAmount();
+        long initial131 = revenue131.getAmount();
+        long initial13108 = revenue13108.getAmount();
+        long initial132 = revenue132.getAmount();
+
+        long changeAmount = (long) (initial131 * percentage); // -32.200.000
+
+        // Εκτέλεση
+        revenue131.implementChangesOfPercentageAdjustment(percentage);
+
+        // 1. Έλεγχος Target (131)
+        assertEquals(initial131 + changeAmount, revenue131.getAmount());
+
+        // 2. Upward Propagation (Ο γονέας 13 μειώνεται κατά το ποσό της αλλαγής)
+        assertEquals(initial13 + changeAmount, revenue13.getAmount());
+
+        // 3. Downward Propagation (Το παιδί 13108 μειώνεται κατά 10%)
+        long expected13108 = (long) (initial13108 * (1 + percentage));
+        assertEquals(expected13108, revenue13108.getAmount());
+
+        // 4. Isolation Check (Το 132 δεν πρέπει να αλλάξει)
+        assertEquals(initial132, revenue132.getAmount());
+    }
+
+    @Test
+    void updateAmountOfSuperClassFilteredObjectsIncreaseTest1() {
         long change = 1000000L; // 1 million change in regular revenue 11
 
         // Initial amounts of filtered objects
@@ -302,7 +357,7 @@ public class RegularBudgetRevenueTest {
     }
 
     @Test
-    void updateAmountOfSuperClassFilteredObjects2() {
+    void updateAmountOfSuperClassFilteredObjectsIncreaseTest2() {
         double percentage = 0.1; // 10% change applied to regular revenue 11
 
         // Initial amounts of filtered objects
