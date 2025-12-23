@@ -122,7 +122,7 @@ public class PublicInvestmentBudgetCoFundedRevenue extends PublicInvestmentBudge
 
     //Updating the filtered objects in SuperClass
     @Override
-    public void updateAmountOfSuperClassFilteredObjects(long change) {
+    public void updateAmountOfSuperClassFilteredObject(long change) {
         PublicInvestmentBudgetRevenue publicInvestmentBudgetRevenue = PublicInvestmentBudgetRevenue.findPublicInvestmentBudgetRevenueWithCode(this.getCode());
         if (publicInvestmentBudgetRevenue != null ) {
             publicInvestmentBudgetRevenue.setCoFundedAmount(amount, true);
@@ -135,7 +135,7 @@ public class PublicInvestmentBudgetCoFundedRevenue extends PublicInvestmentBudge
     public void setAmount(long amount) {
         if (amount >= 0) {
             this.amount = amount;
-            updateAmountOfSuperClassFilteredObjects(amount);
+            updateAmountOfSuperClassFilteredObject(amount);
         } else {
             RevenuesHistory.returnToPreviousState();
             throw new IllegalArgumentException();

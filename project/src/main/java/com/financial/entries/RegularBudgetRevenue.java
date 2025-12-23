@@ -120,7 +120,7 @@ public class RegularBudgetRevenue extends BudgetRevenue implements BudgetRevenue
 
     //Updating the filtered objects in SuperClass
     @Override
-    public void updateAmountOfSuperClassFilteredObjects(long change) {
+    public void updateAmountOfSuperClassFilteredObject(long change) {
         BudgetRevenue budgetRevenue = BudgetRevenue.findBudgetRevenueWithCode(this.getCode());
         if (budgetRevenue != null) {
             budgetRevenue.setRegularAmount(amount, true);
@@ -131,10 +131,10 @@ public class RegularBudgetRevenue extends BudgetRevenue implements BudgetRevenue
     public void setAmount(long amount) {
         if (amount >= 0) {
             this.amount = amount;
-            updateAmountOfSuperClassFilteredObjects(amount);
+            updateAmountOfSuperClassFilteredObject(amount);
         } else {
             RevenuesHistory.returnToPreviousState();
-            throw new IllegalArgumentException("Αποτυχία Πραγματοποίησης Αλλαγών");
+            throw new IllegalArgumentException();
         }
     }
 

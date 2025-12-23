@@ -12,7 +12,7 @@ public interface BudgetRevenueChanges {
     void setAmountOfAllSubCategoriesWithPercentageAdjustment(double percentage);
 
     //Update all filtered objects in superclass
-    void updateAmountOfSuperClassFilteredObjects(long change);
+    void updateAmountOfSuperClassFilteredObject(long change);
 
     //Keep accounts that will change for history
     void keepAccountsAndBudgetTypeBeforeChange();

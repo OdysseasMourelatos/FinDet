@@ -60,4 +60,12 @@ public class RevenuesHistory {
             System.out.println("NO HISTORY FOUND");
         }
     }
+
+    public static Deque<Map<String, Long>>  getHistoryDeque() {
+        return historyDeque;
+    }
+
+    public static Deque<BudgetType> getTypeDeque() {
+        return typeDeque;
+    }
 }

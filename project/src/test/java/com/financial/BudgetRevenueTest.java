@@ -1,7 +1,9 @@
 package com.financial;
 
 import com.financial.entries.*;
+import com.financial.services.BudgetType;
 import com.financial.services.data.DataInput;
+import com.financial.services.revenues.RevenuesHistory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
@@ -18,6 +20,8 @@ public class BudgetRevenueTest {
         BudgetRevenue.getAllBudgetRevenues().clear();
         RegularBudgetRevenue.getAllRegularBudgetRevenues().clear();
         PublicInvestmentBudgetRevenue.getAllPublicInvestmentBudgetRevenues().clear();
+        RevenuesHistory.getHistoryDeque().clear();
+        RevenuesHistory.getTypeDeque().clear();
 
         // --- REGULAR BUDGET REVENUE (Τακτικός) ---
         // ΝΕΟ: Κωδικός 12 (Νέα Ρίζα)
@@ -36,6 +40,7 @@ public class BudgetRevenueTest {
         DataInput.createBudgetRevenueFilteredFromPublicInvestmentBudgetRevenue();
         BudgetRevenue.sortBudgetRevenuesByCode();
         BudgetRevenue.filterBudgetRevenues();
+
     }
 
     @Test
@@ -181,6 +186,25 @@ public class BudgetRevenueTest {
 
         assertEquals(newRegular, br12.getRegularAmount());
         assertEquals(newRegular + initialPIB, br12.getAmount());
+    }
+
+
+    @Test
+    void setRegularAmountNegativeTest() {
+        BudgetRevenue br12 = BudgetRevenue.findBudgetRevenueWithCode("12");
+
+        br12.setRegularAmount(-1L, false);
+        //Δεν άλλαξε κάτι
+        assertEquals(60000000L, br12.getRegularAmount());
+    }
+
+    @Test
+    void setPublicInvestmentAmountTryCoverageTest13() {
+        BudgetRevenue br13 = BudgetRevenue.findBudgetRevenueWithCode("13");
+
+        br13.setPublicInvestmentAmount(-5L, false);
+        //Δεν άλλαξε κάτι
+        assertEquals(4225000000L, br13.getPublicInvestmentAmount());
     }
 
     @Test

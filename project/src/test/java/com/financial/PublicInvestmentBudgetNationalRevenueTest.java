@@ -227,7 +227,7 @@ public class PublicInvestmentBudgetNationalRevenueTest {
     }
 
     @Test
-    void updateAmountOfSuperClassFilteredObjectsTest1() {
+    void updateAmountOfSuperClassFilteredObjectTest1() {
         long change = 5000000L; // +5 Million change
 
         // Αρχικά ποσά των filtered αντικειμένων (PIB)
@@ -252,7 +252,7 @@ public class PublicInvestmentBudgetNationalRevenueTest {
     }
 
     @Test
-    void updateAmountOfSuperClassFilteredObjectsTest2() {
+    void updateAmountOfSuperClassFilteredObjectTest2() {
         double percentage = 0.1; // +10% change
 
         // Αρχικά ποσά των filtered αντικειμένων (PIB)
@@ -272,7 +272,7 @@ public class PublicInvestmentBudgetNationalRevenueTest {
     }
 
     @Test
-    void updateAmountOfSuperClassFilteredObjectsNullBranchTest() {
+    void updateAmountOfSuperClassFilteredObjectNullBranchTest() {
         // Δημιουργούμε ένα προσωρινό αντικείμενο
         PublicInvestmentBudgetNationalRevenue tempRevenue = new PublicInvestmentBudgetNationalRevenue("99", "Temp", "ΕΣΟΔΑ", "ΕΘΝΙΚΟ", 100L);
 

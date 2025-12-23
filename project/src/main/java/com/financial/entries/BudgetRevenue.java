@@ -2,7 +2,6 @@ package com.financial.entries;
 
 import com.financial.services.revenues.BudgetRevenueLogicService;
 import com.financial.services.revenues.BudgetRevenueLogic;
-import com.financial.services.revenues.RevenuesHistory;
 
 import java.util.*;
 
@@ -137,9 +136,6 @@ public class BudgetRevenue extends BudgetEntry implements BudgetRevenueLogic {
             if (update) {
                 this.amount = regularAmount + publicInvestmentAmount;
             }
-        } else {
-            RevenuesHistory.returnToPreviousState();
-            throw new IllegalArgumentException();
         }
     }
 
@@ -149,9 +145,6 @@ public class BudgetRevenue extends BudgetEntry implements BudgetRevenueLogic {
             if (update) {
                 this.amount = regularAmount + publicInvestmentAmount;
             }
-        } else {
-            RevenuesHistory.returnToPreviousState();
-            throw new IllegalArgumentException();
         }
     }
 

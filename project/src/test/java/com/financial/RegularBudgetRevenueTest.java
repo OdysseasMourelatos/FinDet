@@ -409,7 +409,7 @@ public class RegularBudgetRevenueTest {
     }
 
     @Test
-    void updateAmountOfSuperClassFilteredObjectsIncreaseTest1() {
+    void updateAmountOfSuperClassFilteredObjectIncreaseTest1() {
         long change = 1000000L; // 1 million change in regular revenue 11
 
         // Initial amounts of filtered objects
@@ -436,7 +436,7 @@ public class RegularBudgetRevenueTest {
     }
 
     @Test
-    void updateAmountOfSuperClassFilteredObjectsIncreaseTest2() {
+    void updateAmountOfSuperClassFilteredObjectIncreaseTest2() {
         double percentage = 0.1; // 10% change applied to regular revenue 11
 
         // Initial amounts of filtered objects
@@ -469,7 +469,7 @@ public class RegularBudgetRevenueTest {
     }
 
     @Test
-    void updateAmountOfSuperClassFilteredObjectsReductionTest1() {
+    void updateAmountOfSuperClassFilteredObjectReductionTest1() {
         // Σενάριο: Ισόποση μείωση 100.000.000€ στους Φόρους (11)
         long reduction = -100000000L;
 
@@ -495,7 +495,7 @@ public class RegularBudgetRevenueTest {
     }
 
     @Test
-    void updateAmountOfSuperClassFilteredObjectsReductionTest2() {
+    void updateAmountOfSuperClassFilteredObjectReductionTest2() {
         // Σενάριο: Ποσοστιαία μείωση 20% στους Φόρους (11)
         double percentage = -0.2;
 
@@ -519,7 +519,7 @@ public class RegularBudgetRevenueTest {
     }
 
     @Test
-    void updateAmountOfSuperClassFilteredObjectsNullBranchTest() {
+    void updateAmountOfSuperClassFilteredObjectNullBranchTest() {
         // 1. Δημιουργούμε ένα νέο αντικείμενο
         RegularBudgetRevenue tempRevenue = new RegularBudgetRevenue("TEMP-99", "Προσωρινό", "ΕΣΟΔΑ", 1000L);
 
