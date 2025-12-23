@@ -379,6 +379,21 @@ public class RegularBudgetRevenueTest {
     }
 
     @Test
+    void implementChangesOfEqualDistributionRollbackTest() {
+        // Σενάριο: Μείωση 4.000.000€ στο 12201
+        // Προκαλεί αρνητικό ποσό στο 1220101 (1M - 2M = -1M) -> Rollback
+        long reduction = -4000000L;
+
+        // ΔΕΝ Αναμένουμε IllegalArgumentException γιατί πιάνεται από την μέθοδο της BudgetRevenueChangesService
+
+        // Επιβεβαίωση ότι οι τιμές παρέμειναν οι αρχικές (δεν άλλαξε τίποτα)
+        assertEquals(60000000L, revenue12.getAmount());
+        assertEquals(60000000L, revenue12201.getAmount());
+        assertEquals(1000000L, revenue1220101.getAmount());
+        assertEquals(59000000L, revenue1220102.getAmount());
+    }
+
+    @Test
     void updateAmountOfSuperClassFilteredObjectsIncreaseTest1() {
         long change = 1000000L; // 1 million change in regular revenue 11
 

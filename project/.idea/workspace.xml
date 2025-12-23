@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="88d8a661-a47d-4ac5-b89a-2164a467de01" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/services/revenues/BudgetRevenueChangesService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/services/revenues/BudgetRevenueChangesService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/RegularBudgetRevenueTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/RegularBudgetRevenueTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -74,6 +73,8 @@
     "JUnit.RegularBudgetRevenueTest.findSuperCategoryTest.executor": "Run",
     "JUnit.RegularBudgetRevenueTest.implementChangesOfEqualDistributionReductionTest1.executor": "Run",
     "JUnit.RegularBudgetRevenueTest.implementChangesOfEqualDistributionReductionTest13.executor": "Run",
+    "JUnit.RegularBudgetRevenueTest.implementChangesOfEqualDistributionReductionTest2.executor": "Run",
+    "JUnit.RegularBudgetRevenueTest.implementChangesOfEqualDistributionRollbackTest.executor": "Run",
     "JUnit.RegularBudgetRevenueTest.implementChangesOfPercentageAdjustmentReductionTest131.executor": "Run",
     "JUnit.financial in FinDet.executor": "Run",
     "JUnit.java in FinDet.executor": "Run",
@@ -87,22 +88,7 @@
     "settings.editor.selected.configurable": "preferences.general"
   }
 }]]></component>
-  <component name="RunManager" selected="JUnit.RegularBudgetRevenueTest.implementChangesOfEqualDistributionReductionTest2">
-    <configuration name="PublicInvestmentBudgetCoFundedRevenueTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="FinDet" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.financial.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.financial" />
-      <option name="MAIN_CLASS_NAME" value="com.financial.PublicInvestmentBudgetCoFundedRevenueTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="JUnit.RegularBudgetRevenueTest.implementChangesOfEqualDistributionRollbackTest">
     <configuration name="RegularBudgetRevenueTest.implementChangesOfEqualDistributionReductionTest1" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="FinDet" />
       <extension name="coverage">
@@ -151,6 +137,22 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="RegularBudgetRevenueTest.implementChangesOfEqualDistributionRollbackTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="FinDet" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.financial.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.financial" />
+      <option name="MAIN_CLASS_NAME" value="com.financial.RegularBudgetRevenueTest" />
+      <option name="METHOD_NAME" value="implementChangesOfEqualDistributionRollbackTest" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="RegularBudgetRevenueTest.implementChangesOfPercentageAdjustmentReductionTest131" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="FinDet" />
       <extension name="coverage">
@@ -180,11 +182,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.RegularBudgetRevenueTest.implementChangesOfEqualDistributionRollbackTest" />
         <item itemvalue="JUnit.RegularBudgetRevenueTest.implementChangesOfEqualDistributionReductionTest2" />
         <item itemvalue="JUnit.RegularBudgetRevenueTest.implementChangesOfEqualDistributionReductionTest1" />
         <item itemvalue="JUnit.RegularBudgetRevenueTest.implementChangesOfEqualDistributionReductionTest13" />
         <item itemvalue="JUnit.RegularBudgetRevenueTest.implementChangesOfPercentageAdjustmentReductionTest131" />
-        <item itemvalue="JUnit.PublicInvestmentBudgetCoFundedRevenueTest" />
       </list>
     </recent_temporary>
   </component>
