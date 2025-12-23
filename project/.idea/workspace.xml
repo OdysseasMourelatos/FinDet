@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="88d8a661-a47d-4ac5-b89a-2164a467de01" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/RegularBudgetRevenueTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/RegularBudgetRevenueTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/checkstyle-cachefile" beforeDir="false" afterPath="$PROJECT_DIR$/target/checkstyle-cachefile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.AppTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.AppTest.xml" afterDir="false" />
@@ -82,6 +81,7 @@
     "JUnit.PublicInvestmentBudgetRevenueTest.testUpdateAmountOfSuperClassFilteredObjects.executor": "Run",
     "JUnit.RegularBudgetRevenueTest.executor": "Run",
     "JUnit.RegularBudgetRevenueTest.findSuperCategoryTest.executor": "Run",
+    "JUnit.RegularBudgetRevenueTest.getAboveLevelSuperCategoryTest.executor": "Run",
     "JUnit.RegularBudgetRevenueTest.implementChangesOfEqualDistributionReductionTest1.executor": "Run",
     "JUnit.RegularBudgetRevenueTest.implementChangesOfEqualDistributionReductionTest13.executor": "Run",
     "JUnit.RegularBudgetRevenueTest.implementChangesOfEqualDistributionReductionTest2.executor": "Run",
@@ -104,22 +104,7 @@
     "settings.editor.selected.configurable": "preferences.general"
   }
 }]]></component>
-  <component name="RunManager">
-    <configuration name="BudgetRevenueTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="FinDet" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.financial.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.financial" />
-      <option name="MAIN_CLASS_NAME" value="com.financial.BudgetRevenueTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="JUnit.RegularBudgetRevenueTest.getAboveLevelSuperCategoryTest">
     <configuration name="BudgetRevenueTest.setRegularAmountNegativeTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="FinDet" />
       <extension name="coverage">
@@ -147,6 +132,22 @@
       <option name="PACKAGE_NAME" value="com.financial" />
       <option name="MAIN_CLASS_NAME" value="com.financial.PublicInvestmentBudgetNationalRevenueTest" />
       <option name="METHOD_NAME" value="updateAmountOfSuperClassFilteredObjectNullBranchTest" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RegularBudgetRevenueTest.getAboveLevelSuperCategoryTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="FinDet" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.financial.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.financial" />
+      <option name="MAIN_CLASS_NAME" value="com.financial.RegularBudgetRevenueTest" />
+      <option name="METHOD_NAME" value="getAboveLevelSuperCategoryTest" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -189,11 +190,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.RegularBudgetRevenueTest.getAboveLevelSuperCategoryTest" />
         <item itemvalue="JUnit.RegularBudgetRevenueTest.updateAmountOfSuperClassFilteredObjectReductionTest2" />
         <item itemvalue="JUnit.PublicInvestmentBudgetNationalRevenueTest.updateAmountOfSuperClassFilteredObjectNullBranchTest" />
         <item itemvalue="JUnit.financial in FinDet" />
         <item itemvalue="JUnit.BudgetRevenueTest.setRegularAmountNegativeTest" />
-        <item itemvalue="JUnit.BudgetRevenueTest" />
       </list>
     </recent_temporary>
   </component>

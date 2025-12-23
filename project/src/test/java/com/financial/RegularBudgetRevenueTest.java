@@ -108,10 +108,10 @@ public class RegularBudgetRevenueTest {
 
     @Test
     void getAboveLevelSuperCategoryTest() {
-        RegularBudgetRevenue parent = revenue11101.getAboveLevelSuperCategory();
+        RegularBudgetRevenue parent = revenue1220101001.getAboveLevelSuperCategory();
         assertNotNull(parent);
-        assertEquals("111", parent.getCode());
-        assertEquals(33667000000L, parent.getAmount());
+        assertEquals("1220101", parent.getCode());
+        assertEquals(1000000L, parent.getAmount());
     }
 
     @Test
