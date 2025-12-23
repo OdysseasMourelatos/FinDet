@@ -19,6 +19,7 @@ public class RegularBudgetRevenueTest {
     private RegularBudgetRevenue revenue12201;
     private RegularBudgetRevenue revenue1220101;
     private RegularBudgetRevenue revenue1220102;
+    private RegularBudgetRevenue revenue1220101001;
     private RegularBudgetRevenue revenue13;
     private RegularBudgetRevenue revenue131;
     private RegularBudgetRevenue revenue13108;
@@ -41,6 +42,7 @@ public class RegularBudgetRevenueTest {
         revenue12201 = new RegularBudgetRevenue("12201", "Εισφορές εργαζομένων", "ΕΣΟΔΑ", 60000000L);
         revenue1220101 = new RegularBudgetRevenue("1220101", "Εισφορές εργαζομένων για συνταξιοδότηση από το Δημόσιο", "ΕΣΟΔΑ", 1000000L);
         revenue1220102 = new RegularBudgetRevenue("1220102", "Εισφορές εργαζομένων για παροχές υγείας από το Δημόσιο", "ΕΣΟΔΑ", 59000000L);
+        revenue1220101001 = new RegularBudgetRevenue("1220101001", "Εισφορές εργαζομένων για συνταξιοδότηση από το Δημόσιο", "ΕΣΟΔΑ", 1000000L);
         revenue13 = new RegularBudgetRevenue("13", "Μεταβιβάσεις", "ΕΣΟΔΑ", 3906000000L);
         revenue131 = new RegularBudgetRevenue("131", "Τρέχουσες εγχώριες μεταβιβάσεις", "ΕΣΟΔΑ", 322000000L);
         revenue13108 = new RegularBudgetRevenue("13108", "Μεταβιβάσεις από λοιπά νομικά πρόσωπα", "ΕΣΟΔΑ", 322000000L);
@@ -54,7 +56,7 @@ public class RegularBudgetRevenueTest {
     @Test
     void getAllRegularBudgetRevenuesTest() {
         ArrayList<RegularBudgetRevenue> allRevenues = RegularBudgetRevenue.getAllRegularBudgetRevenues();
-        assertEquals(12, allRevenues.size());
+        assertEquals(13, allRevenues.size());
         assertTrue(allRevenues.get(0) instanceof RegularBudgetRevenue);
     }
 
@@ -134,12 +136,14 @@ public class RegularBudgetRevenueTest {
 
     @Test
     void getAllSubCategoriesTest() {
-        ArrayList<BudgetRevenue> allSubCategories = revenue13.getAllSubCategories();
-        //3 children total - 131, 132 & 13108
-        assertEquals(3, allSubCategories.size());
-        assertTrue(allSubCategories.contains(revenue131));
-        assertTrue(allSubCategories.contains(revenue13108));
-        assertTrue(allSubCategories.contains(revenue132));
+        ArrayList<BudgetRevenue> allSubCategories = revenue12.getAllSubCategories();
+        //5 children total - 122, 12201, 1220101, 12020102 & 1220101001
+        assertEquals(5, allSubCategories.size());
+        assertTrue(allSubCategories.contains(revenue122));
+        assertTrue(allSubCategories.contains(revenue12201));
+        assertTrue(allSubCategories.contains(revenue1220101));
+        assertTrue(allSubCategories.contains(revenue1220102));
+        assertTrue(allSubCategories.contains(revenue1220101001));
     }
 
     @Test
@@ -215,6 +219,7 @@ public class RegularBudgetRevenueTest {
         long initial12201 = revenue12201.getAmount();
         long initial1220101 = revenue1220101.getAmount();
         long initial1220102 = revenue1220102.getAmount();
+        long initial1220101001 = revenue1220101001.getAmount();
 
         // Implementation
         revenue12.implementChangesOfEqualDistribution(change);
@@ -236,6 +241,9 @@ public class RegularBudgetRevenueTest {
         assertEquals(initial1220101 + changeLevel3, revenue1220101.getAmount());
         assertEquals(initial1220102 + changeLevel3, revenue1220102.getAmount());
 
+        // 1220101 -> 1220101001 (1 child: 5M / 1 = 5M)
+        assertEquals(initial1220101001 + changeLevel3, revenue1220101001.getAmount());
+
         // 3 - Checking if ab object with no correlation has indeed not changed
         assertEquals(62055000000L, revenue11.getAmount());
     }
@@ -252,6 +260,7 @@ public class RegularBudgetRevenueTest {
         // Initial amounts (Subcategories for checking downward propagation)
         long initial1220101 = revenue1220101.getAmount();
         long initial1220102 = revenue1220102.getAmount();
+        long initial1220101001 = revenue1220101001.getAmount();
 
         // Implementation
         revenue12201.implementChangesOfEqualDistribution(change);
@@ -269,6 +278,9 @@ public class RegularBudgetRevenueTest {
         // 1220101 and 1220102 receive 2M each
         assertEquals(initial1220101 + changeToBranch, revenue1220101.getAmount());
         assertEquals(initial1220102 + changeToBranch, revenue1220102.getAmount());
+
+        // 1220101 -> 1220101001 (1 child: 2M / 1 = 2M)
+        assertEquals(initial1220101001 + changeToBranch, revenue1220101001.getAmount());
 
         // 4 - Checking if an object with no correlation has indeed not changed
         assertEquals(62055000000L, revenue11.getAmount());
@@ -310,6 +322,7 @@ public class RegularBudgetRevenueTest {
         long initial12201 = revenue12201.getAmount();
         long initial1220101 = revenue1220101.getAmount();
         long initial1220102 = revenue1220102.getAmount();
+        long initial1220101001 = revenue1220101001.getAmount(); // Αρχικό ποσό 10-ψήφιου
 
         // Εκτέλεση
         revenue12201.implementChangesOfEqualDistribution(reduction);
@@ -324,6 +337,9 @@ public class RegularBudgetRevenueTest {
         long split = reduction / 2;
         assertEquals(initial1220101 + split, revenue1220101.getAmount());
         assertEquals(initial1220102 + split, revenue1220102.getAmount());
+
+        // Το 1220101 έχει 1 παιδί, άρα του μεταφέρει όλο το ποσό (-500Κ / 1 = -500Κ)
+        assertEquals(initial1220101001 + split, revenue1220101001.getAmount());
     }
 
     @Test
@@ -357,13 +373,14 @@ public class RegularBudgetRevenueTest {
 
     @Test
     void implementChangesOfPercentageAdjustmentReductionTest2() {
-        // Σενάριο: Ποσοστιαία μείωση 50% στη Ρίζα (12) - Επηρεάζει όλο το δέντρο
+        // Σενάριο: Ποσοστιαία μείωση 50% στη Ρίζα (12) - Επηρεάζει όλο το δέντρο μέχρι το επίπεδο 10
         double percentage = -0.5;
 
         long initial12 = revenue12.getAmount();           // 60M
         long initial122 = revenue122.getAmount();         // 60M
         long initial1220101 = revenue1220101.getAmount(); // 1M
         long initial1220102 = revenue1220102.getAmount(); // 59M
+        long initial1220101001 = revenue1220101001.getAmount(); // 1M (Level 10 object)
 
         revenue12.implementChangesOfPercentageAdjustment(percentage);
 
@@ -376,6 +393,10 @@ public class RegularBudgetRevenueTest {
         // 3. Έλεγχος Βαθύτερων επιπέδων
         assertEquals((long)(initial1220101 * 0.5), revenue1220101.getAmount());
         assertEquals((long)(initial1220102 * 0.5), revenue1220102.getAmount());
+
+        // 4. Έλεγχος Επιπέδου 10 (Εδώ καλύπτεται το "if length == 10" και το "catch" της Εικόνας 3)
+        // Η μείωση 50% πρέπει να φτάσει μέχρι το τελευταίο αντικείμενο
+        assertEquals((long)(initial1220101001 * 0.5), revenue1220101001.getAmount());
     }
 
     @Test
@@ -385,14 +406,23 @@ public class RegularBudgetRevenueTest {
         // Το 1220101 (1M) θα έπρεπε να πάρει -2M -> Αρνητικό -> Rollback.
         long reduction = -4000000L;
 
-        // Εκτέλεση αλλαγής στο 122
-        revenue122.implementChangesOfEqualDistribution(reduction);
-
-        //Filtered Αντικείμενα Υπερκλάσης
+        // Καταγραφή αρχικών τιμών από την Υπερκλάση για ΟΛΑ τα αντικείμενα
         BudgetRevenue budget12 = BudgetRevenue.findBudgetRevenueWithCode("12");
         BudgetRevenue budget122 = BudgetRevenue.findBudgetRevenueWithCode("122");
+        BudgetRevenue budget12201 = BudgetRevenue.findBudgetRevenueWithCode("12201");
+        BudgetRevenue budget1220101 = BudgetRevenue.findBudgetRevenueWithCode("1220101");
+        BudgetRevenue budget1220102 = BudgetRevenue.findBudgetRevenueWithCode("1220102");
+        BudgetRevenue budget1220101001 = BudgetRevenue.findBudgetRevenueWithCode("1220101001");
+
         long initialBudget12Amount = budget12.getAmount();
         long initialBudget122Amount = budget122.getAmount();
+        long initialBudget12201Amount = budget12201.getAmount();
+        long initialBudget1220101Amount = budget1220101.getAmount();
+        long initialBudget1220102Amount = budget1220102.getAmount();
+        long initialBudget1220101001Amount = budget1220101001.getAmount();
+
+        // Εκτέλεση αλλαγής στο 122
+        revenue122.implementChangesOfEqualDistribution(reduction);
 
         // --- ΕΛΕΓΧΟΣ ΥΠΟΚΛΑΣΗΣ (RegularBudgetRevenue) ---
         // Αν το rollback δουλεύει, όλα πρέπει να είναι όπως πριν
@@ -401,10 +431,18 @@ public class RegularBudgetRevenueTest {
         assertEquals(60000000L, revenue12201.getAmount());
         assertEquals(1000000L, revenue1220101.getAmount());
         assertEquals(59000000L, revenue1220102.getAmount());
+        assertEquals(1000000L, revenue1220101001.getAmount());
 
         // ΕΛΕΓΧΟΣ ΥΠΕΡΚΛΑΣΗΣ
+        // Επιβεβαίωση ότι ΟΛΑ τα αντικείμενα της υπερκλάσης επέστρεψαν στις αρχικές τιμές
         assertEquals(initialBudget12Amount, budget12.getAmount());
         assertEquals(initialBudget122Amount, budget122.getAmount());
+        assertEquals(initialBudget12201Amount, budget12201.getAmount());
+        assertEquals(initialBudget1220101Amount, budget1220101.getAmount());
+        assertEquals(initialBudget1220102Amount, budget1220102.getAmount());
+        assertEquals(initialBudget1220101001Amount, budget1220101001.getAmount());
+
+        // Έλεγχος συγχρονισμού RegularAmount
         assertEquals(60000000L, budget12.getRegularAmount());
     }
 
