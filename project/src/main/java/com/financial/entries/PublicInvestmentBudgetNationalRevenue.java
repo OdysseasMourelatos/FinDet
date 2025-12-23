@@ -134,8 +134,13 @@ public class PublicInvestmentBudgetNationalRevenue extends PublicInvestmentBudge
 
     @Override
     public void setAmount(long amount) {
-        this.amount = amount;
-        updateAmountOfSuperClassFilteredObjects(amount);
+        if (amount >= 0) {
+            this.amount = amount;
+            updateAmountOfSuperClassFilteredObjects(amount);
+        } else {
+            RevenuesHistory.returnToPreviousState();
+            throw new IllegalArgumentException();
+        }
     }
 
     @Override

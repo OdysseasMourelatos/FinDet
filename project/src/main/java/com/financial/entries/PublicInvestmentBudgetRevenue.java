@@ -3,6 +3,7 @@ package com.financial.entries;
 import com.financial.services.revenues.BudgetRevenueLogicService;
 import com.financial.services.data.DataInput;
 import com.financial.services.revenues.BudgetRevenueLogic;
+import com.financial.services.revenues.RevenuesHistory;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -143,18 +144,28 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements Budg
     }
 
     public void setNationalAmount(long newNationalAmount, boolean update) {
-        this.nationalAmount = newNationalAmount;
-        if (update) {
-            this.amount = nationalAmount + coFundedAmount;
-            updateAmountOfSuperClassFilteredObjects(amount);
+        if (newNationalAmount >= 0) {
+            this.nationalAmount = newNationalAmount;
+            if (update) {
+                this.amount = nationalAmount + coFundedAmount;
+                updateAmountOfSuperClassFilteredObjects(amount);
+            }
+        } else {
+            RevenuesHistory.returnToPreviousState();
+            throw new IllegalArgumentException();
         }
     }
 
     public void setCoFundedAmount(long newCoFundedAmount, boolean update) {
-        this.coFundedAmount = newCoFundedAmount;
-        if (update) {
-            this.amount = nationalAmount + coFundedAmount;
-            updateAmountOfSuperClassFilteredObjects(amount);
+        if (newCoFundedAmount >= 0) {
+            this.coFundedAmount = newCoFundedAmount;
+            if (update) {
+                this.amount = nationalAmount + coFundedAmount;
+                updateAmountOfSuperClassFilteredObjects(amount);
+            }
+        } else {
+            RevenuesHistory.returnToPreviousState();
+            throw new IllegalArgumentException();
         }
     }
 

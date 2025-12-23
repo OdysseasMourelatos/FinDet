@@ -76,11 +76,7 @@ public class MultiYearBudgetExpense extends MultiYearBudgetEntry {
 
     public static Map<Integer, Long> getSumOfAllYears() {
         Map<Integer, Long> sumOfAllYears = new HashMap<>();
-        List<Integer> uniqueYears = multiYearBudgetExpenses.stream()
-                .map(MultiYearBudgetExpense::getYear)
-                .distinct()
-                .sorted()
-                .collect(Collectors.toList());
+        List<Integer> uniqueYears = multiYearBudgetExpenses.stream().map(MultiYearBudgetExpense::getYear).distinct().sorted().collect(Collectors.toList());
         for (Integer year : uniqueYears) {
             sumOfAllYears.put(year, getSumOfSpecificYear(year));
         }

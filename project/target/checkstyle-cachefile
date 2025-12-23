@@ -1,4 +1,4 @@
-#Mon Dec 22 12:44:48 EET 2025
+#Mon Dec 22 13:09:29 EET 2025
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/MainApp.java=1766318325038
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/charts/BarChartGenerator.java=1766318325030
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/charts/PieChartGenerator.java=1766158674373
@@ -14,7 +14,9 @@
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/entries/RegularBudgetRevenue.java=1766396295302
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/menu/Colors.java=1766392545849
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/multi_year_analysis/entries/MultiYearBudgetEntry.java=1766315625280
+/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/multi_year_analysis/entries/MultiYearBudgetExpense.java=1766401765898
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/multi_year_analysis/entries/MultiYearBudgetRevenue.java=1766315625284
+/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/multi_year_analysis/entries/MultiYearEntity.java=1766401243864
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/pdf/BudgetExpenseConvertToPdf.java=1766158674373
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/pdf/BudgetRevenueConvertToPdf.java=1766392618516
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/pdf/PdfFormat.java=1766158674373

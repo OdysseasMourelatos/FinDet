@@ -129,8 +129,13 @@ public class RegularBudgetRevenue extends BudgetRevenue implements BudgetRevenue
 
     @Override
     public void setAmount(long amount) {
-        this.amount = amount;
-        updateAmountOfSuperClassFilteredObjects(amount);
+        if (amount >= 0) {
+            this.amount = amount;
+            updateAmountOfSuperClassFilteredObjects(amount);
+        } else {
+            RevenuesHistory.returnToPreviousState();
+            throw new IllegalArgumentException();
+        }
     }
 
     //ToString
