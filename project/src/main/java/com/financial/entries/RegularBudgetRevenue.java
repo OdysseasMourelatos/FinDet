@@ -96,9 +96,9 @@ public class RegularBudgetRevenue extends BudgetRevenue implements BudgetRevenue
     @Override
     public void implementChangesOfEqualDistribution(long change) {
         keepAccountsAndBudgetTypeBeforeChange();
+        setAmount(getAmount() + change);
         setAmountOfSuperCategories(change);
         setAmountOfAllSubCategoriesWithEqualDistribution(change);
-        setAmount(getAmount() + change);
     }
 
     @Override

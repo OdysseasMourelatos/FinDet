@@ -272,7 +272,7 @@ public class PublicInvestmentBudgetNationalRevenueTest {
     }
 
     @Test
-    void updateSuperClassBranchCoverageTest() {
+    void updateAmountOfSuperClassFilteredObjectsNullBranchTest() {
         // Δημιουργούμε ένα προσωρινό αντικείμενο
         PublicInvestmentBudgetNationalRevenue tempRevenue = new PublicInvestmentBudgetNationalRevenue("99", "Temp", "ΕΣΟΔΑ", "ΕΘΝΙΚΟ", 100L);
 

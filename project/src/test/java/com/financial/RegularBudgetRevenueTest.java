@@ -380,17 +380,32 @@ public class RegularBudgetRevenueTest {
 
     @Test
     void implementChangesOfEqualDistributionRollbackTest() {
-        // Σενάριο: Μείωση 4.000.000€ στο 12201
-        // Προκαλεί αρνητικό ποσό στο 1220101 (1M - 2M = -1M) -> Rollback
+        // Σενάριο: Μείωση 4.000.000€ στο 122 (Middle Level)
+        // Η μείωση μεταφέρεται στο 12201 και μετά στα παιδιά 1220101 & 1220102.
+        // Το 1220101 (1M) θα έπρεπε να πάρει -2M -> Αρνητικό -> Rollback.
         long reduction = -4000000L;
 
-        // ΔΕΝ Αναμένουμε IllegalArgumentException γιατί πιάνεται από την μέθοδο της BudgetRevenueChangesService
+        // Εκτέλεση αλλαγής στο 122
+        revenue122.implementChangesOfEqualDistribution(reduction);
 
-        // Επιβεβαίωση ότι οι τιμές παρέμειναν οι αρχικές (δεν άλλαξε τίποτα)
+        //Filtered Αντικείμενα Υπερκλάσης
+        BudgetRevenue budget12 = BudgetRevenue.findBudgetRevenueWithCode("12");
+        BudgetRevenue budget122 = BudgetRevenue.findBudgetRevenueWithCode("122");
+        long initialBudget12Amount = budget12.getAmount();
+        long initialBudget122Amount = budget122.getAmount();
+
+        // --- ΕΛΕΓΧΟΣ ΥΠΟΚΛΑΣΗΣ (RegularBudgetRevenue) ---
+        // Αν το rollback δουλεύει, όλα πρέπει να είναι όπως πριν
         assertEquals(60000000L, revenue12.getAmount());
+        assertEquals(60000000L, revenue122.getAmount());
         assertEquals(60000000L, revenue12201.getAmount());
         assertEquals(1000000L, revenue1220101.getAmount());
         assertEquals(59000000L, revenue1220102.getAmount());
+
+        // ΕΛΕΓΧΟΣ ΥΠΕΡΚΛΑΣΗΣ
+        assertEquals(initialBudget12Amount, budget12.getAmount());
+        assertEquals(initialBudget122Amount, budget122.getAmount());
+        assertEquals(60000000L, budget12.getRegularAmount());
     }
 
     @Test
@@ -501,6 +516,28 @@ public class RegularBudgetRevenueTest {
 
         // Έλεγχος ότι το συνολικό ποσό (Amount) της BudgetRevenue παραμένει συνεπές
         assertEquals(budget11.getRegularAmount() + budget11.getPublicInvestmentAmount(), budget11.getAmount());
+    }
+
+    @Test
+    void updateAmountOfSuperClassFilteredObjectsNullBranchTest() {
+        // 1. Δημιουργούμε ένα νέο αντικείμενο
+        RegularBudgetRevenue tempRevenue = new RegularBudgetRevenue("TEMP-99", "Προσωρινό", "ΕΣΟΔΑ", 1000L);
+
+        // 2. Αφαιρούμε το αντίστοιχο αντικείμενο από την υπερκλάση
+        // για να αναγκάσουμε το lookup (find) να επιστρέψει null
+        BudgetRevenue brTemp = BudgetRevenue.findBudgetRevenueWithCode("TEMP-99");
+        BudgetRevenue.getAllBudgetRevenues().remove(brTemp);
+
+        // 3. Εκτελούμε μια αλλαγή
+        // Η setAmount θα καλέσει την updateAmountOfSuperClassFilteredObjects,
+        // η οποία θα βρει null στο find και θα προσπεράσει το εσωτερικό του if
+        tempRevenue.setAmount(1500L);
+
+        // 4. Επιβεβαιώνουμε ότι η υποκλάση ενημερώθηκε κανονικά
+        assertEquals(1500L, tempRevenue.getAmount());
+
+        // 5. Επιβεβαιώνουμε ότι στην υπερκλάση όντως δεν υπάρχει πλέον το αντικείμενο
+        assertNull(BudgetRevenue.findBudgetRevenueWithCode("TEMP-99"));
     }
 
     @Test

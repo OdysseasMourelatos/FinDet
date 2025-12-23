@@ -98,9 +98,9 @@ public class PublicInvestmentBudgetCoFundedRevenue extends PublicInvestmentBudge
     @Override
     public void implementChangesOfEqualDistribution(long change) {
         keepAccountsAndBudgetTypeBeforeChange();
+        setAmount(getAmount() + change);
         setAmountOfSuperCategories(change);
         setAmountOfAllSubCategoriesWithEqualDistribution(change);
-        setAmount(getAmount() + change);
     }
 
     @Override
