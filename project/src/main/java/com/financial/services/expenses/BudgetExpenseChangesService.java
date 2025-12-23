@@ -15,9 +15,9 @@ public class BudgetExpenseChangesService {
     public static void implementGlobalChangesInCertainExpenseCategoryWithPercentageAllocation(String code, double percentage, long fixedAmount, ArrayList<? extends BudgetExpense> expenses) {
         ExpenseAdjustmentStrategy strategy;
         if (fixedAmount == 0) {
-             strategy = new PercentageAllocationAdjustmentStrategy(new AccountFilter(code), new PercentageOperation());
+            strategy = new PercentageAllocationAdjustmentStrategy(new AccountFilter(code), new PercentageOperation());
         } else {
-             strategy = new PercentageAllocationAdjustmentStrategy(new AccountFilter(code), new FixedAmountOperation());
+            strategy = new PercentageAllocationAdjustmentStrategy(new AccountFilter(code), new FixedAmountOperation());
         }
         strategy.applyAdjustment(expenses, percentage, fixedAmount);
     }

@@ -1,9 +1,9 @@
 com/financial/ui/views/ExpensesView.class
 com/financial/ui/views/EntitiesView.class
 com/financial/strategies/operations/PercentageOperation.class
-com/financial/strategies/IExpenseAdjustmentStrategy.class
 com/financial/ui/MainWindow.class
 com/financial/services/data/DataOutput.class
+com/financial/strategies/ExpenseAdjustmentStrategy.class
 com/financial/entries/BudgetRevenue.class
 com/financial/entries/Entity.class
 com/financial/strategies/filters/ExpenseFilter.class
@@ -18,7 +18,6 @@ com/financial/charts/BarChartGenerator.class
 com/financial/strategies/filters/AccountFilter.class
 com/financial/multi_year_analysis/entries/MultiYearBudgetExpense.class
 com/financial/multi_year_analysis/entries/MultiYearEntity.class
-com/financial/services/expenses/BudgetExpenseHandling.class
 com/financial/services/Command.class
 com/financial/services/data/DataUpdate.class
 com/financial/ui/views/ChartsView.class
@@ -45,7 +44,9 @@ com/financial/services/revenues/BudgetRevenueLogicService.class
 com/financial/entries/BudgetRevenue$1.class
 com/financial/ui/views/ExportView.class
 com/financial/entries/RegularBudgetRevenue.class
+com/financial/services/expenses/BudgetExpenseLogicService.class
 com/financial/services/data/DataInput.class
+com/financial/services/expenses/BudgetExpenseChangesService.class
 com/financial/entries/PublicInvestmentBudgetNationalRevenue.class
 com/financial/services/revenues/BudgetRevenueLogic.class
 com/financial/strategies/operations/AdjustmentOperation.class

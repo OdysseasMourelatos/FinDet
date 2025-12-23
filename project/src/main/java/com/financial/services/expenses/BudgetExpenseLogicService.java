@@ -2,7 +2,6 @@ package com.financial.services.expenses;
 
 import com.financial.entries.Entity;
 import com.financial.entries.BudgetExpense;
-import com.financial.entries.RegularBudgetExpense;
 import com.financial.services.data.DataOutput;
 import com.financial.strategies.*;
 

@@ -19,9 +19,9 @@ public class DataUpdate {
         try {
             writer = new BufferedWriter(new FileWriter(filePath));
             writer.write("code,description,category,amount");
-            for (BudgetEntry budgetEntry : BudgetEntry.mergeListsOfMainRevenuesAndMainExpenses()) {
-                writer.write("\n" + budgetEntry.getCode() + "," + budgetEntry.getDescription() + "," + budgetEntry.getCategory() + "," + budgetEntry.getAmount() );
-            }
+            //for (BudgetEntry budgetEntry : BudgetEntry.mergeListsOfMainRevenuesAndMainExpenses()) {
+                //writer.write("\n" + budgetEntry.getCode() + "," + budgetEntry.getDescription() + "," + budgetEntry.getCategory() + "," + budgetEntry.getAmount() );
+            //}
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
