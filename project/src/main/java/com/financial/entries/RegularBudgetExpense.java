@@ -62,6 +62,10 @@ public class RegularBudgetExpense extends BudgetExpense {
         return BudgetExpenseLogicService.getSumOfEveryExpenseCategory(regularBudgetExpenses);
     }
 
+    public static ArrayList<RegularBudgetExpense> getRegularBudgetExpensesPerCategory() {
+        return regularBudgetExpensesPerCategory;
+    }
+
     //Applies changes to certain expense category (e.g. 21) of all entities (Global Change)
 
     public static void implementGlobalChangesInCertainRegularExpenseCategoryWithPercentageAllocation(String code, double percentage, long fixedAmount) {

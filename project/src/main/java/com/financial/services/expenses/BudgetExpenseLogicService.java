@@ -6,7 +6,6 @@ import com.financial.entries.BudgetExpense;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class BudgetExpenseLogicService {
 
@@ -42,9 +41,10 @@ public class BudgetExpenseLogicService {
         return totalExpensesSum;
     }
 
-    public static ArrayList<? extends BudgetExpense> getSumOfEveryCategory(ArrayList<? extends BudgetExpense> expenses) {
+    //Sums Of Every Expense Category
+    public static Map<String, Long> getSumOfEveryExpenseCategory(ArrayList<? extends BudgetExpense> expenses) {
         String[] categoryCodes = expenses.stream().map(BudgetExpense::getCode).distinct().sorted().toArray(String[]::new);
-        ArrayList<BudgetExpense> expensesPerCategory = new ArrayList<>();
+        Map<String, Long> expensesPerCategory = new HashMap<>();
 
         for (String categoryCode : categoryCodes) {
             long sum = 0;
@@ -53,7 +53,7 @@ public class BudgetExpenseLogicService {
                     sum += expense.getAmount();
                 }
             }
-            //expensesPerCategory.add(new BudgetExpense(categoryCode, BudgetExpenseLogicService.findExpenseWithCode(categoryCode, expenses).getDescription(), "ΕΞΟΔΑ", sum));
+            expensesPerCategory.put(categoryCode, sum);
         }
         return expensesPerCategory;
     }
@@ -71,21 +71,5 @@ public class BudgetExpenseLogicService {
             expensesPerEntity.add(new BudgetExpense(entity.getEntityCode(), entity.getEntityName(), "ΕΞΟΔΑ", sum));
         }
         return expensesPerEntity;
-    }
-
-    public static Map<String, Long> getSumOfEveryExpenseCategory(ArrayList<? extends BudgetExpense> expenses) {
-        String[] categoryCodes = expenses.stream().map(BudgetExpense::getCode).distinct().sorted().toArray(String[]::new);
-        Map<String, Long> expensesPerCategory = new HashMap<>();
-
-        for (String categoryCode : categoryCodes) {
-            long sum = 0;
-            for (BudgetExpense expense : expenses) {
-                if (categoryCode.equals(expense.getCode())) {
-                    sum += expense.getAmount();
-                }
-            }
-            expensesPerCategory.put(categoryCode, sum);
-        }
-        return expensesPerCategory;
     }
 }
