@@ -3,7 +3,9 @@ package com.financial.services.expenses;
 import com.financial.entries.BudgetExpense;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EntityLogicService {
 
@@ -38,5 +40,14 @@ public class EntityLogicService {
             }
         }
         return expensesOfService;
+    }
+
+    public static Map<String, Long> getSumOfEveryService(ArrayList<? extends BudgetExpense> expenses) {
+        List<String> serviceCodes = getAllServiceCodes(expenses);
+        Map<String, Long> serviceSums = new HashMap<>();
+        for (String serviceCode : serviceCodes) {
+            serviceSums.put(serviceCode, getSumOfServiceWithCode(serviceCode, expenses));
+        }
+        return serviceSums;
     }
 }

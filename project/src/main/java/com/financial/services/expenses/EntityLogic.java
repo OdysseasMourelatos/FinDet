@@ -3,7 +3,9 @@ package com.financial.services.expenses;
 import com.financial.entries.BudgetExpense;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 public interface EntityLogic {
@@ -58,4 +60,11 @@ public interface EntityLogic {
     ArrayList<BudgetExpense> getRegularExpensesOfServiceWithCode(String serviceCode);
     ArrayList<BudgetExpense> getPublicInvestmentNationalExpensesOfServiceWithCode(String serviceCode);
     ArrayList<BudgetExpense> getPublicInvestmentCoFundedExpensesOfServiceWithCode(String serviceCode);
+
+    //Get sum of expenses of specific service
+    Map<String, Long> getRegularSumOfEveryService();
+    Map<String, Long> getPublicInvestmentNationalSumOfEveryService();
+    Map<String, Long> getPublicInvestmentCoFundedSumOfEveryService();
+
+    
 }

@@ -121,22 +121,19 @@ public class Entity implements EntityLogic {
 
     //Get Sums Of Every Service
 
+    @Override
     public Map<String, Long> getRegularSumOfEveryService() {
-        String[] serviceCodes = regularBudgetExpenses.stream().map(RegularBudgetExpense::getServiceCode).distinct().sorted().toArray(String[]::new);
-        Map<String, Long> regularServiceSums = new HashMap<>();
-        for (String serviceCode : serviceCodes) {
-            regularServiceSums.put(serviceCode, getRegularSumOfServiceWithCode(serviceCode));
-        }
-        return regularServiceSums;
+        return EntityLogicService.getSumOfEveryService(regularBudgetExpenses);
     }
 
-    public Map<String, Long> getPublicInvestmentSumOfEveryService(String type) {
-        String[] serviceCodes = publicInvestmentBudgetExpenses.stream().map(PublicInvestmentBudgetExpense::getServiceCode).distinct().sorted().toArray(String[]::new);
-        Map<String, Long> publicInvestmentServiceSums = new HashMap<>();
-        for (String serviceCode : serviceCodes) {
-            publicInvestmentServiceSums.put(serviceCode, getPublicInvestmentNationalSumOfServiceWithCode(serviceCode, type));
-        }
-        return publicInvestmentServiceSums;
+    @Override
+    public Map<String, Long> getPublicInvestmentNationalSumOfEveryService() {
+        return EntityLogicService.getSumOfEveryService(publicInvestmentBudgetNationalExpenses);
+    }
+
+    @Override
+    public Map<String, Long> getPublicInvestmentCoFundedSumOfEveryService() {
+        return EntityLogicService.getSumOfEveryService(publicInvestmentBudgetCoFundedExpenses);
     }
 
     // Get Sums Of Specific Expense Category
