@@ -2,10 +2,7 @@ package com.financial.services.expenses;
 
 import com.financial.entries.BudgetExpense;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class EntityLogicService {
 
@@ -59,5 +56,14 @@ public class EntityLogicService {
             }
         }
         return sum;
+    }
+
+    public static Map<String, Long> getSumOfEveryExpenseCategory(ArrayList<? extends BudgetExpense> expenses) {
+        String[] expenseCategories = expenses.stream().map(BudgetExpense::getCode).distinct().sorted().toArray(String[]::new);
+        Map<String, Long> expensesSums = new LinkedHashMap<>();
+        for (String expenseCategory : expenseCategories) {
+            expensesSums.put(expenseCategory, getSumOfExpenseCategoryWithCode(expenseCategory, expenses));
+        }
+        return expensesSums;
     }
 }

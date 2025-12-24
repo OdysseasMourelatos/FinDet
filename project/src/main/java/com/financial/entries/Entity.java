@@ -156,21 +156,15 @@ public class Entity implements EntityLogic {
     //Get Sums Of Every Expense Category
 
     public Map<String, Long> getRegularSumOfEveryExpenseCategory() {
-        String[] expenseCategories = regularBudgetExpenses.stream().map(RegularBudgetExpense::getCode).distinct().sorted().toArray(String[]::new);
-        Map<String, Long> regularExpensesSums = new LinkedHashMap<>();
-        for (String expenseCategory : expenseCategories) {
-            regularExpensesSums.put(expenseCategory, getRegularSumOfExpenseCategoryWithCode(expenseCategory));
-        }
-        return regularExpensesSums;
+        return EntityLogicService.getSumOfEveryExpenseCategory(regularBudgetExpenses);
     }
 
-    public Map<String, Long> getPublicInvestmentSumOfEveryExpenseCategory(String type) {
-        String[] expenseCategories = publicInvestmentBudgetExpenses.stream().map(PublicInvestmentBudgetExpense::getCode).distinct().sorted().toArray(String[]::new);
-        Map<String, Long> publicInvestmentExpensesSums = new LinkedHashMap<>();
-        for (String expenseCategory : expenseCategories) {
-            publicInvestmentExpensesSums.put(expenseCategory, getPublicInvestmentSumOfExpenseCategoryWithCode(expenseCategory, type));
-        }
-        return publicInvestmentExpensesSums;
+    public Map<String, Long> getPublicInvestmentNationalSumOfEveryExpenseCategory() {
+        return EntityLogicService.getSumOfEveryExpenseCategory(publicInvestmentBudgetNationalExpenses);
+    }
+
+    public Map<String, Long> getPublicInvestmentCoFundedSumOfEveryExpenseCategory() {
+        return EntityLogicService.getSumOfEveryExpenseCategory(publicInvestmentBudgetCoFundedExpenses);
     }
 
     //Getters
