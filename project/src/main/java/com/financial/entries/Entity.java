@@ -4,10 +4,7 @@ import com.financial.services.expenses.BudgetExpenseLogicService;
 import com.financial.services.expenses.EntityLogic;
 import com.financial.services.expenses.EntityLogicService;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Entity implements EntityLogic {
     private final String entityCode;
@@ -73,27 +70,20 @@ public class Entity implements EntityLogic {
 
     // Get Service Codes
 
-    public ArrayList<String> getRegularServiceCodes() {
-        ArrayList<String> regularServiceCodes = new ArrayList<>();
-        for (RegularBudgetExpense regularBudgetExpense : regularBudgetExpenses) {
-            if (!regularServiceCodes.contains(regularBudgetExpense.getServiceCode())) {
-                regularServiceCodes.add(regularBudgetExpense.getServiceCode());
-            }
-        }
-        return regularServiceCodes;
+    @Override
+    public List<String> getRegularServiceCodes() {
+        return EntityLogicService.getServiceCodes(regularBudgetExpenses);
     }
 
-    public ArrayList<String> getPublicInvestmentServiceCodes(String type) {
-        ArrayList<String> publicInvestmentServiceCodes = new ArrayList<>();
-        for (PublicInvestmentBudgetExpense publicInvestmentBudgetExpense : publicInvestmentBudgetExpenses) {
-            if (!publicInvestmentServiceCodes.contains(publicInvestmentBudgetExpense.getServiceCode()) && publicInvestmentBudgetExpense.getType().equals(type)) {
-                publicInvestmentServiceCodes.add(publicInvestmentBudgetExpense.getServiceCode());
-            }
-        }
-        return publicInvestmentServiceCodes;
+    @Override
+    public List<String> getPublicInvestmentNationalServiceCodes() {
+        return EntityLogicService.getServiceCodes(publicInvestmentBudgetNationalExpenses)
     }
 
-
+    @Override
+    public List<String> getPublicInvestmentCoFundedServiceCodes() {
+        return EntityLogicService.getServiceCodes(publicInvestmentBudgetCoFundedExpenses);
+    }
 
 
     // Get Sums Of Service With Code

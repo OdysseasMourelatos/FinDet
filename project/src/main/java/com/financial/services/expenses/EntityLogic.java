@@ -1,5 +1,7 @@
 package com.financial.services.expenses;
 
+import java.util.List;
+
 public interface EntityLogic {
 
     //Total Sums of Entity
@@ -17,4 +19,8 @@ public interface EntityLogic {
     String getRegularServiceNameWithCode(String serviceCode);
     String getPublicInvestmentNationalServiceNameWithCode(String serviceCode);
     String getPublicInvestmentCoFundedServiceNameWithCode(String serviceCode);
+
+    List<String> getRegularServiceCodes();
+    List<String> getPublicInvestmentNationalServiceCodes();
+    List<String> getPublicInvestmentCoFundedServiceCodes();
 }
