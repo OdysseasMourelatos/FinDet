@@ -9,6 +9,10 @@ import java.util.Map;
 
 public class BudgetExpenseLogicService {
 
+    private BudgetExpenseLogicService() {
+        // utility class – no instances
+    }
+
     //Filters expenses based on the entity code
     public static <T extends BudgetExpense> ArrayList<T> getExpensesOfEntityWithCode(String entityCode, ArrayList<T> expenses) {
         ArrayList<T> expensesOfEntity = new ArrayList<>();

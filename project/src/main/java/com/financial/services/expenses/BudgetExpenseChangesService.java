@@ -12,6 +12,10 @@ import java.util.ArrayList;
 
 public class BudgetExpenseChangesService {
 
+    private BudgetExpenseChangesService() {
+        // utility class – no instances
+    }
+
     public static void implementGlobalChangesInCertainExpenseCategoryWithPercentageAllocation(String code, double percentage, long fixedAmount, ArrayList<? extends BudgetExpense> expenses) {
         ExpenseAdjustmentStrategy strategy;
         if (fixedAmount == 0) {
