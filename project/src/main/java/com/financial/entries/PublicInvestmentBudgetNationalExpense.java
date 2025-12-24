@@ -70,7 +70,7 @@ public class PublicInvestmentBudgetNationalExpense extends PublicInvestmentBudge
     public static ArrayList<PublicInvestmentBudgetNationalExpense> getPublicInvestmentBudgetNationalExpensesPerCategory() {
         return pibNationalExpensesPerCategory;
     }
-    
+
     public static void implementGlobalChangesInCertainPublicInvestmentBudgetNationalCategory(String code, double percentage, long fixedAmount) {
         ExpensesHistory.keepHistory(getPublicInvestmentBudgetNationalExpensesOfCategoryWithCode(code), BudgetType.PUBLIC_INVESTMENT_BUDGET_NATIONAL);
         BudgetExpenseChangesService.implementGlobalChangesInCertainExpenseCategoryWithPercentageAllocation(code, percentage, fixedAmount, pibNationalExpenses);
