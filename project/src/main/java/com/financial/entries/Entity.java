@@ -104,24 +104,19 @@ public class Entity implements EntityLogic {
 
     //Get Expenses Of Service With Code
 
-    public ArrayList<RegularBudgetExpense> getRegularExpensesOfServiceWithCode(String serviceCode) {
-        ArrayList<RegularBudgetExpense> regularExpenses = new ArrayList<>();
-        for (RegularBudgetExpense expense : regularBudgetExpenses) {
-            if (serviceCode.equals(expense.getServiceCode())) {
-                regularExpenses.add(expense);
-            }
-        }
-        return  regularExpenses;
+    @Override
+    public ArrayList<BudgetExpense> getRegularExpensesOfServiceWithCode(String serviceCode) {
+        return EntityLogicService.getExpensesOfServiceWithCode(serviceCode, regularBudgetExpenses);
     }
 
-    public ArrayList<PublicInvestmentBudgetExpense> getPublicInvestmentExpensesOfServiceWithCode(String serviceCode, String type) {
-        ArrayList<PublicInvestmentBudgetExpense> publicInvestmentExpenses = new ArrayList<>();
-        for (PublicInvestmentBudgetExpense expense : publicInvestmentBudgetExpenses) {
-            if (serviceCode.equals(expense.getServiceCode()) && type.equals(expense.getType())) {
-                publicInvestmentExpenses.add(expense);
-            }
-        }
-        return  publicInvestmentExpenses;
+    @Override
+    public ArrayList<BudgetExpense> getPublicInvestmentNationalExpensesOfServiceWithCode(String serviceCode) {
+        return EntityLogicService.getExpensesOfServiceWithCode(serviceCode, publicInvestmentBudgetNationalExpenses);
+    }
+
+    @Override
+    public ArrayList<BudgetExpense> getPublicInvestmentCoFundedExpensesOfServiceWithCode(String serviceCode) {
+        return EntityLogicService.getExpensesOfServiceWithCode(serviceCode, publicInvestmentBudgetCoFundedExpenses);
     }
 
     //Get Sums Of Every Service

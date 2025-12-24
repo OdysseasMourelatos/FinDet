@@ -29,4 +29,14 @@ public class EntityLogicService {
         }
         return sum;
     }
+
+    public static ArrayList<BudgetExpense> getExpensesOfServiceWithCode(String serviceCode, ArrayList<? extends BudgetExpense> expenses) {
+        ArrayList<BudgetExpense> expensesOfService = new ArrayList<>();
+        for (BudgetExpense expense : expenses) {
+            if (serviceCode.equals(expense.getServiceCode())) {
+                expensesOfService.add(expense);
+            }
+        }
+        return expensesOfService;
+    }
 }

@@ -1,5 +1,7 @@
 package com.financial.services.expenses;
 
+import com.financial.entries.BudgetExpense;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -51,4 +53,9 @@ public interface EntityLogic {
     default long getTotalSumOfServiceWithCode(String serviceCode) {
         return getPublicInvestmentSumOfServiceWithCode(serviceCode) + getRegularSumOfServiceWithCode(serviceCode);
     }
+
+    //Get expenses of specific service
+    ArrayList<BudgetExpense> getRegularExpensesOfServiceWithCode(String serviceCode);
+    ArrayList<BudgetExpense> getPublicInvestmentNationalExpensesOfServiceWithCode(String serviceCode);
+    ArrayList<BudgetExpense> getPublicInvestmentCoFundedExpensesOfServiceWithCode(String serviceCode);
 }
