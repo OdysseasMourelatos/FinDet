@@ -71,41 +71,35 @@ public class Entity implements EntityLogic {
     // Get Service Codes
 
     @Override
-    public List<String> getRegularServiceCodes() {
-        return EntityLogicService.getServiceCodes(regularBudgetExpenses);
+    public List<String> getAllRegularServiceCodes() {
+        return EntityLogicService.getAllServiceCodes(regularBudgetExpenses);
     }
 
     @Override
-    public List<String> getPublicInvestmentNationalServiceCodes() {
-        return EntityLogicService.getServiceCodes(publicInvestmentBudgetNationalExpenses)
+    public List<String> getAllPublicInvestmentNationalServiceCodes() {
+        return EntityLogicService.getAllServiceCodes(publicInvestmentBudgetNationalExpenses)
     }
 
     @Override
-    public List<String> getPublicInvestmentCoFundedServiceCodes() {
-        return EntityLogicService.getServiceCodes(publicInvestmentBudgetCoFundedExpenses);
+    public List<String> getAllPublicInvestmentCoFundedServiceCodes() {
+        return EntityLogicService.getAllServiceCodes(publicInvestmentBudgetCoFundedExpenses);
     }
-
 
     // Get Sums Of Service With Code
 
+    @Override
     public long getRegularSumOfServiceWithCode(String serviceCode) {
-        long sum = 0;
-        for (RegularBudgetExpense expense : regularBudgetExpenses) {
-            if (serviceCode.equals(expense.getServiceCode())) {
-                sum += expense.getAmount();
-            }
-        }
-        return sum;
+        return EntityLogicService.getSumOfServiceWithCode(serviceCode, regularBudgetExpenses);
     }
 
-    public long getPublicInvestmentSumOfServiceWithCode(String serviceCode, String type) {
-        long sum = 0;
-        for (PublicInvestmentBudgetExpense expense : publicInvestmentBudgetExpenses) {
-            if (serviceCode.equals(expense.getServiceCode()) && type.equals(expense.getType())) {
-                sum += expense.getAmount();
-            }
-        }
-        return sum;
+    @Override
+    public long getPublicInvestmentNationalSumOfServiceWithCode(String serviceCode) {
+        return EntityLogicService.getSumOfServiceWithCode(serviceCode, publicInvestmentBudgetNationalExpenses)
+    }
+
+    @Override
+    public long getPublicInvestmentCoFundedSumOfServiceWithCode(String serviceCode) {
+        return EntityLogicService.getSumOfServiceWithCode(serviceCode, publicInvestmentBudgetCoFundedExpenses);
     }
 
     //Get Expenses Of Service With Code
@@ -145,7 +139,7 @@ public class Entity implements EntityLogic {
         String[] serviceCodes = publicInvestmentBudgetExpenses.stream().map(PublicInvestmentBudgetExpense::getServiceCode).distinct().sorted().toArray(String[]::new);
         Map<String, Long> publicInvestmentServiceSums = new HashMap<>();
         for (String serviceCode : serviceCodes) {
-            publicInvestmentServiceSums.put(serviceCode, getPublicInvestmentSumOfServiceWithCode(serviceCode, type));
+            publicInvestmentServiceSums.put(serviceCode, getPublicInvestmentNationalSumOfServiceWithCode(serviceCode, type));
         }
         return publicInvestmentServiceSums;
     }

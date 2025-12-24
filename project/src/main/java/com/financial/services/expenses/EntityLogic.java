@@ -15,12 +15,17 @@ public interface EntityLogic {
         return calculateRegularSum() + calculatePublicInvestmentSum();
     }
 
-    //Find Service Names
+    //Get Service Names
     String getRegularServiceNameWithCode(String serviceCode);
     String getPublicInvestmentNationalServiceNameWithCode(String serviceCode);
     String getPublicInvestmentCoFundedServiceNameWithCode(String serviceCode);
 
-    List<String> getRegularServiceCodes();
-    List<String> getPublicInvestmentNationalServiceCodes();
-    List<String> getPublicInvestmentCoFundedServiceCodes();
+    //Get all service codes
+    List<String> getAllRegularServiceCodes();
+    List<String> getAllPublicInvestmentNationalServiceCodes();
+    List<String> getAllPublicInvestmentCoFundedServiceCodes();
+
+    long getRegularSumOfServiceWithCode(String serviceCode);
+    long getPublicInvestmentNationalSumOfServiceWithCode(String serviceCode);
+    long getPublicInvestmentCoFundedSumOfServiceWithCode(String serviceCode);
 }

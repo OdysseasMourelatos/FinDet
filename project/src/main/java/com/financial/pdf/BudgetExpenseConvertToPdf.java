@@ -26,7 +26,7 @@ public class BudgetExpenseConvertToPdf {
                 table.addCell(PdfFormat.createCenteredCell("Κωδικός Ταξινόμησης", font));
                 table.addCell(PdfFormat.createCenteredCell("Ονομασία", font));
                 table.addCell(PdfFormat.createCenteredCell("Ποσό", font));
-                for (String serviceCode : entity.getRegularServiceCodes()) {
+                for (String serviceCode : entity.getAllRegularServiceCodes()) {
                     table.addCell(PdfFormat.createCenteredCell(serviceCode, font));
                     table.addCell(PdfFormat.createCenteredCell(entity.findRegularServiceNameWithCode(serviceCode), font));
                     table.addCell(PdfFormat.createCenteredCell(String.format("%,d", entity.getRegularSumOfServiceWithCode(serviceCode)), font));
