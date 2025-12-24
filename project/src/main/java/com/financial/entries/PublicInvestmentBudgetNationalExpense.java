@@ -7,12 +7,15 @@ import com.financial.services.expenses.ExpensesHistory;
 import java.util.*;
 
 public class PublicInvestmentBudgetNationalExpense extends PublicInvestmentBudgetExpense {
+
     protected static ArrayList<PublicInvestmentBudgetNationalExpense> pibNationalExpenses = new ArrayList<>();
 
     public PublicInvestmentBudgetNationalExpense(String entityCode, String entityName, String serviceCode, String serviceName, String code, String description, String type, String category, long amount) {
         super(entityCode, entityName, serviceCode, serviceName, code, description, type, category, amount);
         pibNationalExpenses.add(this);
     }
+
+    //Constructor & List of filtered PIB national budget expenses
 
     protected static ArrayList<PublicInvestmentBudgetNationalExpense> pibNationalExpensesPerCategory = new ArrayList<>();
 
@@ -21,10 +24,8 @@ public class PublicInvestmentBudgetNationalExpense extends PublicInvestmentBudge
         pibNationalExpensesPerCategory.add(this);
     }
 
-    public static ArrayList<PublicInvestmentBudgetNationalExpense> getAllPublicInvestmentBudgetNationalExpenses() {
-        return pibNationalExpenses;
-    }
 
+    //Create filtered PIB national budget expenses
     public static void createPublicInvestmentBudgetNationalExpensesPerCategory() {
         pibNationalExpensesPerCategory.clear();
         for (Map.Entry<String, Long> entry : getSumOfEveryExpenseCategory().entrySet()) {
@@ -33,12 +34,17 @@ public class PublicInvestmentBudgetNationalExpense extends PublicInvestmentBudge
         }
     }
 
-    public static void updateAllFilteredPIBNationalExpenses() {
-        Map<String, Long> allNewSums = getSumOfEveryExpenseCategory();
-        for (PublicInvestmentBudgetNationalExpense filteredExpense : pibNationalExpensesPerCategory) {
-            long newTotal = allNewSums.getOrDefault(filteredExpense.getCode(), 0L);
-            filteredExpense.setAmount(newTotal);
+    public static PublicInvestmentBudgetNationalExpense findFilteredPublicInvestmentBudgetNationalExpenseWithCode(String code) {
+        for (PublicInvestmentBudgetNationalExpense expense : pibNationalExpensesPerCategory) {
+            if (expense.getCode().equals(code)) {
+                return expense;
+            }
         }
+        return null;
+    }
+
+    public static ArrayList<PublicInvestmentBudgetNationalExpense> getAllPublicInvestmentBudgetNationalExpenses() {
+        return pibNationalExpenses;
     }
 
     public static ArrayList<PublicInvestmentBudgetNationalExpense> getPublicInvestmentBudgetNationalExpensesOfEntityWithCode(String entityCode) {
@@ -57,14 +63,14 @@ public class PublicInvestmentBudgetNationalExpense extends PublicInvestmentBudge
         return BudgetExpenseLogicService.calculateSum(pibNationalExpenses);
     }
 
-    public static ArrayList<PublicInvestmentBudgetNationalExpense> getPublicInvestmentBudgetNationalExpensesPerCategory() {
-        return pibNationalExpensesPerCategory;
-    }
-
     public static Map<String, Long> getSumOfEveryExpenseCategory() {
         return BudgetExpenseLogicService.getSumOfEveryExpenseCategory(pibNationalExpenses);
     }
 
+    public static ArrayList<PublicInvestmentBudgetNationalExpense> getPublicInvestmentBudgetNationalExpensesPerCategory() {
+        return pibNationalExpensesPerCategory;
+    }
+    
     public static void implementGlobalChangesInCertainPublicInvestmentBudgetNationalCategory(String code, double percentage, long fixedAmount) {
         ExpensesHistory.keepHistory(getPublicInvestmentBudgetNationalExpensesOfCategoryWithCode(code), BudgetType.PUBLIC_INVESTMENT_BUDGET_NATIONAL);
         BudgetExpenseChangesService.implementGlobalChangesInCertainExpenseCategoryWithPercentageAllocation(code, percentage, fixedAmount, pibNationalExpenses);
@@ -85,13 +91,12 @@ public class PublicInvestmentBudgetNationalExpense extends PublicInvestmentBudge
         }
     }
 
-    public static PublicInvestmentBudgetNationalExpense findFilteredPublicInvestmentBudgetNationalExpenseWithCode(String code) {
-        for (PublicInvestmentBudgetNationalExpense expense : pibNationalExpensesPerCategory) {
-            if (expense.getCode().equals(code)) {
-                return expense;
-            }
+    public static void updateAllFilteredPIBNationalExpenses() {
+        Map<String, Long> allNewSums = getSumOfEveryExpenseCategory();
+        for (PublicInvestmentBudgetNationalExpense filteredExpense : pibNationalExpensesPerCategory) {
+            long newTotal = allNewSums.getOrDefault(filteredExpense.getCode(), 0L);
+            filteredExpense.setAmount(newTotal);
         }
-        return null;
     }
 
     @Override

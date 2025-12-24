@@ -8,6 +8,7 @@ import com.financial.services.expenses.ExpensesHistory;
 import java.util.*;
 
 public class RegularBudgetExpense extends BudgetExpense {
+
     protected static ArrayList<RegularBudgetExpense> regularBudgetExpenses = new ArrayList<>();
 
     public RegularBudgetExpense(String entityCode, String entityName, String serviceCode, String serviceName, String code, String description, String category, long amount) {
