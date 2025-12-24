@@ -53,6 +53,14 @@ public class PublicInvestmentBudgetNationalExpense extends PublicInvestmentBudge
         return (PublicInvestmentBudgetNationalExpense) BudgetExpenseLogicService.findExpenseWithCode(entityCode, serviceCode, expenseCode, pibNationalExpenses);
     }
 
+    public static long calculateSum() {
+        return BudgetExpenseLogicService.calculateSum(pibNationalExpenses);
+    }
+
+    public static ArrayList<PublicInvestmentBudgetNationalExpense> getPublicInvestmentBudgetNationalExpensesPerCategory() {
+        return pibNationalExpensesPerCategory;
+    }
+
     public static Map<String, Long> getSumOfEveryExpenseCategory() {
         return BudgetExpenseLogicService.getSumOfEveryExpenseCategory(pibNationalExpenses);
     }
