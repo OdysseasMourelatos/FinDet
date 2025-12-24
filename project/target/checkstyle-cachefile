@@ -1,4 +1,4 @@
-#Wed Dec 24 13:25:29 EET 2025
+#Wed Dec 24 13:43:55 EET 2025
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/MainApp.java=1766492732206
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/charts/BarChartGenerator.java=1766492732206
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/charts/PieChartGenerator.java=1766158674373
@@ -27,11 +27,12 @@
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/services/data/DataUpdate.java=1766508400274
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/services/expenses/BudgetExpenseChangesService.java=1766574949564
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/services/expenses/BudgetExpenseLogicService.java=1766574949552
+/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/services/expenses/ExpensesHistory.java=1766576252449
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/services/revenues/BudgetRevenueChanges.java=1766492732206
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/services/revenues/BudgetRevenueChangesService.java=1766508265457
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/services/revenues/BudgetRevenueLogic.java=1766492732206
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/services/revenues/BudgetRevenueLogicService.java=1766508265457
-/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/services/revenues/RevenuesHistory.java=1766575512968
+/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/services/revenues/RevenuesHistory.java=1766576252476
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/strategies/ExpenseAdjustmentStrategy.java=1766508265457
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/strategies/PercentageAllocationAdjustmentStrategy.java=1766508265457
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/strategies/filters/AccountFilter.java=1766158674377

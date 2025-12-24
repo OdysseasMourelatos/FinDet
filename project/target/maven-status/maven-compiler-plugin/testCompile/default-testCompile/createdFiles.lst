@@ -4,4 +4,5 @@ com/financial/PublicInvestmentBudgetNationalRevenueTest.class
 com/financial/RegularBudgetRevenueTest.class
 com/financial/PublicInvestmentBudgetCoFundedRevenueTest.class
 com/financial/RegularBudgetExpenseTest.class
+com/financial/ExpensesHistoryTest.class
 com/financial/AppTest.class

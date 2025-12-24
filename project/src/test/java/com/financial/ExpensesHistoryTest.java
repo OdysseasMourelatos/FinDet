@@ -78,4 +78,35 @@ public class ExpensesHistoryTest {
         assertNull(ExpensesHistory.getMostRecentBudgetType());
         assertNull(ExpensesHistory.getMostRecentExpensesHistory());
     }
+
+    @Test
+    void testReturnToPreviousStateBulkChanges() {
+        // 1. Δημιουργία πολλαπλών εξόδων
+        RegularBudgetExpense e1 = new RegularBudgetExpense("1001", "ORG", "S1", "SERV1", "21", "Μισθοί", "ΕΞΟΔΑ", 1000L);
+        RegularBudgetExpense e2 = new RegularBudgetExpense("1001", "ORG", "S1", "SERV1", "23", "Ασφάλιση", "ΕΞΟΔΑ", 2000L);
+        RegularBudgetExpense e3 = new RegularBudgetExpense("1001", "ORG", "S2", "SERV2", "21", "Μισθοί", "ΕΞΟΔΑ", 3000L);
+
+        ArrayList<RegularBudgetExpense> allExpenses = RegularBudgetExpense.getAllRegularBudgetExpenses();
+
+        // 2. Κρατάμε snapshot ΠΡΙΝ τη μαζική αλλαγή
+        ExpensesHistory.keepHistory(allExpenses, BudgetType.REGULAR_BUDGET);
+
+        // 3. Προσομοίωση μαζικής αλλαγής (π.χ. +50% σε όλα)
+        for (RegularBudgetExpense e : allExpenses) {
+            e.setAmount((long) (e.getAmount() * 1.5));
+        }
+        assertEquals(1500L, e1.getAmount());
+        assertEquals(3000L, e2.getAmount());
+        assertEquals(4500L, e3.getAmount());
+
+        // 4. Εκτέλεση Undo
+        ExpensesHistory.returnToPreviousState();
+
+        // 5. Έλεγχος αν ΟΛΟΙ οι λογαριασμοί επέστρεψαν στις αρχικές τιμές
+        assertEquals(1000L, e1.getAmount());
+        assertEquals(2000L, e2.getAmount());
+        assertEquals(3000L, e3.getAmount());
+
+        assertTrue(ExpensesHistory.getHistoryDeque().isEmpty());
+    }
 }

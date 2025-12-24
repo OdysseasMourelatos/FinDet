@@ -39,6 +39,7 @@ com/financial/pdf/BudgetRevenueConvertToPdf.class
 com/financial/pdf/BudgetExpenseConvertToPdf.class
 com/financial/charts/PieChartGenerator.class
 com/financial/pdf/PdfFormat.class
+com/financial/services/expenses/ExpensesHistory.class
 com/financial/entries/BudgetExpense.class
 com/financial/services/revenues/BudgetRevenueLogicService.class
 com/financial/entries/BudgetRevenue$1.class
