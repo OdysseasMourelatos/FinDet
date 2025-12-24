@@ -71,33 +71,35 @@ public class RegularBudgetExpense extends BudgetExpense {
 
     public static void implementGlobalChangesInCertainRegularExpenseCategoryWithPercentageAllocation(String code, double percentage, long fixedAmount) {
         BudgetExpenseChangesService.implementGlobalChangesInCertainExpenseCategoryWithPercentageAllocation(code, percentage, fixedAmount, regularBudgetExpenses);
-        updateFilteredRegularBudgetExpense(code, percentage, fixedAmount);
+        updateFilteredRegularBudgetExpense(code);
     }
 
     //Scenario: Change of all regular budget expenses of all entities
 
     public static void implementGlobalChangesInAllExpenseCategoriesWithPercentageAllocation(double percentage, long fixedAmount) {
         BudgetExpenseChangesService.implementGlobalChangesInAllExpenseCategoriesWithPercentageAllocation(percentage, fixedAmount, regularBudgetExpenses);
-        updateAllFilteredRegularBudgetExpenses(percentage, fixedAmount);
+        updateAllFilteredRegularBudgetExpenses();
     }
 
     //Update Filtered Objects
 
-    public static void updateFilteredRegularBudgetExpense(String code, double percentage, long fixedAmount) {
+    public static void updateFilteredRegularBudgetExpense(String code) {
         RegularBudgetExpense regularBudgetExpense = findFilteredRegularBudgetExpenseWithCode(code);
-        if (fixedAmount == 0) {
-            regularBudgetExpense.setAmount((long) (regularBudgetExpense.getAmount() * (1 + percentage)));
-        } else {
-            regularBudgetExpense.setAmount(regularBudgetExpense.getAmount() + fixedAmount);
+        if (regularBudgetExpense != null) {
+            // Αντί να υπολογίζουμε το ποσό χειροκίνητα, παίρνουμε το άθροισμα από τη βασική λίστα
+            long newTotal = getSumOfEveryExpenseCategory().getOrDefault(code, 0L);
+            regularBudgetExpense.setAmount(newTotal);
         }
     }
 
-    public static void updateAllFilteredRegularBudgetExpenses(double percentage, long fixedAmount) {
-        for (RegularBudgetExpense regularBudgetExpense : regularBudgetExpensesPerCategory) {
-            if (fixedAmount == 0) {
-                regularBudgetExpense.setAmount((long) (regularBudgetExpense.getAmount() * (1 + percentage)));
-            } else {
-                regularBudgetExpense.setAmount(regularBudgetExpense.getAmount() + fixedAmount);
+    public static void updateAllFilteredRegularBudgetExpenses() {
+        // Παίρνουμε όλα τα νέα αθροίσματα μία φορά
+        Map<String, Long> allNewSums = getSumOfEveryExpenseCategory();
+
+        for (RegularBudgetExpense filteredExpense : regularBudgetExpensesPerCategory) {
+            Long newTotal = allNewSums.get(filteredExpense.getCode());
+            if (newTotal != null) {
+                filteredExpense.setAmount(newTotal);
             }
         }
     }

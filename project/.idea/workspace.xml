@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="88d8a661-a47d-4ac5-b89a-2164a467de01" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/RegularBudgetExpenseTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/RegularBudgetExpenseTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -77,7 +76,9 @@
     "JUnit.PublicInvestmentBudgetRevenueTest.setCoFundedAmountNegativeTest.executor": "Run",
     "JUnit.PublicInvestmentBudgetRevenueTest.testUpdateAmountOfSuperClassFilteredObjects.executor": "Run",
     "JUnit.RegularBudgetExpenseTest.executor": "Run",
+    "JUnit.RegularBudgetExpenseTest.implementGlobalIncreaseInCertainRegularExpenseCategoryWithPercentageAllocationTest.executor": "Run",
     "JUnit.RegularBudgetExpenseTest.implementGlobalIncreaseInCertainRegularExpenseCategoryWithPercentageAllocationTest1.executor": "Run",
+    "JUnit.RegularBudgetExpenseTest.testCreateRegularBudgetExpensesPerCategoryAggregation.executor": "Run",
     "JUnit.RegularBudgetRevenueTest.executor": "Run",
     "JUnit.RegularBudgetRevenueTest.findSuperCategoryTest.executor": "Run",
     "JUnit.RegularBudgetRevenueTest.getAboveLevelSuperCategoryTest.executor": "Run",
