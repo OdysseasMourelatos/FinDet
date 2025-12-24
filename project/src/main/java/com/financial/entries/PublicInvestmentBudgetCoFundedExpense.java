@@ -25,11 +25,7 @@ public class PublicInvestmentBudgetCoFundedExpense extends PublicInvestmentBudge
     public static void createPublicInvestmentBudgetCoFundedExpensesPerCategory() {
         pibCoFundedExpensesPerCategory.clear();
         for (Map.Entry<String, Long> entry : getSumOfEveryExpenseCategory().entrySet()) {
-            String description = pibCoFundedExpenses.stream()
-                    .filter(e -> e.getCode().equals(entry.getKey()))
-                    .findFirst()
-                    .map(PublicInvestmentBudgetCoFundedExpense::getDescription)
-                    .orElse("");
+            String description = pibCoFundedExpenses.stream().filter(e -> e.getCode().equals(entry.getKey())).findFirst().map(PublicInvestmentBudgetCoFundedExpense::getDescription).orElse("");
             new PublicInvestmentBudgetCoFundedExpense(entry.getKey(), description, "ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ", "ΕΞΟΔΑ", entry.getValue());
         }
     }

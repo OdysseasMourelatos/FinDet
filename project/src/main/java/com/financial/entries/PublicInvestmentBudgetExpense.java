@@ -1,7 +1,5 @@
 package com.financial.entries;
 
-import com.financial.services.data.DataOutput;
-
 import java.util.ArrayList;
 
 public class PublicInvestmentBudgetExpense extends BudgetExpense {
@@ -19,13 +17,8 @@ public class PublicInvestmentBudgetExpense extends BudgetExpense {
         this.type = type;
     }
 
-
     public static ArrayList<PublicInvestmentBudgetExpense> getAllPublicInvestmentBudgetExpenses() {
         return publicInvestmentBudgetExpenses;
-    }
-
-    public static void printAllPublicInvestmentBudgetExpenses() {
-        DataOutput.printPublicInvestmentBudgetExpenseWithAsciiTable(getAllPublicInvestmentBudgetExpenses());
     }
 
     public static ArrayList<PublicInvestmentBudgetExpense> getPublicInvestmentBudgetNationalExpenses() {
@@ -38,9 +31,6 @@ public class PublicInvestmentBudgetExpense extends BudgetExpense {
         return publicInvestmentBudgetNationalExpenses;
     }
 
-    public static void printPublicInvestmentBudgetNationalExpenses() {
-        DataOutput.printPublicInvestmentBudgetExpenseWithAsciiTable(getPublicInvestmentBudgetNationalExpenses());
-    }
 
     public static ArrayList<PublicInvestmentBudgetExpense> getPublicInvestmentBudgetCoFundedExpenses() {
         ArrayList<PublicInvestmentBudgetExpense> publicInvestmentBudgetCoFundedExpenses = new ArrayList<>();
@@ -52,9 +42,6 @@ public class PublicInvestmentBudgetExpense extends BudgetExpense {
         return publicInvestmentBudgetCoFundedExpenses;
     }
 
-    public static void printPublicInvestmentBudgetCoFundedExpenses() {
-        DataOutput.printPublicInvestmentBudgetExpenseWithAsciiTable(getPublicInvestmentBudgetCoFundedExpenses());
-    }
 
     public String getType() {
         return type;

@@ -13,6 +13,7 @@ com/financial/entries/PublicInvestmentBudgetRevenue$1.class
 com/financial/strategies/PercentageAllocationAdjustmentStrategy.class
 com/financial/entries/PublicInvestmentBudgetExpense.class
 com/financial/strategies/filters/ServiceFilter.class
+com/financial/entries/PublicInvestmentBudgetNationalExpense.class
 com/financial/ui/views/RevenuesView.class
 com/financial/charts/BarChartGenerator.class
 com/financial/strategies/filters/AccountFilter.class
@@ -35,6 +36,7 @@ com/financial/strategies/operations/FixedAmountOperation.class
 com/financial/services/revenues/RevenuesHistory.class
 com/financial/ui/views/ChartsView$LegendItem.class
 com/financial/pdf/BudgetRevenueConvertToPdf.class
+com/financial/services/expenses/EntityLogicService.class
 com/financial/pdf/BudgetExpenseConvertToPdf.class
 com/financial/charts/PieChartGenerator.class
 com/financial/pdf/PdfFormat.class
@@ -45,8 +47,10 @@ com/financial/entries/BudgetRevenue$1.class
 com/financial/ui/views/ExportView.class
 com/financial/entries/RegularBudgetRevenue.class
 com/financial/services/expenses/BudgetExpenseLogicService.class
+com/financial/services/expenses/EntityLogic.class
 com/financial/services/data/DataInput.class
 com/financial/services/expenses/BudgetExpenseChangesService.class
 com/financial/entries/PublicInvestmentBudgetNationalRevenue.class
 com/financial/services/revenues/BudgetRevenueLogic.class
+com/financial/entries/PublicInvestmentBudgetCoFundedExpense.class
 com/financial/strategies/operations/AdjustmentOperation.class
