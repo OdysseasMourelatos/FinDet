@@ -1,10 +1,6 @@
 package com.financial.ui.views;
 
-import com.financial.entries.BudgetRevenue;
-import com.financial.entries.PublicInvestmentBudgetExpense;
-import com.financial.entries.PublicInvestmentBudgetRevenue;
-import com.financial.entries.RegularBudgetExpense;
-import com.financial.entries.RegularBudgetRevenue;
+import com.financial.entries.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -43,12 +39,12 @@ public class DashboardView {
         HBox row = new HBox(20);
         row.setAlignment(Pos.CENTER_LEFT);
 
-        long totalRegularRevenue = calculateTotalRegularRevenue();
-        long totalPublicInvestmentRevenue = calculateTotalPublicInvestmentRevenue();
-        long totalRevenue = totalRegularRevenue + totalPublicInvestmentRevenue;
+        long totalRegularRevenue = RegularBudgetRevenue.calculateSum();
+        long totalPublicInvestmentRevenue = PublicInvestmentBudgetRevenue.calculateSum();
+        long totalRevenue = BudgetRevenue.calculateSum();
 
-        long totalRegularExpense = calculateTotalRegularExpense();
-        long totalPublicInvestmentExpense = calculateTotalPublicInvestmentExpense();
+        long totalRegularExpense = RegularBudgetExpense.calculateSum();
+        long totalPublicInvestmentExpense = PublicInvestmentBudgetExpense.calculateSum();
         long totalExpense = totalRegularExpense + totalPublicInvestmentExpense;
 
         long balance = totalRevenue - totalExpense;
@@ -127,30 +123,6 @@ public class DashboardView {
 
         grid.add(labelNode, 0, row);
         grid.add(valueNode, 1, row);
-    }
-
-    private long calculateTotalRegularRevenue() {
-        return RegularBudgetRevenue.getAllRegularBudgetRevenues().stream().
-            filter(r -> r.getCode().length() == 2 && r.getCode().charAt(0) <= '3').
-            mapToLong(RegularBudgetRevenue::getAmount).sum();
-    }
-
-    private long calculateTotalPublicInvestmentRevenue() {
-        return PublicInvestmentBudgetRevenue.getAllPublicInvestmentBudgetRevenues().stream().
-            filter(r -> r.getCode().length() == 2 && r.getCode().charAt(0) <= '3').
-            mapToLong(r -> r.getCoFundedAmount() + r.getNationalAmount()).sum();
-    }
-
-    private long calculateTotalRegularExpense() {
-        return RegularBudgetExpense.getAllRegularBudgetExpenses().stream().
-            filter(e -> e.getCode().charAt(0) <= '3').
-            mapToLong(RegularBudgetExpense::getAmount).sum();
-    }
-
-    private long calculateTotalPublicInvestmentExpense() {
-        return PublicInvestmentBudgetExpense.getAllPublicInvestmentBudgetExpenses().stream().
-            filter(e -> e.getCode().charAt(0) <= '3').
-            mapToLong(PublicInvestmentBudgetExpense::getAmount).sum();
     }
 
     private String formatAmount(long amount) {

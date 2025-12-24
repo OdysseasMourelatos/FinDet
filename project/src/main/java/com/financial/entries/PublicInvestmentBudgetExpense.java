@@ -12,32 +12,13 @@ public class PublicInvestmentBudgetExpense extends BudgetExpense {
         publicInvestmentBudgetExpenses.add(this);
     }
 
-
     public static ArrayList<PublicInvestmentBudgetExpense> getAllPublicInvestmentBudgetExpenses() {
         return publicInvestmentBudgetExpenses;
     }
 
-    public static ArrayList<PublicInvestmentBudgetExpense> getPublicInvestmentBudgetNationalExpenses() {
-        ArrayList<PublicInvestmentBudgetExpense> publicInvestmentBudgetNationalExpenses = new ArrayList<>();
-        for (PublicInvestmentBudgetExpense expense : publicInvestmentBudgetExpenses) {
-            if (expense.getType().equals("ΕΘΝΙΚΟ") || expense.getType().equals("ΕΘΝΙΚΟ ΣΚΕΛΟΣ") ) {
-                publicInvestmentBudgetNationalExpenses.add(expense);
-            }
-        }
-        return publicInvestmentBudgetNationalExpenses;
+    public static long calculateSum() {
+        return PublicInvestmentBudgetNationalExpense.calculateSum() + PublicInvestmentBudgetCoFundedExpense.calculateSum();
     }
-
-
-    public static ArrayList<PublicInvestmentBudgetExpense> getPublicInvestmentBudgetCoFundedExpenses() {
-        ArrayList<PublicInvestmentBudgetExpense> publicInvestmentBudgetCoFundedExpenses = new ArrayList<>();
-        for (PublicInvestmentBudgetExpense expense : publicInvestmentBudgetExpenses) {
-            if (expense.getType().equals("ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ") || expense.getType().equals("ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ ΣΚΕΛΟΣ") ) {
-                publicInvestmentBudgetCoFundedExpenses.add(expense);
-            }
-        }
-        return publicInvestmentBudgetCoFundedExpenses;
-    }
-
 
     public String getType() {
         return type;

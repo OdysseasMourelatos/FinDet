@@ -4,6 +4,7 @@ import com.financial.entries.BudgetRevenue;
 import com.financial.entries.PublicInvestmentBudgetExpense;
 import com.financial.entries.RegularBudgetExpense;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -291,16 +292,14 @@ public class ChartsView {
 
         Label title = createSectionTitle("Κατανομή Εσόδων");
 
-        List<BudgetRevenue> revenues = BudgetRevenue.getAllBudgetRevenues().stream().
-            filter(r -> r.getCode().length() == 2 && r.getCode().charAt(0) <= '3').
-            collect(Collectors.toList());
+        List<BudgetRevenue> revenues = BudgetRevenue.getMainBudgetRevenues();
 
         if (revenues.isEmpty()) {
             showNoDataMessage();
             return;
         }
 
-        long total = revenues.stream().mapToLong(BudgetRevenue::getAmount).sum();
+        long total = BudgetRevenue.calculateSum();
 
         ObservableList<PieChart.Data> pieData = FXCollections.observableArrayList();
         List<LegendItem> legendItems = new ArrayList<>();
@@ -324,7 +323,7 @@ public class ChartsView {
 
         Label title = createSectionTitle("Κατανομή Εξόδων");
 
-        Map<String, Long> expensesByEntity = new java.util.HashMap<>();
+        Map<String, Long> expensesByEntity = new HashMap<>();
 
         for (RegularBudgetExpense e : RegularBudgetExpense.getAllRegularBudgetExpenses()) {
             if (e.getCode().charAt(0) <= '3') {
@@ -515,7 +514,7 @@ public class ChartsView {
 
         Label title = createSectionTitle("Έξοδα ανά Υπουργείο");
 
-        Map<String, Long> expensesByMinistry = new java.util.HashMap<>();
+        Map<String, Long> expensesByMinistry = new HashMap<>();
 
         for (RegularBudgetExpense e : RegularBudgetExpense.getAllRegularBudgetExpenses()) {
             if (e.getCode().charAt(0) <= '3') {

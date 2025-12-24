@@ -209,6 +209,7 @@ public class Entity implements EntityLogic {
             throw new IllegalStateException("BUDGET_TYPE NOT SUPPORTED");
         }
     }
+
     //Getters
 
     public String getEntityCode() {
