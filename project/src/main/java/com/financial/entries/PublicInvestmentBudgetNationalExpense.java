@@ -93,4 +93,9 @@ public class PublicInvestmentBudgetNationalExpense extends PublicInvestmentBudge
         }
         return null;
     }
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }
