@@ -98,7 +98,7 @@ public class RegularBudgetExpenseTest {
 
     @Test
     void testGetSumOfEveryExpenseCategory() {
-        Map<String, Long> categorySums = RegularBudgetExpense.getSumOfEveryExpenseCategory();
+        Map<String, Long> categorySums = RegularBudgetExpense.getSumOfEveryRegularExpenseCategory();
 
         // Έλεγχος Κατηγορίας 21: 3.532.000 + 6.423.000 + 44.609.000 = 54.564.000
         assertEquals(54564000L, categorySums.get("21"));

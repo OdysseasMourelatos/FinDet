@@ -38,7 +38,7 @@ public class RegularBudgetExpense extends BudgetExpense {
         return BudgetExpenseLogicService.calculateSum(regularBudgetExpenses);
     }
 
-    public static Map<String, Long> getSumOfEveryExpenseCategory() {
+    public static Map<String, Long> getSumOfEveryRegularExpenseCategory() {
         return BudgetExpenseLogicService.getSumOfEveryExpenseCategory(regularBudgetExpenses);
     }
 
