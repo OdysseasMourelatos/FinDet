@@ -53,6 +53,10 @@ public class RegularBudgetExpense extends BudgetExpense {
         return BudgetExpenseLogicService.getExpensesOfEntityWithCode(entityCode, regularBudgetExpenses);
     }
 
+    public static ArrayList<RegularBudgetExpense> getRegularBudgetExpensesOfCategoryWithCode(String expenseCode) {
+        return BudgetExpenseLogicService.getExpensesOfCategoryWithCode(expenseCode, regularBudgetExpenses);
+    }
+
     public static RegularBudgetExpense findRegularBudgetExpenseWithCodes(String entityCode, String serviceCode, String expenseCode) {
         return (RegularBudgetExpense) (BudgetExpenseLogicService.findExpenseWithCode(entityCode, serviceCode, expenseCode, regularBudgetExpenses));
     }
@@ -72,7 +76,7 @@ public class RegularBudgetExpense extends BudgetExpense {
     //Applies changes to certain expense category (e.g. 21) of all entities (Global Change)
 
     public static void implementGlobalChangesInCertainRegularExpenseCategoryWithPercentageAllocation(String code, double percentage, long fixedAmount) {
-        ExpensesHistory.keepHistory(regularBudgetExpenses, BudgetType.REGULAR_BUDGET);
+        ExpensesHistory.keepHistory(getRegularBudgetExpensesOfCategoryWithCode(code), BudgetType.REGULAR_BUDGET);
         BudgetExpenseChangesService.implementGlobalChangesInCertainExpenseCategoryWithPercentageAllocation(code, percentage, fixedAmount, regularBudgetExpenses);
         updateFilteredRegularBudgetExpense(code);
     }

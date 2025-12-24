@@ -26,6 +26,19 @@ public class BudgetExpenseLogicService {
         return expensesOfEntity;
     }
 
+    //Filters expenses based on the expenseCode
+    public static <T extends BudgetExpense> ArrayList<T> getExpensesOfCategoryWithCode(String expenseCode, ArrayList<T> expenses) {
+        ArrayList<T> expensesOfCategory = new ArrayList<>();
+
+        for (T expense : expenses) {
+            if (expense.getCode().equals(expenseCode)) {
+                expensesOfCategory.add(expense);
+            }
+        }
+
+        return expensesOfCategory;
+    }
+
     //Finds specific expense based on the primary key (entityCode, serviceCode, expenseCode)
     public static BudgetExpense findExpenseWithCode(String entityCode, String serviceCode, String expenseCode, ArrayList<? extends BudgetExpense> expenses) {
         for (BudgetExpense expense : expenses) {
