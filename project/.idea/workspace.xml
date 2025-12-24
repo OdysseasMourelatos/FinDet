@@ -6,8 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="88d8a661-a47d-4ac5-b89a-2164a467de01" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/entries/Entity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/Entity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetExpense.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/PublicInvestmentBudgetExpense.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/entries/RegularBudgetExpense.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/RegularBudgetExpense.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/services/expenses/BudgetExpenseLogicService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/services/expenses/BudgetExpenseLogicService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/RegularBudgetExpenseTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/RegularBudgetExpenseTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,6 +86,7 @@
     "JUnit.RegularBudgetExpenseTest.implementGlobalIncreaseInCertainRegularExpenseCategoryWithPercentageAllocationTest.executor": "Run",
     "JUnit.RegularBudgetExpenseTest.implementGlobalIncreaseInCertainRegularExpenseCategoryWithPercentageAllocationTest1.executor": "Run",
     "JUnit.RegularBudgetExpenseTest.testCreateRegularBudgetExpensesPerCategoryAggregation.executor": "Run",
+    "JUnit.RegularBudgetExpenseTest.testGetDescriptionWithCode.executor": "Run",
     "JUnit.RegularBudgetExpenseTest.testGetRegularBudgetExpensesOfCategoryWithCode.executor": "Run",
     "JUnit.RegularBudgetExpenseTest.testGlobalFixedAmountChangeOnPrimaryData.executor": "Run",
     "JUnit.RegularBudgetExpenseTest.testGlobalPercentageChangeOnPrimaryData.executor": "Run",
@@ -118,18 +120,19 @@
     "settings.editor.selected.configurable": "preferences.general"
   }
 }]]></component>
-  <component name="RunManager">
-    <configuration name="BudgetEntryTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="JUnit.RegularBudgetExpenseTest.testGetDescriptionWithCode">
+    <configuration name="RegularBudgetExpenseTest.testGetDescriptionWithCode" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="FinDet" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.financial.entries.*" />
+          <option name="PATTERN" value="com.financial.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="com.financial" />
-      <option name="MAIN_CLASS_NAME" value="com.financial.BudgetEntryTest" />
-      <option name="TEST_OBJECT" value="class" />
+      <option name="MAIN_CLASS_NAME" value="com.financial.RegularBudgetExpenseTest" />
+      <option name="METHOD_NAME" value="testGetDescriptionWithCode" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -202,11 +205,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.RegularBudgetExpenseTest.testGetDescriptionWithCode" />
         <item itemvalue="JUnit.RegularBudgetRevenueTest.getAllSubCategoriesTest" />
         <item itemvalue="JUnit.RegularBudgetRevenueTest.getAboveLevelSuperCategoryTest" />
         <item itemvalue="JUnit.RegularBudgetRevenueTest" />
         <item itemvalue="JUnit.java in FinDet" />
-        <item itemvalue="JUnit.BudgetEntryTest" />
       </list>
     </recent_temporary>
   </component>

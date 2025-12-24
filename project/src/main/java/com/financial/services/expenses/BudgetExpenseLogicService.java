@@ -89,4 +89,8 @@ public class BudgetExpenseLogicService {
         }
         return expensesPerEntity;
     }
+
+    public static String getDescriptionWithCode(String code, ArrayList<? extends BudgetExpense> expenses) {
+        return expenses.stream().filter(e -> e.getCode().equals(code)).findFirst().map(BudgetExpense::getDescription).orElse("Περιγραφή μη διαθέσιμη");
+    }
 }

@@ -12,9 +12,8 @@ public class RegularBudgetExpenseTest {
 
     @BeforeEach
     void setup() {
-        // Καθαρισμός των static λιστών πριν από κάθε test για αποφυγή διπλότυπων
+        // Καθαρισμός πριν από κάθε test για αποφυγή διπλότυπων
         RegularBudgetExpense.getAllRegularBudgetExpenses().clear();
-        RegularBudgetExpense.getRegularBudgetExpensesPerCategory().clear();
 
         // Εισαγωγή δεδομένων
         new RegularBudgetExpense("1001", "ΠΡΟΕΔΡΙΑ ΤΗΣ ΔΗΜΟΚΡΑΤΙΑΣ", "1001-101-0000000", "Προεδρία της Δημοκρατίας", "21", "Παροχές σε εργαζομένους", "ΕΞΟΔΑ", 3532000L);
@@ -32,57 +31,12 @@ public class RegularBudgetExpenseTest {
         new RegularBudgetExpense("1003", "ΒΟΥΛΗ ΤΩΝ ΕΛΛΗΝΩΝ", "1003-201-0000000", "Γενική Γραμματεία", "29", "Πιστώσεις υπό κατανομή", "ΕΞΟΔΑ", 100000L);
         new RegularBudgetExpense("1003", "ΒΟΥΛΗ ΤΩΝ ΕΛΛΗΝΩΝ", "1003-201-0000000", "Γενική Γραμματεία", "31", "Πάγια περιουσιακά στοιχεία", "ΕΞΟΔΑ", 3208000L);
         new RegularBudgetExpense("1003", "ΒΟΥΛΗ ΤΩΝ ΕΛΛΗΝΩΝ", "1003-201-0000000", "Γενική Γραμματεία", "33", "Τιμαλφή", "ΕΞΟΔΑ", 80000L);
-
-        RegularBudgetExpense.createRegularBudgetExpensesPerCategory();
-    }
-
-    @Test
-    void testCreateRegularBudgetExpensesPerCategoryAggregation() {
-        // 1. Εκτέλεση της μεθόδου
-        RegularBudgetExpense.createRegularBudgetExpensesPerCategory();
-
-        // 2. Έλεγχος μεγέθους: Έχουμε 7 μοναδικούς κωδικούς (21, 22, 23, 24, 29, 31, 33)
-        ArrayList<RegularBudgetExpense> summaries = RegularBudgetExpense.getRegularBudgetExpensesPerCategory();
-        assertEquals(7, summaries.size());
-
-        // 3. Έλεγχος περιγραφής και ποσού για την κατηγορία 21
-        // 3.532.000 + 6.423.000 + 44.609.000 = 54.564.000
-        RegularBudgetExpense summary21 = summaries.stream()
-                .filter(s -> s.getCode().equals("21"))
-                .findFirst()
-                .orElse(null);
-
-        assertNotNull(summary21);
-        assertEquals("Παροχές σε εργαζομένους", summary21.getDescription());
-        assertEquals(54564000L, summary21.getAmount());
-
-        // 4. Έλεγχος κατηγορίας 31 (Πάγια)
-        // 53.000 + 3.208.000 = 3.261.000
-        RegularBudgetExpense summary31 = summaries.stream()
-                .filter(s -> s.getCode().equals("31"))
-                .findFirst()
-                .orElse(null);
-
-        assertEquals(3261000L, summary31.getAmount());
     }
 
     @Test
     void testGetAllRegularBudgetExpenses() {
         ArrayList<RegularBudgetExpense> all = RegularBudgetExpense.getAllRegularBudgetExpenses();
         assertEquals(13, all.size());
-    }
-
-    @Test
-    void testFindFilteredRegularBudgetExpenseWithCode() {
-
-        // Έλεγχος εύρεσης υπάρχοντος κωδικού (π.χ. 21)
-        RegularBudgetExpense found = RegularBudgetExpense.findFilteredRegularBudgetExpenseWithCode("21");
-        assertNotNull(found);
-        assertEquals(54564000L, found.getAmount());
-
-        // Έλεγχος εύρεσης κωδικού που δεν υπάρχει στα δεδομένα (π.χ. 99)
-        RegularBudgetExpense notFound = RegularBudgetExpense.findFilteredRegularBudgetExpenseWithCode("99");
-        assertNull(notFound);
     }
 
     @Test
@@ -113,7 +67,7 @@ public class RegularBudgetExpenseTest {
             assertEquals(targetCode, e.getCode());
         }
 
-        // γ) Έλεγχος για κωδικό που δεν υπάρχει (Branch Coverage για την περίπτωση που δεν βρίσκει τίποτα)
+        // γ) Έλεγχος για κωδικό που δεν υπάρχει (Branch Coverage για την περίπτωση που δε βρίσκει τίποτα)
         ArrayList<RegularBudgetExpense> emptyResult = RegularBudgetExpense.getRegularBudgetExpensesOfCategoryWithCode("999");
         assertTrue(emptyResult.isEmpty());
     }
@@ -160,12 +114,26 @@ public class RegularBudgetExpenseTest {
     }
 
     @Test
-    void testGetRegularBudgetExpensesPerCategory() {
-        ArrayList<RegularBudgetExpense> perCategoryList = RegularBudgetExpense.getRegularBudgetExpensesPerCategory();
+    void testGetDescriptionWithCode() {
+        // Έλεγχος για την κατηγορία 21 (υπάρχει σε πολλούς φορείς)
+        assertEquals("Παροχές σε εργαζομένους",
+                RegularBudgetExpense.getDescriptionWithCode("21"));
 
-        // Έλεγχος αν η λίστα περιέχει τα σωστά δεδομένα
-        assertFalse(perCategoryList.isEmpty());
-        assertEquals(7, perCategoryList.size()); // Με βάση τα 13 αντικείμενα του setup
+        // Έλεγχος για την κατηγορία 24
+        assertEquals("Αγορές αγαθών και υπηρεσιών",
+                RegularBudgetExpense.getDescriptionWithCode("24"));
+
+        // Έλεγχος για την κατηγορία 33 (υπάρχει μόνο στη Γενική Γραμματεία)
+        assertEquals("Τιμαλφή",
+                RegularBudgetExpense.getDescriptionWithCode("33"));
+
+        // Έλεγχος για την κατηγορία 29
+        assertEquals("Πιστώσεις υπό κατανομή",
+                RegularBudgetExpense.getDescriptionWithCode("29"));
+
+        // Έλεγχος οριακής περίπτωσης: Κωδικός που δεν υπάρχει στα δεδομένα του setup
+        assertEquals("Περιγραφή μη διαθέσιμη",
+                RegularBudgetExpense.getDescriptionWithCode("99"));
     }
 
     @Test
@@ -225,36 +193,6 @@ public class RegularBudgetExpenseTest {
     }
 
     @Test
-    void updateFilteredRegularBudgetExpensePercentageTest() {
-        // Αρχικό άθροισμα κατηγορίας 21: 54.564.000
-        double percentage = 0.10;
-        RegularBudgetExpense.implementGlobalChangesInCertainRegularExpenseCategoryWithPercentageAllocation("21", percentage, 0);
-
-        // 2. Έλεγχος του Φιλτραρισμένου αντικειμένου
-        RegularBudgetExpense filtered = RegularBudgetExpense.findFilteredRegularBudgetExpenseWithCode("21");
-
-        // 54.564.000 * 1.1 = 60.020.400
-        assertNotNull(filtered);
-        assertEquals(60020400L, filtered.getAmount());
-    }
-
-    @Test
-    void updateFilteredRegularBudgetExpenseFixedAmountTest() {
-        RegularBudgetExpense.createRegularBudgetExpensesPerCategory();
-
-        // Σενάριο: +100.000 fixed σε κάθε αναλυτική εγγραφή.
-        // Στην κατηγορία 21 υπάρχουν 3 αναλυτικές εγγραφές.
-        // Άρα το συνολικό άθροισμα πρέπει να αυξηθεί κατά 3 * 100.000 = 300.000.
-        long fixedAmount = 100000L;
-        RegularBudgetExpense.implementGlobalChangesInCertainRegularExpenseCategoryWithPercentageAllocation("21", 0, fixedAmount);
-
-        RegularBudgetExpense filtered = RegularBudgetExpense.findFilteredRegularBudgetExpenseWithCode("21");
-
-        // Αρχικό 54.564.000 + (3 εγγραφές * 100.000) = 54.864.000
-        assertEquals(54864000L, filtered.getAmount());
-    }
-
-    @Test
     void implementGlobalIncreaseInAllExpenseCategoriesWithPercentageAllocationTest1() {
         // Εφαρμογή 10% σε ΟΛΑ τα έξοδα του συστήματος
         double percentage = 0.10;
@@ -293,48 +231,6 @@ public class RegularBudgetExpenseTest {
                 assertEquals(105000L, expense.getAmount()); // 100.000 + 5.000
             }
         }
-    }
-
-    @Test
-    void updateAllFilteredRegularBudgetExpensesPercentageTest() {
-        // 1. Εφαρμογή 10% σε ΟΛΑ
-        RegularBudgetExpense.implementGlobalChangesInAllExpenseCategoriesWithPercentageAllocation(0.10, 0);
-
-        // 2. Έλεγχος Κατηγορίας 21 στα Filtered
-        // Αρχικό 54.564.000 -> 60.020.400
-        RegularBudgetExpense filtered21 = RegularBudgetExpense.findFilteredRegularBudgetExpenseWithCode("21");
-        assertEquals(60020400L, filtered21.getAmount());
-
-        // 3. Έλεγχος Κατηγορίας 31 στα Filtered
-        // Αρχικό 3.261.000 -> 3.587.100
-        RegularBudgetExpense filtered31 = RegularBudgetExpense.findFilteredRegularBudgetExpenseWithCode("31");
-        assertEquals(3587100L, filtered31.getAmount());
-    }
-
-    @Test
-    void updateAllFilteredRegularBudgetExpensesFixedAmountTest() {
-        // Προσθήκη 10.000 ευρώ σε ΚΑΘΕ αναλυτική εγγραφή
-        long fixed = 10000L;
-        RegularBudgetExpense.implementGlobalChangesInAllExpenseCategoriesWithPercentageAllocation(0, fixed);
-
-        // Έλεγχος Κατηγορίας 23
-        // Στο setup υπάρχουν 2 εγγραφές για την κατηγορία 23 (μία στο 1001 και μία στο 1003)
-        // Αρχικό άθροισμα 23: 203.000 + 6.318.000 = 6.521.000
-        // Αναμενόμενο νέο άθροισμα: 6.521.000 + (2 * 10.000) = 6.541.000
-        RegularBudgetExpense filtered23 = RegularBudgetExpense.findFilteredRegularBudgetExpenseWithCode("23");
-        assertEquals(6541000L, filtered23.getAmount());
-    }
-
-    @Test
-    void testUpdateFilteredRegularBudgetExpenseWhenNull() {
-        // Φροντίζουμε η λίστα των filtered να είναι άδεια
-        RegularBudgetExpense.getRegularBudgetExpensesPerCategory().clear();
-
-        // Προσπαθούμε να ενημερώσουμε μια κατηγορία που δεν υπάρχει στα filtered
-        // Δεν πρέπει να πετάξει NullPointerException λόγω του check (regularBudgetExpense != null)
-        assertDoesNotThrow(() -> {
-            RegularBudgetExpense.updateFilteredRegularBudgetExpense("99");
-        });
     }
 
     @Test
