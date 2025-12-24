@@ -73,6 +73,19 @@ class RegularBudgetExpenseTest {
     }
 
     @Test
+    void testFindFilteredRegularBudgetExpenseWithCode() {
+
+        // Έλεγχος εύρεσης υπάρχοντος κωδικού (π.χ. 21)
+        RegularBudgetExpense found = RegularBudgetExpense.findFilteredRegularBudgetExpenseWithCode("21");
+        assertNotNull(found);
+        assertEquals(54564000L, found.getAmount());
+
+        // Έλεγχος εύρεσης κωδικού που δεν υπάρχει στα δεδομένα (π.χ. 99)
+        RegularBudgetExpense notFound = RegularBudgetExpense.findFilteredRegularBudgetExpenseWithCode("99");
+        assertNull(notFound);
+    }
+
+    @Test
     void testGetRegularBudgetExpensesOfEntityWithCode() {
         // Entity 1001: Έχει 4 εγγραφές
         ArrayList<RegularBudgetExpense> list1001 = RegularBudgetExpense.getRegularBudgetExpensesOfEntityWithCode("1001");
@@ -122,6 +135,15 @@ class RegularBudgetExpenseTest {
 
         // Έλεγχος πλήθους κατηγοριών: {21, 23, 24, 31, 22, 29, 33} = 7 κατηγορίες
         assertEquals(7, categorySums.size());
+    }
+
+    @Test
+    void testGetRegularBudgetExpensesPerCategory() {
+        ArrayList<RegularBudgetExpense> perCategoryList = RegularBudgetExpense.getRegularBudgetExpensesPerCategory();
+
+        // Έλεγχος αν η λίστα περιέχει τα σωστά δεδομένα
+        assertFalse(perCategoryList.isEmpty());
+        assertEquals(7, perCategoryList.size()); // Με βάση τα 13 αντικείμενα του setup
     }
 
     @Test
