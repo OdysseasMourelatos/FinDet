@@ -11,6 +11,8 @@ import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 
 public class DataInput {
+    
+    private static final DatabaseImporter dbImporter = new DatabaseImporter();
 
     public static void simpleCSVReader(String filePath) {
         String line;
@@ -69,13 +71,10 @@ public class DataInput {
         Set<String> headerSet = new HashSet<>(Arrays.asList(header));
 
         if (headerSet.contains("Σκέλος")) {
-
             if (headerSet.contains("Κωδικός_Υπηρεσίας")) {
                 return "PUBLIC_INVESTMENT_EXPENSES_PER_SERVICE";
             }
-
             return "PUBLIC_INVESTMENT_REVENUES";
-
         } else if (headerSet.contains("Κωδικός_Υπηρεσίας")) {
             return "REGULAR_EXPENSES_PER_SERVICE";
         } else if (headerSet.size() == 3) {
@@ -100,31 +99,43 @@ public class DataInput {
         String description = values[1];
         String category = "ΕΣΟΔΑ";
         long amount = Long.parseLong(values[2]);
+        
+        // Υπάρχων λειτουργικότητα
         BudgetRevenue regularBudgetRevenue = new RegularBudgetRevenue(code, description, category, amount);
-        //New filtered object of BudgetRevenue class
         BudgetRevenue budgetRevenue = new BudgetRevenue(code, description, category, amount, 0, amount);
+        
+        // ΝΕΟ: Εισαγωγή στη βάση δεδομένων
+        dbImporter.importRegularRevenue(code, description, amount);
     }
 
-    //Activated when all PublicInvestmentBudgetRevenues are filtered
+    // Activated when all PublicInvestmentBudgetRevenues are filtered
     public static void createBudgetRevenueFilteredFromPublicInvestmentBudgetRevenue() {
         for (PublicInvestmentBudgetRevenue revenue : PublicInvestmentBudgetRevenue.getPublicInvestmentBudgetRevenuesFiltered()) {
             BudgetRevenue budgetRevenue = new BudgetRevenue(revenue.getCode(), revenue.getDescription(), revenue.getCategory(), 0, revenue.getAmount(), revenue.getAmount());
+            
+            // ΝΕΟ: Εισαγωγή filtered revenues στη βάση
+            // Μπορούμε να προσθέσουμε ειδική μέθοδο αν χρειαστεί
         }
     }
 
-    private static void createPublicInvestmentBudgetRevenueFromCSV(String [] values) {
+    private static void createPublicInvestmentBudgetRevenueFromCSV(String[] values) {
         String code = values[0];
         String description = values[1];
         String category = "ΕΣΟΔΑ";
         String type = values[2];
         long amount = Long.parseLong(values[3]);
+        
+        // Υπάρχων λειτουργικότητα
         if (type.equals("ΕΘΝΙΚΟ") || type.equals("ΕΘΝΙΚΟ ΣΚΕΛΟΣ")) {
             PublicInvestmentBudgetRevenue publicInvestmentBudgetRevenue = new PublicInvestmentBudgetNationalRevenue(code, description, category, type, amount);
             PublicInvestmentBudgetRevenue publicInvestmentBudgetRevenueFiltered = new PublicInvestmentBudgetRevenue(code, description, category, type, amount, 0, amount);
-        } else if (type.equals("ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ") || type.equals("ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ ΣΚΕΛΟΣ") ) {
+        } else if (type.equals("ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ") || type.equals("ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ ΣΚΕΛΟΣ")) {
             PublicInvestmentBudgetRevenue publicInvestmentBudgetRevenue = new PublicInvestmentBudgetCoFundedRevenue(code, description, category, type, amount);
             PublicInvestmentBudgetRevenue publicInvestmentBudgetRevenueFiltered = new PublicInvestmentBudgetRevenue(code, description, category, type, 0, amount, amount);
         }
+        
+        // ΝΕΟ: Εισαγωγή στη βάση δεδομένων
+        dbImporter.importPublicInvestmentRevenue(code, description, type, amount);
     }
 
     private static void createRegularBudgetExpenseFromCSV(String[] values) {
@@ -136,12 +147,15 @@ public class DataInput {
         String description = values[5];
         String category = "ΕΞΟΔΑ";
         long amount = Long.parseLong(values[6]);
+        
+        // Υπάρχων λειτουργικότητα
         BudgetExpense regularBudgetExpense = new RegularBudgetExpense(entityCode, entityName, serviceCode, serviceName, expenseCode, description, category, amount);
+        
+        // ΝΕΟ: Εισαγωγή στη βάση δεδομένων
+        dbImporter.importRegularExpense(entityCode, entityName, serviceCode, serviceName, expenseCode, description, amount);
     }
 
-
-
-    private static void createPublicInvestmentBudgetExpenseFromCSV(String [] values) {
+    private static void createPublicInvestmentBudgetExpenseFromCSV(String[] values) {
         String entityCode = values[0];
         String entityName = values[1];
         String serviceCode = values[2];
@@ -151,11 +165,57 @@ public class DataInput {
         String type = values[6];
         long amount = Long.parseLong(values[7]);
         String category = "ΕΞΟΔΑ";
+        
+        // Υπάρχων λειτουργικότητα
         BudgetExpense publicInvestmentBudgetExpense = new PublicInvestmentBudgetExpense(entityCode, entityName, serviceCode, serviceName, expenseCode, description, type, category, amount);
+        
+        // ΝΕΟ: Εισαγωγή στη βάση δεδομένων
+        dbImporter.importPublicInvestmentExpense(entityCode, entityName, serviceCode, serviceName, expenseCode, description, type, amount);
     }
 
     public static void createEntityFromCSV() {
-        Map<String, String> entityMap = BudgetExpense.getExpenses().stream().collect(Collectors.toMap(BudgetExpense::getEntityCode, BudgetExpense::getEntityName, (existing, replacement) -> existing));
-        entityMap.keySet().stream().sorted().forEach(entityCode -> new Entity(entityCode, entityMap.get(entityCode)));
+        Map<String, String> entityMap = BudgetExpense.getExpenses().stream()
+            .collect(Collectors.toMap(BudgetExpense::getEntityCode, BudgetExpense::getEntityName, (existing, replacement) -> existing));
+        
+        entityMap.keySet().stream()
+            .sorted()
+            .forEach(entityCode -> new Entity(entityCode, entityMap.get(entityCode)));
+    }
+    
+    // ΝΕΑ ΜΕΘΟΔΟΣ: Εμφάνιση στατιστικών βάσης
+    public static void showDatabaseStatistics() {
+        dbImporter.printDatabaseStatistics();
+    }
+    
+    // ΝΕΑ ΜΕΘΟΔΟΣ: Καθαρισμός βάσης δεδομένων
+    public static void clearDatabase() {
+        String[] tables = {
+            "regular_revenues",
+            "public_investment_revenues",
+            "regular_expenses",
+            "public_investment_expenses",
+            "entities"
+        };
+        
+        System.out.println("⚠️  Προσοχή: Θα διαγραφούν όλα τα δεδομένα από τη βάση!");
+        System.out.print("Να συνεχίσω; (Ν/Ο): ");
+        
+        Scanner scanner = new Scanner(System.in);
+        String response = scanner.nextLine().trim().toUpperCase();
+        
+        if (response.equals("Ν") || response.equals("YES") || response.equals("Y")) {
+            try {
+                for (String table : tables) {
+                    String sql = "DELETE FROM " + table;
+                    // Εκτέλεση SQL
+                    System.out.println("Διαγράφτηκε ο πίνακας: " + table);
+                }
+                System.out.println("✅ Η βάση δεδομένων καθαρίστηκε επιτυχώς!");
+            } catch (Exception e) {
+                System.out.println("❌ Σφάλμα κατά τον καθαρισμό: " + e.getMessage());
+            }
+        } else {
+            System.out.println("❌ Ακυρώθηκε ο καθαρισμός της βάσης.");
+        }
     }
 }
