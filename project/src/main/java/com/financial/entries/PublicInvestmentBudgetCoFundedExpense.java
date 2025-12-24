@@ -15,30 +15,6 @@ public class PublicInvestmentBudgetCoFundedExpense extends PublicInvestmentBudge
         pibCoFundedExpenses.add(this);
     }
 
-    protected static ArrayList<PublicInvestmentBudgetCoFundedExpense> pibCoFundedExpensesPerCategory = new ArrayList<>();
-
-    private PublicInvestmentBudgetCoFundedExpense(String code, String description, String type, String category, long amount) {
-        super(code, description, type, category, amount);
-        pibCoFundedExpensesPerCategory.add(this);
-    }
-
-    public static void createPublicInvestmentBudgetCoFundedExpensesPerCategory() {
-        pibCoFundedExpensesPerCategory.clear();
-        for (Map.Entry<String, Long> entry : getSumOfEveryExpenseCategory().entrySet()) {
-            String description = pibCoFundedExpenses.stream().filter(e -> e.getCode().equals(entry.getKey())).findFirst().map(PublicInvestmentBudgetCoFundedExpense::getDescription).orElse("");
-            new PublicInvestmentBudgetCoFundedExpense(entry.getKey(), description, "ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ", "ΕΞΟΔΑ", entry.getValue());
-        }
-    }
-
-    public static PublicInvestmentBudgetCoFundedExpense findFilteredPublicInvestmentBudgetCoFundedExpenseWithCode(String code) {
-        for (PublicInvestmentBudgetCoFundedExpense expense : pibCoFundedExpensesPerCategory) {
-            if (expense.getCode().equals(code)) {
-                return expense;
-            }
-        }
-        return null;
-    }
-
     public static ArrayList<PublicInvestmentBudgetCoFundedExpense> getAllPublicInvestmentBudgetCoFundedExpenses() {
         return pibCoFundedExpenses;
     }
@@ -63,37 +39,20 @@ public class PublicInvestmentBudgetCoFundedExpense extends PublicInvestmentBudge
         return BudgetExpenseLogicService.getSumOfEveryExpenseCategory(pibCoFundedExpenses);
     }
 
-    public static ArrayList<PublicInvestmentBudgetCoFundedExpense> getPublicInvestmentBudgetCoFundedExpensesPerCategory() {
-        return pibCoFundedExpensesPerCategory;
+    public static String getDescriptionWithCode(String code) {
+        return BudgetExpenseLogicService.getDescriptionWithCode(code, pibCoFundedExpenses);
     }
 
     public static void implementGlobalChangesInCertainPublicInvestmentBudgetCoFundedCategory(String code, double percentage, long fixedAmount) {
         ExpensesHistory.keepHistory(getPublicInvestmentBudgetCoFundedExpensesOfCategoryWithCode(code), BudgetType.PUBLIC_INVESTMENT_BUDGET_COFUNDED);
         BudgetExpenseChangesService.implementGlobalChangesInCertainExpenseCategoryWithPercentageAllocation(code, percentage, fixedAmount, pibCoFundedExpenses);
-        updateFilteredPublicInvestmentBudgetCoFundedExpense(code);
     }
 
     public static void implementGlobalChangesInAllPublicInvestmentBudgetCoFundedCategories(double percentage, long fixedAmount) {
         ExpensesHistory.keepHistory(pibCoFundedExpenses, BudgetType.PUBLIC_INVESTMENT_BUDGET_COFUNDED);
         BudgetExpenseChangesService.implementGlobalChangesInAllExpenseCategoriesWithPercentageAllocation(percentage, fixedAmount, pibCoFundedExpenses);
-        updateAllFilteredPIBCoFundedExpenses();
     }
 
-    public static void updateFilteredPublicInvestmentBudgetCoFundedExpense(String code) {
-        PublicInvestmentBudgetCoFundedExpense filtered = findFilteredPublicInvestmentBudgetCoFundedExpenseWithCode(code);
-        if (filtered != null) {
-            long newTotal = getSumOfEveryExpenseCategory().getOrDefault(code, 0L);
-            filtered.setAmount(newTotal);
-        }
-    }
-
-    public static void updateAllFilteredPIBCoFundedExpenses() {
-        Map<String, Long> allNewSums = getSumOfEveryExpenseCategory();
-        for (PublicInvestmentBudgetCoFundedExpense filteredExpense : pibCoFundedExpensesPerCategory) {
-            long newTotal = allNewSums.getOrDefault(filteredExpense.getCode(), 0L);
-            filteredExpense.setAmount(newTotal);
-        }
-    }
 
     @Override
     public String toString() {

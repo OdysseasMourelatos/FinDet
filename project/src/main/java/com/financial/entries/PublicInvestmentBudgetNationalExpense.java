@@ -43,7 +43,6 @@ public class PublicInvestmentBudgetNationalExpense extends PublicInvestmentBudge
         return BudgetExpenseLogicService.getDescriptionWithCode(code, pibNationalExpenses);
     }
 
-
     public static void implementGlobalChangesInCertainPublicInvestmentBudgetNationalCategory(String code, double percentage, long fixedAmount) {
         ExpensesHistory.keepHistory(getPublicInvestmentBudgetNationalExpensesOfCategoryWithCode(code), BudgetType.PUBLIC_INVESTMENT_BUDGET_NATIONAL);
         BudgetExpenseChangesService.implementGlobalChangesInCertainExpenseCategoryWithPercentageAllocation(code, percentage, fixedAmount, pibNationalExpenses);
