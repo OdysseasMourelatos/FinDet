@@ -6,6 +6,15 @@
   <component name="ChangeListManager">
     <list default="true" id="88d8a661-a47d-4ac5-b89a-2164a467de01" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/RegularBudgetExpenseTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/RegularBudgetExpenseTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/checkstyle-cachefile" beforeDir="false" afterPath="$PROJECT_DIR$/target/checkstyle-cachefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/checkstyle-result.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/checkstyle-result.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.AppTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.AppTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.BudgetRevenueTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.financial.BudgetRevenueTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.financial.AppTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.financial.AppTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.financial.BudgetRevenueTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.financial.BudgetRevenueTest.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,7 +88,11 @@
     "JUnit.RegularBudgetExpenseTest.implementGlobalIncreaseInCertainRegularExpenseCategoryWithPercentageAllocationTest.executor": "Run",
     "JUnit.RegularBudgetExpenseTest.implementGlobalIncreaseInCertainRegularExpenseCategoryWithPercentageAllocationTest1.executor": "Run",
     "JUnit.RegularBudgetExpenseTest.testCreateRegularBudgetExpensesPerCategoryAggregation.executor": "Run",
+    "JUnit.RegularBudgetExpenseTest.testGlobalFixedAmountChangeOnPrimaryData.executor": "Run",
     "JUnit.RegularBudgetExpenseTest.testGlobalPercentageChangeOnPrimaryData.executor": "Run",
+    "JUnit.RegularBudgetExpenseTest.testToStringFormatting.executor": "Run",
+    "JUnit.RegularBudgetExpenseTest.updateAllFilteredRegularBudgetExpensesFixedAmountTest.executor": "Run",
+    "JUnit.RegularBudgetExpenseTest.updateAllFilteredRegularBudgetExpensesPercentageTest.executor": "Run",
     "JUnit.RegularBudgetRevenueTest.executor": "Run",
     "JUnit.RegularBudgetRevenueTest.findSuperCategoryTest.executor": "Run",
     "JUnit.RegularBudgetRevenueTest.getAboveLevelSuperCategoryTest.executor": "Run",
@@ -105,8 +118,8 @@
     "settings.editor.selected.configurable": "preferences.general"
   }
 }]]></component>
-  <component name="RunManager" selected="JUnit.RegularBudgetExpenseTest.updateAllFilteredRegularBudgetExpensesPercentageTest">
-    <configuration name="RegularBudgetExpenseTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="JUnit.RegularBudgetExpenseTest.testUpdateAllFilteredRegularBudgetExpensesWhenSumMissing">
+    <configuration name="RegularBudgetExpenseTest.testToStringFormatting" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="FinDet" />
       <extension name="coverage">
         <pattern>
@@ -116,28 +129,13 @@
       </extension>
       <option name="PACKAGE_NAME" value="com.financial" />
       <option name="MAIN_CLASS_NAME" value="com.financial.RegularBudgetExpenseTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="RegularBudgetExpenseTest.testGlobalFixedAmountChangeOnPrimaryData" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="FinDet" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.financial.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.financial" />
-      <option name="MAIN_CLASS_NAME" value="com.financial.RegularBudgetExpenseTest" />
-      <option name="METHOD_NAME" value="testGlobalFixedAmountChangeOnPrimaryData" />
+      <option name="METHOD_NAME" value="testToStringFormatting" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="RegularBudgetExpenseTest.testGlobalPercentageChangeOnPrimaryData" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="RegularBudgetExpenseTest.testUpdateAllFilteredRegularBudgetExpensesWhenSumMissing" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="FinDet" />
       <extension name="coverage">
         <pattern>
@@ -147,7 +145,23 @@
       </extension>
       <option name="PACKAGE_NAME" value="com.financial" />
       <option name="MAIN_CLASS_NAME" value="com.financial.RegularBudgetExpenseTest" />
-      <option name="METHOD_NAME" value="testGlobalPercentageChangeOnPrimaryData" />
+      <option name="METHOD_NAME" value="testUpdateAllFilteredRegularBudgetExpensesWhenSumMissing" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RegularBudgetExpenseTest.testUpdateFilteredRegularBudgetExpenseWhenNull" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="FinDet" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.financial.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.financial" />
+      <option name="MAIN_CLASS_NAME" value="com.financial.RegularBudgetExpenseTest" />
+      <option name="METHOD_NAME" value="testUpdateFilteredRegularBudgetExpenseWhenNull" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -198,11 +212,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.RegularBudgetExpenseTest.testUpdateAllFilteredRegularBudgetExpensesWhenSumMissing" />
+        <item itemvalue="JUnit.RegularBudgetExpenseTest.testUpdateFilteredRegularBudgetExpenseWhenNull" />
+        <item itemvalue="JUnit.RegularBudgetExpenseTest.testToStringFormatting" />
         <item itemvalue="JUnit.RegularBudgetExpenseTest.updateAllFilteredRegularBudgetExpensesPercentageTest" />
         <item itemvalue="JUnit.RegularBudgetExpenseTest.updateAllFilteredRegularBudgetExpensesFixedAmountTest" />
-        <item itemvalue="JUnit.RegularBudgetExpenseTest.testGlobalFixedAmountChangeOnPrimaryData" />
-        <item itemvalue="JUnit.RegularBudgetExpenseTest.testGlobalPercentageChangeOnPrimaryData" />
-        <item itemvalue="JUnit.RegularBudgetExpenseTest" />
       </list>
     </recent_temporary>
   </component>
@@ -233,5 +247,20 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/test/java/com/financial/RegularBudgetExpenseTest.java</url>
+          <line>306</line>
+          <properties class="com.financial.RegularBudgetExpenseTest" method="testToStringFormatting">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

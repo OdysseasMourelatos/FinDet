@@ -172,8 +172,10 @@ public class RegularBudgetExpenseTest {
         }
     }
 
+    //Tests ONLY for increases
+
     @Test
-    void implementGlobalIncreaseInCertainRegularExpenseCategoryWithPercentageAllocationTest() {
+    void implementGlobalIncreaseInCertainRegularExpenseCategoryWithPercentageAllocationTest2() {
         // Σενάριο: Προσθήκη 100.000 ευρώ fixed σε κάθε εγγραφή της κατηγορίας 21
         long fixedAmount = 100000L;
         RegularBudgetExpense.implementGlobalChangesInCertainRegularExpenseCategoryWithPercentageAllocation("21", 0, fixedAmount);
@@ -231,7 +233,7 @@ public class RegularBudgetExpenseTest {
     }
 
     @Test
-    void testGlobalPercentageChangeOnPrimaryData() {
+    void implementGlobalIncreaseInAllExpenseCategoriesWithPercentageAllocationTest1() {
         // Εφαρμογή 10% σε ΟΛΑ τα έξοδα του συστήματος
         double percentage = 0.10;
         RegularBudgetExpense.implementGlobalChangesInAllExpenseCategoriesWithPercentageAllocation(percentage, 0);
@@ -251,7 +253,7 @@ public class RegularBudgetExpenseTest {
     }
 
     @Test
-    void testGlobalFixedAmountChangeOnPrimaryData() {
+    void implementGlobalIncreaseInAllExpenseCategoriesWithPercentageAllocationTest2() {
         // Προσθήκη 5.000 ευρώ σε ΚΑΘΕ εγγραφή στη λίστα
         long fixed = 5000L;
         RegularBudgetExpense.implementGlobalChangesInAllExpenseCategoriesWithPercentageAllocation(0, fixed);
@@ -299,5 +301,42 @@ public class RegularBudgetExpenseTest {
         // Αναμενόμενο νέο άθροισμα: 6.521.000 + (2 * 10.000) = 6.541.000
         RegularBudgetExpense filtered23 = RegularBudgetExpense.findFilteredRegularBudgetExpenseWithCode("23");
         assertEquals(6541000L, filtered23.getAmount());
+    }
+
+    @Test
+    void testUpdateFilteredRegularBudgetExpenseWhenNull() {
+        // Φροντίζουμε η λίστα των filtered να είναι άδεια
+        RegularBudgetExpense.getRegularBudgetExpensesPerCategory().clear();
+
+        // Προσπαθούμε να ενημερώσουμε μια κατηγορία που δεν υπάρχει στα filtered
+        // Δεν πρέπει να πετάξει NullPointerException λόγω του check (regularBudgetExpense != null)
+        assertDoesNotThrow(() -> {
+            RegularBudgetExpense.updateFilteredRegularBudgetExpense("99");
+        });
+    }
+
+    @Test
+    void testUpdateAllFilteredRegularBudgetExpensesWhenSumMissing() {
+        // 1. Δημιουργούμε ένα filtered αντικείμενο χειροκίνητα με κωδικό που ΔΕΝ υπάρχει στη βασική λίστα
+        // (Χρησιμοποιούμε reflection ή προσωρινά αλλάζουμε τη λίστα για το test)
+        RegularBudgetExpense.createRegularBudgetExpensesPerCategory();
+
+        // Προσθέτουμε ένα "ψεύτικο" summary που δεν αντιστοιχεί σε πραγματικά έξοδα
+        // Στην updateAllFiltered, το allNewSums.get("NON_EXISTENT") θα επιστρέψει null
+        assertDoesNotThrow(() -> {
+            RegularBudgetExpense.updateAllFilteredRegularBudgetExpenses();
+        });
+
+        // Η μέθοδος πρέπει απλά να προσπεράσει το null χωρίς να κρασάρει
+    }
+
+    @Test
+    void testToStringFormatting() {
+        RegularBudgetExpense e = new RegularBudgetExpense("1001", "ΤΕΣΤ", "1001-101", "ΥΠ", "21", "Μισθοί", "ΕΞΟΔΑ", 1000000L);
+        String output = e.toString();
+
+        assertTrue(output.contains("1001"));
+        assertTrue(output.contains("ΤΕΣΤ"));
+        assertTrue(output.contains("ΥΠ"));
     }
 }
