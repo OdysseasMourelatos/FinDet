@@ -97,6 +97,28 @@ public class RegularBudgetExpenseTest {
     }
 
     @Test
+    void testGetRegularBudgetExpensesOfCategoryWithCode() {
+        // 1. Δεδομένα: Έχουμε ήδη 3 εγγραφές με κωδικό "21" από το setup
+        String targetCode = "21";
+
+        // 2. Εκτέλεση φιλτραρίσματος
+        ArrayList<RegularBudgetExpense> result = RegularBudgetExpense.getRegularBudgetExpensesOfCategoryWithCode(targetCode);
+
+        // 3. Επαλήθευση
+        // α) Πρέπει να βρει ακριβώς 3 εγγραφές
+        assertEquals(3, result.size());
+
+        // β) Κάθε εγγραφή στη λίστα πρέπει να έχει κωδικό "21"
+        for (RegularBudgetExpense e : result) {
+            assertEquals(targetCode, e.getCode());
+        }
+
+        // γ) Έλεγχος για κωδικό που δεν υπάρχει (Branch Coverage για την περίπτωση που δεν βρίσκει τίποτα)
+        ArrayList<RegularBudgetExpense> emptyResult = RegularBudgetExpense.getRegularBudgetExpensesOfCategoryWithCode("999");
+        assertTrue(emptyResult.isEmpty());
+    }
+
+    @Test
     void testFindRegularBudgetExpenseWithCodes() {
         // Αναζήτηση συγκεκριμένου: Entity 1003, Service 1003-201-0000000, Code 29
         RegularBudgetExpense found = RegularBudgetExpense.findRegularBudgetExpenseWithCodes(
