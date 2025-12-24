@@ -1,7 +1,9 @@
 package com.financial.entries;
 
+import com.financial.services.BudgetType;
 import com.financial.services.expenses.BudgetExpenseChangesService;
 import com.financial.services.expenses.BudgetExpenseLogicService;
+import com.financial.services.expenses.ExpensesHistory;
 
 import java.util.*;
 
@@ -70,6 +72,7 @@ public class RegularBudgetExpense extends BudgetExpense {
     //Applies changes to certain expense category (e.g. 21) of all entities (Global Change)
 
     public static void implementGlobalChangesInCertainRegularExpenseCategoryWithPercentageAllocation(String code, double percentage, long fixedAmount) {
+        ExpensesHistory.keepHistory(regularBudgetExpenses, BudgetType.REGULAR_BUDGET);
         BudgetExpenseChangesService.implementGlobalChangesInCertainExpenseCategoryWithPercentageAllocation(code, percentage, fixedAmount, regularBudgetExpenses);
         updateFilteredRegularBudgetExpense(code);
     }
@@ -77,6 +80,7 @@ public class RegularBudgetExpense extends BudgetExpense {
     //Scenario: Change of all regular budget expenses of all entities
 
     public static void implementGlobalChangesInAllExpenseCategoriesWithPercentageAllocation(double percentage, long fixedAmount) {
+        ExpensesHistory.keepHistory(regularBudgetExpenses, BudgetType.REGULAR_BUDGET);
         BudgetExpenseChangesService.implementGlobalChangesInAllExpenseCategoriesWithPercentageAllocation(percentage, fixedAmount, regularBudgetExpenses);
         updateAllFilteredRegularBudgetExpenses();
     }
