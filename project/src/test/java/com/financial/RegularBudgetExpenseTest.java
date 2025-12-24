@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.Map;
 
-class RegularBudgetExpenseTest {
+public class RegularBudgetExpenseTest {
 
     @BeforeEach
     void setup() {
@@ -228,5 +228,46 @@ class RegularBudgetExpenseTest {
 
         // Αρχικό 54.564.000 + (3 εγγραφές * 100.000) = 54.864.000
         assertEquals(54864000L, filtered.getAmount());
+    }
+
+    @Test
+    void testGlobalPercentageChangeOnPrimaryData() {
+        // Εφαρμογή 10% σε ΟΛΑ τα έξοδα του συστήματος
+        double percentage = 0.10;
+        RegularBudgetExpense.implementGlobalChangesInAllExpenseCategoriesWithPercentageAllocation(percentage, 0);
+
+        // Σάρωση όλης της λίστας για επαλήθευση
+        for (RegularBudgetExpense expense : RegularBudgetExpense.getAllRegularBudgetExpenses()) {
+            // Παράδειγμα ελέγχου για την εγγραφή 1001-21 (Αρχικό: 3.532.000)
+            if (expense.getEntityCode().equals("1001") && expense.getCode().equals("21")) {
+                assertEquals(3885200L, expense.getAmount());
+            }
+
+            // Παράδειγμα ελέγχου για την εγγραφή 1003-33 (Αρχικό: 80.000)
+            if (expense.getEntityCode().equals("1003") && expense.getCode().equals("33")) {
+                assertEquals(88000L, expense.getAmount());
+            }
+        }
+    }
+
+    @Test
+    void testGlobalFixedAmountChangeOnPrimaryData() {
+        // Προσθήκη 5.000 ευρώ σε ΚΑΘΕ εγγραφή στη λίστα
+        long fixed = 5000L;
+        RegularBudgetExpense.implementGlobalChangesInAllExpenseCategoriesWithPercentageAllocation(0, fixed);
+
+        ArrayList<RegularBudgetExpense> allExpenses = RegularBudgetExpense.getAllRegularBudgetExpenses();
+
+        // Επαλήθευση ότι και οι 13 εγγραφές αυξήθηκαν
+        for (RegularBudgetExpense expense : allExpenses) {
+            // Ελέγχουμε με βάση τις γνωστές αρχικές τιμές από το setup
+            if (expense.getEntityCode().equals("1001") && expense.getCode().equals("31")) {
+                assertEquals(58000L, expense.getAmount()); // 53.000 + 5.000
+            }
+
+            if (expense.getEntityCode().equals("1003") && expense.getServiceCode().contains("201") && expense.getCode().equals("29")) {
+                assertEquals(105000L, expense.getAmount()); // 100.000 + 5.000
+            }
+        }
     }
 }

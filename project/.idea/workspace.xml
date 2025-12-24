@@ -79,6 +79,7 @@
     "JUnit.RegularBudgetExpenseTest.implementGlobalIncreaseInCertainRegularExpenseCategoryWithPercentageAllocationTest.executor": "Run",
     "JUnit.RegularBudgetExpenseTest.implementGlobalIncreaseInCertainRegularExpenseCategoryWithPercentageAllocationTest1.executor": "Run",
     "JUnit.RegularBudgetExpenseTest.testCreateRegularBudgetExpensesPerCategoryAggregation.executor": "Run",
+    "JUnit.RegularBudgetExpenseTest.testGlobalPercentageChangeOnPrimaryData.executor": "Run",
     "JUnit.RegularBudgetRevenueTest.executor": "Run",
     "JUnit.RegularBudgetRevenueTest.findSuperCategoryTest.executor": "Run",
     "JUnit.RegularBudgetRevenueTest.getAboveLevelSuperCategoryTest.executor": "Run",
@@ -104,23 +105,7 @@
     "settings.editor.selected.configurable": "preferences.general"
   }
 }]]></component>
-  <component name="RunManager" selected="JUnit.RegularBudgetExpenseTest">
-    <configuration name="PublicInvestmentBudgetRevenueTest.setNationalAmountNegativeTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="FinDet" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.financial.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.financial" />
-      <option name="MAIN_CLASS_NAME" value="com.financial.PublicInvestmentBudgetRevenueTest" />
-      <option name="METHOD_NAME" value="setNationalAmountNegativeTest" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="JUnit.RegularBudgetExpenseTest.testGlobalFixedAmountChangeOnPrimaryData">
     <configuration name="RegularBudgetExpenseTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="FinDet" />
       <extension name="coverage">
@@ -132,22 +117,6 @@
       <option name="PACKAGE_NAME" value="com.financial" />
       <option name="MAIN_CLASS_NAME" value="com.financial.RegularBudgetExpenseTest" />
       <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="RegularBudgetExpenseTest.implementGlobalIncreaseInCertainRegularExpenseCategoryWithPercentageAllocationTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="FinDet" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.financial.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.financial" />
-      <option name="MAIN_CLASS_NAME" value="com.financial.RegularBudgetExpenseTest" />
-      <option name="METHOD_NAME" value="implementGlobalIncreaseInCertainRegularExpenseCategoryWithPercentageAllocationTest" />
-      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -184,6 +153,38 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="RegularBudgetExpenseTest.testGlobalFixedAmountChangeOnPrimaryData" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="FinDet" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.financial.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.financial" />
+      <option name="MAIN_CLASS_NAME" value="com.financial.RegularBudgetExpenseTest" />
+      <option name="METHOD_NAME" value="testGlobalFixedAmountChangeOnPrimaryData" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RegularBudgetExpenseTest.testGlobalPercentageChangeOnPrimaryData" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="FinDet" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.financial.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.financial" />
+      <option name="MAIN_CLASS_NAME" value="com.financial.RegularBudgetExpenseTest" />
+      <option name="METHOD_NAME" value="testGlobalPercentageChangeOnPrimaryData" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="JetRunConfigurationType">
       <module name="project" />
       <method v="2">
@@ -197,11 +198,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.RegularBudgetExpenseTest.testGlobalFixedAmountChangeOnPrimaryData" />
+        <item itemvalue="JUnit.RegularBudgetExpenseTest.testGlobalPercentageChangeOnPrimaryData" />
         <item itemvalue="JUnit.RegularBudgetExpenseTest" />
         <item itemvalue="JUnit.RegularBudgetExpenseTest.implementGlobalIncreaseInCertainRegularExpenseCategoryWithPercentageAllocationTest1" />
         <item itemvalue="JUnit.RegularBudgetExpenseTest.testCreateRegularBudgetExpensesPerCategoryAggregation" />
-        <item itemvalue="JUnit.RegularBudgetExpenseTest.implementGlobalIncreaseInCertainRegularExpenseCategoryWithPercentageAllocationTest" />
-        <item itemvalue="JUnit.PublicInvestmentBudgetRevenueTest.setNationalAmountNegativeTest" />
       </list>
     </recent_temporary>
   </component>
