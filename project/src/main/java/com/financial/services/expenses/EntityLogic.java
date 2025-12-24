@@ -66,5 +66,34 @@ public interface EntityLogic {
     Map<String, Long> getPublicInvestmentNationalSumOfEveryService();
     Map<String, Long> getPublicInvestmentCoFundedSumOfEveryService();
 
-    
+    default Map<String, Long> getPublicInvestmentSumOfEveryService() {
+        Map<String, Long> nationalMap = getPublicInvestmentNationalSumOfEveryService();
+        Map<String, Long> coFundedMap = getPublicInvestmentCoFundedSumOfEveryService();
+
+        // Δημιουργούμε ένα νέο Map ξεκινώντας με τα δεδομένα του Εθνικού σκέλους
+        Map<String, Long> combinedMap = new HashMap<>(nationalMap);
+
+        // Προσθέτουμε τα δεδομένα του Συγχρηματοδοτούμενου
+        coFundedMap.forEach((serviceCode, amount) ->
+                combinedMap.merge(serviceCode, amount, Long::sum)
+        );
+
+        return combinedMap;
+    }
+
+
+    default Map<String, Long> getTotalSumOfEveryService() {
+        Map<String, Long> regularMap = getPublicInvestmentSumOfEveryService();
+        Map<String, Long> pibMap = getRegularSumOfEveryService();
+
+        // Δημιουργούμε ένα νέο Map ξεκινώντας με τα δεδομένα του Τακτικού
+        Map<String, Long> combinedMap = new HashMap<>(regularMap);
+
+        // Προσθέτουμε τα δεδομένα του ΠΔΕ
+        pibMap.forEach((serviceCode, amount) ->
+                combinedMap.merge(serviceCode, amount, Long::sum)
+        );
+
+        return combinedMap;
+    }
 }
