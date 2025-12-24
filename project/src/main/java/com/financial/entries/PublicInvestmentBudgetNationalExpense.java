@@ -56,4 +56,33 @@ public class PublicInvestmentBudgetNationalExpense extends PublicInvestmentBudge
     public static Map<String, Long> getSumOfEveryExpenseCategory() {
         return BudgetExpenseLogicService.getSumOfEveryExpenseCategory(pibNationalExpenses);
     }
+
+    public static void implementGlobalChangesInCertainPublicInvestmentBudgetNationalCategory(String code, double percentage, long fixedAmount) {
+        ExpensesHistory.keepHistory(getPublicInvestmentBudgetNationalExpensesOfCategoryWithCode(code), BudgetType.PUBLIC_INVESTMENT_BUDGET_NATIONAL);
+        BudgetExpenseChangesService.implementGlobalChangesInCertainExpenseCategoryWithPercentageAllocation(code, percentage, fixedAmount, pibNationalExpenses);
+        updateFilteredPublicInvestmentBudgetNationalExpense(code);
+    }
+
+    public static void implementGlobalChangesInAllPublicInvestmentBudgetNationalCategories(double percentage, long fixedAmount) {
+        ExpensesHistory.keepHistory(pibNationalExpenses, BudgetType.PUBLIC_INVESTMENT_BUDGET_NATIONAL);
+        BudgetExpenseChangesService.implementGlobalChangesInAllExpenseCategoriesWithPercentageAllocation(percentage, fixedAmount, pibNationalExpenses);
+        updateAllFilteredPIBNationalExpenses();
+    }
+
+    public static void updateFilteredPublicInvestmentBudgetNationalExpense(String code) {
+        PublicInvestmentBudgetNationalExpense filtered = findFilteredPublicInvestmentBudgetNationalExpenseWithCode(code);
+        if (filtered != null) {
+            long newTotal = getSumOfEveryExpenseCategory().getOrDefault(code, 0L);
+            filtered.setAmount(newTotal);
+        }
+    }
+
+    public static PublicInvestmentBudgetNationalExpense findFilteredPublicInvestmentBudgetNationalExpenseWithCode(String code) {
+        for (PublicInvestmentBudgetNationalExpense expense : pibNationalExpensesPerCategory) {
+            if (expense.getCode().equals(code)) {
+                return expense;
+            }
+        }
+        return null;
+    }
 }
