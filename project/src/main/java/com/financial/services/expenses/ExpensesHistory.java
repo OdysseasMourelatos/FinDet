@@ -2,6 +2,7 @@ package com.financial.services.expenses;
 
 import com.financial.entries.BudgetExpense;
 import com.financial.services.BudgetType;
+import com.financial.entries.RegularBudgetExpense;
 
 import java.util.*;
 
@@ -13,15 +14,63 @@ public class ExpensesHistory {
         // utility class – no instances
     }
 
+    public static Deque<Map<String[], Long>> getHistoryDeque() {
+        return historyDeque;
+    }
+
+    public static Deque<BudgetType> getTypeDeque() {
+        return typeDeque;
+    }
+
     public static void keepHistory(ArrayList<? extends BudgetExpense> expenses, BudgetType type) {
         Map<String[], Long> modifiedElement = new HashMap<>();
         for (BudgetExpense expense : expenses) {
-            String[] primaryKey = new String[2];
-            primaryKey[0] = expense.getServiceCode();
-            primaryKey[1] = expense.getCode();
+            String[] primaryKey = new String[3];
+            primaryKey[0] = expense.getEntityCode();
+            primaryKey[1] = expense.getServiceCode();
+            primaryKey[2] = expense.getCode();
             modifiedElement.put(primaryKey, expense.getAmount());
         }
         historyDeque.addFirst(modifiedElement);
         typeDeque.addFirst(type);
+    }
+
+    public static BudgetType getMostRecentBudgetType() {
+        try {
+            return typeDeque.getFirst();
+        } catch (NoSuchElementException e) {
+            System.out.println("NO HISTORY FOUND");
+            return null;
+        }
+    }
+
+    public static Map<String[], Long> getMostRecentExpensesHistory() {
+        try {
+            return historyDeque.getFirst();
+        } catch (NoSuchElementException e) {
+            System.out.println("NO HISTORY FOUND");
+            return null;
+        }
+    }
+
+    public static void returnToPreviousState() {
+        try {
+            BudgetType type = getMostRecentBudgetType();
+            for (Map.Entry<String[], Long> entry : getMostRecentExpensesHistory().entrySet()) {
+                String[] primaryKey = entry.getKey();
+                if (type.equals(BudgetType.REGULAR_BUDGET)) {
+                    RegularBudgetExpense expense = RegularBudgetExpense.findRegularBudgetExpenseWithCodes(primaryKey[0], primaryKey[1], primaryKey[2]);
+                    expense.setAmount(entry.getValue());
+                } else if (type.equals(BudgetType.PUBLIC_INVESTMENT_BUDGET_NATIONAL)) {
+                    return;
+                } else if (type.equals(BudgetType.PUBLIC_INVESTMENT_BUDGET_COFUNDED)) {
+                    return;
+                }
+            }
+            historyDeque.pop();
+            typeDeque.pop();
+        } catch (NoSuchElementException e) {
+            System.out.println("NO HISTORY FOUND");
+        }
     }
 }

@@ -1,9 +1,6 @@
 package com.financial.services.revenues;
 
-import com.financial.entries.BudgetRevenue;
-import com.financial.entries.PublicInvestmentBudgetCoFundedRevenue;
-import com.financial.entries.PublicInvestmentBudgetNationalRevenue;
-import com.financial.entries.RegularBudgetRevenue;
+import com.financial.entries.*;
 import com.financial.services.BudgetType;
 
 import java.util.*;
@@ -33,7 +30,6 @@ public class RevenuesHistory {
         typeDeque.addFirst(type);
     }
 
-
     public static BudgetType getMostRecentBudgetType() {
         try {
             return typeDeque.getFirst();
@@ -57,7 +53,7 @@ public class RevenuesHistory {
             BudgetType type = getMostRecentBudgetType();
             for (Map.Entry<String, Long> entry : getMostRecentRevenuesHistory().entrySet()) {
                 if (type.equals(BudgetType.REGULAR_BUDGET)) {
-                    BudgetRevenue revenue = RegularBudgetRevenue.findRegularBudgetRevenueWithCode(entry.getKey());
+                    RegularBudgetRevenue revenue = RegularBudgetRevenue.findRegularBudgetRevenueWithCode(entry.getKey());
                     revenue.setAmount(entry.getValue());
                 } else if (type.equals(BudgetType.PUBLIC_INVESTMENT_BUDGET_NATIONAL)) {
                     PublicInvestmentBudgetNationalRevenue revenue = PublicInvestmentBudgetNationalRevenue.findPublicInvestmentBudgetNationalRevenueWithCode(entry.getKey());
