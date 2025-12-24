@@ -108,44 +108,6 @@ public class DataOutput {
         System.out.println(at.render());
     }
 
-    public static void printEntitiesWithAsciiTable(int budgetType) {
-        AsciiTable at = new AsciiTable();
-        at.getRenderer().setCWC(new CWC_FixedWidth().add(20).add(70).add(20));
-        at.addRule();
-        at.addRow("Κωδικός Φορέα", "Ονομασία", "Ποσό");
-        at.addRule();
-        long sum = 0;
-        for (Entity entity : Entity.getEntities()) {
-            at.addRow(
-                    entity.getEntityCode(),
-                    entity.getEntityName(),
-                    String.format("%,d", entity.getSum(budgetType))
-            );
-            at.addRule();
-            sum += entity.getSum(budgetType);
-        }
-
-        at.addRow("", "", String.format("%,d", sum));
-        at.addRule();
-        System.out.println(at.render());
-    }
-
-    /*public static void printEntityWithAsciiTable(Entity entity, int budgetType) {
-        AsciiTable at = new AsciiTable();
-        at.getRenderer().setCWC(new CWC_FixedWidth().add(125));
-        at.addRule();
-        at.addRow(entity.getEntityName());
-        at.addRule();
-        System.out.println(at.render());
-
-        if (budgetType == 0) {
-            //printBudgetExpenseWithAsciiTable(entity.getAllBudgetExpenses());
-        } else if (budgetType == 1) {
-            printBudgetExpenseWithAsciiTable(entity.getRegularBudgetExpenses());
-        } else if (budgetType == 2) {
-            printPublicInvestmentBudgetExpenseWithAsciiTable(entity.getPublicInvestmentExpenses());
-        }
-    }*/
 
     public static void printExpenseWithAsciiTable(ArrayList<? extends BudgetExpense> expenses) {
         AsciiTable at = new AsciiTable();

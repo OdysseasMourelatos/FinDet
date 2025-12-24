@@ -149,7 +149,11 @@ public class DataInput {
         String type = values[6];
         long amount = Long.parseLong(values[7]);
         String category = "ΕΞΟΔΑ";
-        BudgetExpense publicInvestmentBudgetExpense = new PublicInvestmentBudgetExpense(entityCode, entityName, serviceCode, serviceName, expenseCode, description, type, category, amount);
+        if (type.equals("ΕΘΝΙΚΟ") || type.equals("ΕΘΝΙΚΟ ΣΚΕΛΟΣ")) {
+            BudgetExpense publicInvestmentBudgetExpense = new PublicInvestmentBudgetNationalExpense(entityCode, entityName, serviceCode, serviceName, expenseCode, description, type, category, amount);
+        } else if (type.equals("ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ") || type.equals("ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ ΣΚΕΛΟΣ") ) {
+            BudgetExpense publicInvestmentBudgetExpense = new PublicInvestmentBudgetCoFundedExpense(entityCode, entityName, serviceCode, serviceName, expenseCode, description, type, category, amount);
+        }
     }
 
     public static void createEntityFromCSV() {

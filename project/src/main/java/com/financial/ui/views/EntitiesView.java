@@ -55,42 +55,36 @@ public class EntitiesView {
 
         TableColumn<Entity, String> codeCol = new TableColumn<>("Κωδικός");
         codeCol.setCellValueFactory(data ->
-            new SimpleStringProperty(data.getValue().getEntityCode()));
+                new SimpleStringProperty(data.getValue().getEntityCode()));
         codeCol.setPrefWidth(100);
 
         TableColumn<Entity, String> nameCol = new TableColumn<>("Ονομασία Φορέα");
         nameCol.setCellValueFactory(data ->
-            new SimpleStringProperty(data.getValue().getEntityName()));
-        nameCol.setPrefWidth(400);
+                new SimpleStringProperty(data.getValue().getEntityName()));
+        nameCol.setPrefWidth(300);
 
         TableColumn<Entity, String> regularExpenseCol = new TableColumn<>("Τακτικά Έξοδα");
         regularExpenseCol.setCellValueFactory(data -> {
-            long total = data.getValue().getRegularBudgetExpenses().stream().
-                filter(e -> e.getCode().charAt(0) <= '3').mapToLong(e -> e.getAmount()).sum();
+            long total = data.getValue().calculateRegularSum();
             return new SimpleStringProperty(String.format("%,d €", total));
         });
         regularExpenseCol.setPrefWidth(150);
 
         TableColumn<Entity, String> investmentExpenseCol = new TableColumn<>("Έξοδα ΠΔΕ");
         investmentExpenseCol.setCellValueFactory(data -> {
-            long total = data.getValue().getPublicInvestmentExpenses().stream().
-                filter(e -> e.getCode().charAt(0) <= '3').mapToLong(e -> e.getAmount()).sum();
+            long total = data.getValue().calculatePublicInvestmentSum();
             return new SimpleStringProperty(String.format("%,d €", total));
         });
         investmentExpenseCol.setPrefWidth(150);
 
         TableColumn<Entity, String> totalCol = new TableColumn<>("Σύνολο");
         totalCol.setCellValueFactory(data -> {
-            long regular = data.getValue().getRegularBudgetExpenses().stream().
-                filter(e -> e.getCode().charAt(0) <= '3').mapToLong(e -> e.getAmount()).sum();
-            long investment = data.getValue().getPublicInvestmentExpenses().stream().
-                filter(e -> e.getCode().charAt(0) <= '3').mapToLong(e -> e.getAmount()).sum();
-            return new SimpleStringProperty(String.format("%,d €", regular + investment));
+            long total = data.getValue().calculateTotalSum();
+            return new SimpleStringProperty(String.format("%,d €", total));
         });
         totalCol.setPrefWidth(150);
 
-        tableView.getColumns().addAll(codeCol, nameCol, regularExpenseCol,
-            investmentExpenseCol, totalCol);
+        tableView.getColumns().addAll(codeCol, nameCol, regularExpenseCol, investmentExpenseCol, totalCol);
         tableView.setItems(tableData);
 
         return tableView;
