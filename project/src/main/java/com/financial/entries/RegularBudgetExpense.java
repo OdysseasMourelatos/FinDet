@@ -24,6 +24,7 @@ public class RegularBudgetExpense extends BudgetExpense {
 
     //Create filtered regular budget expenses
     public static void createRegularBudgetExpensesPerCategory() {
+        regularBudgetExpensesPerCategory.clear();
         for (Map.Entry<String, Long> entry : getSumOfEveryExpenseCategory().entrySet()) {
             String description = regularBudgetExpenses.stream().filter(e -> e.getCode().equals(entry.getKey())).findFirst().map(RegularBudgetExpense::getDescription).orElse(null);
             new RegularBudgetExpense(entry.getKey(), description, "ΕΞΟΔΑ", entry.getValue());

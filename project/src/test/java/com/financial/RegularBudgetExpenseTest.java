@@ -32,6 +32,38 @@ class RegularBudgetExpenseTest {
         new RegularBudgetExpense("1003", "ΒΟΥΛΗ ΤΩΝ ΕΛΛΗΝΩΝ", "1003-201-0000000", "Γενική Γραμματεία", "29", "Πιστώσεις υπό κατανομή", "ΕΞΟΔΑ", 100000L);
         new RegularBudgetExpense("1003", "ΒΟΥΛΗ ΤΩΝ ΕΛΛΗΝΩΝ", "1003-201-0000000", "Γενική Γραμματεία", "31", "Πάγια περιουσιακά στοιχεία", "ΕΞΟΔΑ", 3208000L);
         new RegularBudgetExpense("1003", "ΒΟΥΛΗ ΤΩΝ ΕΛΛΗΝΩΝ", "1003-201-0000000", "Γενική Γραμματεία", "33", "Τιμαλφή", "ΕΞΟΔΑ", 80000L);
+
+        RegularBudgetExpense.createRegularBudgetExpensesPerCategory();
+    }
+
+    @Test
+    void testCreateRegularBudgetExpensesPerCategoryAggregation() {
+        // 1. Εκτέλεση της μεθόδου
+        RegularBudgetExpense.createRegularBudgetExpensesPerCategory();
+
+        // 2. Έλεγχος μεγέθους: Έχουμε 7 μοναδικούς κωδικούς (21, 22, 23, 24, 29, 31, 33)
+        ArrayList<RegularBudgetExpense> summaries = RegularBudgetExpense.getRegularBudgetExpensesPerCategory();
+        assertEquals(7, summaries.size());
+
+        // 3. Έλεγχος περιγραφής και ποσού για την κατηγορία 21
+        // 3.532.000 + 6.423.000 + 44.609.000 = 54.564.000
+        RegularBudgetExpense summary21 = summaries.stream()
+                .filter(s -> s.getCode().equals("21"))
+                .findFirst()
+                .orElse(null);
+
+        assertNotNull(summary21);
+        assertEquals("Παροχές σε εργαζομένους", summary21.getDescription());
+        assertEquals(54564000L, summary21.getAmount());
+
+        // 4. Έλεγχος κατηγορίας 31 (Πάγια)
+        // 53.000 + 3.208.000 = 3.261.000
+        RegularBudgetExpense summary31 = summaries.stream()
+                .filter(s -> s.getCode().equals("31"))
+                .findFirst()
+                .orElse(null);
+
+        assertEquals(3261000L, summary31.getAmount());
     }
 
     @Test
@@ -90,5 +122,59 @@ class RegularBudgetExpenseTest {
 
         // Έλεγχος πλήθους κατηγοριών: {21, 23, 24, 31, 22, 29, 33} = 7 κατηγορίες
         assertEquals(7, categorySums.size());
+    }
+
+    @Test
+    void implementGlobalIncreaseInCertainRegularExpenseCategoryWithPercentageAllocationTest1() {
+        // Εφαρμογή αύξησης 10% στην κατηγορία 21
+        double percentage = 0.10;
+        RegularBudgetExpense.implementGlobalChangesInCertainRegularExpenseCategoryWithPercentageAllocation("21", percentage, 0);
+
+        // Έλεγχος όλων των εγγραφών στη βασική λίστα
+        for (RegularBudgetExpense expense : RegularBudgetExpense.getAllRegularBudgetExpenses()) {
+            if (expense.getCode().equals("21")) {
+                // Υπολογίζουμε ποιο θα έπρεπε να είναι το ποσό βάσει των αρχικών δεδομένων
+                if (expense.getEntityCode().equals("1001")) {
+                    assertEquals(3885200L, expense.getAmount()); // 3.532.000 * 1.1
+                } else if (expense.getEntityCode().equals("1003") && expense.getServiceCode().contains("101")) {
+                    assertEquals(7065300L, expense.getAmount()); // 6.423.000 * 1.1
+                } else if (expense.getEntityCode().equals("1003") && expense.getServiceCode().contains("201")) {
+                    assertEquals(49069900L, expense.getAmount()); // 44.609.000 * 1.1
+                }
+            } else {
+                // Έλεγχος ότι καμία άλλη κατηγορία (π.χ. 23) δεν επηρεάστηκε
+                if (expense.getCode().equals("23") && expense.getEntityCode().equals("1001")) {
+                    assertEquals(203000L, expense.getAmount());
+                }
+            }
+        }
+    }
+
+    @Test
+    void implementGlobalIncreaseInCertainRegularExpenseCategoryWithPercentageAllocationTest() {
+        // Σενάριο: Προσθήκη 100.000 ευρώ fixed σε κάθε εγγραφή της κατηγορίας 21
+        long fixedAmount = 100000L;
+        RegularBudgetExpense.implementGlobalChangesInCertainRegularExpenseCategoryWithPercentageAllocation("21", 0, fixedAmount);
+
+        // Έλεγχος όλων των εγγραφών στη βασική λίστα για την κατηγορία 21
+        for (RegularBudgetExpense expense : RegularBudgetExpense.getAllRegularBudgetExpenses()) {
+            if (expense.getCode().equals("21")) {
+                if (expense.getEntityCode().equals("1001")) {
+                    // Αρχικό 3.532.000 + 100.000 = 3.632.000
+                    assertEquals(3632000L, expense.getAmount());
+                } else if (expense.getEntityCode().equals("1003") && expense.getServiceCode().contains("101")) {
+                    // Αρχικό 6.423.000 + 100.000 = 6.523.000
+                    assertEquals(6523000L, expense.getAmount());
+                } else if (expense.getEntityCode().equals("1003") && expense.getServiceCode().contains("201")) {
+                    // Αρχικό 44.609.000 + 100.000 = 44.709.000
+                    assertEquals(44709000L, expense.getAmount());
+                }
+            } else {
+                // Έλεγχος ότι καμία άλλη κατηγορία (π.χ. 23) δεν επηρεάστηκε
+                if (expense.getCode().equals("23") && expense.getEntityCode().equals("1001")) {
+                    assertEquals(203000L, expense.getAmount());
+                }
+            }
+        }
     }
 }

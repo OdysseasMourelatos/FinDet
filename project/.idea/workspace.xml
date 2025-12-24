@@ -5,7 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="88d8a661-a47d-4ac5-b89a-2164a467de01" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/entries/RegularBudgetExpense.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/RegularBudgetExpense.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/RegularBudgetExpenseTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/RegularBudgetExpenseTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,6 +76,8 @@
     "JUnit.PublicInvestmentBudgetRevenueTest.executor": "Run",
     "JUnit.PublicInvestmentBudgetRevenueTest.setCoFundedAmountNegativeTest.executor": "Run",
     "JUnit.PublicInvestmentBudgetRevenueTest.testUpdateAmountOfSuperClassFilteredObjects.executor": "Run",
+    "JUnit.RegularBudgetExpenseTest.executor": "Run",
+    "JUnit.RegularBudgetExpenseTest.implementGlobalIncreaseInCertainRegularExpenseCategoryWithPercentageAllocationTest1.executor": "Run",
     "JUnit.RegularBudgetRevenueTest.executor": "Run",
     "JUnit.RegularBudgetRevenueTest.findSuperCategoryTest.executor": "Run",
     "JUnit.RegularBudgetRevenueTest.getAboveLevelSuperCategoryTest.executor": "Run",
@@ -100,39 +103,7 @@
     "settings.editor.selected.configurable": "preferences.general"
   }
 }]]></component>
-  <component name="RunManager" selected="JUnit.PublicInvestmentBudgetRevenueTest.setNationalAmountNegativeTest">
-    <configuration name="PublicInvestmentBudgetNationalRevenueTest.updateAmountOfSuperClassFilteredObjectNullBranchTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="FinDet" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.financial.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.financial" />
-      <option name="MAIN_CLASS_NAME" value="com.financial.PublicInvestmentBudgetNationalRevenueTest" />
-      <option name="METHOD_NAME" value="updateAmountOfSuperClassFilteredObjectNullBranchTest" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="PublicInvestmentBudgetRevenueTest.setCoFundedAmountNegativeTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="FinDet" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.financial.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.financial" />
-      <option name="MAIN_CLASS_NAME" value="com.financial.PublicInvestmentBudgetRevenueTest" />
-      <option name="METHOD_NAME" value="setCoFundedAmountNegativeTest" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="JUnit.RegularBudgetExpenseTest">
     <configuration name="PublicInvestmentBudgetRevenueTest.setNationalAmountNegativeTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="FinDet" />
       <extension name="coverage">
@@ -149,7 +120,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="RegularBudgetRevenueTest.getAboveLevelSuperCategoryTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="RegularBudgetExpenseTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="FinDet" />
       <extension name="coverage">
         <pattern>
@@ -158,14 +129,29 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="com.financial" />
-      <option name="MAIN_CLASS_NAME" value="com.financial.RegularBudgetRevenueTest" />
-      <option name="METHOD_NAME" value="getAboveLevelSuperCategoryTest" />
+      <option name="MAIN_CLASS_NAME" value="com.financial.RegularBudgetExpenseTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RegularBudgetExpenseTest.implementGlobalIncreaseInCertainRegularExpenseCategoryWithPercentageAllocationTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="FinDet" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.financial.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.financial" />
+      <option name="MAIN_CLASS_NAME" value="com.financial.RegularBudgetExpenseTest" />
+      <option name="METHOD_NAME" value="implementGlobalIncreaseInCertainRegularExpenseCategoryWithPercentageAllocationTest" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="RegularBudgetRevenueTest.updateAmountOfSuperClassFilteredObjectReductionTest2" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="RegularBudgetExpenseTest.implementGlobalIncreaseInCertainRegularExpenseCategoryWithPercentageAllocationTest1" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="FinDet" />
       <extension name="coverage">
         <pattern>
@@ -174,8 +160,24 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="com.financial" />
-      <option name="MAIN_CLASS_NAME" value="com.financial.RegularBudgetRevenueTest" />
-      <option name="METHOD_NAME" value="updateAmountOfSuperClassFilteredObjectReductionTest2" />
+      <option name="MAIN_CLASS_NAME" value="com.financial.RegularBudgetExpenseTest" />
+      <option name="METHOD_NAME" value="implementGlobalIncreaseInCertainRegularExpenseCategoryWithPercentageAllocationTest1" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RegularBudgetExpenseTest.testCreateRegularBudgetExpensesPerCategoryAggregation" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="FinDet" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.financial.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.financial" />
+      <option name="MAIN_CLASS_NAME" value="com.financial.RegularBudgetExpenseTest" />
+      <option name="METHOD_NAME" value="testCreateRegularBudgetExpensesPerCategoryAggregation" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -194,11 +196,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.RegularBudgetExpenseTest" />
+        <item itemvalue="JUnit.RegularBudgetExpenseTest.implementGlobalIncreaseInCertainRegularExpenseCategoryWithPercentageAllocationTest1" />
+        <item itemvalue="JUnit.RegularBudgetExpenseTest.testCreateRegularBudgetExpensesPerCategoryAggregation" />
+        <item itemvalue="JUnit.RegularBudgetExpenseTest.implementGlobalIncreaseInCertainRegularExpenseCategoryWithPercentageAllocationTest" />
         <item itemvalue="JUnit.PublicInvestmentBudgetRevenueTest.setNationalAmountNegativeTest" />
-        <item itemvalue="JUnit.PublicInvestmentBudgetRevenueTest.setCoFundedAmountNegativeTest" />
-        <item itemvalue="JUnit.RegularBudgetRevenueTest.getAboveLevelSuperCategoryTest" />
-        <item itemvalue="JUnit.RegularBudgetRevenueTest.updateAmountOfSuperClassFilteredObjectReductionTest2" />
-        <item itemvalue="JUnit.PublicInvestmentBudgetNationalRevenueTest.updateAmountOfSuperClassFilteredObjectNullBranchTest" />
       </list>
     </recent_temporary>
   </component>
