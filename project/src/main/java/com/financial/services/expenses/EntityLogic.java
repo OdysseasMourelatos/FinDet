@@ -2,10 +2,7 @@ package com.financial.services.expenses;
 
 import com.financial.entries.BudgetExpense;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Stream;
 
 public interface EntityLogic {
@@ -61,7 +58,7 @@ public interface EntityLogic {
     ArrayList<BudgetExpense> getPublicInvestmentNationalExpensesOfServiceWithCode(String serviceCode);
     ArrayList<BudgetExpense> getPublicInvestmentCoFundedExpensesOfServiceWithCode(String serviceCode);
 
-    //Get sum of expenses of specific service
+    //Get sum of expenses of every service
     Map<String, Long> getRegularSumOfEveryService();
     Map<String, Long> getPublicInvestmentNationalSumOfEveryService();
     Map<String, Long> getPublicInvestmentCoFundedSumOfEveryService();
@@ -71,7 +68,7 @@ public interface EntityLogic {
         Map<String, Long> coFundedMap = getPublicInvestmentCoFundedSumOfEveryService();
 
         // Δημιουργούμε ένα νέο Map ξεκινώντας με τα δεδομένα του Εθνικού σκέλους
-        Map<String, Long> combinedMap = new HashMap<>(nationalMap);
+        Map<String, Long> combinedMap = new LinkedHashMap<>(nationalMap);
 
         // Προσθέτουμε τα δεδομένα του Συγχρηματοδοτούμενου
         coFundedMap.forEach((serviceCode, amount) ->
@@ -86,7 +83,7 @@ public interface EntityLogic {
         Map<String, Long> pibMap = getRegularSumOfEveryService();
 
         // Δημιουργούμε ένα νέο Map ξεκινώντας με τα δεδομένα του Τακτικού
-        Map<String, Long> combinedMap = new HashMap<>(regularMap);
+        Map<String, Long> combinedMap = new LinkedHashMap<>(regularMap);
 
         // Προσθέτουμε τα δεδομένα του ΠΔΕ
         pibMap.forEach((serviceCode, amount) ->
@@ -107,5 +104,33 @@ public interface EntityLogic {
 
     default long getTotalSumOfExpenseCategoryWithCode(String code) {
         return getRegularSumOfExpenseCategoryWithCode(code) + getPublicInvestmentSumOfExpenseCategoryWithCode(code);
+    }
+
+    //Get sum of expenses of every expense category
+    Map<String, Long> getRegularSumOfEveryExpenseCategory();
+    Map<String, Long> getPublicInvestmentNationalSumOfEveryExpenseCategory();
+    Map<String, Long> getPublicInvestmentCoFundedSumOfEveryExpenseCategory();
+
+    default Map<String, Long> getPublicInvestmentSumOfEveryExpenseCategory() {
+        Map<String, Long> nationalMap = getPublicInvestmentNationalSumOfEveryExpenseCategory();
+        Map<String, Long> coFundedMap = getPublicInvestmentCoFundedSumOfEveryExpenseCategory();
+
+        // Χρήση LinkedHashMap για διατήρηση της ταξινόμησης
+        Map<String, Long> combinedMap = new LinkedHashMap<>(nationalMap);
+        coFundedMap.forEach((code, amount) ->
+                combinedMap.merge(code, amount, Long::sum)
+        );
+        return combinedMap;
+    }
+
+    default Map<String, Long> getTotalSumOfEveryExpenseCategory() {
+        Map<String, Long> regularMap = getRegularSumOfEveryExpenseCategory();
+        Map<String, Long> pibMap = getPublicInvestmentSumOfEveryExpenseCategory();
+
+        Map<String, Long> combinedMap = new LinkedHashMap<>(regularMap);
+        pibMap.forEach((code, amount) ->
+                combinedMap.merge(code, amount, Long::sum)
+        );
+        return combinedMap;
     }
 }
