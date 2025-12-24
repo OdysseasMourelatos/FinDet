@@ -2,6 +2,7 @@ package com.financial;
 
 import atlantafx.base.theme.PrimerDark;
 import com.financial.entries.BudgetRevenue;
+import com.financial.entries.Entity;
 import com.financial.entries.PublicInvestmentBudgetRevenue;
 import com.financial.services.data.DataInput;
 import com.financial.ui.MainWindow;

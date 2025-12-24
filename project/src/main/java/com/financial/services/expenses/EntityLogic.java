@@ -2,6 +2,7 @@ package com.financial.services.expenses;
 
 public interface EntityLogic {
 
+    //Total Sums of Entity
     long calculateRegularSum();
     long calculatePublicInvestmentNationalSum();
     long calculatePublicInvestmentCoFundedSum();

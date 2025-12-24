@@ -2,6 +2,7 @@ package com.financial.entries;
 
 import com.financial.services.expenses.BudgetExpenseLogicService;
 import com.financial.services.expenses.EntityLogic;
+import com.financial.services.expenses.EntityLogicService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,25 +44,19 @@ public class Entity implements EntityLogic {
         return BudgetExpenseLogicService.calculateSum(publicInvestmentBudgetCoFundedExpenses);
     }
 
-    
-    // Find Methods
+
+    // Find service name with code
 
     public String findRegularServiceNameWithCode(String serviceCode) {
-        for (RegularBudgetExpense regularBudgetExpense : regularBudgetExpenses) {
-            if (regularBudgetExpense.getServiceCode().equals(serviceCode)) {
-                return regularBudgetExpense.getServiceName();
-            }
-        }
-        return null;
+        return EntityLogicService.findServiceNameWithCode(serviceCode, regularBudgetExpenses);
     }
 
-    public String findPublicInvestmentServiceNameWithCode(String serviceCode, String type) {
-        for (PublicInvestmentBudgetExpense publicInvestmentBudgetExpense : publicInvestmentBudgetExpenses) {
-            if (publicInvestmentBudgetExpense.getServiceCode().equals(serviceCode)) {
-                return publicInvestmentBudgetExpense.getServiceName();
-            }
-        }
-        return null;
+    public String findPublicInvestmentNationalServiceNameWithCode(String serviceCode) {
+        return EntityLogicService.findServiceNameWithCode(serviceCode, publicInvestmentBudgetNationalExpenses);
+    }
+
+    public String findPublicInvestmentCoFundedServiceNameWithCode(String serviceCode) {
+        return EntityLogicService.findServiceNameWithCode(serviceCode, publicInvestmentBudgetCoFundedExpenses);
     }
 
     // Get Service Codes
