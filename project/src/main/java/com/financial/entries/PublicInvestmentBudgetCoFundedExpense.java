@@ -22,6 +22,25 @@ public class PublicInvestmentBudgetCoFundedExpense extends PublicInvestmentBudge
         pibCoFundedExpensesPerCategory.add(this);
     }
 
+    public static void createPublicInvestmentBudgetCoFundedExpensesPerCategory() {
+        pibCoFundedExpensesPerCategory.clear();
+        for (Map.Entry<String, Long> entry : getSumOfEveryExpenseCategory().entrySet()) {
+            String description = pibCoFundedExpenses.stream()
+                    .filter(e -> e.getCode().equals(entry.getKey()))
+                    .findFirst()
+                    .map(PublicInvestmentBudgetCoFundedExpense::getDescription)
+                    .orElse("");
+            new PublicInvestmentBudgetCoFundedExpense(entry.getKey(), description, "ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ", "ΕΞΟΔΑ", entry.getValue());
+        }
+    }
+
+    public static PublicInvestmentBudgetCoFundedExpense findFilteredPublicInvestmentBudgetCoFundedExpenseWithCode(String code) {
+        for (PublicInvestmentBudgetCoFundedExpense expense : pibCoFundedExpensesPerCategory) {
+            if (expense.getCode().equals(code)) return expense;
+        }
+        return null;
+    }
+
     public static ArrayList<PublicInvestmentBudgetCoFundedExpense> getAllPublicInvestmentBudgetCoFundedExpenses() {
         return pibCoFundedExpenses;
     }
@@ -36,6 +55,14 @@ public class PublicInvestmentBudgetCoFundedExpense extends PublicInvestmentBudge
 
     public static PublicInvestmentBudgetCoFundedExpense findPublicInvestmentBudgetCoFundedExpenseWithCodes(String entityCode, String serviceCode, String expenseCode) {
         return (PublicInvestmentBudgetCoFundedExpense) BudgetExpenseLogicService.findExpenseWithCode(entityCode, serviceCode, expenseCode, pibCoFundedExpenses);
+    }
+
+    public static long calculateSum() {
+        return BudgetExpenseLogicService.calculateSum(pibCoFundedExpenses);
+    }
+
+    public static Map<String, Long> getSumOfEveryExpenseCategory() {
+        return BudgetExpenseLogicService.getSumOfEveryExpenseCategory(pibCoFundedExpenses);
     }
 
     public static ArrayList<PublicInvestmentBudgetCoFundedExpense> getPublicInvestmentBudgetCoFundedExpensesPerCategory() {
