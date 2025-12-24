@@ -27,6 +27,16 @@ public class Entity implements EntityLogic {
         entities.add(this);
     }
 
+    //Class Method
+    public static Entity findEntityWithEntityCode(String entityCode) {
+        for (Entity entity : entities) {
+            if (entity.getEntityCode().equals(entityCode)) {
+                return entity;
+            }
+        }
+        return null;
+    }
+
     //Calculate Sums Of Entity
 
     @Override
@@ -44,19 +54,21 @@ public class Entity implements EntityLogic {
         return BudgetExpenseLogicService.calculateSum(publicInvestmentBudgetCoFundedExpenses);
     }
 
+    //Get service name with code
 
-    // Find service name with code
-
-    public String findRegularServiceNameWithCode(String serviceCode) {
-        return EntityLogicService.findServiceNameWithCode(serviceCode, regularBudgetExpenses);
+    @Override
+    public String getRegularServiceNameWithCode(String serviceCode) {
+        return EntityLogicService.getServiceNameWithCode(serviceCode, regularBudgetExpenses);
     }
 
-    public String findPublicInvestmentNationalServiceNameWithCode(String serviceCode) {
-        return EntityLogicService.findServiceNameWithCode(serviceCode, publicInvestmentBudgetNationalExpenses);
+    @Override
+    public String getPublicInvestmentNationalServiceNameWithCode(String serviceCode) {
+        return EntityLogicService.getServiceNameWithCode(serviceCode, publicInvestmentBudgetNationalExpenses);
     }
 
-    public String findPublicInvestmentCoFundedServiceNameWithCode(String serviceCode) {
-        return EntityLogicService.findServiceNameWithCode(serviceCode, publicInvestmentBudgetCoFundedExpenses);
+    @Override
+    public String getPublicInvestmentCoFundedServiceNameWithCode(String serviceCode) {
+        return EntityLogicService.getServiceNameWithCode(serviceCode, publicInvestmentBudgetCoFundedExpenses);
     }
 
     // Get Service Codes
@@ -82,24 +94,6 @@ public class Entity implements EntityLogic {
     }
 
 
-
-    public long getSum(int budgetType) {
-        return switch (budgetType) {
-            case 0 -> calculateTotalSum();
-            case 1 -> calculateRegularSum();
-            case 2 -> calculatePublicInvestmentSum();
-            default -> 0;
-        };
-    }
-
-    public static Entity findEntityWithEntityCode(String entityCode) {
-        for (Entity entity : entities) {
-            if (entity.getEntityCode().equals(entityCode)) {
-                return entity;
-            }
-        }
-        return null;
-    }
 
 
     // Get Sums Of Service With Code
@@ -222,8 +216,12 @@ public class Entity implements EntityLogic {
         return regularBudgetExpenses;
     }
 
-    public ArrayList<PublicInvestmentBudgetExpense> getPublicInvestmentExpenses() {
-        return publicInvestmentBudgetExpenses;
+    public ArrayList<PublicInvestmentBudgetNationalExpense> getPublicInvestmentBudgetNationalExpenses() {
+        return publicInvestmentBudgetNationalExpenses;
+    }
+
+    public ArrayList<PublicInvestmentBudgetCoFundedExpense> getPublicInvestmentBudgetCoFundedExpenses() {
+        return publicInvestmentBudgetCoFundedExpenses;
     }
 
     public static ArrayList<Entity> getEntities() {

@@ -12,4 +12,9 @@ public interface EntityLogic {
     default long calculateTotalSum() {
         return calculateRegularSum() + calculatePublicInvestmentSum();
     }
+
+    //Find Service Names
+    String getRegularServiceNameWithCode(String serviceCode);
+    String getPublicInvestmentNationalServiceNameWithCode(String serviceCode);
+    String getPublicInvestmentCoFundedServiceNameWithCode(String serviceCode);
 }

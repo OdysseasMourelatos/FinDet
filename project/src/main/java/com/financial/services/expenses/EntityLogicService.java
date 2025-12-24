@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class EntityLogicService {
 
-    public static String findServiceNameWithCode(String serviceCode, ArrayList<? extends BudgetExpense> expenses) {
+    public static String getServiceNameWithCode(String serviceCode, ArrayList<? extends BudgetExpense> expenses) {
         for (BudgetExpense expense : expenses) {
             if (expense.getServiceCode().equals(serviceCode)) {
                 return expense.getServiceName();
