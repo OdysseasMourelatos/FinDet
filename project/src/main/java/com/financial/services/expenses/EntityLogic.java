@@ -28,4 +28,11 @@ public interface EntityLogic {
     long getRegularSumOfServiceWithCode(String serviceCode);
     long getPublicInvestmentNationalSumOfServiceWithCode(String serviceCode);
     long getPublicInvestmentCoFundedSumOfServiceWithCode(String serviceCode);
+
+    default long getPublicInvestmentSumOfServiceWithCode(String serviceCode) {
+        return getPublicInvestmentNationalSumOfServiceWithCode(serviceCode) + getPublicInvestmentCoFundedSumOfServiceWithCode(serviceCode);
+    }
+    default long getTotalSumOfServiceWithCode(String serviceCode) {
+        return getPublicInvestmentSumOfServiceWithCode(serviceCode) + getRegularSumOfServiceWithCode(serviceCode);
+    }
 }
