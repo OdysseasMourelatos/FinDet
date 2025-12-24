@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 class RegularBudgetExpenseTest {
 
@@ -63,5 +64,31 @@ class RegularBudgetExpenseTest {
         //Αναζήτηση για έξοδο που δεν υπάρχει
         RegularBudgetExpense found2 = RegularBudgetExpense.findRegularBudgetExpenseWithCodes("999", "9999-999-9999999", "99");
         assertNull(found2);
+    }
+
+    @Test
+    void testCalculateSum() {
+        // Συνολικό άθροισμα όλων των ποσών:
+        // 1001: 3.532.000 + 203.000 + 850.000 + 53.000 = 4.638.000
+        // 1003: 6.423.000 + 12.000 + 44.609.000 + 716.000 + 6.318.000 + 15.605.000 + 100.000 + 3.208.000 + 80.000 = 77.071.000
+        // Σύνολο: 81.709.000
+        assertEquals(81709000L, RegularBudgetExpense.calculateSum());
+    }
+
+    @Test
+    void testGetSumOfEveryExpenseCategory() {
+        Map<String, Long> categorySums = RegularBudgetExpense.getSumOfEveryExpenseCategory();
+
+        // Έλεγχος Κατηγορίας 21: 3.532.000 + 6.423.000 + 44.609.000 = 54.564.000
+        assertEquals(54564000L, categorySums.get("21"));
+
+        // Έλεγχος Κατηγορίας 23: 203.000 + 6.318.000 = 6.521.000
+        assertEquals(6521000L, categorySums.get("23"));
+
+        // Έλεγχος Κατηγορίας 31: 53.000 + 3.208.000 = 3.261.000
+        assertEquals(3261000L, categorySums.get("31"));
+
+        // Έλεγχος πλήθους κατηγοριών: {21, 23, 24, 31, 22, 29, 33} = 7 κατηγορίες
+        assertEquals(7, categorySums.size());
     }
 }
