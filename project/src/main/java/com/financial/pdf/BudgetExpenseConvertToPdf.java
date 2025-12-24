@@ -28,9 +28,9 @@ public class BudgetExpenseConvertToPdf {
                 table.addCell(PdfFormat.createCenteredCell("Ποσό", font));
                 for (String serviceCode : entity.getAllRegularServiceCodes()) {
                     table.addCell(PdfFormat.createCenteredCell(serviceCode, font));
-                    table.addCell(PdfFormat.createCenteredCell(entity.findRegularServiceNameWithCode(serviceCode), font));
+                    table.addCell(PdfFormat.createCenteredCell(entity.getRegularServiceNameWithCode(serviceCode), font));
                     table.addCell(PdfFormat.createCenteredCell(String.format("%,d", entity.getRegularSumOfServiceWithCode(serviceCode)), font));
-                    for (RegularBudgetExpense expense : entity.getRegularExpensesOfServiceWithCode(serviceCode)) {
+                    for (BudgetExpense expense : entity.getRegularExpensesOfServiceWithCode(serviceCode)) {
                         table.addCell(PdfFormat.createCenteredCell(String.valueOf(expense.getCode()), font));
                         table.addCell(PdfFormat.createCenteredCell(expense.getDescription(), font));
                         table.addCell(PdfFormat.createCenteredCell(String.format("%,d", expense.getAmount()), font));

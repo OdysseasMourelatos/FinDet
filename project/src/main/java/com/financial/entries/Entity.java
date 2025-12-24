@@ -77,7 +77,7 @@ public class Entity implements EntityLogic {
 
     @Override
     public List<String> getAllPublicInvestmentNationalServiceCodes() {
-        return EntityLogicService.getAllServiceCodes(publicInvestmentBudgetNationalExpenses)
+        return EntityLogicService.getAllServiceCodes(publicInvestmentBudgetNationalExpenses);
     }
 
     @Override
@@ -94,7 +94,7 @@ public class Entity implements EntityLogic {
 
     @Override
     public long getPublicInvestmentNationalSumOfServiceWithCode(String serviceCode) {
-        return EntityLogicService.getSumOfServiceWithCode(serviceCode, publicInvestmentBudgetNationalExpenses)
+        return EntityLogicService.getSumOfServiceWithCode(serviceCode, publicInvestmentBudgetNationalExpenses);
     }
 
     @Override
@@ -155,14 +155,17 @@ public class Entity implements EntityLogic {
 
     //Get Sums Of Every Expense Category
 
+    @Override
     public Map<String, Long> getRegularSumOfEveryExpenseCategory() {
         return EntityLogicService.getSumOfEveryExpenseCategory(regularBudgetExpenses);
     }
 
+    @Override
     public Map<String, Long> getPublicInvestmentNationalSumOfEveryExpenseCategory() {
         return EntityLogicService.getSumOfEveryExpenseCategory(publicInvestmentBudgetNationalExpenses);
     }
 
+    @Override
     public Map<String, Long> getPublicInvestmentCoFundedSumOfEveryExpenseCategory() {
         return EntityLogicService.getSumOfEveryExpenseCategory(publicInvestmentBudgetCoFundedExpenses);
     }
