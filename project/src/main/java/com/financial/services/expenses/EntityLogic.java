@@ -95,4 +95,17 @@ public interface EntityLogic {
 
         return combinedMap;
     }
+
+    //Get sums of specific expense category
+    long getRegularSumOfExpenseCategoryWithCode(String code);
+    long getPublicInvestmentNationalSumOfExpenseCategoryWithCode(String code);
+    long getPublicInvestmentCoFundedSumOfExpenseCategoryWithCode(String code);
+
+    default long getPublicInvestmentSumOfExpenseCategoryWithCode(String code) {
+        return getPublicInvestmentNationalSumOfExpenseCategoryWithCode(code) + getPublicInvestmentCoFundedSumOfExpenseCategoryWithCode(code);
+    }
+
+    default long getTotalSumOfExpenseCategoryWithCode(String code) {
+        return getRegularSumOfExpenseCategoryWithCode(code) + getPublicInvestmentSumOfExpenseCategoryWithCode(code);
+    }
 }

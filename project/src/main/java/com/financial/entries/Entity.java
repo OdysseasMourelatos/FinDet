@@ -138,18 +138,20 @@ public class Entity implements EntityLogic {
 
     // Get Sums Of Specific Expense Category
 
+    @Override
     public long getRegularSumOfExpenseCategoryWithCode(String code) {
         return EntityLogicService.getSumOfExpenseCategoryWithCode(code, regularBudgetExpenses);
     }
 
+    @Override
     public long getPublicInvestmentNationalSumOfExpenseCategoryWithCode(String code) {
         return EntityLogicService.getSumOfExpenseCategoryWithCode(code, publicInvestmentBudgetNationalExpenses);
     }
 
+    @Override
     public long getPublicInvestmentCoFundedSumOfExpenseCategoryWithCode(String code) {
         return EntityLogicService.getSumOfExpenseCategoryWithCode(code, publicInvestmentBudgetCoFundedExpenses);
     }
-
 
     //Get Sums Of Every Expense Category
 
