@@ -1,6 +1,8 @@
 package com.financial.services.expenses;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public interface EntityLogic {
 
@@ -25,6 +27,19 @@ public interface EntityLogic {
     List<String> getAllPublicInvestmentNationalServiceCodes();
     List<String> getAllPublicInvestmentCoFundedServiceCodes();
 
+    default List<String> getAllPublicInvestmentServiceCodes() {
+        List<String> national = getAllPublicInvestmentNationalServiceCodes();
+        List<String> coFunded = getAllPublicInvestmentCoFundedServiceCodes();
+        return Stream.concat(national.stream(), coFunded.stream()).distinct().sorted().toList();
+    }
+
+    default List<String> getAllServiceCodes() {
+        List<String> regular = getAllRegularServiceCodes();
+        List<String> publicInvestment = getAllPublicInvestmentServiceCodes();
+        return Stream.concat(regular.stream(), publicInvestment.stream()).distinct().sorted().toList();
+    }
+
+    //Get sums of specific service inside an entity
     long getRegularSumOfServiceWithCode(String serviceCode);
     long getPublicInvestmentNationalSumOfServiceWithCode(String serviceCode);
     long getPublicInvestmentCoFundedSumOfServiceWithCode(String serviceCode);
@@ -32,6 +47,7 @@ public interface EntityLogic {
     default long getPublicInvestmentSumOfServiceWithCode(String serviceCode) {
         return getPublicInvestmentNationalSumOfServiceWithCode(serviceCode) + getPublicInvestmentCoFundedSumOfServiceWithCode(serviceCode);
     }
+
     default long getTotalSumOfServiceWithCode(String serviceCode) {
         return getPublicInvestmentSumOfServiceWithCode(serviceCode) + getRegularSumOfServiceWithCode(serviceCode);
     }
