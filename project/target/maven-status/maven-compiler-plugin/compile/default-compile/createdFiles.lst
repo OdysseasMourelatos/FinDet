@@ -18,7 +18,6 @@ com/financial/charts/BarChartGenerator.class
 com/financial/strategies/filters/AccountFilter.class
 com/financial/multi_year_analysis/entries/MultiYearBudgetExpense.class
 com/financial/multi_year_analysis/entries/MultiYearEntity.class
-com/financial/services/Command.class
 com/financial/services/data/DataUpdate.class
 com/financial/ui/views/ChartsView.class
 com/financial/entries/RegularBudgetExpense.class
