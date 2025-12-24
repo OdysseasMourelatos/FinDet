@@ -139,24 +139,17 @@ public class Entity implements EntityLogic {
     // Get Sums Of Specific Expense Category
 
     public long getRegularSumOfExpenseCategoryWithCode(String code) {
-        long sum = 0;
-        for (RegularBudgetExpense expense : regularBudgetExpenses) {
-            if (code.equals(expense.getCode())) {
-                sum += expense.getAmount();
-            }
-        }
-        return sum;
+        return EntityLogicService.getSumOfExpenseCategoryWithCode(code, regularBudgetExpenses);
     }
 
-    public long getPublicInvestmentSumOfExpenseCategoryWithCode(String code, String type) {
-        long sum = 0;
-        for (PublicInvestmentBudgetExpense expense : publicInvestmentBudgetExpenses) {
-            if (code.equals(expense.getCode()) && type.equals(expense.getType())) {
-                sum += expense.getAmount();
-            }
-        }
-        return sum;
+    public long getPublicInvestmentNationalSumOfExpenseCategoryWithCode(String code) {
+        return EntityLogicService.getSumOfExpenseCategoryWithCode(code, publicInvestmentBudgetNationalExpenses);
     }
+
+    public long getPublicInvestmentCoFundedSumOfExpenseCategoryWithCode(String code) {
+        return EntityLogicService.getSumOfExpenseCategoryWithCode(code, publicInvestmentBudgetCoFundedExpenses);
+    }
+
 
     //Get Sums Of Every Expense Category
 

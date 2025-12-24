@@ -81,7 +81,6 @@ public interface EntityLogic {
         return combinedMap;
     }
 
-
     default Map<String, Long> getTotalSumOfEveryService() {
         Map<String, Long> regularMap = getPublicInvestmentSumOfEveryService();
         Map<String, Long> pibMap = getRegularSumOfEveryService();

@@ -50,4 +50,14 @@ public class EntityLogicService {
         }
         return serviceSums;
     }
+
+    public static long getSumOfExpenseCategoryWithCode(String code, ArrayList<? extends BudgetExpense> expenses) {
+        long sum = 0;
+        for (BudgetExpense expense : expenses) {
+            if (code.equals(expense.getCode())) {
+                sum += expense.getAmount();
+            }
+        }
+        return sum;
+    }
 }
