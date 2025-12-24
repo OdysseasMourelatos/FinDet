@@ -1,13 +1,14 @@
 package com.financial.entries;
 
 import com.financial.services.expenses.BudgetExpenseLogicService;
+import com.financial.services.expenses.EntityLogic;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class Entity {
+public class Entity implements EntityLogic {
     private final String entityCode;
     private final String entityName;
     protected ArrayList<RegularBudgetExpense> regularBudgetExpenses;
@@ -27,26 +28,22 @@ public class Entity {
 
     //Calculate Sums Of Entity
 
+    @Override
     public long calculateRegularSum() {
         return BudgetExpenseLogicService.calculateSum(regularBudgetExpenses);
     }
 
+    @Override
     public long calculatePublicInvestmentNationalSum() {
         return BudgetExpenseLogicService.calculateSum(publicInvestmentBudgetNationalExpenses);
     }
 
+    @Override
     public long calculatePublicInvestmentCoFundedSum() {
         return BudgetExpenseLogicService.calculateSum(publicInvestmentBudgetCoFundedExpenses);
     }
 
-    public long calculatePublicInvestmentSum() {
-        return calculatePublicInvestmentNationalSum() + calculatePublicInvestmentCoFundedSum();
-    }
-
-    public long calculateTotalSum() {
-        return calculateRegularSum() + calculatePublicInvestmentSum();
-    }
-
+    
     // Find Methods
 
     public String findRegularServiceNameWithCode(String serviceCode) {
