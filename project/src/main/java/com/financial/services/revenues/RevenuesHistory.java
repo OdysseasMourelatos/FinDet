@@ -16,6 +16,14 @@ public class RevenuesHistory {
         // utility class – no instances
     }
 
+    public static Deque<Map<String, Long>> getHistoryDeque() {
+        return historyDeque;
+    }
+
+    public static Deque<BudgetType> getTypeDeque() {
+        return typeDeque;
+    }
+
     public static void keepHistory(ArrayList<? extends BudgetRevenue> revenues, BudgetType type) {
         Map<String, Long> modifiedElement = new HashMap<>();
         for (BudgetRevenue revenue : revenues) {
@@ -24,6 +32,7 @@ public class RevenuesHistory {
         historyDeque.addFirst(modifiedElement);
         typeDeque.addFirst(type);
     }
+
 
     public static BudgetType getMostRecentBudgetType() {
         try {
@@ -63,13 +72,5 @@ public class RevenuesHistory {
         } catch (NoSuchElementException e) {
             System.out.println("NO HISTORY FOUND");
         }
-    }
-
-    public static Deque<Map<String, Long>>  getHistoryDeque() {
-        return historyDeque;
-    }
-
-    public static Deque<BudgetType> getTypeDeque() {
-        return typeDeque;
     }
 }

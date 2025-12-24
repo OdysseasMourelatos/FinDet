@@ -1,4 +1,4 @@
-#Wed Dec 24 13:18:18 EET 2025
+#Wed Dec 24 13:25:29 EET 2025
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/MainApp.java=1766492732206
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/charts/BarChartGenerator.java=1766492732206
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/charts/PieChartGenerator.java=1766158674373
@@ -31,7 +31,7 @@
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/services/revenues/BudgetRevenueChangesService.java=1766508265457
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/services/revenues/BudgetRevenueLogic.java=1766492732206
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/services/revenues/BudgetRevenueLogicService.java=1766508265457
-/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/services/revenues/RevenuesHistory.java=1766508265457
+/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/services/revenues/RevenuesHistory.java=1766575512968
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/strategies/ExpenseAdjustmentStrategy.java=1766508265457
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/strategies/PercentageAllocationAdjustmentStrategy.java=1766508265457
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/strategies/filters/AccountFilter.java=1766158674377
