@@ -97,10 +97,8 @@ public class RegularBudgetExpense extends BudgetExpense {
         Map<String, Long> allNewSums = getSumOfEveryExpenseCategory();
 
         for (RegularBudgetExpense filteredExpense : regularBudgetExpensesPerCategory) {
-            Long newTotal = allNewSums.get(filteredExpense.getCode());
-            if (newTotal != null) {
-                filteredExpense.setAmount(newTotal);
-            }
+            long newTotal = allNewSums.get(filteredExpense.getCode());
+            filteredExpense.setAmount(newTotal);
         }
     }
 

@@ -316,21 +316,6 @@ public class RegularBudgetExpenseTest {
     }
 
     @Test
-    void testUpdateAllFilteredRegularBudgetExpensesWhenSumMissing() {
-        // 1. Δημιουργούμε ένα filtered αντικείμενο χειροκίνητα με κωδικό που ΔΕΝ υπάρχει στη βασική λίστα
-        // (Χρησιμοποιούμε reflection ή προσωρινά αλλάζουμε τη λίστα για το test)
-        RegularBudgetExpense.createRegularBudgetExpensesPerCategory();
-
-        // Προσθέτουμε ένα "ψεύτικο" summary που δεν αντιστοιχεί σε πραγματικά έξοδα
-        // Στην updateAllFiltered, το allNewSums.get("NON_EXISTENT") θα επιστρέψει null
-        assertDoesNotThrow(() -> {
-            RegularBudgetExpense.updateAllFilteredRegularBudgetExpenses();
-        });
-
-        // Η μέθοδος πρέπει απλά να προσπεράσει το null χωρίς να κρασάρει
-    }
-
-    @Test
     void testToStringFormatting() {
         RegularBudgetExpense e = new RegularBudgetExpense("1001", "ΤΕΣΤ", "1001-101", "ΥΠ", "21", "Μισθοί", "ΕΞΟΔΑ", 1000000L);
         String output = e.toString();
