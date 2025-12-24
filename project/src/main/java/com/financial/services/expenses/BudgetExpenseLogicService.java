@@ -2,8 +2,6 @@ package com.financial.services.expenses;
 
 import com.financial.entries.Entity;
 import com.financial.entries.BudgetExpense;
-import com.financial.services.data.DataOutput;
-import com.financial.strategies.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,17 +23,18 @@ public class BudgetExpenseLogicService {
         return expensesOfEntity;
     }
 
-
-    public static BudgetExpense findExpenseWithCode(String code, ArrayList<? extends BudgetExpense> expenses) {
+    //Finds specific expense based on the primary key (entityCode, serviceCode, expenseCode)
+    public static BudgetExpense findExpenseWithCode(String entityCode, String serviceCode, String expenseCode, ArrayList<? extends BudgetExpense> expenses) {
         for (BudgetExpense expense : expenses) {
-            if (expense.getCode().equals(code)) {
+            if (expense.getCode().equals(expenseCode) && expense.getEntityCode().equals(entityCode) && expense.getServiceCode().equals(serviceCode)) {
                 return expense;
             }
         }
         return null;
     }
 
-    public static long calculateSumOfExpenses(ArrayList<? extends BudgetExpense> expenses) {
+    //Calculates sum of expenses
+    public static long calculateSum(ArrayList<? extends BudgetExpense> expenses) {
         long totalExpensesSum = 0;
         for (BudgetExpense expense : expenses) {
             totalExpensesSum += expense.getAmount();
@@ -54,13 +53,9 @@ public class BudgetExpenseLogicService {
                     sum += expense.getAmount();
                 }
             }
-            expensesPerCategory.add(new BudgetExpense(categoryCode, BudgetExpenseLogicService.findExpenseWithCode(categoryCode, expenses).getDescription(), "ΕΞΟΔΑ", sum));
+            //expensesPerCategory.add(new BudgetExpense(categoryCode, BudgetExpenseLogicService.findExpenseWithCode(categoryCode, expenses).getDescription(), "ΕΞΟΔΑ", sum));
         }
         return expensesPerCategory;
-    }
-
-    public static void printSumOfEveryCategory(ArrayList<? extends BudgetExpense> expenses) {
-        DataOutput.printExpenseWithAsciiTable(getSumOfEveryCategory(expenses));
     }
 
     //Sums Of Every Entity
@@ -78,24 +73,18 @@ public class BudgetExpenseLogicService {
         return expensesPerEntity;
     }
 
-    public static void applyGlobalAdjustment(ExpenseAdjustmentStrategy strategy, double percentage, long fixedAmount, ArrayList<BudgetExpense> expenses) {
-        strategy.applyAdjustment(expenses, percentage, fixedAmount);
-    }
+    public static Map<String, Long> getSumOfEveryExpenseCategory(ArrayList<? extends BudgetExpense> expenses) {
+        String[] categoryCodes = expenses.stream().map(BudgetExpense::getCode).distinct().sorted().toArray(String[]::new);
+        Map<String, Long> expensesPerCategory = new HashMap<>();
 
-    public static Map<String, String> getUniqueExpenseMap(ArrayList<? extends BudgetExpense> expenses) {
-        return expenses.stream().collect(Collectors.toMap(BudgetExpense::getCode, BudgetExpense::getDescription, (existing, replacement) -> existing));
-    }
-
-    public static Map<Map<String, String>, Long> getSumOfEveryExpenseCategory(Map<String, String> uniqueExpenseMap, ArrayList<? extends BudgetExpense> expenses) {
-        Map<Map<String, String>, Long> expensesPerCategory = new HashMap<>();
-        for (Map.Entry<String, String> entry : uniqueExpenseMap.entrySet()) {
+        for (String categoryCode : categoryCodes) {
             long sum = 0;
             for (BudgetExpense expense : expenses) {
-                if (entry.getKey().equals(expense.getCode())) {
+                if (categoryCode.equals(expense.getCode())) {
                     sum += expense.getAmount();
                 }
             }
-            expensesPerCategory.put(uniqueExpenseMap, sum);
+            expensesPerCategory.put(categoryCode, sum);
         }
         return expensesPerCategory;
     }
