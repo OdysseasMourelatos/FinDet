@@ -25,6 +25,22 @@ public class PublicInvestmentBudgetNationalExpense extends PublicInvestmentBudge
         return pibNationalExpenses;
     }
 
+    public static void createPublicInvestmentBudgetNationalExpensesPerCategory() {
+        pibNationalExpensesPerCategory.clear();
+        for (Map.Entry<String, Long> entry : getSumOfEveryExpenseCategory().entrySet()) {
+            String description = pibNationalExpenses.stream().filter(e -> e.getCode().equals(entry.getKey())).findFirst().map(PublicInvestmentBudgetNationalExpense::getDescription).orElse("");
+            new PublicInvestmentBudgetNationalExpense(entry.getKey(), description, "ΕΘΝΙΚΟ", "ΕΞΟΔΑ", entry.getValue());
+        }
+    }
+
+    public static void updateAllFilteredPIBNationalExpenses() {
+        Map<String, Long> allNewSums = getSumOfEveryExpenseCategory();
+        for (PublicInvestmentBudgetNationalExpense filteredExpense : pibNationalExpensesPerCategory) {
+            long newTotal = allNewSums.getOrDefault(filteredExpense.getCode(), 0L);
+            filteredExpense.setAmount(newTotal);
+        }
+    }
+
     public static ArrayList<PublicInvestmentBudgetNationalExpense> getPublicInvestmentBudgetNationalExpensesOfEntityWithCode(String entityCode) {
         return BudgetExpenseLogicService.getExpensesOfEntityWithCode(entityCode, pibNationalExpenses);
     }
@@ -32,8 +48,12 @@ public class PublicInvestmentBudgetNationalExpense extends PublicInvestmentBudge
     public static ArrayList<PublicInvestmentBudgetNationalExpense> getPublicInvestmentBudgetNationalExpensesOfCategoryWithCode(String expenseCode) {
         return BudgetExpenseLogicService.getExpensesOfCategoryWithCode(expenseCode, pibNationalExpenses);
     }
-    
+
     public static PublicInvestmentBudgetNationalExpense findPublicInvestmentBudgetNationalExpenseWithCodes(String entityCode, String serviceCode, String expenseCode) {
         return (PublicInvestmentBudgetNationalExpense) BudgetExpenseLogicService.findExpenseWithCode(entityCode, serviceCode, expenseCode, pibNationalExpenses);
+    }
+
+    public static Map<String, Long> getSumOfEveryExpenseCategory() {
+        return BudgetExpenseLogicService.getSumOfEveryExpenseCategory(pibNationalExpenses);
     }
 }
