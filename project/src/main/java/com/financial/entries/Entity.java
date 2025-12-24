@@ -1,8 +1,16 @@
 package com.financial.entries;
 
+import com.financial.services.BudgetType;
 import com.financial.services.expenses.BudgetExpenseLogicService;
 import com.financial.services.expenses.EntityLogic;
 import com.financial.services.expenses.EntityLogicService;
+import com.financial.services.expenses.ExpensesHistory;
+import com.financial.strategies.ExpenseAdjustmentStrategy;
+import com.financial.strategies.PercentageAllocationAdjustmentStrategy;
+import com.financial.strategies.filters.AccountFilter;
+import com.financial.strategies.filters.MatchAllFilter;
+import com.financial.strategies.filters.ServiceFilter;
+import com.financial.strategies.operations.PercentageOperation;
 
 import java.util.*;
 
@@ -170,6 +178,37 @@ public class Entity implements EntityLogic {
         return EntityLogicService.getSumOfEveryExpenseCategory(publicInvestmentBudgetCoFundedExpenses);
     }
 
+    //IMPLEMENTATION OF CHANGES
+
+    public void implementChangesInAllExpenseCategoriesOfAllServicesWithPercentageAllocation(double percentage, long fixedAmount, BudgetType budgetType) {
+        ExpenseAdjustmentStrategy strategy = new PercentageAllocationAdjustmentStrategy(new MatchAllFilter(), new PercentageOperation());
+        applyChangesAndKeepHistory(strategy, percentage, fixedAmount, budgetType);
+    }
+
+    public void implementChangesInSpecificExpenseCategoryOfAllServicesWithPercentageAllocation(String expenseCode, double percentage, long fixedAmount, BudgetType budgetType) {
+        ExpenseAdjustmentStrategy strategy = new PercentageAllocationAdjustmentStrategy(new AccountFilter(expenseCode), new PercentageOperation());
+        applyChangesAndKeepHistory(strategy, percentage, fixedAmount, budgetType);
+    }
+
+    public void implementChangesInAllExpenseCategoriesOfSpecificServiceWithPercentageAllocation(String serviceCode, double percentage, long fixedAmount, BudgetType budgetType) {
+        ExpenseAdjustmentStrategy strategy = new PercentageAllocationAdjustmentStrategy(new ServiceFilter(serviceCode), new PercentageOperation());
+        applyChangesAndKeepHistory(strategy, percentage, fixedAmount, budgetType);
+    }
+
+    private void applyChangesAndKeepHistory(ExpenseAdjustmentStrategy strategy, double percentage, long fixedAmount, BudgetType budgetType) {
+        if (budgetType == BudgetType.REGULAR_BUDGET) {
+            ExpensesHistory.keepHistory(regularBudgetExpenses, budgetType);
+            strategy.applyAdjustment(regularBudgetExpenses, percentage, fixedAmount);
+        } else if (budgetType == BudgetType.PUBLIC_INVESTMENT_BUDGET_NATIONAL) {
+            ExpensesHistory.keepHistory(publicInvestmentBudgetNationalExpenses, budgetType);
+            strategy.applyAdjustment(publicInvestmentBudgetNationalExpenses, percentage, fixedAmount);
+        } else if (budgetType == BudgetType.PUBLIC_INVESTMENT_BUDGET_COFUNDED) {
+            ExpensesHistory.keepHistory(publicInvestmentBudgetCoFundedExpenses, budgetType);
+            strategy.applyAdjustment(publicInvestmentBudgetCoFundedExpenses, percentage, fixedAmount);
+        } else {
+            throw new IllegalStateException("BUDGET_TYPE NOT SUPPORTED");
+        }
+    }
     //Getters
 
     public String getEntityCode() {
