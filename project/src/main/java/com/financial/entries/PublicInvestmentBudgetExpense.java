@@ -12,10 +12,6 @@ public class PublicInvestmentBudgetExpense extends BudgetExpense {
         publicInvestmentBudgetExpenses.add(this);
     }
 
-    public PublicInvestmentBudgetExpense(String code, String description, String type, String category, long amount) {
-        super(code, description, category, amount);
-        this.type = type;
-    }
 
     public static ArrayList<PublicInvestmentBudgetExpense> getAllPublicInvestmentBudgetExpenses() {
         return publicInvestmentBudgetExpenses;

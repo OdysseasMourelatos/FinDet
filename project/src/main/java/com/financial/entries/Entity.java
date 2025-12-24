@@ -11,7 +11,8 @@ public class Entity {
     private final String entityCode;
     private final String entityName;
     protected ArrayList<RegularBudgetExpense> regularBudgetExpenses;
-    protected ArrayList<PublicInvestmentBudgetExpense> publicInvestmentBudgetExpenses;
+    protected ArrayList<PublicInvestmentBudgetNationalExpense> publicInvestmentBudgetNationalExpenses;
+    protected ArrayList<PublicInvestmentBudgetCoFundedExpense> publicInvestmentBudgetCoFundedExpenses;
 
     protected static ArrayList<Entity> entities = new ArrayList<>();
 
@@ -19,8 +20,31 @@ public class Entity {
         this.entityCode = entityCode;
         this.entityName = entityName;
         regularBudgetExpenses = RegularBudgetExpense.getRegularBudgetExpensesOfEntityWithCode(entityCode);
-        publicInvestmentBudgetExpenses = BudgetExpenseLogicService.getExpensesOfEntityWithCode(entityCode, PublicInvestmentBudgetExpense.getAllPublicInvestmentBudgetExpenses());
+        publicInvestmentBudgetNationalExpenses = PublicInvestmentBudgetNationalExpense.getPublicInvestmentBudgetNationalExpensesOfEntityWithCode(entityCode);
+        publicInvestmentBudgetCoFundedExpenses = PublicInvestmentBudgetCoFundedExpense.getPublicInvestmentBudgetCoFundedExpensesOfEntityWithCode(entityCode);
         entities.add(this);
+    }
+
+    //Calculate Sums Of Entity
+
+    public long calculateRegularSum() {
+        return BudgetExpenseLogicService.calculateSum(regularBudgetExpenses);
+    }
+
+    public long calculatePublicInvestmentNationalSum() {
+        return BudgetExpenseLogicService.calculateSum(publicInvestmentBudgetNationalExpenses);
+    }
+
+    public long calculatePublicInvestmentCoFundedSum() {
+        return BudgetExpenseLogicService.calculateSum(publicInvestmentBudgetCoFundedExpenses);
+    }
+
+    public long calculatePublicInvestmentSum() {
+        return calculatePublicInvestmentNationalSum() + calculatePublicInvestmentCoFundedSum();
+    }
+
+    public long calculateTotalSum() {
+        return calculateRegularSum() + calculatePublicInvestmentSum();
     }
 
     // Find Methods
@@ -65,43 +89,13 @@ public class Entity {
         return publicInvestmentServiceCodes;
     }
 
-    // Get Sums
 
-    public long getTotalSum() {
-        return getRegularSum() + getPublicInvestmentSum();
-    }
-
-    public long getRegularSum() {
-        long sum = 0;
-        for (RegularBudgetExpense regularBudgetExpense : regularBudgetExpenses) {
-            sum += regularBudgetExpense.getAmount();
-        }
-        return sum;
-    }
-
-    public long getPublicInvestmentSum() {
-        long sum = 0;
-        for (PublicInvestmentBudgetExpense publicInvestmentBudgetExpense : publicInvestmentBudgetExpenses) {
-            sum += publicInvestmentBudgetExpense.getAmount();
-        }
-        return sum;
-    }
-
-    public long getPublicInvestmentSum(String type) {
-        long sum = 0;
-        for (PublicInvestmentBudgetExpense publicInvestmentBudgetExpense : publicInvestmentBudgetExpenses) {
-            if (publicInvestmentBudgetExpense.getType().equals(type)) {
-                sum += publicInvestmentBudgetExpense.getAmount();
-            }
-        }
-        return sum;
-    }
 
     public long getSum(int budgetType) {
         return switch (budgetType) {
-            case 0 -> getTotalSum();
-            case 1 -> getRegularSum();
-            case 2 -> getPublicInvestmentSum();
+            case 0 -> calculateTotalSum();
+            case 1 -> calculateRegularSum();
+            case 2 -> calculatePublicInvestmentSum();
             default -> 0;
         };
     }
