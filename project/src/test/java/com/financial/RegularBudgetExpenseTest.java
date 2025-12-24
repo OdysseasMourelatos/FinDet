@@ -270,4 +270,34 @@ public class RegularBudgetExpenseTest {
             }
         }
     }
+
+    @Test
+    void updateAllFilteredRegularBudgetExpensesPercentageTest() {
+        // 1. Εφαρμογή 10% σε ΟΛΑ
+        RegularBudgetExpense.implementGlobalChangesInAllExpenseCategoriesWithPercentageAllocation(0.10, 0);
+
+        // 2. Έλεγχος Κατηγορίας 21 στα Filtered
+        // Αρχικό 54.564.000 -> 60.020.400
+        RegularBudgetExpense filtered21 = RegularBudgetExpense.findFilteredRegularBudgetExpenseWithCode("21");
+        assertEquals(60020400L, filtered21.getAmount());
+
+        // 3. Έλεγχος Κατηγορίας 31 στα Filtered
+        // Αρχικό 3.261.000 -> 3.587.100
+        RegularBudgetExpense filtered31 = RegularBudgetExpense.findFilteredRegularBudgetExpenseWithCode("31");
+        assertEquals(3587100L, filtered31.getAmount());
+    }
+
+    @Test
+    void updateAllFilteredRegularBudgetExpensesFixedAmountTest() {
+        // Προσθήκη 10.000 ευρώ σε ΚΑΘΕ αναλυτική εγγραφή
+        long fixed = 10000L;
+        RegularBudgetExpense.implementGlobalChangesInAllExpenseCategoriesWithPercentageAllocation(0, fixed);
+
+        // Έλεγχος Κατηγορίας 23
+        // Στο setup υπάρχουν 2 εγγραφές για την κατηγορία 23 (μία στο 1001 και μία στο 1003)
+        // Αρχικό άθροισμα 23: 203.000 + 6.318.000 = 6.521.000
+        // Αναμενόμενο νέο άθροισμα: 6.521.000 + (2 * 10.000) = 6.541.000
+        RegularBudgetExpense filtered23 = RegularBudgetExpense.findFilteredRegularBudgetExpenseWithCode("23");
+        assertEquals(6541000L, filtered23.getAmount());
+    }
 }

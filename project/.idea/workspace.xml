@@ -105,7 +105,7 @@
     "settings.editor.selected.configurable": "preferences.general"
   }
 }]]></component>
-  <component name="RunManager" selected="JUnit.RegularBudgetExpenseTest.testGlobalFixedAmountChangeOnPrimaryData">
+  <component name="RunManager" selected="JUnit.RegularBudgetExpenseTest.updateAllFilteredRegularBudgetExpensesPercentageTest">
     <configuration name="RegularBudgetExpenseTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="FinDet" />
       <extension name="coverage">
@@ -117,38 +117,6 @@
       <option name="PACKAGE_NAME" value="com.financial" />
       <option name="MAIN_CLASS_NAME" value="com.financial.RegularBudgetExpenseTest" />
       <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="RegularBudgetExpenseTest.implementGlobalIncreaseInCertainRegularExpenseCategoryWithPercentageAllocationTest1" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="FinDet" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.financial.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.financial" />
-      <option name="MAIN_CLASS_NAME" value="com.financial.RegularBudgetExpenseTest" />
-      <option name="METHOD_NAME" value="implementGlobalIncreaseInCertainRegularExpenseCategoryWithPercentageAllocationTest1" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="RegularBudgetExpenseTest.testCreateRegularBudgetExpensesPerCategoryAggregation" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="FinDet" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.financial.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.financial" />
-      <option name="MAIN_CLASS_NAME" value="com.financial.RegularBudgetExpenseTest" />
-      <option name="METHOD_NAME" value="testCreateRegularBudgetExpensesPerCategoryAggregation" />
-      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -185,6 +153,38 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="RegularBudgetExpenseTest.updateAllFilteredRegularBudgetExpensesFixedAmountTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="FinDet" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.financial.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.financial" />
+      <option name="MAIN_CLASS_NAME" value="com.financial.RegularBudgetExpenseTest" />
+      <option name="METHOD_NAME" value="updateAllFilteredRegularBudgetExpensesFixedAmountTest" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RegularBudgetExpenseTest.updateAllFilteredRegularBudgetExpensesPercentageTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="FinDet" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.financial.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.financial" />
+      <option name="MAIN_CLASS_NAME" value="com.financial.RegularBudgetExpenseTest" />
+      <option name="METHOD_NAME" value="updateAllFilteredRegularBudgetExpensesPercentageTest" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="JetRunConfigurationType">
       <module name="project" />
       <method v="2">
@@ -198,11 +198,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.RegularBudgetExpenseTest.updateAllFilteredRegularBudgetExpensesPercentageTest" />
+        <item itemvalue="JUnit.RegularBudgetExpenseTest.updateAllFilteredRegularBudgetExpensesFixedAmountTest" />
         <item itemvalue="JUnit.RegularBudgetExpenseTest.testGlobalFixedAmountChangeOnPrimaryData" />
         <item itemvalue="JUnit.RegularBudgetExpenseTest.testGlobalPercentageChangeOnPrimaryData" />
         <item itemvalue="JUnit.RegularBudgetExpenseTest" />
-        <item itemvalue="JUnit.RegularBudgetExpenseTest.implementGlobalIncreaseInCertainRegularExpenseCategoryWithPercentageAllocationTest1" />
-        <item itemvalue="JUnit.RegularBudgetExpenseTest.testCreateRegularBudgetExpensesPerCategoryAggregation" />
       </list>
     </recent_temporary>
   </component>
