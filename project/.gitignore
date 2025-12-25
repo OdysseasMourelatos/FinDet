@@ -59,14 +59,8 @@ Desktop.ini
 *.swp
 *~
 
-# Generated chart files
-*.jpeg
-*.jpg
-*.png
-BarChart3d.jpeg
-
-# Generated PDF files (if you don't want to track them)
-# *.pdf
+# Generated output directory (PDFs, charts, etc.)
+output/
 
 # Environment variables
 .env
