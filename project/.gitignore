@@ -1,0 +1,92 @@
+# Compiled class files
+*.class
+
+# Log files
+*.log
+
+# Package Files
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Maven build directory
+target/
+
+# Maven wrapper (if you want to track it, remove these lines)
+.mvn/wrapper/maven-wrapper.jar
+
+# IDE - IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# IDE - VS Code
+.vscode/
+*.code-workspace
+
+# IDE - Eclipse
+.classpath
+.project
+.settings/
+bin/
+
+# IDE - NetBeans
+nbproject/private/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+# OS Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
+
+# Generated chart files
+*.jpeg
+*.jpg
+*.png
+BarChart3d.jpeg
+
+# Generated PDF files (if you don't want to track them)
+# *.pdf
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Test coverage reports
+coverage/
+*.lcov
+
+# JaCoCo coverage reports
+jacoco.exec
+jacoco/
+
+# Node modules (if any frontend tooling is used)
+node_modules/
+
+# Gradle (if ever switched to Gradle)
+.gradle/
+build/
+
+# JUnit test results
+TEST-*.xml
