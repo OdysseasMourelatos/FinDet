@@ -1,16 +1,32 @@
 package com.financial.services.revenues;
 
 import com.financial.entries.BudgetRevenue;
-
 import java.util.ArrayList;
 
+/**
+ * Utility service class that provides logic for managing and navigating
+ * the hierarchical structure of budget revenues.
+ * <p>
+ * This class includes methods for filtering main categories, searching by code,
+ * and traversing parent-child relationships within revenue lists.
+ */
 public class BudgetRevenueLogicService {
 
+    /**
+     * Private constructor to prevent instantiation of this utility class.
+     */
     private BudgetRevenueLogicService() {
         // utility class – no instances
     }
 
-    //Returns only revenues with 2 digits
+    /**
+     * Filters and returns only the top-level (main) budget revenues.
+     * Main revenues are identified by having a code length of exactly 2 digits.
+     *
+     * @param <T>            the type of BudgetRevenue
+     * @param budgetRevenues the list of revenues to filter
+     * @return an ArrayList containing only the top-level revenues
+     */
     public static <T extends BudgetRevenue> ArrayList<T> getMainBudgetRevenues(ArrayList<T> budgetRevenues) {
         ArrayList<T> mainBudgetRevenues = new ArrayList<>();
         for (T budgetRevenue : budgetRevenues) {
@@ -21,7 +37,14 @@ public class BudgetRevenueLogicService {
         return mainBudgetRevenues;
     }
 
-    //Finds revenue
+    /**
+     * Searches for a specific revenue object within a list based on its unique code.
+     *
+     * @param <T>      the type of BudgetRevenue
+     * @param code     the unique string code to search for
+     * @param revenues the list of revenues to search in
+     * @return the matching revenue object, or {@code null} if no match is found
+     */
     public static <T extends BudgetRevenue> T findRevenueWithCode(String code, ArrayList<T> revenues) {
         for (T revenue : revenues) {
             if (revenue.getCode().equals(code)) {
@@ -31,8 +54,13 @@ public class BudgetRevenueLogicService {
         return null;
     }
 
-    //Get certain revenues
-
+    /**
+     * Retrieves all revenues whose codes start with the specified prefix.
+     *
+     * @param code     the prefix to match
+     * @param revenues the list of revenues to filter
+     * @return an ArrayList of revenues that start with the given code
+     */
     public static ArrayList<BudgetRevenue> getRevenuesStartingWithCode(String code, ArrayList<? extends BudgetRevenue> revenues) {
         ArrayList<BudgetRevenue> mainRevenues = new ArrayList<>();
         for (BudgetRevenue revenue : revenues) {
@@ -43,7 +71,12 @@ public class BudgetRevenueLogicService {
         return mainRevenues;
     }
 
-    //Calculates sum based on the main codes (2-digits)
+    /**
+     * Calculates the total sum of all top-level (2-digit code) budget revenues.
+     *
+     * @param budgetRevenues the list of revenues to summarize
+     * @return the total sum of amounts for main budget categories
+     */
     public static long calculateSum(ArrayList<? extends BudgetRevenue> budgetRevenues) {
         long sum = 0;
         for (BudgetRevenue budgetRevenue : budgetRevenues) {
@@ -54,8 +87,15 @@ public class BudgetRevenueLogicService {
         return sum;
     }
 
-    //Finds super category based on the level of hierarchy of the currentRevenue
-    //e.g. revenue with code 113 has revenue with code 11 as super category
+    /**
+     * Identifies the immediate parent (supercategory) of the given revenue.
+     * The parent is found by truncating the current code based on the hierarchy level.
+     *
+     * @param <T>            the type of BudgetRevenue
+     * @param currentRevenue the revenue whose parent is sought
+     * @param revenues       the list of available revenues to search within
+     * @return the immediate parent revenue object, or {@code null} if none exists
+     */
     public static <T extends BudgetRevenue> T getAboveLevelSuperCategory(T currentRevenue, ArrayList<T> revenues) {
         int level = currentRevenue.getLevelOfHierarchy();
         String tempCode;
@@ -71,7 +111,14 @@ public class BudgetRevenueLogicService {
         return findRevenueWithCode(tempCode, revenues);
     }
 
-    //Gets all super categories by using getAboveLevelSuperCategory as long as there is one
+    /**
+     * Retrieves the full chain of ancestors (supercategories) for a given revenue.
+     *
+     * @param <T>            the type of BudgetRevenue
+     * @param currentRevenue the revenue to find ancestors for
+     * @param revenues       the list of available revenues
+     * @return an ArrayList of all parent revenues, from immediate parent up to the root
+     */
     public static <T extends BudgetRevenue> ArrayList<BudgetRevenue> getAllSuperCategories(T currentRevenue, ArrayList<T> revenues) {
         ArrayList<BudgetRevenue> superCategories = new ArrayList<>();
         BudgetRevenue superCategory = getAboveLevelSuperCategory(currentRevenue, revenues);
@@ -82,9 +129,15 @@ public class BudgetRevenueLogicService {
         return superCategories;
     }
 
-    //Sub Categories
-
-    //Finds only the next level subcategories, by knowing how many digits it's supposed to have
+    /**
+     * Finds the immediate children (subcategories) of a given parent revenue.
+     * Immediate children are identified by their specific code length relative to the parent.
+     *
+     * @param <T>      the type of BudgetRevenue
+     * @param parent   the parent revenue
+     * @param revenues the list of revenues to search in
+     * @return an ArrayList of immediate subcategories
+     */
     public static <T extends BudgetRevenue> ArrayList<BudgetRevenue> getNextLevelSubCategories(T parent, ArrayList<T> revenues) {
         int level = parent.getLevelOfHierarchy();
         int subCategoryCodeLength;
@@ -104,10 +157,14 @@ public class BudgetRevenueLogicService {
         return subCategories;
     }
 
-    /*If the parent has its code starting with the same digits as its child,
-    and it's not the same object, then it must be his child
-    e.g. 11 (parent), 113 child, 11311 child*/
-
+    /**
+     * Retrieves all descendants (subcategories) of a parent revenue across all levels.
+     *
+     * @param <T>      the type of BudgetRevenue
+     * @param parent   the ancestor revenue
+     * @param revenues the list of revenues to search in
+     * @return an ArrayList containing all subcategories that belong to the parent's hierarchy
+     */
     public static <T extends BudgetRevenue> ArrayList<BudgetRevenue> getAllSubCategories(T parent, ArrayList<T> revenues) {
         ArrayList<BudgetRevenue> subCategories = new ArrayList<>();
         for (T budgetRevenue : revenues) {

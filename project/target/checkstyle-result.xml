@@ -1,5 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <checkstyle version="9.3">
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/pdf/BudgetRevenueConvertToPdf.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/pdf/BudgetExpenseConvertToPdf.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/services/data/DataUpdate.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/services/data/DataInput.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/services/data/DataOutput.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/services/expenses/BudgetExpenseLogicService.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/services/expenses/EntityLogic.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/services/expenses/BudgetExpenseChangesService.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/services/expenses/ExpensesHistory.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/services/expenses/EntityLogicService.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/services/revenues/BudgetRevenueLogicService.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/services/revenues/BudgetRevenueChanges.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/services/revenues/RevenuesHistory.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/services/revenues/BudgetRevenueLogic.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/services/revenues/BudgetRevenueChangesService.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/entries/BudgetEntry.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/entries/BudgetRevenue.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/entries/RegularBudgetRevenue.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/entries/PublicInvestmentBudgetCoFundedExpense.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/entries/Entity.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/entries/BudgetExpense.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/entries/PublicInvestmentBudgetNationalRevenue.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/entries/PublicInvestmentBudgetNationalExpense.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/entries/PublicInvestmentBudgetCoFundedRevenue.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/entries/PublicInvestmentBudgetRevenue.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/entries/RegularBudgetExpense.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/entries/PublicInvestmentBudgetExpense.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/multi_year_analysis/entries/MultiYearEntity.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/multi_year_analysis/entries/MultiYearBudgetExpense.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/ui/views/EntitiesView.java">
+</file>
 <file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/ui/views/ChartsView.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/ui/views/DashboardView.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/strategies/PercentageAllocationAdjustmentStrategy.java">
+</file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/strategies/ExpenseAdjustmentStrategy.java">
 </file>
 </checkstyle>
