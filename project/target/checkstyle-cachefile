@@ -1,4 +1,4 @@
-#Sat Dec 27 20:01:36 EET 2025
+#Sat Dec 27 20:03:42 EET 2025
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/MainApp.java=1766613545569
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/charts/BarChartGenerator.java=1766492732206
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/charts/PieChartGenerator.java=1766158674373
@@ -13,7 +13,7 @@
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/entries/PublicInvestmentBudgetNationalRevenue.java=1766618168087
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/entries/PublicInvestmentBudgetRevenue.java=1766618168087
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/entries/RegularBudgetExpense.java=1766618168087
-/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/entries/RegularBudgetRevenue.java=1766618168087
+/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/entries/RegularBudgetRevenue.java=1766858610752
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/menu/Colors.java=1766392545849
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/multi_year_analysis/entries/MultiYearBudgetEntry.java=1766315625280
 /home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/multi_year_analysis/entries/MultiYearBudgetExpense.java=1766618168092
