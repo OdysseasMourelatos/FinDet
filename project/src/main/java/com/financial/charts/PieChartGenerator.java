@@ -39,7 +39,7 @@ public class PieChartGenerator {
         JFreeChart chart = ChartFactory.createPieChart(title, dataset);
         PiePlot plot = (PiePlot) chart.getPlot();
         plot.setLabelGenerator(new StandardPieSectionLabelGenerator("{0} = {2}", new DecimalFormat("0"), new DecimalFormat("0.00%")));
-        ChartUtils.saveChartAsPNG(new File("chart.png"), chart, 800, 600);
+        ChartUtils.saveChartAsPNG(new File("output/chart.png"), chart, 800, 600);
         ChartFrame frame = new ChartFrame(title, chart);
         frame.setSize(600, 400);
         frame.setLocationRelativeTo(null);

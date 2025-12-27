@@ -36,7 +36,7 @@ public class BarChartGenerator {
             dataset.setValue(entry.getValue(), series, entry.getKey());
         }
         JFreeChart barChart3d = ChartFactory.createBarChart(title, xAxis, yAxis, dataset, PlotOrientation.VERTICAL, true, true, false);
-        File barChart3dFile = new File("BarChart3d.jpeg");
+        File barChart3dFile = new File("output/BarChart3d.jpeg");
         ChartUtils.saveChartAsJPEG(barChart3dFile, barChart3d, 650, 500);
         ChartFrame frame = new ChartFrame(title, barChart3d);
         frame.setSize(600, 400);
