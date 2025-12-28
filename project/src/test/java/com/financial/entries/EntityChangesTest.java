@@ -144,4 +144,71 @@ public class EntityChangesTest {
         ArrayList<PublicInvestmentBudgetCoFundedExpense> expenses = entity.getPublicInvestmentBudgetCoFundedExpenses();
         assertEquals(1500000L, expenses.get(0).getAmount()); // 2M - 500k
     }
+
+    @Test
+    void implementSpecificCategoryIncreasePercentageRegularTest() {
+        Entity entity = Entity.findEntityWithEntityCode("1001");
+        // Κατηγορία 21: 3.532.000, Κατηγορία 23: 203.000
+        // Αύξηση 10% ΜΟΝΟ στην 21
+        entity.implementChangesInSpecificExpenseCategoryOfAllServices("21", 0.10, 0, BudgetType.REGULAR_BUDGET);
+
+        ArrayList<RegularBudgetExpense> expenses = entity.getRegularBudgetExpenses();
+        // Έλεγχος λογαριασμού που ΕΠΡΕΠΕ να αλλάξει
+        assertEquals(3885200L, expenses.get(0).getAmount()); // 21: 3.532.000 * 1.1
+        // Έλεγχος λογαριασμού που ΔΕΝ ΕΠΡΕΠΕ να αλλάξει (Isolation Check)
+        assertEquals(203000L, expenses.get(1).getAmount());  // 23: Παραμένει ίδιο
+    }
+
+    @Test
+    void implementSpecificCategoryIncreaseFixedNationalPIBTest() {
+        Entity entity = Entity.findEntityWithEntityCode("1004");
+        // Κατηγορία 29 (National): Δύο λογαριασμοί των 1.500.000 (Service 201 & 202)
+        // Προσθήκη 50.000 σταθερά
+        entity.implementChangesInSpecificExpenseCategoryOfAllServices("29", 0.0, 50000, BudgetType.PUBLIC_INVESTMENT_BUDGET_NATIONAL);
+
+        ArrayList<PublicInvestmentBudgetNationalExpense> expenses = entity.getPublicInvestmentBudgetNationalExpenses();
+        assertEquals(1550000L, expenses.get(0).getAmount()); // 201: 1.5M + 50k
+        assertEquals(1550000L, expenses.get(1).getAmount()); // 202: 1.5M + 50k
+    }
+
+    @Test
+    void implementSpecificCategoryIncreasePercentageCoFundedTest() {
+        Entity entity = Entity.findEntityWithEntityCode("1003");
+        // Κατηγορία 29 (CoFunded): 2.000.000. Αύξηση 5%.
+        entity.implementChangesInSpecificExpenseCategoryOfAllServices("29", 0.05, 0, BudgetType.PUBLIC_INVESTMENT_BUDGET_COFUNDED);
+
+        ArrayList<PublicInvestmentBudgetCoFundedExpense> expenses = entity.getPublicInvestmentBudgetCoFundedExpenses();
+        assertEquals(2100000L, expenses.get(0).getAmount()); // 2M * 1.05
+    }
+
+    @Test
+    void implementSpecificCategoryDecreasePercentageRegularTest() {
+        Entity entity = Entity.findEntityWithEntityCode("1001");
+        // Κατηγορία 24: 850.000, Κατηγορία 31: 53.000. Μείωση 20% στην 24.
+        entity.implementChangesInSpecificExpenseCategoryOfAllServices("24", -0.20, 0, BudgetType.REGULAR_BUDGET);
+
+        ArrayList<RegularBudgetExpense> expenses = entity.getRegularBudgetExpenses();
+        assertEquals(680000L, expenses.get(2).getAmount()); // 24: 850.000 * 0.8
+        assertEquals(53000L,  expenses.get(3).getAmount()); // 31: Παραμένει ίδιο
+    }
+
+    @Test
+    void implementSpecificCategoryDecreaseFixedNationalPIBTest() {
+        Entity entity = Entity.findEntityWithEntityCode("1004");
+        // Κατηγορία 29: 1.500.000 ανά υπηρεσία. Μείωση 100.000.
+        entity.implementChangesInSpecificExpenseCategoryOfAllServices("29", 0.0, -100000, BudgetType.PUBLIC_INVESTMENT_BUDGET_NATIONAL);
+
+        ArrayList<PublicInvestmentBudgetNationalExpense> expenses = entity.getPublicInvestmentBudgetNationalExpenses();
+        assertEquals(1400000L, expenses.get(0).getAmount()); // 1.5M - 100k
+    }
+
+    @Test
+    void implementSpecificCategoryDecreaseFixedCoFundedTest() {
+        Entity entity = Entity.findEntityWithEntityCode("1003");
+        // Κατηγορία 29: 2.000.000. Μείωση 1.500.000.
+        entity.implementChangesInSpecificExpenseCategoryOfAllServices("29", 0.0, -1500000, BudgetType.PUBLIC_INVESTMENT_BUDGET_COFUNDED);
+
+        ArrayList<PublicInvestmentBudgetCoFundedExpense> expenses = entity.getPublicInvestmentBudgetCoFundedExpenses();
+        assertEquals(500000L, expenses.get(0).getAmount()); // 2M - 1.5M
+    }
 }
