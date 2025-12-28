@@ -64,49 +64,84 @@ public class EntityChangesTest {
     }
 
     @Test
-    void implementChangesInAllRegularExpensesWithFixedAmountTest() {
+    void implementChangesInAllRegularExpensesIncreaseFixedTest() {
         Entity entity = Entity.findEntityWithEntityCode("1001");
         // Πριν: 3.532.000 (21), 203.000 (23), 850.000 (24), 53.000 (31)
-
         entity.implementChangesInAllExpenseCategoriesOfAllServices(0.0, 10000, BudgetType.REGULAR_BUDGET);
 
-        // Έλεγχος συνολικού αθροίσματος
         assertEquals(4678000L, entity.calculateRegularSum());
 
-        // Έλεγχος συγκεκριμένων λογαριασμών
         ArrayList<RegularBudgetExpense> expenses = entity.getRegularBudgetExpenses();
-        assertEquals(3542000L, expenses.get(0).getAmount()); // 21: 3.532.000 + 10.000
-        assertEquals(63000L, expenses.get(3).getAmount());   // 31: 53.000 + 10.000
+        assertEquals(3542000L, expenses.get(0).getAmount()); // 21: +10.000
+        assertEquals(213000L,  expenses.get(1).getAmount()); // 23: +10.000
+        assertEquals(860000L,  expenses.get(2).getAmount()); // 24: +10.000
+        assertEquals(63000L,   expenses.get(3).getAmount()); // 31: +10.000
     }
 
     @Test
-    void implementChangesInAllNationalPIBExpensesWithPercentageTest() {
+    void implementChangesInAllNationalPIBExpensesIncreasePercentageTest() {
         Entity entity = Entity.findEntityWithEntityCode("1004");
-        // Πριν: 1.500.000 (201), 1.500.000 (202)
-
+        // Πριν: 1.500.000 (Service 201), 1.500.000 (Service 202)
         entity.implementChangesInAllExpenseCategoriesOfAllServices(0.20, 0, BudgetType.PUBLIC_INVESTMENT_BUDGET_NATIONAL);
 
         assertEquals(3600000L, entity.calculatePublicInvestmentNationalSum());
 
-        // Έλεγχος δαπάνης συγκεκριμένης υπηρεσίας
-        // 1.500.000 * 1.20 = 1.800.000
-        long service201Amount = entity.getPublicInvestmentNationalSumOfServiceWithCode("1004-201-000000");
-        assertEquals(1800000L, service201Amount);
+        ArrayList<PublicInvestmentBudgetNationalExpense> expenses = entity.getPublicInvestmentBudgetNationalExpenses();
+        assertEquals(1800000L, expenses.get(0).getAmount()); // 1.5M * 1.20
+        assertEquals(1800000L, expenses.get(1).getAmount()); // 1.5M * 1.20
     }
 
     @Test
-    void implementChangesInAllCoFundedPIBExpensesWithPercentageTest() {
+    void implementChangesInAllCoFundedPIBExpensesIncreasePercentageTest() {
         Entity entity = Entity.findEntityWithEntityCode("1003");
-        // Πριν: 2.000.000 (501)
-
+        // Πριν: 2.000.000 (Service 501)
         entity.implementChangesInAllExpenseCategoriesOfAllServices(0.05, 0, BudgetType.PUBLIC_INVESTMENT_BUDGET_COFUNDED);
 
         assertEquals(2100000L, entity.calculatePublicInvestmentCoFundedSum());
 
-        // Έλεγχος μοναδικής δαπάνης
-        // 2.000.000 * 1.05 = 2.100.000
-        ArrayList<BudgetExpense> expenses = entity.getPublicInvestmentCoFundedExpensesOfServiceWithCode("1003-501-000000");
-        assertEquals(2100000L, expenses.get(0).getAmount());
+        ArrayList<PublicInvestmentBudgetCoFundedExpense> expenses = entity.getPublicInvestmentBudgetCoFundedExpenses();
+        assertEquals(2100000L, expenses.get(0).getAmount()); // 2M * 1.05
     }
 
+    @Test
+    void implementChangesInAllRegularExpensesDecreasePercentageTest() {
+        Entity entity = Entity.findEntityWithEntityCode("1001");
+        // Πριν: 3.532.000 (21), 203.000 (23), 850.000 (24), 53.000 (31)
+        // Μείωση 10%
+        entity.implementChangesInAllExpenseCategoriesOfAllServices(-0.10, 0, BudgetType.REGULAR_BUDGET);
+
+        assertEquals(4174200L, entity.calculateRegularSum());
+
+        ArrayList<RegularBudgetExpense> expenses = entity.getRegularBudgetExpenses();
+        assertEquals(3178800L, expenses.get(0).getAmount()); // 3.532.000 * 0.9
+        assertEquals(182700L,  expenses.get(1).getAmount()); // 203.000 * 0.9
+        assertEquals(765000L,  expenses.get(2).getAmount()); // 850.000 * 0.9
+        assertEquals(47700L,   expenses.get(3).getAmount()); // 53.000 * 0.9
+    }
+
+    @Test
+    void implementChangesInAllNationalPIBExpensesDecreaseFixedTest() {
+        Entity entity = Entity.findEntityWithEntityCode("1004");
+        // Πριν: 1.500.000 (201), 1.500.000 (202)
+        // Μείωση 100.000 ανά λογαριασμό
+        entity.implementChangesInAllExpenseCategoriesOfAllServices(0.0, -100000, BudgetType.PUBLIC_INVESTMENT_BUDGET_NATIONAL);
+
+        assertEquals(2800000L, entity.calculatePublicInvestmentNationalSum());
+
+        ArrayList<PublicInvestmentBudgetNationalExpense> expenses = entity.getPublicInvestmentBudgetNationalExpenses();
+        assertEquals(1400000L, expenses.get(0).getAmount()); // 1.5M - 100k
+        assertEquals(1400000L, expenses.get(1).getAmount()); // 1.5M - 100k
+    }
+
+    @Test
+    void implementChangesInAllCoFundedPIBExpensesDecreaseFixedTest() {
+        Entity entity = Entity.findEntityWithEntityCode("1003");
+        // Πριν: 2.000.000 (501). Μείωση 500.000.
+        entity.implementChangesInAllExpenseCategoriesOfAllServices(0.0, -500000, BudgetType.PUBLIC_INVESTMENT_BUDGET_COFUNDED);
+
+        assertEquals(1500000L, entity.calculatePublicInvestmentCoFundedSum());
+
+        ArrayList<PublicInvestmentBudgetCoFundedExpense> expenses = entity.getPublicInvestmentBudgetCoFundedExpenses();
+        assertEquals(1500000L, expenses.get(0).getAmount()); // 2M - 500k
+    }
 }
