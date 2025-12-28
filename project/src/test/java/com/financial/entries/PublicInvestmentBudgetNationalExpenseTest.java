@@ -1,6 +1,5 @@
-package com.financial;
+package com.financial.entries;
 
-import com.financial.entries.PublicInvestmentBudgetNationalExpense;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
