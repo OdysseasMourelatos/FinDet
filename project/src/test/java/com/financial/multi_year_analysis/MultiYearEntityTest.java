@@ -21,15 +21,15 @@ public class MultiYearEntityTest {
         MultiYearEntity.getMultiYearEntities().clear();
 
         // 2. Δημιουργία Εξόδων (Δεδομένα 2023-2024)
-        new MultiYearBudgetExpense("1007", "Υπουργείο Εσωτερικών", 3337487000L, 368000000L, 2024);
-        new MultiYearBudgetExpense("1009", "Υπουργείο Εξωτερικών", 384892000L, 23000000L, 2024);
-        new MultiYearBudgetExpense("1009", "Υπουργείο Εξωτερικών", 266600000L, 15575000L, 2023);
-        new MultiYearBudgetExpense("1011", "Υπουργείο Εθνικής Άμυνας", 5687800000L, 20000000L, 2023);
+        new MultiYearBudgetExpense("1007", "Υπουργείο Εσωτερικών", "1007-TOTAL", "Δαπάνη", "ΕΞΟΔΑ", 3337487000L, 368000000L, 2024);
+        new MultiYearBudgetExpense("1009", "Υπουργείο Εξωτερικών", "1009-TOTAL", "Δαπάνη", "ΕΞΟΔΑ", 384892000L, 23000000L, 2024);
+        new MultiYearBudgetExpense("1009", "Υπουργείο Εξωτερικών", "1009-TOTAL", "Δαπάνη", "ΕΞΟΔΑ", 266600000L, 15575000L, 2023);
+        new MultiYearBudgetExpense("1011", "Υπουργείο Εθνικής Άμυνας", "1011-TOTAL", "Δαπάνη", "ΕΞΟΔΑ", 5687800000L, 20000000L, 2023);
 
         // 3. Αρχικοποίηση Entities
-        new MultiYearEntity("1007", "Υπουργείο Εσωτερικών");
-        new MultiYearEntity("1009", "Υπουργείο Εξωτερικών");
-        new MultiYearEntity("1011", "Υπουργείο Εθνικής Άμυνας");
+        new MultiYearEntity("1007", "Υπουργείο Εσωτερικών", null);
+        new MultiYearEntity("1009", "Υπουργείο Εξωτερικών", null);
+        new MultiYearEntity("1011", "Υπουργείο Εθνικής Άμυνας", null);
     }
 
     @Test
