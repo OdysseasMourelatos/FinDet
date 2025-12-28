@@ -68,7 +68,11 @@ public class MultiYearBudgetExpense extends MultiYearBudgetEntry {
         this.entityName = entityName;
         this.regularAmount = regularAmount;
         this.publicInvestmentAmount = publicInvestmentAmount;
-        multiYearBudgetExpenses.add(this);
+        multiYearBudgetExpensesOfEntities.add(this);
+    }
+
+    public static List<MultiYearBudgetExpense> getMultiYearBudgetExpensesOfEntities() {
+        return multiYearBudgetExpensesOfEntities;
     }
 
     /**
