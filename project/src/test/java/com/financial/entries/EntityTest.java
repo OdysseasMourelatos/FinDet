@@ -394,4 +394,72 @@ public class EntityTest {
         // Σύνολο: 2.100.000
         assertEquals(2100000L, entity.getTotalSumOfExpenseCategoryWithCode("29"));
     }
+
+    @Test
+    void getRegularSumOfEveryExpenseCategoryTest() {
+        // Φορέας 1001 (Προεδρία Δημοκρατίας)
+        Entity entity = Entity.findEntityWithEntityCode("1001");
+        Map<String, Long> categoryMap = entity.getRegularSumOfEveryExpenseCategory();
+
+        // Setup 1001: 4 κατηγορίες (21, 23, 24, 31)
+        assertEquals(4, categoryMap.size());
+        assertEquals(3532000L, categoryMap.get("21"));
+        assertEquals(203000L, categoryMap.get("23"));
+        assertEquals(850000L, categoryMap.get("24"));
+        assertEquals(53000L, categoryMap.get("31"));
+    }
+
+    @Test
+    void getPublicInvestmentNationalSumOfEveryExpenseCategoryTest() {
+        // Φορέας 1004 (Προεδρία Κυβέρνησης)
+        Entity entity = Entity.findEntityWithEntityCode("1004");
+        Map<String, Long> categoryMap = entity.getPublicInvestmentNationalSumOfEveryExpenseCategory();
+
+        // Setup 1004 National: Μόνο κατηγορία 29 (1.5M + 1.5M)
+        assertEquals(1, categoryMap.size());
+        assertEquals(3000000L, categoryMap.get("29"));
+    }
+
+    @Test
+    void getPublicInvestmentCoFundedSumOfEveryExpenseCategoryTest() {
+        // Φορέας 1004 (Προεδρία Κυβέρνησης)
+        Entity entity = Entity.findEntityWithEntityCode("1004");
+        Map<String, Long> categoryMap = entity.getPublicInvestmentCoFundedSumOfEveryExpenseCategory();
+
+        // Setup 1004 CoFunded: Μόνο κατηγορία 29 (1M)
+        assertEquals(1, categoryMap.size());
+        assertEquals(1000000L, categoryMap.get("29"));
+    }
+
+    @Test
+    void getPublicInvestmentSumOfEveryExpenseCategoryTest() {
+        // Default μέθοδος στο Interface (National + CoFunded ανά κατηγορία)
+        Entity entity = Entity.findEntityWithEntityCode("1004");
+        Map<String, Long> pibCategoryMap = entity.getPublicInvestmentSumOfEveryExpenseCategory();
+
+        // Κατηγορία 29: 3.000.000 (National) + 1.000.000 (CoFunded) = 4.000.000
+        assertEquals(1, pibCategoryMap.size());
+        assertEquals(4000000L, pibCategoryMap.get("29"));
+    }
+
+    @Test
+    void getTotalSumOfEveryExpenseCategoryTest() {
+        // Φορέας 1003 (Βουλή των Ελλήνων)
+        Entity entity = Entity.findEntityWithEntityCode("1003");
+        Map<String, Long> totalCategoryMap = entity.getTotalSumOfEveryExpenseCategory();
+
+        // Επαλήθευση Κατηγορίας 21 (Παροχές σε εργαζομένους)
+        // Regular (101 & 201): 6.423.000 + 44.609.000 = 51.032.000
+        // PIB: 0
+        assertEquals(51032000L, totalCategoryMap.get("21"));
+
+        // Επαλήθευση Κατηγορίας 29 (Πιστώσεις υπό κατανομή)
+        // Regular (201): 100.000
+        // PIB (501): 2.000.000
+        // Σύνολο: 2.100.000
+        assertEquals(2100000L, totalCategoryMap.get("29"));
+
+        // Έλεγχος μεγέθους: 21, 22, 23, 24, 29, 31, 33 (7 μοναδικές κατηγορίες συνολικά)
+        assertEquals(7, totalCategoryMap.size());
+    }
 }
