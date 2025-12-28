@@ -3,6 +3,7 @@ package com.financial.entries;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -243,5 +244,39 @@ public class EntityTest {
         // Για την υπηρεσία 101:
         // Regular: 6.435.000 | PIB: 0
         assertEquals(6435000L, entity.getTotalSumOfServiceWithCode("1003-101-000000"));
+    }
+    
+    @Test
+    void getRegularExpensesOfServiceWithCodeTest() {
+        // Φορέας 1001 (Προεδρία Δημοκρατίας) - Υπηρεσία 101
+        Entity entity = Entity.findEntityWithEntityCode("1001");
+        ArrayList<BudgetExpense> expenses = entity.getRegularExpensesOfServiceWithCode("1001-101-000000");
+
+        // Στο setup για τον 101 βάλαμε 4 εγγραφές (21, 23, 24, 31)
+        assertEquals(4, expenses.size(), "Θα έπρεπε να επιστραφούν 4 εγγραφές για τον κωδικό 101");
+        assertEquals("Παροχές σε εργαζομένους", expenses.get(0).getExpenseName());
+    }
+
+    @Test
+    void getPublicInvestmentNationalExpensesOfServiceWithCodeTest() {
+        // Φορέας 1004 (Προεδρία Κυβέρνησης) - Υπηρεσία 202 (ΓΓ Νομικών Θεμάτων)
+        Entity entity = Entity.findEntityWithEntityCode("1004");
+        ArrayList<BudgetExpense> expenses = entity.getPublicInvestmentNationalExpensesOfServiceWithCode("1004-202-000000");
+
+        // Setup 202 National: 1 εγγραφή
+        assertEquals(1, expenses.size());
+        assertEquals(1500000L, expenses.get(0).getAmount());
+    }
+
+    @Test
+    void getPublicInvestmentCoFundedExpensesOfServiceWithCodeTest() {
+        // Φορέας 1003 (Βουλή των Ελλήνων) - Υπηρεσία 501
+        Entity entity = Entity.findEntityWithEntityCode("1003");
+        ArrayList<BudgetExpense> expenses = entity.getPublicInvestmentCoFundedExpensesOfServiceWithCode("1003-501-000000");
+
+        // Setup 501 CoFunded: 1 εγγραφή
+        assertEquals(1, expenses.size());
+        // Casting για να ελέγξουμε το πεδίο leg που ανήκει στο ΠΔΕ
+        assertEquals("ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ", ((PublicInvestmentBudgetCoFundedExpense)expenses.get(0)).getLeg());
     }
 }
