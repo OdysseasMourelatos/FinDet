@@ -211,4 +211,69 @@ public class EntityChangesTest {
         ArrayList<PublicInvestmentBudgetCoFundedExpense> expenses = entity.getPublicInvestmentBudgetCoFundedExpenses();
         assertEquals(500000L, expenses.get(0).getAmount()); // 2M - 1.5M
     }
+
+    @Test
+    void implementSpecificServiceIncreaseFixedRegularTest() {
+        Entity entity = Entity.findEntityWithEntityCode("1003"); // Βουλή
+        // Υπηρεσία 101: Λογαριασμοί 21 (6.423.000) και 24 (12.000). Προσθήκη 50.000 ανά λογαριασμό.
+        entity.implementChangesInAllExpenseCategoriesOfSpecificService("1003-101-000000", 0.0, 50000, BudgetType.REGULAR_BUDGET);
+
+        ArrayList<RegularBudgetExpense> service101Exps = entity.getRegularExpensesOfServiceWithCode("1003-101-000000");
+        // Έλεγχος ότι άλλαξαν ΟΛΟΙ οι λογαριασμοί της υπηρεσίας
+        assertEquals(6473000L, service101Exps.get(0).getAmount()); // 21: 6.423.000 + 50.000
+        assertEquals(62000L,   service101Exps.get(1).getAmount()); // 24: 12.000 + 50.000
+
+        // Έλεγχος Isolation: Η υπηρεσία 201 (Λογαριασμός 21: 44.609.000) πρέπει να είναι ίδια
+        long otherServiceAcc21 = entity.getRegularExpensesOfServiceWithCode("1003-201-000000").get(0).getAmount();
+        assertEquals(44609000L, otherServiceAcc21);
+    }
+
+    @Test
+    void implementSpecificServiceIncreasePercentageNationalPIBTest() {
+        Entity entity = Entity.findEntityWithEntityCode("1004");
+        // Υπηρεσία 201: 1.500.000. Αύξηση 10%.
+        entity.implementChangesInAllExpenseCategoriesOfSpecificService("1004-201-000000", 0.10, 0, BudgetType.PUBLIC_INVESTMENT_BUDGET_NATIONAL);
+
+        ArrayList<PublicInvestmentBudgetNationalExpense> expenses = entity.getPublicInvestmentBudgetNationalExpenses();
+        assertEquals(1650000L, expenses.get(0).getAmount()); // Service 201: Άλλαξε
+        assertEquals(1500000L, expenses.get(1).getAmount()); // Service 202: Ίδιο
+    }
+
+    @Test
+    void implementSpecificServiceIncreaseFixedCoFundedTest() {
+        Entity entity = Entity.findEntityWithEntityCode("1003");
+        // Υπηρεσία 501: 2.000.000. Προσθήκη 1.000.000.
+        entity.implementChangesInAllExpenseCategoriesOfSpecificService("1003-501-000000", 0.0, 1000000, BudgetType.PUBLIC_INVESTMENT_BUDGET_COFUNDED);
+
+        assertEquals(3000000L, entity.getPublicInvestmentCoFundedExpensesOfServiceWithCode("1003-501-000000").get(0).getAmount());
+    }
+
+    @Test
+    void implementSpecificServiceDecreasePercentageRegularTest() {
+        Entity entity = Entity.findEntityWithEntityCode("1001");
+        // Υπηρεσία 101 (Προεδρία): Λογαριασμός 21: 3.532.000. Μείωση 50%.
+        entity.implementChangesInAllExpenseCategoriesOfSpecificService("1001-101-000000", -0.50, 0, BudgetType.REGULAR_BUDGET);
+
+        long amount21 = entity.getRegularExpensesOfServiceWithCode("1001-101-000000").get(0).getAmount();
+        assertEquals(1766000L, amount21); // 3.532.000 * 0.5
+    }
+
+    @Test
+    void implementSpecificServiceDecreaseFixedNationalPIBTest() {
+        Entity entity = Entity.findEntityWithEntityCode("1004");
+        // Υπηρεσία 202: 1.500.000. Μείωση 200.000.
+        entity.implementChangesInAllExpenseCategoriesOfSpecificService("1004-202-000000", 0.0, -200000, BudgetType.PUBLIC_INVESTMENT_BUDGET_NATIONAL);
+
+        assertEquals(1300000L, entity.getPublicInvestmentBudgetNationalExpenses().get(1).getAmount()); // Service 202: Άλλαξε
+        assertEquals(1500000L, entity.getPublicInvestmentBudgetNationalExpenses().get(0).getAmount()); // Service 201: Ίδιο
+    }
+
+    @Test
+    void implementSpecificServiceDecreasePercentageCoFundedTest() {
+        Entity entity = Entity.findEntityWithEntityCode("1003");
+        // Υπηρεσία 501: 2.000.000. Μείωση 10%.
+        entity.implementChangesInAllExpenseCategoriesOfSpecificService("1003-501-000000", -0.10, 0, BudgetType.PUBLIC_INVESTMENT_BUDGET_COFUNDED);
+
+        assertEquals(1800000L, entity.getPublicInvestmentCoFundedExpensesOfServiceWithCode("1003-501-000000").get(0).getAmount());
+    }
 }
