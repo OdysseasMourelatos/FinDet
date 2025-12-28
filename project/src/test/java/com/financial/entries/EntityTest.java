@@ -51,6 +51,45 @@ public class EntityTest {
         Entity notFound = Entity.findEntityWithEntityCode("9999");
 
         assertNull(notFound, "Η μέθοδος θα έπρεπε να επιστρέψει null για ανύπαρκτο κωδικό");
+    }
 
+    @Test
+    void calculateRegularSumTest() {
+        // Φορέας 1001 (Προεδρία Δημοκρατίας)
+        Entity entity = Entity.findEntityWithEntityCode("1001");
+        // Setup: 3.532.000 + 203.000 + 850.000 + 53.000
+        assertEquals(4638000L, entity.calculateRegularSum());
+    }
+
+    @Test
+    void calculatePublicInvestmentNationalSumTest() {
+        // Φορέας 1004 (Προεδρία Κυβέρνησης)
+        Entity entity = Entity.findEntityWithEntityCode("1004");
+        // Setup: 1.500.000 + 1.500.000
+        assertEquals(3000000L, entity.calculatePublicInvestmentNationalSum());
+    }
+
+    @Test
+    void calculatePublicInvestmentCoFundedSumTest() {
+        // Φορέας 1004 (Προεδρία Κυβέρνησης)
+        Entity entity = Entity.findEntityWithEntityCode("1004");
+        // Setup: 1.000.000
+        assertEquals(1000000L, entity.calculatePublicInvestmentCoFundedSum());
+    }
+
+    @Test
+    void calculatePublicInvestmentSumTest() {
+        // Default μέθοδος στο Interface (National + CoFunded)
+        Entity entity = Entity.findEntityWithEntityCode("1004");
+        // 3.000.000 + 1.000.000
+        assertEquals(4000000L, entity.calculatePublicInvestmentSum());
+    }
+
+    @Test
+    void calculateTotalSumTest() {
+        // Default μέθοδος στο Interface (Regular + PIB)
+        Entity entity = Entity.findEntityWithEntityCode("1003");
+        // Regular: 6.423.000 + PIB (CoFunded): 2.000.000
+        assertEquals(8423000L, entity.calculateTotalSum());
     }
 }
