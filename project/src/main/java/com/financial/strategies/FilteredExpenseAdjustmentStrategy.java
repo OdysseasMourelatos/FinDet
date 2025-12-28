@@ -5,12 +5,12 @@ import com.financial.strategies.operations.AdjustmentOperation;
 import com.financial.entries.BudgetExpense;
 import java.util.ArrayList;
 
-public class PercentageAllocationAdjustmentStrategy implements ExpenseAdjustmentStrategy {
+public class FilteredExpenseAdjustmentStrategy implements ExpenseAdjustmentStrategy {
 
     private final ExpenseFilter filter;
     private final AdjustmentOperation operation;
 
-    public PercentageAllocationAdjustmentStrategy(ExpenseFilter filter, AdjustmentOperation operation) {
+    public FilteredExpenseAdjustmentStrategy(ExpenseFilter filter, AdjustmentOperation operation) {
         this.filter = filter;
         this.operation = operation;
     }
