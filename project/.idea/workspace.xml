@@ -6,8 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="88d8a661-a47d-4ac5-b89a-2164a467de01" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/multi_year_analysis/entries/MultiYearBudgetRevenue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/multi_year_analysis/entries/MultiYearBudgetRevenue.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/MultiYearBudgetRevenueTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/MultiYearBudgetRevenueTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/PublicInvestmentBudgetCoFundedExpenseTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/PublicInvestmentBudgetCoFundedExpenseTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/PublicInvestmentBudgetNationalExpenseTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/PublicInvestmentBudgetNationalExpenseTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,7 +74,9 @@
     "JUnit.ExpensesHistoryTest.testReturnToPreviousState.executor": "Run",
     "JUnit.ExpensesHistoryTest.testReturnToPreviousStateBulkChanges.executor": "Run",
     "JUnit.ExpensesHistoryTest.testReturnToPreviousStateEmptyHistory.executor": "Run",
+    "JUnit.PublicInvestmentBudgetCoFundedExpenseTest.executor": "Run",
     "JUnit.PublicInvestmentBudgetCoFundedRevenueTest.executor": "Run",
+    "JUnit.PublicInvestmentBudgetNationalExpenseTest.executor": "Run",
     "JUnit.PublicInvestmentBudgetNationalRevenueTest.executor": "Run",
     "JUnit.PublicInvestmentBudgetNationalRevenueTest.testUpdateSuperClassBranchCoverage.executor": "Run",
     "JUnit.PublicInvestmentBudgetNationalRevenueTest.updateAmountOfSuperClassFilteredObjectNullBranchTest.executor": "Run",
@@ -119,7 +121,7 @@
     "settings.editor.selected.configurable": "preferences.general"
   }
 }]]></component>
-  <component name="RunManager" selected="JUnit.BudgetEntryTest">
+  <component name="RunManager">
     <configuration name="BudgetEntryTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="FinDet" />
       <extension name="coverage">
