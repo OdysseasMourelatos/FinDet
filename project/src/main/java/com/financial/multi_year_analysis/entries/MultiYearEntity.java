@@ -64,6 +64,9 @@ public class MultiYearEntity {
         return multiYearExpensesOfEntity;
     }
 
+    public static List<MultiYearEntity> getMultiYearEntities() {
+        return multiYearEntities;
+    }
     @Override
     public String toString() {
         return "EntityCode: " + entityCode + ", EntityName: " + entityName;

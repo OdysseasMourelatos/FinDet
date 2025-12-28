@@ -6,17 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="88d8a661-a47d-4ac5-b89a-2164a467de01" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/multi_year_analysis/entries/MultiYearBudgetExpense.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/multi_year_analysis/entries/MultiYearBudgetExpense.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/BudgetRevenueTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/entries/BudgetRevenueTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/MultiYearBudgetRevenueTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/multi_year_analysis/MultiYearBudgetRevenueTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/PublicInvestmentBudgetCoFundedExpenseTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/entries/PublicInvestmentBudgetCoFundedExpenseTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/PublicInvestmentBudgetCoFundedRevenueTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/entries/PublicInvestmentBudgetCoFundedRevenueTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/PublicInvestmentBudgetNationalExpenseTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/entries/PublicInvestmentBudgetNationalExpenseTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/PublicInvestmentBudgetNationalRevenueTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/entries/PublicInvestmentBudgetNationalRevenueTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/PublicInvestmentBudgetRevenueTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/entries/PublicInvestmentBudgetRevenueTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/RegularBudgetExpenseTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/entries/RegularBudgetExpenseTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/RegularBudgetRevenueTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/entries/RegularBudgetRevenueTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/checkstyle-cachefile" beforeDir="false" afterPath="$PROJECT_DIR$/target/checkstyle-cachefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/multi_year_analysis/entries/MultiYearEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/multi_year_analysis/entries/MultiYearEntity.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,6 +74,7 @@
     "JUnit.ExpensesHistoryTest.testReturnToPreviousStateBulkChanges.executor": "Run",
     "JUnit.ExpensesHistoryTest.testReturnToPreviousStateEmptyHistory.executor": "Run",
     "JUnit.MultiYearBudgetExpenseTest.executor": "Run",
+    "JUnit.MultiYearEntityTest.executor": "Run",
     "JUnit.PublicInvestmentBudgetCoFundedExpenseTest.executor": "Run",
     "JUnit.PublicInvestmentBudgetCoFundedRevenueTest.executor": "Run",
     "JUnit.PublicInvestmentBudgetNationalExpenseTest.executor": "Run",
@@ -137,7 +128,7 @@
       <recent name="com.financial.entries" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.MultiYearBudgetExpenseTest">
+  <component name="RunManager" selected="JUnit.MultiYearEntityTest">
     <configuration name="MultiYearBudgetExpenseTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="FinDet" />
       <extension name="coverage">
@@ -153,6 +144,21 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="MultiYearEntityTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="FinDet" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.financial.multi_year_analysis.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.financial.multi_year_analysis" />
+      <option name="MAIN_CLASS_NAME" value="com.financial.multi_year_analysis.MultiYearEntityTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="PublicInvestmentBudgetNationalRevenueTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="FinDet" />
       <extension name="coverage">
@@ -163,21 +169,6 @@
       </extension>
       <option name="PACKAGE_NAME" value="com.financial.entries" />
       <option name="MAIN_CLASS_NAME" value="com.financial.entries.PublicInvestmentBudgetNationalRevenueTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="RegularBudgetRevenueTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="FinDet" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.financial.entries.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.financial.entries" />
-      <option name="MAIN_CLASS_NAME" value="com.financial.entries.RegularBudgetRevenueTest" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -228,11 +219,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.MultiYearEntityTest" />
         <item itemvalue="JUnit.MultiYearBudgetExpenseTest" />
         <item itemvalue="JUnit.PublicInvestmentBudgetNationalRevenueTest" />
         <item itemvalue="JUnit.RegularBudgetRevenueTest.getAllSubCategoriesTest" />
         <item itemvalue="JUnit.RegularBudgetRevenueTest.getAboveLevelSuperCategoryTest" />
-        <item itemvalue="JUnit.RegularBudgetRevenueTest" />
       </list>
     </recent_temporary>
   </component>
