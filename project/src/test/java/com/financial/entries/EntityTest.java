@@ -255,7 +255,7 @@ public class EntityTest {
 
         // Στο setup για τον 101 βάλαμε 4 εγγραφές (21, 23, 24, 31)
         assertEquals(4, expenses.size(), "Θα έπρεπε να επιστραφούν 4 εγγραφές για τον κωδικό 101");
-        assertEquals("Παροχές σε εργαζομένους", expenses.get(0).getExpenseName());
+        assertEquals("Παροχές σε εργαζομένους", expenses.get(0).getDescription());
     }
 
     @Test
@@ -342,5 +342,56 @@ public class EntityTest {
         assertEquals(6435000L, totalMap.get("1003-101-000000"));
         assertEquals(70636000L, totalMap.get("1003-201-000000"));
         assertEquals(2000000L, totalMap.get("1003-501-000000"));
+    }
+
+    @Test
+    void getRegularSumOfExpenseCategoryWithCodeTest() {
+        // Φορέας 1003 (Βουλή) - Κατηγορία 21 (Παροχές σε εργαζομένους)
+        Entity entity = Entity.findEntityWithEntityCode("1003");
+
+        // Setup 1003 Category 21: 6.423.000 (101) + 44.609.000 (201) = 51.032.000
+        long sum = entity.getRegularSumOfExpenseCategoryWithCode("21");
+        assertEquals(51032000L, sum);
+    }
+
+    @Test
+    void getPublicInvestmentNationalSumOfExpenseCategoryWithCodeTest() {
+        // Φορέας 1004 (Προεδρία Κυβέρνησης) - Κατηγορία 29 (Πιστώσεις υπό κατανομή)
+        Entity entity = Entity.findEntityWithEntityCode("1004");
+
+        // Setup 1004 Category 29 National: 1.500.000 (201) + 1.500.000 (202) = 3.000.000
+        long sum = entity.getPublicInvestmentNationalSumOfExpenseCategoryWithCode("29");
+        assertEquals(3000000L, sum);
+    }
+
+    @Test
+    void getPublicInvestmentCoFundedSumOfExpenseCategoryWithCodeTest() {
+        // Φορέας 1004 (Προεδρία Κυβέρνησης) - Κατηγορία 29
+        Entity entity = Entity.findEntityWithEntityCode("1004");
+
+        // Setup 1004 Category 29 CoFunded: 1.000.000
+        long sum = entity.getPublicInvestmentCoFundedSumOfExpenseCategoryWithCode("29");
+        assertEquals(1000000L, sum);
+    }
+
+    @Test
+    void getPublicInvestmentSumOfExpenseCategoryWithCodeTest() {
+        // Default μέθοδος στο Interface (National + CoFunded για την ίδια κατηγορία)
+        Entity entity = Entity.findEntityWithEntityCode("1004");
+
+        // Κατηγορία 29: 3.000.000 (National) + 1.000.000 (CoFunded) = 4.000.000
+        assertEquals(4000000L, entity.getPublicInvestmentSumOfExpenseCategoryWithCode("29"));
+    }
+
+    @Test
+    void getTotalSumOfExpenseCategoryWithCodeTest() {
+        // Default μέθοδος στο Interface (Regular + PIB) για τη Βουλή
+        Entity entity = Entity.findEntityWithEntityCode("1003");
+
+        // Κατηγορία 29:
+        // Regular: 100.000 (από 201)
+        // PIB (CoFunded): 2.000.000 (από 501)
+        // Σύνολο: 2.100.000
+        assertEquals(2100000L, entity.getTotalSumOfExpenseCategoryWithCode("29"));
     }
 }
