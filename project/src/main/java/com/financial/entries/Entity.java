@@ -6,7 +6,7 @@ import com.financial.services.expenses.EntityLogic;
 import com.financial.services.expenses.EntityLogicService;
 import com.financial.services.expenses.ExpensesHistory;
 import com.financial.strategies.ExpenseAdjustmentStrategy;
-import com.financial.strategies.PercentageAllocationAdjustmentStrategy;
+import com.financial.strategies.FilteredExpenseAdjustmentStrategy;
 import com.financial.strategies.filters.AccountFilter;
 import com.financial.strategies.filters.MatchAllFilter;
 import com.financial.strategies.filters.ServiceFilter;
@@ -180,18 +180,18 @@ public class Entity implements EntityLogic {
 
     //IMPLEMENTATION OF CHANGES
 
-    public void implementChangesInAllExpenseCategoriesOfAllServicesWithPercentageAllocation(double percentage, long fixedAmount, BudgetType budgetType) {
-        ExpenseAdjustmentStrategy strategy = new PercentageAllocationAdjustmentStrategy(new MatchAllFilter(), new PercentageOperation());
+    public void implementChangesInAllExpenseCategoriesOfAllServices(double percentage, long fixedAmount, BudgetType budgetType) {
+        ExpenseAdjustmentStrategy strategy = new FilteredExpenseAdjustmentStrategy(new MatchAllFilter(), new PercentageOperation());
         applyChangesAndKeepHistory(strategy, percentage, fixedAmount, budgetType);
     }
 
-    public void implementChangesInSpecificExpenseCategoryOfAllServicesWithPercentageAllocation(String expenseCode, double percentage, long fixedAmount, BudgetType budgetType) {
-        ExpenseAdjustmentStrategy strategy = new PercentageAllocationAdjustmentStrategy(new AccountFilter(expenseCode), new PercentageOperation());
+    public void implementChangesInSpecificExpenseCategoryOfAllServices(String expenseCode, double percentage, long fixedAmount, BudgetType budgetType) {
+        ExpenseAdjustmentStrategy strategy = new FilteredExpenseAdjustmentStrategy(new AccountFilter(expenseCode), new PercentageOperation());
         applyChangesAndKeepHistory(strategy, percentage, fixedAmount, budgetType);
     }
 
-    public void implementChangesInAllExpenseCategoriesOfSpecificServiceWithPercentageAllocation(String serviceCode, double percentage, long fixedAmount, BudgetType budgetType) {
-        ExpenseAdjustmentStrategy strategy = new PercentageAllocationAdjustmentStrategy(new ServiceFilter(serviceCode), new PercentageOperation());
+    public void implementChangesInAllExpenseCategoriesOfSpecificService(String serviceCode, double percentage, long fixedAmount, BudgetType budgetType) {
+        ExpenseAdjustmentStrategy strategy = new FilteredExpenseAdjustmentStrategy(new ServiceFilter(serviceCode), new PercentageOperation());
         applyChangesAndKeepHistory(strategy, percentage, fixedAmount, budgetType);
     }
 
