@@ -1,6 +1,5 @@
-package com.financial;
+package com.financial.entries;
 
-import com.financial.entries.RegularBudgetExpense;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
