@@ -112,7 +112,7 @@ public class EntityTest {
     @Test
     void getRegularServiceNameWithCodeTest() {
         Entity entity = Entity.findEntityWithEntityCode("1003");
-        
+
         String serviceName = entity.getRegularServiceNameWithCode("1003-201-000000");
         assertEquals("Γενική Γραμματεία της Βουλής των Ελλήνων", serviceName);
     }
@@ -131,5 +131,67 @@ public class EntityTest {
 
         String serviceName = entity.getPublicInvestmentCoFundedServiceNameWithCode("1003-501-000000");
         assertEquals("Λοιπές αυτοτελείς Υπηρεσίες και μονάδες", serviceName);
+    }
+
+    @Test
+    void getAllRegularServiceCodesTest() {
+        // Φορέας 1003 (Βουλή των Ελλήνων)
+        Entity entity = Entity.findEntityWithEntityCode("1003");
+        List<String> codes = entity.getAllRegularServiceCodes();
+
+        // Έχουμε δύο μοναδικούς κωδικούς: 1003-101-000000 και 1003-201-000000
+        assertEquals(2, codes.size());
+        assertTrue(codes.contains("1003-101-000000"));
+        assertTrue(codes.contains("1003-201-000000"));
+    }
+
+    @Test
+    void getAllPublicInvestmentNationalServiceCodesTest() {
+        // Φορέας 1004 (Προεδρία Κυβέρνησης)
+        Entity entity = Entity.findEntityWithEntityCode("1004");
+        List<String> codes = entity.getAllPublicInvestmentNationalServiceCodes();
+
+        // Έχουμε δύο μοναδικούς κωδικούς στο Εθνικό ΠΔΕ: 201 και 202
+        assertEquals(2, codes.size());
+        assertTrue(codes.contains("1004-201-000000"));
+        assertTrue(codes.contains("1004-202-000000"));
+    }
+
+    @Test
+    void getAllPublicInvestmentCoFundedServiceCodesTest() {
+        // Φορέας 1004 (Προεδρία Κυβέρνησης)
+        Entity entity = Entity.findEntityWithEntityCode("1004");
+        List<String> codes = entity.getAllPublicInvestmentCoFundedServiceCodes();
+
+        // Έχουμε μόνο έναν κωδικό στο Συγχρηματοδοτούμενο: 201
+        assertEquals(1, codes.size());
+        assertEquals("1004-201-000000", codes.get(0));
+    }
+
+    @Test
+    void getAllPublicInvestmentServiceCodesTest() {
+        // Default μέθοδος (National + CoFunded)
+        Entity entity = Entity.findEntityWithEntityCode("1004");
+        List<String> combinedPibCodes = entity.getAllPublicInvestmentServiceCodes();
+
+        // National: [201, 202], CoFunded: [201]
+        // Το Stream.distinct() πρέπει να επιστρέψει μοναδικούς: [201, 202]
+        assertEquals(2, combinedPibCodes.size());
+        assertTrue(combinedPibCodes.contains("1004-201-000000"));
+        assertTrue(combinedPibCodes.contains("1004-202-000000"));
+    }
+
+    @Test
+    void getAllServiceCodesTest() {
+        // Default μέθοδος (Regular + All Public Investment)
+        Entity entity = Entity.findEntityWithEntityCode("1003");
+        List<String> allCodes = entity.getAllServiceCodes();
+
+        // Regular: [101, 201], CoFunded: [501]
+        // Σύνολο: 3 μοναδικοί κωδικοί
+        assertEquals(3, allCodes.size());
+        assertTrue(allCodes.contains("1003-101-000000"));
+        assertTrue(allCodes.contains("1003-201-000000"));
+        assertTrue(allCodes.contains("1003-501-000000"));
     }
 }
