@@ -9,7 +9,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class EntityTest {
+public class EntityLogicTest {
 
     @BeforeEach
     void setup() {
@@ -461,5 +461,59 @@ public class EntityTest {
 
         // Έλεγχος μεγέθους: 21, 22, 23, 24, 29, 31, 33 (7 μοναδικές κατηγορίες συνολικά)
         assertEquals(7, totalCategoryMap.size());
+    }
+    
+    @Test
+    void getEntityCodeTest() {
+        Entity entity = Entity.findEntityWithEntityCode("1001");
+        assertEquals("1001", entity.getEntityCode());
+    }
+
+    @Test
+    void getEntityNameTest() {
+        Entity entity = Entity.findEntityWithEntityCode("1004");
+        assertEquals("Προεδρία της Κυβέρνησης", entity.getEntityName());
+    }
+
+    @Test
+    void getRegularBudgetExpensesTest() {
+        // Έλεγχος αν η λίστα αρχικοποιήθηκε σωστά από τον constructor
+        Entity entity = Entity.findEntityWithEntityCode("1001");
+        ArrayList<RegularBudgetExpense> expenses = entity.getRegularBudgetExpenses();
+
+        assertNotNull(expenses);
+        assertEquals(4, expenses.size(), "Η λίστα τακτικού προϋπολογισμού πρέπει να έχει 4 εγγραφές");
+    }
+
+    @Test
+    void getPublicInvestmentBudgetNationalExpensesTest() {
+        Entity entity = Entity.findEntityWithEntityCode("1004");
+        ArrayList<PublicInvestmentBudgetNationalExpense> expenses = entity.getPublicInvestmentBudgetNationalExpenses();
+
+        assertNotNull(expenses);
+        assertEquals(2, expenses.size(), "Η λίστα Εθνικού ΠΔΕ πρέπει να έχει 2 εγγραφές (ΓΓ Πρωθυπουργού & ΓΓ Νομικών)");
+    }
+
+    @Test
+    void getPublicInvestmentBudgetCoFundedExpensesTest() {
+        Entity entity = Entity.findEntityWithEntityCode("1003");
+        ArrayList<PublicInvestmentBudgetCoFundedExpense> expenses = entity.getPublicInvestmentBudgetCoFundedExpenses();
+
+        assertNotNull(expenses);
+        assertEquals(1, expenses.size(), "Η λίστα Συγχρηματοδοτούμενου ΠΔΕ της Βουλής πρέπει να έχει 1 εγγραφή");
+    }
+
+    @Test
+    void getEntitiesTest() {
+        // Έλεγχος της static λίστας που κρατάει όλα τα entities
+        ArrayList<Entity> allEntities = Entity.getEntities();
+        assertEquals(3, allEntities.size(), "Πρέπει να υπάρχουν 3 Entities στη μνήμη (1001, 1003, 1004)");
+    }
+
+    @Test
+    void toStringTest() {
+        Entity entity = Entity.findEntityWithEntityCode("1001");
+        String expected = "Entity Code: 1001, Name: Προεδρία της Δημοκρατίας";
+        assertEquals(expected, entity.toString());
     }
 }
