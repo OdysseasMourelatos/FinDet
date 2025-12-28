@@ -10,6 +10,7 @@ import com.financial.strategies.FilteredExpenseAdjustmentStrategy;
 import com.financial.strategies.filters.AccountFilter;
 import com.financial.strategies.filters.MatchAllFilter;
 import com.financial.strategies.filters.ServiceFilter;
+import com.financial.strategies.operations.FixedAmountOperation;
 import com.financial.strategies.operations.PercentageOperation;
 
 import java.util.*;
@@ -181,17 +182,32 @@ public class Entity implements EntityLogic {
     //IMPLEMENTATION OF CHANGES
 
     public void implementChangesInAllExpenseCategoriesOfAllServices(double percentage, long fixedAmount, BudgetType budgetType) {
-        ExpenseAdjustmentStrategy strategy = new FilteredExpenseAdjustmentStrategy(new MatchAllFilter(), new PercentageOperation());
+        ExpenseAdjustmentStrategy strategy = null;
+        if (fixedAmount == 0) {
+             strategy = new FilteredExpenseAdjustmentStrategy(new MatchAllFilter(), new PercentageOperation());
+        } else {
+             strategy = new FilteredExpenseAdjustmentStrategy(new MatchAllFilter(), new FixedAmountOperation());
+        }
         applyChangesAndKeepHistory(strategy, percentage, fixedAmount, budgetType);
     }
 
     public void implementChangesInSpecificExpenseCategoryOfAllServices(String expenseCode, double percentage, long fixedAmount, BudgetType budgetType) {
-        ExpenseAdjustmentStrategy strategy = new FilteredExpenseAdjustmentStrategy(new AccountFilter(expenseCode), new PercentageOperation());
+        ExpenseAdjustmentStrategy strategy = null;
+        if (fixedAmount == 0) {
+            strategy = new FilteredExpenseAdjustmentStrategy(new AccountFilter(expenseCode), new PercentageOperation());
+        } else {
+            strategy = new FilteredExpenseAdjustmentStrategy(new AccountFilter(expenseCode), new FixedAmountOperation());
+        }
         applyChangesAndKeepHistory(strategy, percentage, fixedAmount, budgetType);
     }
 
     public void implementChangesInAllExpenseCategoriesOfSpecificService(String serviceCode, double percentage, long fixedAmount, BudgetType budgetType) {
-        ExpenseAdjustmentStrategy strategy = new FilteredExpenseAdjustmentStrategy(new ServiceFilter(serviceCode), new PercentageOperation());
+        ExpenseAdjustmentStrategy strategy = null;
+        if (fixedAmount == 0) {
+            strategy = new FilteredExpenseAdjustmentStrategy(new ServiceFilter(serviceCode), new PercentageOperation());
+        } else {
+            strategy = new FilteredExpenseAdjustmentStrategy(new ServiceFilter(serviceCode), new FixedAmountOperation());
+        }
         applyChangesAndKeepHistory(strategy, percentage, fixedAmount, budgetType);
     }
 
