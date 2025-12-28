@@ -27,9 +27,9 @@ public class MultiYearEntityTest {
         new MultiYearBudgetExpense("1011", "Υπουργείο Εθνικής Άμυνας", "1011-TOTAL", "Δαπάνη", "ΕΞΟΔΑ", 5687800000L, 20000000L, 2023);
 
         // 3. Αρχικοποίηση Entities
-        new MultiYearEntity("1007", "Υπουργείο Εσωτερικών", null);
-        new MultiYearEntity("1009", "Υπουργείο Εξωτερικών", null);
-        new MultiYearEntity("1011", "Υπουργείο Εθνικής Άμυνας", null);
+        new MultiYearEntity("1007", "Υπουργείο Εσωτερικών");
+        new MultiYearEntity("1009", "Υπουργείο Εξωτερικών");
+        new MultiYearEntity("1011", "Υπουργείο Εθνικής Άμυνας");
     }
 
     @Test
