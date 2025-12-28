@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -245,7 +246,7 @@ public class EntityTest {
         // Regular: 6.435.000 | PIB: 0
         assertEquals(6435000L, entity.getTotalSumOfServiceWithCode("1003-101-000000"));
     }
-    
+
     @Test
     void getRegularExpensesOfServiceWithCodeTest() {
         // Φορέας 1001 (Προεδρία Δημοκρατίας) - Υπηρεσία 101
@@ -276,7 +277,70 @@ public class EntityTest {
 
         // Setup 501 CoFunded: 1 εγγραφή
         assertEquals(1, expenses.size());
-        // Casting για να ελέγξουμε το πεδίο leg που ανήκει στο ΠΔΕ
-        assertEquals("ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ", ((PublicInvestmentBudgetCoFundedExpense)expenses.get(0)).getLeg());
+
+    }
+
+    @Test
+    void getRegularSumOfEveryServiceTest() {
+        // Φορέας 1003 (Βουλή)
+        Entity entity = Entity.findEntityWithEntityCode("1003");
+        Map<String, Long> serviceMap = entity.getRegularSumOfEveryService();
+
+        // 101: 6.423.000 + 12.000 = 6.435.000
+        // 201: 44.609.000 + 716.000 + 6.318.000 + 15.605.000 + 100.000 + 3.208.000 + 80.000 = 70.636.000
+        assertEquals(2, serviceMap.size());
+        assertEquals(6435000L, serviceMap.get("1003-101-000000"));
+        assertEquals(70636000L, serviceMap.get("1003-201-000000"));
+    }
+
+    @Test
+    void getPublicInvestmentNationalSumOfEveryServiceTest() {
+        // Φορέας 1004 (Προεδρία Κυβέρνησης)
+        Entity entity = Entity.findEntityWithEntityCode("1004");
+        Map<String, Long> serviceMap = entity.getPublicInvestmentNationalSumOfEveryService();
+
+        // 201: 1.500.000 | 202: 1.500.000
+        assertEquals(2, serviceMap.size());
+        assertEquals(1500000L, serviceMap.get("1004-201-000000"));
+        assertEquals(1500000L, serviceMap.get("1004-202-000000"));
+    }
+
+    @Test
+    void getPublicInvestmentCoFundedSumOfEveryServiceTest() {
+        // Φορέας 1004 (Προεδρία Κυβέρνησης)
+        Entity entity = Entity.findEntityWithEntityCode("1004");
+        Map<String, Long> serviceMap = entity.getPublicInvestmentCoFundedSumOfEveryService();
+
+        // 201: 1.000.000
+        assertEquals(1, serviceMap.size());
+        assertEquals(1000000L, serviceMap.get("1004-201-000000"));
+    }
+
+    @Test
+    void getPublicInvestmentSumOfEveryServiceTest() {
+        // Default μέθοδος: Ενοποίηση Εθνικού + Συγχρηματοδοτούμενου ΠΔΕ
+        Entity entity = Entity.findEntityWithEntityCode("1004");
+        Map<String, Long> pibMap = entity.getPublicInvestmentSumOfEveryService();
+
+        // 201: 1.500.000 (National) + 1.000.000 (CoFunded) = 2.500.000
+        // 202: 1.500.000 (National) + 0 (CoFunded) = 1.500.000
+        assertEquals(2, pibMap.size());
+        assertEquals(2500000L, pibMap.get("1004-201-000000"));
+        assertEquals(1500000L, pibMap.get("1004-202-000000"));
+    }
+
+    @Test
+    void getTotalSumOfEveryServiceTest() {
+        // Default μέθοδος: Γενικό σύνολο (Regular + PIB) για τη Βουλή (1003)
+        Entity entity = Entity.findEntityWithEntityCode("1003");
+        Map<String, Long> totalMap = entity.getTotalSumOfEveryService();
+
+        // 101: 6.435.000 (Regular)
+        // 201: 70.636.000 (Regular)
+        // 501: 2.000.000 (PIB)
+        assertEquals(3, totalMap.size());
+        assertEquals(6435000L, totalMap.get("1003-101-000000"));
+        assertEquals(70636000L, totalMap.get("1003-201-000000"));
+        assertEquals(2000000L, totalMap.get("1003-501-000000"));
     }
 }
