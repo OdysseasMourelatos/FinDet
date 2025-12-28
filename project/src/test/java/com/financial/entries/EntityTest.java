@@ -194,4 +194,54 @@ public class EntityTest {
         assertTrue(allCodes.contains("1003-201-000000"));
         assertTrue(allCodes.contains("1003-501-000000"));
     }
+
+    @Test
+    void getRegularSumOfServiceWithCodeTest() {
+        // Φορέας 1003 (Βουλή των Ελλήνων) - Υπηρεσία 101 (Γραφεία Προέδρου)
+        Entity entity = Entity.findEntityWithEntityCode("1003");
+
+        // Setup 101: 6.423.000 (Παροχές) + 12.000 (Κοινωνικές) = 6.435.000
+        long sum = entity.getRegularSumOfServiceWithCode("1003-101-000000");
+        assertEquals(6435000L, sum);
+    }
+
+    @Test
+    void getPublicInvestmentNationalSumOfServiceWithCodeTest() {
+        // Φορέας 1004 (Προεδρία Κυβέρνησης) - Υπηρεσία 201 (ΓΓ Πρωθυπουργού)
+        Entity entity = Entity.findEntityWithEntityCode("1004");
+
+        // Setup 201 National: 1.500.000
+        long sum = entity.getPublicInvestmentNationalSumOfServiceWithCode("1004-201-000000");
+        assertEquals(1500000L, sum);
+    }
+
+    @Test
+    void getPublicInvestmentCoFundedSumOfServiceWithCodeTest() {
+        // Φορέας 1004 (Προεδρία Κυβέρνησης) - Υπηρεσία 201 (ΓΓ Πρωθυπουργού)
+        Entity entity = Entity.findEntityWithEntityCode("1004");
+
+        // Setup 201 CoFunded: 1.000.000
+        long sum = entity.getPublicInvestmentCoFundedSumOfServiceWithCode("1004-201-000000");
+        assertEquals(1000000L, sum);
+    }
+
+    @Test
+    void getPublicInvestmentSumOfServiceWithCodeTest() {
+        // Default μέθοδος (National + CoFunded για την ίδια υπηρεσία)
+        Entity entity = Entity.findEntityWithEntityCode("1004");
+        String serviceCode = "1004-201-000000";
+
+        // 1.500.000 (National) + 1.000.000 (CoFunded) = 2.500.000
+        assertEquals(2500000L, entity.getPublicInvestmentSumOfServiceWithCode(serviceCode));
+    }
+
+    @Test
+    void getTotalSumOfServiceWithCodeTest() {
+        // Default μέθοδος (Regular + PIB) για τη Βουλή
+        Entity entity = Entity.findEntityWithEntityCode("1003");
+
+        // Για την υπηρεσία 101:
+        // Regular: 6.435.000 | PIB: 0
+        assertEquals(6435000L, entity.getTotalSumOfServiceWithCode("1003-101-000000"));
+    }
 }
