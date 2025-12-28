@@ -88,13 +88,13 @@
 </file>
 <file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/ui/views/DashboardView.java">
 </file>
+<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/strategies/FilteredExpenseAdjustmentStrategy.java">
+</file>
 <file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/strategies/operations/FixedAmountOperation.java">
 </file>
 <file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/strategies/operations/PercentageOperation.java">
 </file>
 <file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/strategies/operations/AdjustmentOperation.java">
-</file>
-<file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/strategies/PercentageAllocationAdjustmentStrategy.java">
 </file>
 <file name="/home/odysseasmourelatos/FinDet/project/src/main/java/com/financial/strategies/filters/ServiceFilter.java">
 </file>

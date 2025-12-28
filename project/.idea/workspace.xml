@@ -5,7 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="88d8a661-a47d-4ac5-b89a-2164a467de01" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/financial/entries/Entity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/financial/entries/Entity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/com/financial/entries/EntityChangesTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/financial/entries/EntityChangesTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/checkstyle-cachefile" beforeDir="false" afterPath="$PROJECT_DIR$/target/checkstyle-cachefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/checkstyle-result.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/checkstyle-result.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,6 +72,7 @@
     "JUnit.DataInputTest.executor": "Run",
     "JUnit.DataOutputTest.executor": "Run",
     "JUnit.DataUpdateTest.executor": "Run",
+    "JUnit.EntityChangesTest.applyChangesWithUnsupportedBudgetTypeThrowsExceptionTest.executor": "Run",
     "JUnit.EntityChangesTest.executor": "Run",
     "JUnit.EntityLogicTest.executor": "Run",
     "JUnit.EntityTest.executor": "Run",
@@ -129,7 +135,23 @@
       <recent name="com.financial.entries" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="JUnit.EntityChangesTest.applyChangesWithUnsupportedBudgetTypeThrowsExceptionTest">
+    <configuration name="EntityChangesTest.applyChangesWithUnsupportedBudgetTypeThrowsExceptionTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="FinDet" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.financial.entries.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.financial.entries" />
+      <option name="MAIN_CLASS_NAME" value="com.financial.entries.EntityChangesTest" />
+      <option name="METHOD_NAME" value="applyChangesWithUnsupportedBudgetTypeThrowsExceptionTest" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="EntityLogicTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="FinDet" />
       <extension name="coverage">
@@ -190,22 +212,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="RegularBudgetRevenueTest.getAllSubCategoriesTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="FinDet" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.financial.entries.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.financial.entries" />
-      <option name="MAIN_CLASS_NAME" value="com.financial.entries.RegularBudgetRevenueTest" />
-      <option name="METHOD_NAME" value="getAllSubCategoriesTest" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration default="true" type="JetRunConfigurationType">
       <module name="project" />
       <method v="2">
@@ -219,11 +225,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.EntityChangesTest.applyChangesWithUnsupportedBudgetTypeThrowsExceptionTest" />
         <item itemvalue="JUnit.EntityLogicTest" />
         <item itemvalue="JUnit.MultiYearEntityTest" />
         <item itemvalue="JUnit.MultiYearBudgetExpenseTest" />
         <item itemvalue="JUnit.PublicInvestmentBudgetNationalRevenueTest" />
-        <item itemvalue="JUnit.RegularBudgetRevenueTest.getAllSubCategoriesTest" />
       </list>
     </recent_temporary>
   </component>

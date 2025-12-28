@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class EntityChangesTest {
 
@@ -218,7 +219,7 @@ public class EntityChangesTest {
         // Υπηρεσία 101: Λογαριασμοί 21 (6.423.000) και 24 (12.000). Προσθήκη 50.000 ανά λογαριασμό.
         entity.implementChangesInAllExpenseCategoriesOfSpecificService("1003-101-000000", 0.0, 50000, BudgetType.REGULAR_BUDGET);
 
-        ArrayList<RegularBudgetExpense> service101Exps = entity.getRegularExpensesOfServiceWithCode("1003-101-000000");
+        ArrayList<BudgetExpense> service101Exps = entity.getRegularExpensesOfServiceWithCode("1003-101-000000");
         // Έλεγχος ότι άλλαξαν ΟΛΟΙ οι λογαριασμοί της υπηρεσίας
         assertEquals(6473000L, service101Exps.get(0).getAmount()); // 21: 6.423.000 + 50.000
         assertEquals(62000L,   service101Exps.get(1).getAmount()); // 24: 12.000 + 50.000
@@ -275,5 +276,15 @@ public class EntityChangesTest {
         entity.implementChangesInAllExpenseCategoriesOfSpecificService("1003-501-000000", -0.10, 0, BudgetType.PUBLIC_INVESTMENT_BUDGET_COFUNDED);
 
         assertEquals(1800000L, entity.getPublicInvestmentCoFundedExpensesOfServiceWithCode("1003-501-000000").get(0).getAmount());
+    }
+
+    @Test
+    void applyChangesWithUnsupportedBudgetTypeThrowsExceptionTest() {
+        Entity entity = Entity.findEntityWithEntityCode("1001");
+
+        // Ελέγχουμε αν η μέθοδος πετάει IllegalStateException όταν το budgetType είναι Public Investment (General)
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
+            entity.implementChangesInAllExpenseCategoriesOfAllServices(0.10, 0, BudgetType.PUBLIC_INVESTMENT_BUDGET);
+        });
     }
 }
