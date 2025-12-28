@@ -184,9 +184,9 @@ public class Entity implements EntityLogic {
     public void implementChangesInAllExpenseCategoriesOfAllServices(double percentage, long fixedAmount, BudgetType budgetType) {
         ExpenseAdjustmentStrategy strategy = null;
         if (fixedAmount == 0) {
-             strategy = new FilteredExpenseAdjustmentStrategy(new MatchAllFilter(), new PercentageOperation());
+            strategy = new FilteredExpenseAdjustmentStrategy(new MatchAllFilter(), new PercentageOperation());
         } else {
-             strategy = new FilteredExpenseAdjustmentStrategy(new MatchAllFilter(), new FixedAmountOperation());
+            strategy = new FilteredExpenseAdjustmentStrategy(new MatchAllFilter(), new FixedAmountOperation());
         }
         applyChangesAndKeepHistory(strategy, percentage, fixedAmount, budgetType);
     }
