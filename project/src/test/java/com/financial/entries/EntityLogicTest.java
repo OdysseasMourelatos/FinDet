@@ -462,7 +462,7 @@ public class EntityLogicTest {
         // Έλεγχος μεγέθους: 21, 22, 23, 24, 29, 31, 33 (7 μοναδικές κατηγορίες συνολικά)
         assertEquals(7, totalCategoryMap.size());
     }
-    
+
     @Test
     void getEntityCodeTest() {
         Entity entity = Entity.findEntityWithEntityCode("1001");
