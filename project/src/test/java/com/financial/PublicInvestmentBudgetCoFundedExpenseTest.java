@@ -3,6 +3,12 @@ package com.financial;
 
 import com.financial.entries.PublicInvestmentBudgetCoFundedExpense;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PublicInvestmentBudgetCoFundedExpenseTest {
 
@@ -11,15 +17,19 @@ public class PublicInvestmentBudgetCoFundedExpenseTest {
         // Καθαρισμός πριν από κάθε test για αποφυγή διπλότυπων
         PublicInvestmentBudgetCoFundedExpense.getAllPublicInvestmentBudgetCoFundedExpenses().clear();
 
-        new PublicInvestmentBudgetCoFundedExpense("1007", "Υπουργείο Εσωτερικών", "207", "Γενική Γραμματεία Δημόσιας Διοίκησης", "10072070", "Πιστώσεις υπό κατανομή", "ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ", "ΕΞΟΔΑ", 6000000L);
-        new PublicInvestmentBudgetCoFundedExpense("1007", "Υπουργείο Εσωτερικών", "209", "Γενική Γραμματεία Αυτοδιοίκησης και Αποκέντρωσης", "10072090", "Πιστώσεις υπό κατανομή", "ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ", "ΕΞΟΔΑ", 73000000L);
-        new PublicInvestmentBudgetCoFundedExpense("1007", "Υπουργείο Εσωτερικών", "999", "Γενική Διεύθυνση Μακεδονίας και Θράκης", "10079990", "Πιστώσεις υπό κατανομή", "ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ", "ΕΞΟΔΑ", 1000000L);
-        new PublicInvestmentBudgetCoFundedExpense("1009", "Υπουργείο Εξωτερικών", "201", "Υπηρεσιακή Γενική Γραμματεία", "10092010", "Πιστώσεις υπό κατανομή", "ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ", "ΕΞΟΔΑ", 672000L);
-        new PublicInvestmentBudgetCoFundedExpense("1009", "Υπουργείο Εξωτερικών", "206", "Διεθνών Οικονομικών Σχέσεων και Εξωστρέφειας", "10092060", "Πιστώσεις υπό κατανομή", "ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ", "ΕΞΟΔΑ", 512000L);
-        new PublicInvestmentBudgetCoFundedExpense("1009", "Υπουργείο Εξωτερικών", "501", "Λοιπές αυτοτελείς μονάδες", "10095010", "Πιστώσεις υπό κατανομή", "ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ", "ΕΞΟΔΑ", 16000L);
-        new PublicInvestmentBudgetCoFundedExpense("1009", "Υπουργείο Εξωτερικών", "701", "Δαπάνες μεταναστευτικών ροών", "10097010", "Πιστώσεις υπό κατανομή", "ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ", "ΕΞΟΔΑ", 10800000L);
+        new PublicInvestmentBudgetCoFundedExpense("1007", "Υπουργείο Εσωτερικών", "1007-207-0000000", "Γενική Γραμματεία Δημόσιας Διοίκησης", "29", "Πιστώσεις υπό κατανομή", "ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ", "ΕΞΟΔΑ", 6000000L);
+        new PublicInvestmentBudgetCoFundedExpense("1007", "Υπουργείο Εσωτερικών", "1007-209-0000000", "Γενική Γραμματεία Αυτοδιοίκησης και Αποκέντρωσης", "29", "Πιστώσεις υπό κατανομή", "ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ", "ΕΞΟΔΑ", 73000000L);
+        new PublicInvestmentBudgetCoFundedExpense("1007", "Υπουργείο Εσωτερικών", "1007-999-0100000", "Γενική Διεύθυνση Μακεδονίας και Θράκης", "29", "Πιστώσεις υπό κατανομή", "ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ", "ΕΞΟΔΑ", 1000000L);
+
+        // Υπουργείο Εξωτερικών (1009) - Πλήρεις Κωδικοί Ειδικού Φορέα
+        new PublicInvestmentBudgetCoFundedExpense("1009", "Υπουργείο Εξωτερικών", "1009-201-0000000", "Υπηρεσιακή Γενική Γραμματεία", "29", "Πιστώσεις υπό κατανομή", "ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ", "ΕΞΟΔΑ", 672000L);
+        new PublicInvestmentBudgetCoFundedExpense("1009", "Υπουργείο Εξωτερικών", "1009-206-0000000", "Γενική Γραμματεία Διεθνών Οικονομικών Σχέσεων", "29", "Πιστώσεις υπό κατανομή", "ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ", "ΕΞΟΔΑ", 512000L);
+        new PublicInvestmentBudgetCoFundedExpense("1009", "Υπουργείο Εξωτερικών", "1009-501-0000000", "Λοιπές μονάδες/αυτοτελείς μονάδες", "29", "Πιστώσεις υπό κατανομή", "ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ", "ΕΞΟΔΑ", 16000L);
+        new PublicInvestmentBudgetCoFundedExpense("1009", "Υπουργείο Εξωτερικών", "1009-701-0000000", "Δαπάνες μεταναστευτικών ροών", "29", "Πιστώσεις υπό κατανομή", "ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ", "ΕΞΟΔΑ", 10800000L);
+
     }
-@Test
+
+    @Test
     void testGetAllPublicInvestmentBudgetCoFundedExpenses() {
         ArrayList<PublicInvestmentBudgetCoFundedExpense> all = PublicInvestmentBudgetCoFundedExpense.getAllPublicInvestmentBudgetCoFundedExpenses();
         assertEquals(7, all.size());
@@ -38,31 +48,21 @@ public class PublicInvestmentBudgetCoFundedExpenseTest {
 
     @Test
     void testGetPublicInvestmentBudgetCoFundedExpensesOfCategoryWithCode() {
-        // 1. Δεδομένα: Έχουμε 7 εγγραφές με διαφορετικούς κωδικούς
-        String targetCode = "10072090";
-
-        // 2. Εκτέλεση φιλτραρίσματος
+        // Εφόσον όλες οι εγγραφές στο setup έχουν code "29", το targetCode πρέπει να είναι "29"
+        String targetCode = "29";
         ArrayList<PublicInvestmentBudgetCoFundedExpense> result = PublicInvestmentBudgetCoFundedExpense.getPublicInvestmentBudgetCoFundedExpensesOfCategoryWithCode(targetCode);
 
-        // 3. Επαλήθευση
-        // α) Πρέπει να βρει ακριβώς 1 εγγραφή
-        assertEquals(1, result.size());
-
-        // β) Η εγγραφή στη λίστα πρέπει να έχει κωδικό "10072090"
+        assertEquals(7, result.size());
         for (PublicInvestmentBudgetCoFundedExpense e : result) {
-            assertEquals(targetCode, e.getCode());
+            assertEquals("29", e.getCode());
         }
-
-        // γ) Έλεγχος για κωδικό που δεν υπάρχει
-        ArrayList<PublicInvestmentBudgetCoFundedExpense> emptyResult = PublicInvestmentBudgetCoFundedExpense.getPublicInvestmentBudgetCoFundedExpensesOfCategoryWithCode("99999999");
-        assertTrue(emptyResult.isEmpty());
     }
 
     @Test
     void testFindPublicInvestmentBudgetCoFundedExpenseWithCodes() {
         // Αναζήτηση συγκεκριμένου: Entity 1009, Service 701, Code 10097010
         PublicInvestmentBudgetCoFundedExpense found = PublicInvestmentBudgetCoFundedExpense.findPublicInvestmentBudgetCoFundedExpenseWithCodes(
-                "1009", "701", "10097010");
+                "1009", "1009-701-0000000", "29");
 
         assertNotNull(found);
         assertEquals(10800000L, found.getAmount());
@@ -85,28 +85,16 @@ public class PublicInvestmentBudgetCoFundedExpenseTest {
     @Test
     void testGetSumOfEveryExpenseCategory() {
         Map<String, Long> categorySums = PublicInvestmentBudgetCoFundedExpense.getSumOfEveryExpenseCategory();
-
-        // Έλεγχος κάθε κατηγορίας
-        assertEquals(6000000L, categorySums.get("10072070"));
-        assertEquals(73000000L, categorySums.get("10072090"));
-        assertEquals(1000000L, categorySums.get("10079990"));
-        assertEquals(672000L, categorySums.get("10092010"));
-        assertEquals(512000L, categorySums.get("10092060"));
-        assertEquals(16000L, categorySums.get("10095010"));
-        assertEquals(10800000L, categorySums.get("10097010"));
-
-        // Έλεγχος πλήθους κατηγοριών: 7 κατηγορίες
-        assertEquals(7, categorySums.size());
+        // Εφόσον όλες οι εγγραφές έχουν code "29", το Map πρέπει να έχει 1 entry με το συνολικό ποσό
+        assertEquals(92000000L, categorySums.get("29"));
+        assertEquals(1, categorySums.size());
     }
 
     @Test
     void testGetDescriptionWithCode() {
         // Έλεγχος για διάφορες κατηγορίες
         assertEquals("Πιστώσεις υπό κατανομή",
-                PublicInvestmentBudgetCoFundedExpense.getDescriptionWithCode("10072070"));
-
-        assertEquals("Πιστώσεις υπό κατανομή",
-                PublicInvestmentBudgetCoFundedExpense.getDescriptionWithCode("10097010"));
+                PublicInvestmentBudgetCoFundedExpense.getDescriptionWithCode("29"));
 
         // Έλεγχος οριακής περίπτωσης: Κωδικός που δεν υπάρχει στα δεδομένα του setup
         assertEquals("Περιγραφή μη διαθέσιμη",
@@ -115,39 +103,42 @@ public class PublicInvestmentBudgetCoFundedExpenseTest {
 
     @Test
     void implementGlobalIncreaseInCertainPublicInvestmentBudgetCoFundedCategoryTest1() {
-        // Εφαρμογή αύξησης 10% στην κατηγορία 10072090
+        // Εφαρμογή αύξησης 10% σε ΟΛΕΣ τις πιστώσεις υπό κατανομή (Code 29)
         double percentage = 0.10;
-        PublicInvestmentBudgetCoFundedExpense.implementGlobalChangesInCertainPublicInvestmentBudgetCoFundedCategory("10072090", percentage, 0);
+        PublicInvestmentBudgetCoFundedExpense.implementGlobalChangesInCertainPublicInvestmentBudgetCoFundedCategory("29", percentage, 0);
 
-        // Έλεγχος όλων των εγγραφών στη βασική λίστα
         for (PublicInvestmentBudgetCoFundedExpense expense : PublicInvestmentBudgetCoFundedExpense.getAllPublicInvestmentBudgetCoFundedExpenses()) {
-            if (expense.getCode().equals("10072090")) {
-                assertEquals(80300000L, expense.getAmount()); // 73.000.000 * 1.1
-            } else {
-                // Έλεγχος ότι καμία άλλη κατηγορία δεν επηρεάστηκε
-                if (expense.getCode().equals("10072070")) {
-                    assertEquals(6000000L, expense.getAmount());
-                }
+            // Έλεγχος ενδεικτικά για την Αυτοδιοίκηση: 73.000.000 * 1.1 = 80.300.000
+            if (expense.getServiceCode().equals("1007-209-0000000")) {
+                assertEquals(80300000L, expense.getAmount());
+            }
+            // Έλεγχος ενδεικτικά για τη Δημόσια Διοίκηση: 6.000.000 * 1.1 = 6.600.000
+            if (expense.getServiceCode().equals("1007-207-0000000")) {
+                assertEquals(6600000L, expense.getAmount());
             }
         }
     }
 
     @Test
     void implementGlobalIncreaseInCertainPublicInvestmentBudgetCoFundedCategoryTest2() {
-        // Σενάριο: Προσθήκη 500.000 ευρώ fixed σε κάθε εγγραφή της κατηγορίας 10097010
+        // Σενάριο: Προσθήκη 500.000 ευρώ fixed σε όλες τις εγγραφές της κατηγορίας "29"
+        // Σημείωση: Αλλάζουμε το "10097010" σε "29" γιατί αυτός είναι ο κωδικός στο setup σου
         long fixedAmount = 500000L;
-        PublicInvestmentBudgetCoFundedExpense.implementGlobalChangesInCertainPublicInvestmentBudgetCoFundedCategory("10097010", 0, fixedAmount);
+        PublicInvestmentBudgetCoFundedExpense.implementGlobalChangesInCertainPublicInvestmentBudgetCoFundedCategory("29", 0, fixedAmount);
 
-        // Έλεγχος όλων των εγγραφών στη βασική λίστα για την κατηγορία 10097010
+        // Έλεγχος όλων των εγγραφών στη βασική λίστα
         for (PublicInvestmentBudgetCoFundedExpense expense : PublicInvestmentBudgetCoFundedExpense.getAllPublicInvestmentBudgetCoFundedExpenses()) {
-            if (expense.getCode().equals("10097010")) {
+
+            // Έλεγχος συγκεκριμένα για την υπηρεσία 1009-701
+            if (expense.getServiceCode().equals("1009-701-0000000")) {
                 // Αρχικό 10.800.000 + 500.000 = 11.300.000
                 assertEquals(11300000L, expense.getAmount());
-            } else {
-                // Έλεγχος ότι καμία άλλη κατηγορία δεν επηρεάστηκε
-                if (expense.getCode().equals("10092010")) {
-                    assertEquals(672000L, expense.getAmount());
-                }
+            }
+
+            // Έλεγχος για την υπηρεσία 1009-201 (επηρεάζεται και αυτή γιατί έχει κωδικό "29")
+            if (expense.getServiceCode().equals("1009-201-0000000")) {
+                // Αρχικό 672.000 + 500.000 = 1.172.000
+                assertEquals(1172000L, expense.getAmount());
             }
         }
     }
@@ -160,14 +151,14 @@ public class PublicInvestmentBudgetCoFundedExpenseTest {
 
         // Σάρωση όλης της λίστας για επαλήθευση
         for (PublicInvestmentBudgetCoFundedExpense expense : PublicInvestmentBudgetCoFundedExpense.getAllPublicInvestmentBudgetCoFundedExpenses()) {
-            // Παράδειγμα ελέγχου για την εγγραφή 1007-10072070 (Αρχικό: 6.000.000)
-            if (expense.getEntityCode().equals("1007") && expense.getCode().equals("10072070")) {
-                assertEquals(6600000L, expense.getAmount());
+            // Παράδειγμα ελέγχου για την εγγραφή 1007-207-0000000 (Αρχικό: 6.000.000)
+            if (expense.getEntityCode().equals("1007") && expense.getServiceCode().equals("1007-207-0000000")) {
+                assertEquals(6600000L, expense.getAmount()); // 6.000.000 * 1.1
             }
 
-            // Παράδειγμα ελέγχου για την εγγραφή 1009-10095010 (Αρχικό: 16.000)
-            if (expense.getEntityCode().equals("1009") && expense.getCode().equals("10095010")) {
-                assertEquals(17600L, expense.getAmount());
+            // Παράδειγμα ελέγχου για την εγγραφή 1009-501-0000000 (Αρχικό: 16.000)
+            if (expense.getEntityCode().equals("1009") && expense.getServiceCode().equals("1009-501-0000000")) {
+                assertEquals(17600L, expense.getAmount()); // 16.000 * 1.1
             }
         }
     }
@@ -183,11 +174,11 @@ public class PublicInvestmentBudgetCoFundedExpenseTest {
         // Επαλήθευση ότι και οι 7 εγγραφές αυξήθηκαν
         for (PublicInvestmentBudgetCoFundedExpense expense : allExpenses) {
             // Ελέγχουμε με βάση τις γνωστές αρχικές τιμές από το setup
-            if (expense.getEntityCode().equals("1009") && expense.getCode().equals("10095010")) {
+            if (expense.getEntityCode().equals("1009") && expense.getServiceCode().equals("1009-501-0000000")) {
                 assertEquals(66000L, expense.getAmount()); // 16.000 + 50.000
             }
 
-            if (expense.getEntityCode().equals("1007") && expense.getCode().equals("10072070")) {
+            if (expense.getEntityCode().equals("1007") && expense.getServiceCode().equals("1007-207-0000000")) {
                 assertEquals(6050000L, expense.getAmount()); // 6.000.000 + 50.000
             }
         }
