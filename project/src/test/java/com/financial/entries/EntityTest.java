@@ -92,4 +92,31 @@ public class EntityTest {
         // Regular: 6.423.000 + PIB (CoFunded): 2.000.000
         assertEquals(8423000L, entity.calculateTotalSum());
     }
+
+    @Test
+    void getRegularServiceNameWithCodeTest() {
+        Entity entity = Entity.findEntityWithEntityCode("1001");
+        // Αναζήτηση ονόματος για τον κωδικό που βάλαμε στο setup
+        String serviceName = entity.getRegularServiceNameWithCode("1001-101-000000");
+
+        assertEquals("Προεδρία της Δημοκρατίας", serviceName );
+    }
+
+    @Test
+    void getPublicInvestmentNationalServiceNameWithCodeTest() {
+        Entity entity = Entity.findEntityWithEntityCode("1004");
+        // Αναζήτηση ονόματος στο Εθνικό ΠΔΕ
+        String serviceName = entity.getPublicInvestmentNationalServiceNameWithCode("1004-201-000000");
+
+        assertEquals("ΓΓ Πρωθυπουργού", serviceName);
+    }
+
+    @Test
+    void getPublicInvestmentCoFundedServiceNameWithCodeTest() {
+        Entity entity = Entity.findEntityWithEntityCode("1003");
+        // Αναζήτηση ονόματος στο Συγχρηματοδοτούμενο ΠΔΕ
+        String serviceName = entity.getPublicInvestmentCoFundedServiceNameWithCode("1003-501-000000");
+
+        assertEquals("Λοιπές αυτοτελείς μονάδες", serviceName);
+    }
 }
