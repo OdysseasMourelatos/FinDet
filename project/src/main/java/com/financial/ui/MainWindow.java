@@ -4,6 +4,8 @@ import com.financial.ui.views.DashboardView;
 import com.financial.ui.views.RevenuesView;
 import com.financial.ui.views.ExpensesView;
 import com.financial.ui.views.EntitiesView;
+import com.financial.ui.views.AccountExplorerView;
+import com.financial.ui.views.BudgetChangesView;
 import com.financial.ui.views.ChartsView;
 import com.financial.ui.views.ExportView;
 import javafx.geometry.Insets;
@@ -33,6 +35,8 @@ public class MainWindow {
     private final RevenuesView revenuesView;
     private final ExpensesView expensesView;
     private final EntitiesView entitiesView;
+    private final AccountExplorerView accountExplorerView;
+    private final BudgetChangesView budgetChangesView;
     private final ChartsView chartsView;
     private final ExportView exportView;
 
@@ -44,6 +48,8 @@ public class MainWindow {
         revenuesView = new RevenuesView();
         expensesView = new ExpensesView();
         entitiesView = new EntitiesView();
+        accountExplorerView = new AccountExplorerView();
+        budgetChangesView = new BudgetChangesView();
         chartsView = new ChartsView();
         exportView = new ExportView();
 
@@ -102,6 +108,8 @@ public class MainWindow {
         Button revenuesBtn = createNavButton("Έσοδα", "revenues");
         Button expensesBtn = createNavButton("Έξοδα", "expenses");
         Button entitiesBtn = createNavButton("Φορείς", "entities");
+        Button explorerBtn = createNavButton("Εξερεύνηση", "explorer");
+        Button changesBtn = createNavButton("Αλλαγές", "changes");
         Button chartsBtn = createNavButton("Γραφήματα", "charts");
         Button exportBtn = createNavButton("Εξαγωγή", "export");
 
@@ -124,6 +132,14 @@ public class MainWindow {
         entitiesBtn.setOnAction(e -> {
             setActiveButton(entitiesBtn);
             showView(entitiesView.getView());
+        });
+        explorerBtn.setOnAction(e -> {
+            setActiveButton(explorerBtn);
+            showView(accountExplorerView.getView());
+        });
+        changesBtn.setOnAction(e -> {
+            setActiveButton(changesBtn);
+            showView(budgetChangesView.getView());
         });
         chartsBtn.setOnAction(e -> {
             setActiveButton(chartsBtn);
@@ -149,6 +165,8 @@ public class MainWindow {
             revenuesBtn,
             expensesBtn,
             entitiesBtn,
+            explorerBtn,
+            changesBtn,
             new Separator(),
             chartsBtn,
             exportBtn,
