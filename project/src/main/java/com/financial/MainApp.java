@@ -49,27 +49,27 @@ public class MainApp extends Application {
 
         try {
             // Load Regular Budget Revenues
-            String regularRevenues = basePath + "/ΤΑΚΤΙΚΟΣ_ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΕΣΟΔΑ.csv";
+            String regularRevenues = basePath + "/data/ΤΑΚΤΙΚΟΣ_ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΕΣΟΔΑ.csv";
             if (new File(regularRevenues).exists()) {
                 DataInput.advancedCSVReader(regularRevenues);
             }
 
             // Load Public Investment Revenues
-            String publicRevenues = basePath + "/ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΔΗΜΟΣΙΩΝ_ΕΠΕΝΔΥΣΕΩΝ_ΕΣΟΔΑ.csv";
+            String publicRevenues = basePath + "/data/ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΔΗΜΟΣΙΩΝ_ΕΠΕΝΔΥΣΕΩΝ_ΕΣΟΔΑ.csv";
             if (new File(publicRevenues).exists()) {
                 DataInput.advancedCSVReader(publicRevenues);
             }
 
             // Load Regular Budget Expenses
             String regularExpenses = basePath
-                + "/ΤΑΚΤΙΚΟΣ_ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΠΙΣΤΩΣΕΙΣ_ΚΑΤΑ_ΕΙΔΙΚΟ_ΦΟΡΕΑ_ΚΑΙ_ΜΕΙΖΟΝΑ_ΚΑΤΗΓΟΡΙΑ_ΔΑΠΑΝΗΣ.csv";
+                + "/data/ΤΑΚΤΙΚΟΣ_ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΠΙΣΤΩΣΕΙΣ_ΚΑΤΑ_ΕΙΔΙΚΟ_ΦΟΡΕΑ_ΚΑΙ_ΜΕΙΖΟΝΑ_ΚΑΤΗΓΟΡΙΑ_ΔΑΠΑΝΗΣ.csv";
             if (new File(regularExpenses).exists()) {
                 DataInput.advancedCSVReader(regularExpenses);
             }
 
             // Load Public Investment Expenses
             String publicExpenses = basePath
-                + "/ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΔΗΜΟΣΙΩΝ_ΕΠΕΝΔΥΣΕΩΝ_ΠΙΣΤΩΣΕΙΣ_ΚΑΤΑ_ΕΙΔΙΚΟ_ΦΟΡΕΑ_ΚΑΙ_ΜΕΙΖΟΝΑ_ΚΑΤΗΓΟΡΙΑ_ΔΑΠΑΝΗΣ.csv";
+                + "/data/ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΔΗΜΟΣΙΩΝ_ΕΠΕΝΔΥΣΕΩΝ_ΠΙΣΤΩΣΕΙΣ_ΚΑΤΑ_ΕΙΔΙΚΟ_ΦΟΡΕΑ_ΚΑΙ_ΜΕΙΖΟΝΑ_ΚΑΤΗΓΟΡΙΑ_ΔΑΠΑΝΗΣ.csv";
             if (new File(publicExpenses).exists()) {
                 DataInput.advancedCSVReader(publicExpenses);
             }
@@ -83,7 +83,7 @@ public class MainApp extends Application {
             DataInput.mergeBudgetRevenuesOfBaseYearWithMultiYearBudgetRevenues(2025);
 
             // Load historical data
-            String historical = basePath + "/ΚΡΑΤΙΚΟΣ_ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΕΣΟΔΑ_ΠΕΝΤΑΕΤΙΑΣ.csv";
+            String historical = basePath + "/data/ΚΡΑΤΙΚΟΣ_ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΕΣΟΔΑ_ΠΕΝΤΑΕΤΙΑΣ.csv";
             if (new File(historical).exists()) {
                 DataInput.advancedCSVReader(historical);
             }
@@ -106,7 +106,7 @@ public class MainApp extends Application {
         };
 
         for (String path : possiblePaths) {
-            File testFile = new File(path + "/ΤΑΚΤΙΚΟΣ_ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΕΣΟΔΑ.csv");
+            File testFile = new File(path + "/data/ΤΑΚΤΙΚΟΣ_ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΕΣΟΔΑ.csv");
             if (testFile.exists()) {
                 return path;
             }
