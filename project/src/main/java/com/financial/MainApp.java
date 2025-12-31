@@ -35,6 +35,9 @@ public class MainApp extends Application {
         // Configure stage
         primaryStage.setTitle("FinDet - Διαχείριση Κρατικού Προϋπολογισμού");
         primaryStage.setScene(scene);
+
+        primaryStage.setResizable(true);
+
         primaryStage.setMinWidth(900);
         primaryStage.setMinHeight(600);
         primaryStage.show();

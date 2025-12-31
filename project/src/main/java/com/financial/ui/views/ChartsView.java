@@ -151,7 +151,7 @@ public class ChartsView {
         searchField.setPrefWidth(100);
         styleTextField(searchField);
 
-        Button searchBtn = createChartButton("Ιεραρχία");
+        Button searchBtn = createChartButton("Κατανομή");
         searchBtn.setOnAction(e -> {
             setActiveButton(searchBtn);
             showCodeHierarchyChart();
@@ -445,22 +445,19 @@ public class ChartsView {
         if (superCats != null) {
             for (int i = superCats.size() - 1; i >= 0; i--) {
                 BudgetRevenue sup = superCats.get(i);
-                items.add(new ChartItem(sup.getCode() + " " + truncate(sup.getDescription(), 25), sup.getAmount()));
             }
         }
-
-        items.add(new ChartItem(revenue.getCode() + " " + truncate(revenue.getDescription(), 25), revenue.getAmount()));
 
         ArrayList<BudgetRevenue> nextLevel = revenue.getNextLevelSubCategories();
         if (nextLevel != null) {
             for (BudgetRevenue sub : nextLevel) {
-                items.add(new ChartItem(sub.getCode() + " " + truncate(sub.getDescription(), 25), sub.getAmount()));
+                items.add(new ChartItem(sub.getCode() + " " + truncate(sub.getDescription(), 60), sub.getAmount()));
             }
         }
 
         long total = items.stream().mapToLong(i -> i.amount).sum();
 
-        VBox content = createChartContent("Ιεραρχία: " + code, revenue.getDescription(), items, total);
+        VBox content = createChartContent("Κατανομή: " + code, revenue.getDescription(), items, total);
 
         // Add hierarchy info card
         ArrayList<BudgetRevenue> subCats = revenue.getAllSubCategories();
