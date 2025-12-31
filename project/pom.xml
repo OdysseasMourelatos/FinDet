@@ -87,6 +87,7 @@
                                 <exclude>com/financial/pdf/**/*</exclude>
                                 <exclude>com/financial/charts/**/*</exclude>
                                 <exclude>com/financial/menu/**/*</exclude>
+                                <exclude>com/financial/services/data**/*</exclude>
                                 <exclude>com/financial/MainApp.class</exclude>
                                 <exclude>com/financial/Main.class</exclude>
                             </excludes>

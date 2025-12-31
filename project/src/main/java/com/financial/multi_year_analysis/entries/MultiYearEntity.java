@@ -11,7 +11,7 @@ public class MultiYearEntity {
     private final String entityName;
     protected static List<MultiYearEntity> multiYearEntities = new ArrayList<>();
 
-    public MultiYearEntity(String entityCode, String entityName, List<MultiYearBudgetExpense> multiYearExpensesOfEntity) {
+    public MultiYearEntity(String entityCode, String entityName) {
         this.entityCode = entityCode;
         this.entityName = entityName;
         // Σύνδεση με τα έξοδα του συγκεκριμένου φορέα
@@ -64,6 +64,9 @@ public class MultiYearEntity {
         return multiYearExpensesOfEntity;
     }
 
+    public static List<MultiYearEntity> getMultiYearEntities() {
+        return multiYearEntities;
+    }
     @Override
     public String toString() {
         return "EntityCode: " + entityCode + ", EntityName: " + entityName;
