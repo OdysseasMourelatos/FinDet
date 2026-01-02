@@ -1,13 +1,14 @@
 package com.financial.ui.views;
 
-import com.financial.entries.BudgetRevenue;
-import com.financial.entries.PublicInvestmentBudgetExpense;
-import com.financial.entries.RegularBudgetExpense;
+import com.financial.entries.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import com.financial.services.expenses.BudgetExpenseLogicService;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.TranslateTransition;
@@ -300,19 +301,13 @@ public class ChartsView {
         currentChartView = "expenses";
         chartContainer.getChildren().clear();
 
-        Map<String, Long> expensesByEntity = new HashMap<>();
-        for (RegularBudgetExpense e : RegularBudgetExpense.getAllRegularBudgetExpenses()) {
-            if (e.getCode().charAt(0) <= '3') {
-                expensesByEntity.merge(e.getEntityName(), e.getAmount(), Long::sum);
-            }
-        }
-        for (PublicInvestmentBudgetExpense e : PublicInvestmentBudgetExpense.getAllPublicInvestmentBudgetExpenses()) {
-            if (e.getCode().charAt(0) <= '3') {
-                expensesByEntity.merge(e.getEntityName(), e.getAmount(), Long::sum);
-            }
+        Map<String, Long> expenses = new HashMap<>();
+
+        for (Map.Entry<String, Long> entry : BudgetExpense.getSumOfEveryBudgetExpenseCategory().entrySet()) {
+            expenses.put(BudgetExpenseLogicService.getDescriptionWithCode(entry.getKey(), BudgetExpense.getBudgetExpenses()), entry.getValue());
         }
 
-        List<Map.Entry<String, Long>> sorted = expensesByEntity.entrySet().stream().sorted((a, b) -> Long.compare(b.getValue(), a.getValue())).limit(8).collect(Collectors.toList());
+        List<Map.Entry<String, Long>> sorted = expenses.entrySet().stream().sorted((a, b) -> Long.compare(b.getValue(), a.getValue())).collect(Collectors.toList());
 
         if (sorted.isEmpty()) {
             showNoData();
@@ -331,8 +326,8 @@ public class ChartsView {
         currentChartView = "comparison";
         chartContainer.getChildren().clear();
 
-        long totalRevenue = BudgetRevenue.getAllBudgetRevenues().stream().filter(r -> r.getCode().length() == 2 && r.getCode().charAt(0) <= '3').mapToLong(BudgetRevenue::getAmount).sum();
-        long totalExpense = RegularBudgetExpense.getAllRegularBudgetExpenses().stream().filter(e -> e.getCode().charAt(0) <= '3').mapToLong(RegularBudgetExpense::getAmount).sum() + PublicInvestmentBudgetExpense.getAllPublicInvestmentBudgetExpenses().stream().filter(e -> e.getCode().charAt(0) <= '3').mapToLong(PublicInvestmentBudgetExpense::getAmount).sum();
+        long totalRevenue = BudgetRevenue.calculateSum();
+        long totalExpense = BudgetExpense.calculateSum();
 
         if (totalRevenue == 0 && totalExpense == 0) {
             showNoData();
@@ -388,15 +383,8 @@ public class ChartsView {
         chartContainer.getChildren().clear();
 
         Map<String, Long> expensesByMinistry = new HashMap<>();
-        for (RegularBudgetExpense e : RegularBudgetExpense.getAllRegularBudgetExpenses()) {
-            if (e.getCode().charAt(0) <= '3') {
-                expensesByMinistry.merge(e.getEntityName(), e.getAmount(), Long::sum);
-            }
-        }
-        for (PublicInvestmentBudgetExpense e : PublicInvestmentBudgetExpense.getAllPublicInvestmentBudgetExpenses()) {
-            if (e.getCode().charAt(0) <= '3') {
-                expensesByMinistry.merge(e.getEntityName(), e.getAmount(), Long::sum);
-            }
+        for (Entity entity : Entity.getEntities()) {
+            expensesByMinistry.put(entity.getEntityName(), entity.calculateTotalSum());
         }
 
         List<Map.Entry<String, Long>> sorted = expensesByMinistry.entrySet().stream().sorted((a, b) -> Long.compare(b.getValue(), a.getValue())).limit(10).collect(Collectors.toList());
