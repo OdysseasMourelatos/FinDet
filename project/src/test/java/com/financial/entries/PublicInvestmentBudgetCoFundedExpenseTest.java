@@ -183,6 +183,65 @@ public class PublicInvestmentBudgetCoFundedExpenseTest {
         }
     }
 
+    //Tests ONLY for decreases
+    @Test
+    void implementGlobalDecreaseInCertainCategorySuccessTest() {
+        // Σενάριο: Μείωση 10% στην κατηγορία "29"
+        // Αρχικά ποσά: 6.000.000 και 16.000. Και τα δύο επιτρέπουν μείωση 10%.
+        double percentage = -0.10;
+        PublicInvestmentBudgetCoFundedExpense.implementGlobalChangesInCertainPublicInvestmentBudgetCoFundedCategory("29", percentage, 0);
+
+        PublicInvestmentBudgetCoFundedExpense e1 = PublicInvestmentBudgetCoFundedExpense.findPublicInvestmentBudgetCoFundedExpenseWithCodes("1007", "1007-207-0000000", "29");
+        PublicInvestmentBudgetCoFundedExpense e2 = PublicInvestmentBudgetCoFundedExpense.findPublicInvestmentBudgetCoFundedExpenseWithCodes("1009", "1009-501-0000000", "29");
+
+        assertEquals(5400000L, e1.getAmount()); // 6.000.000 - 600.000
+        assertEquals(14400L, e2.getAmount());   // 16.000 - 1.600
+    }
+
+    @Test
+    void implementGlobalDecreaseInAllCategoriesSuccessTest() {
+        // Σενάριο: Αφαίρεση 5.000 ευρώ από κάθε λογαριασμό.
+        // Ο μικρότερος είναι 16.000, άρα η αφαίρεση 5.000 είναι ασφαλής.
+        long fixedReduction = -5000L;
+        PublicInvestmentBudgetCoFundedExpense.implementGlobalChangesInAllPublicInvestmentBudgetCoFundedCategories(0, fixedReduction);
+
+        PublicInvestmentBudgetCoFundedExpense e = PublicInvestmentBudgetCoFundedExpense.findPublicInvestmentBudgetCoFundedExpenseWithCodes("1009", "1009-501-0000000", "29");
+        assertEquals(11000L, e.getAmount()); // 16.000 - 5.000
+    }
+
+    @Test
+    void implementGlobalDecreaseLeadingToNegativeFailureTest1() {
+        // ΣΕΝΑΡΙΟ ΑΠΟΤΥΧΙΑΣ: Μείωση 110% (percentage = -1.1) στην κατηγορία "29"
+        // ΠΡΟΣΔΟΚΙΑ: Το ποσό να παραμείνει αμετάβλητο (π.χ. 16.000)
+
+        long originalAmount = 16000L;
+        double dangerousPercentage = -1.10;
+
+        PublicInvestmentBudgetCoFundedExpense.implementGlobalChangesInCertainPublicInvestmentBudgetCoFundedCategory("29", dangerousPercentage, 0);
+
+        PublicInvestmentBudgetCoFundedExpense e = PublicInvestmentBudgetCoFundedExpense.findPublicInvestmentBudgetCoFundedExpenseWithCodes("1009", "1009-501-0000000", "29");
+
+        // Αν ο κώδικας δεν έχει προστασία, το ποσό θα γινόταν -1.600
+        assertEquals(originalAmount, e.getAmount());
+    }
+
+    @Test
+    void implementGlobalDecreaseLeadingToNegativeFailureTest2() {
+        // ΣΕΝΑΡΙΟ ΑΠΟΤΥΧΙΑΣ: Αφαίρεση σταθερού ποσού 100.000 ευρώ από όλους.
+        // Η υπηρεσία 1009-501 έχει μόνο 16.000 ευρώ.
+        // ΠΡΟΣΔΟΚΙΑ: Το ποσό να παραμείνει 16.000.
+
+        long originalAmount = 16000L;
+        long excessiveFixedAmount = -100000L;
+
+        PublicInvestmentBudgetCoFundedExpense.implementGlobalChangesInAllPublicInvestmentBudgetCoFundedCategories(0, excessiveFixedAmount);
+
+        PublicInvestmentBudgetCoFundedExpense e = PublicInvestmentBudgetCoFundedExpense.findPublicInvestmentBudgetCoFundedExpenseWithCodes("1009", "1009-501-0000000", "29");
+
+        // Το test θα αποτύχει αν το ποσό έγινε -84.000
+        assertEquals(originalAmount, e.getAmount());
+    }
+
     @Test
     void testToStringFormatting() {
         PublicInvestmentBudgetCoFundedExpense e = new PublicInvestmentBudgetCoFundedExpense("1007", "ΤΕΣΤ", "207", "ΥΠ", "10072070", "Μισθοί", "ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ", "ΕΞΟΔΑ", 1000000L);

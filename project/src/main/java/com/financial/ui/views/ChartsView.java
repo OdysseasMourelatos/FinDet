@@ -301,7 +301,7 @@ public class ChartsView {
         Map<String, Long> expenses = new HashMap<>();
 
         for (Map.Entry<String, Long> entry : BudgetExpense.getSumOfEveryBudgetExpenseCategory().entrySet()) {
-            expenses.put(BudgetExpenseLogicService.getDescriptionWithCode(entry.getKey(), BudgetExpense.getBudgetExpenses()), entry.getValue());
+            expenses.put(BudgetExpense.getDescriptionWithCode(entry.getKey()), entry.getValue());
         }
 
         List<Map.Entry<String, Long>> sorted = expenses.entrySet().stream().sorted((a, b) -> Long.compare(b.getValue(), a.getValue())).collect(Collectors.toList());

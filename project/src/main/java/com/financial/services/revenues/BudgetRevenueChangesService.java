@@ -137,7 +137,7 @@ public class BudgetRevenueChangesService {
             for (BudgetRevenue subCategory : nextLevelSubCategories) {
                 setAmountOfAllSubCategoriesWithPercentageAdjustment((T) subCategory, revenues, percentage);
             }
-        } catch (RuntimeException e) {
+        } catch (IllegalArgumentException e) {
             return;
         }
     }

@@ -1,5 +1,6 @@
 package com.financial.strategies;
 
+import com.financial.services.expenses.ExpensesHistory;
 import com.financial.strategies.filters.ExpenseFilter;
 import com.financial.strategies.operations.AdjustmentOperation;
 import com.financial.entries.BudgetExpense;
@@ -17,12 +18,17 @@ public class FilteredExpenseAdjustmentStrategy implements ExpenseAdjustmentStrat
 
     @Override
     public void applyAdjustment(ArrayList<? extends BudgetExpense> expenses, double percentage, long fixedAmount) {
-        for (BudgetExpense expense : expenses) {
-            if (filter.matches(expense)) {
-                long newAmount = operation.apply(expense.getAmount(), percentage, fixedAmount);
-                expense.setAmount(roundToNearestHundred(newAmount));
+        try {
+            for (BudgetExpense expense : expenses) {
+                if (filter.matches(expense)) {
+                    long newAmount = operation.apply(expense.getAmount(), percentage, fixedAmount);
+                    expense.setAmount(roundToNearestHundred(newAmount));
+                }
             }
+        } catch (IllegalArgumentException e) {
+            ExpensesHistory.returnToPreviousState();
         }
+
     }
 
     private long roundToNearestHundred(long amount) {
