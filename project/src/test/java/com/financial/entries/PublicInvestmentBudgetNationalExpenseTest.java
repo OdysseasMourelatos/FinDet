@@ -159,6 +159,75 @@ public class PublicInvestmentBudgetNationalExpenseTest {
         }
     }
 
+    //Tests ONLY for decreases
+
+    @Test
+    void implementGlobalDecreaseInCertainCategorySuccessTest() {
+        // Σενάριο: Μείωση 20% στην κατηγορία "29"
+        // Όλοι οι λογαριασμοί είναι μεγάλοι (min 1.000.000), άρα το 20% είναι ασφαλές.
+        double percentage = -0.20;
+        PublicInvestmentBudgetNationalExpense.implementGlobalChangesInCertainPublicInvestmentBudgetNationalCategory("29", percentage, 0);
+
+        // Έλεγχος Γραμματείας Πρωθυπουργού: 1.500.000 -> 1.200.000
+        PublicInvestmentBudgetNationalExpense e1 = PublicInvestmentBudgetNationalExpense.findPublicInvestmentBudgetNationalExpenseWithCodes(
+                "1004", "1004-201-0000000", "29");
+
+        // Έλεγχος Μακεδονίας-Θράκης: 1.000.000 -> 800.000
+        PublicInvestmentBudgetNationalExpense e2 = PublicInvestmentBudgetNationalExpense.findPublicInvestmentBudgetNationalExpenseWithCodes(
+                "1007", "1007-999-0100000", "29");
+
+        assertEquals(1200000L, e1.getAmount());
+        assertEquals(800000L, e2.getAmount());
+    }
+
+    @Test
+    void implementGlobalDecreaseInAllCategoriesSuccessTest() {
+        // Σενάριο: Σταθερή μείωση 500.000 ευρώ από όλους.
+        // Ο μικρότερος είναι 1.000.000, άρα η μείωση επιτρέπεται.
+        long fixedReduction = -500000L;
+        PublicInvestmentBudgetNationalExpense.implementGlobalChangesInAllPublicInvestmentBudgetNationalCategories(0, fixedReduction);
+
+        PublicInvestmentBudgetNationalExpense e = PublicInvestmentBudgetNationalExpense.findPublicInvestmentBudgetNationalExpenseWithCodes(
+                "1007", "1007-999-0100000", "29");
+
+        assertEquals(500000L, e.getAmount()); // 1.000.000 - 500.000
+    }
+
+    @Test
+    void implementGlobalDecreaseLeadingToNegativeFailureTest1() {
+        // ΣΕΝΑΡΙΟ ΑΠΟΤΥΧΙΑΣ: Μείωση 150% (percentage = -1.5) στην κατηγορία "29"
+        // ΠΡΟΣΔΟΚΙΑ: Το ποσό να παραμείνει στο αρχικό (Rollback logic)
+
+        long originalAmount = 1000000L;
+        double dangerousPercentage = -1.50;
+
+        PublicInvestmentBudgetNationalExpense.implementGlobalChangesInCertainPublicInvestmentBudgetNationalCategory("29", dangerousPercentage, 0);
+
+        PublicInvestmentBudgetNationalExpense e = PublicInvestmentBudgetNationalExpense.findPublicInvestmentBudgetNationalExpenseWithCodes(
+                "1007", "1007-999-0100000", "29");
+
+        // Το test θα αποτύχει αν ο λογαριασμός έγινε -500.000
+        assertEquals(originalAmount, e.getAmount());
+    }
+
+    @Test
+    void implementGlobalDecreaseLeadingToNegativeFailureTest2() {
+        // ΣΕΝΑΡΙΟ ΑΠΟΤΥΧΙΑΣ: Αφαίρεση σταθερού ποσού 2.000.000 ευρώ.
+        // Η υπηρεσία 1004-201 έχει μόνο 1.500.000.
+        // ΠΡΟΣΔΟΚΙΑ: Το ποσό να παραμείνει 1.500.000.
+
+        long originalAmount = 1500000L;
+        long excessiveFixedAmount = -2000000L;
+
+        PublicInvestmentBudgetNationalExpense.implementGlobalChangesInAllPublicInvestmentBudgetNationalCategories(0, excessiveFixedAmount);
+
+        PublicInvestmentBudgetNationalExpense e = PublicInvestmentBudgetNationalExpense.findPublicInvestmentBudgetNationalExpenseWithCodes(
+                "1004", "1004-201-0000000", "29");
+
+        // Το test θα αποτύχει αν το ποσό έγινε -500.000
+        assertEquals(originalAmount, e.getAmount());
+    }
+
     @Test
     void testToStringFormatting() {
         PublicInvestmentBudgetNationalExpense e = new PublicInvestmentBudgetNationalExpense("1004", "ΤΕΣΤ", "201", "ΥΠ", "10042010", "Μισθοί", "ΕΘΝΙΚΟ", "ΕΞΟΔΑ", 1000000L);

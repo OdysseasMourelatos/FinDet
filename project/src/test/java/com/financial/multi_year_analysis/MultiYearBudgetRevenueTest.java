@@ -9,7 +9,6 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import static com.financial.multi_year_analysis.entries.MultiYearBudgetRevenue.getMultiYearBudgetRevenuesOfSpecificYear;
 
 public class MultiYearBudgetRevenueTest {
 
@@ -53,7 +52,7 @@ public class MultiYearBudgetRevenueTest {
     }
 
     @Test
-    void getSumCheck() {
+    void getSumTest() {
         int yr = 2022;
         long yrCheck = MultiYearBudgetRevenue.getSumOfSpecificYear(yr);
 
@@ -62,7 +61,7 @@ public class MultiYearBudgetRevenueTest {
     }
 
     @Test
-    void sumOfAllYearsCheck() {
+    void getSumOfAllYearsTest() {
         Map<Integer, Long> result = MultiYearBudgetRevenue.getSumOfAllYears();
 
         // Πρέπει να έχουμε δεδομένα για 3 έτη
@@ -75,7 +74,7 @@ public class MultiYearBudgetRevenueTest {
     }
 
     @Test
-    void toStringCheck() {
+    void toStringTest() {
         List<MultiYearBudgetRevenue> mybr13 = MultiYearBudgetRevenue.getMultiYearBudgetRevenuesOfSpecificCode("13");
         assertFalse(mybr13.isEmpty());
 

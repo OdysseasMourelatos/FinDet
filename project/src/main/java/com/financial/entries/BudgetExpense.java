@@ -1,5 +1,7 @@
 package com.financial.entries;
 
+import com.financial.services.expenses.BudgetExpenseLogicService;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -38,6 +40,10 @@ public class BudgetExpense extends BudgetEntry {
 
     public static long calculateSum() {
         return RegularBudgetExpense.calculateSum() + PublicInvestmentBudgetExpense.calculateSum();
+    }
+
+    public static String getDescriptionWithCode(String code) {
+        return BudgetExpenseLogicService.getDescriptionWithCode(code, budgetExpenses);
     }
 
     public String getEntityCode() {
