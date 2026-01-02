@@ -60,14 +60,14 @@ public class MainApp extends Application {
             // Load Public Investment Revenues
             String publicRevenues = basePath + "/data/ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΔΗΜΟΣΙΩΝ_ΕΠΕΝΔΥΣΕΩΝ_ΕΣΟΔΑ.csv";
             if (new File(publicRevenues).exists()) {
-                DataInput.advancedCSVReader(publicRevenues , null);
+                DataInput.advancedCSVReader(publicRevenues, null);
             }
 
             // Load Regular Budget Expenses
             String regularExpenses = basePath
                 + "/data/ΤΑΚΤΙΚΟΣ_ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΠΙΣΤΩΣΕΙΣ_ΚΑΤΑ_ΕΙΔΙΚΟ_ΦΟΡΕΑ_ΚΑΙ_ΜΕΙΖΟΝΑ_ΚΑΤΗΓΟΡΙΑ_ΔΑΠΑΝΗΣ.csv";
             if (new File(regularExpenses).exists()) {
-                DataInput.advancedCSVReader(regularExpenses,  null);
+                DataInput.advancedCSVReader(regularExpenses, null);
             }
 
             // Load Public Investment Expenses
@@ -100,7 +100,7 @@ public class MainApp extends Application {
             if (new File(historicalExpensesPerEntity).exists()) {
                 DataInput.createMultiYearEntityFromCSV();
                 DataInput.mergeBudgetExpensesPerEntityOfBaseYearWithMultiYearBudgetExpensesPerEntity(2025);
-                DataInput.advancedCSVReader(historicalExpensesPerEntity,null);
+                DataInput.advancedCSVReader(historicalExpensesPerEntity, null);
             }
 
             System.out.println("Budget data loaded successfully!");
