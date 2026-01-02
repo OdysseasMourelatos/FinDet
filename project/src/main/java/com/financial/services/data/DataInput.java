@@ -9,6 +9,7 @@ import com.financial.entries.*;
 import com.financial.multi_year_analysis.entries.MultiYearBudgetExpense;
 import com.financial.multi_year_analysis.entries.MultiYearBudgetRevenue;
 import com.financial.multi_year_analysis.entries.MultiYearEntity;
+import com.financial.services.expenses.BudgetExpenseLogicService;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 
@@ -181,9 +182,16 @@ public class DataInput {
         }
     }
 
+    public static void mergeBudgetExpensesOfBaseYearWithMultiYearBudgetExpenses(int baseYear) {
+        for (Map.Entry<String, Long> entry : BudgetExpense.getSumOfEveryBudgetExpenseCategory().entrySet()) {
+            MultiYearBudgetExpense multiYearBudgetExpense = new MultiYearBudgetExpense(entry.getKey(), BudgetExpenseLogicService.getDescriptionWithCode(entry.getKey(), BudgetExpense.getBudgetExpenses()), "ΕΞΟΔΑ", entry.getValue(), baseYear);
+        }
+    }
+
     public static void mergeBudgetExpensesPerEntityOfBaseYearWithMultiYearBudgetExpensesPerEntity(int baseYear) {
         for (Entity entity : Entity.getEntities()) {
             MultiYearBudgetExpense multiYearBudgetExpense = new MultiYearBudgetExpense(entity.getEntityCode(), entity.getEntityName(), entity.calculateRegularSum(), entity.calculatePublicInvestmentSum(), baseYear);
         }
     }
+
 }
