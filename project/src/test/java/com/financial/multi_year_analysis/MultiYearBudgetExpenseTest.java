@@ -25,11 +25,11 @@ public class MultiYearBudgetExpenseTest {
         new MultiYearBudgetExpense("23", "Μεταβιβάσεις", "ΕΞΟΔΑ", 32475557000L, 2023);
 
         // Υπουργεία (Constructor 2)
-        new MultiYearBudgetExpense("1007", "Υπουργείο Εσωτερικών", "1007-TOTAL", "Συνολική Δαπάνη ΥΠΕΣ", "ΕΞΟΔΑ", 3337487000L, 368000000L, 2024);
-        new MultiYearBudgetExpense("1009", "Υπουργείο Εξωτερικών", "1009-TOTAL", "Συνολική Δαπάνη ΥΠΕΞ", "ΕΞΟΔΑ", 384892000L, 23000000L, 2024);
-        new MultiYearBudgetExpense("1009", "Υπουργείο Εξωτερικών", "1009-TOTAL", "Συνολική Δαπάνη ΥΠΕΞ", "ΕΞΟΔΑ", 266600000L, 15575000L, 2023);
-        new MultiYearBudgetExpense("1011", "Υπουργείο Εθνικής Άμυνας", "1011-TOTAL", "Συνολική Δαπάνη ΥΠΕΘΑ", "ΕΞΟΔΑ", 5687800000L, 20000000L, 2023);
-        new MultiYearBudgetExpense("1015", "Υπουργείο Υγείας", "1015-TOTAL", "Συνολική Δαπάνη ΥΠ.ΥΓ.", "ΕΞΟΔΑ", 4776460000L, 425928000L, 2023);
+        new MultiYearBudgetExpense("1007", "Υπουργείο Εσωτερικών", 3337487000L, 368000000L, 2024);
+        new MultiYearBudgetExpense("1009", "Υπουργείο Εξωτερικών", 384892000L, 23000000L, 2024);
+        new MultiYearBudgetExpense("1009", "Υπουργείο Εξωτερικών", 266600000L, 15575000L, 2023);
+        new MultiYearBudgetExpense("1011", "Υπουργείο Εθνικής Άμυνας", 5687800000L, 20000000L, 2023);
+        new MultiYearBudgetExpense("1015", "Υπουργείο Υγείας", 4776460000L, 425928000L, 2023);
     }
 
     @Test
