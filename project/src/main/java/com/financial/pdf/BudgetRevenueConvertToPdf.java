@@ -24,7 +24,8 @@ public class BudgetRevenueConvertToPdf {
             document.open();
 
            
-            BaseFont bf = BaseFont.createFont("C:/Windows/Fonts/arial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            //BaseFont bf = BaseFont.createFont("C:/Windows/Fonts/arial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            BaseFont bf = BaseFont.createFont("/usr/share/fonts/truetype/freefont/FreeSans.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
             Font font = new Font(bf, 12);
 
             Paragraph title0 = new Paragraph("ΚΡΑΤΙΚΟΣ ΠΡΟΥΠΟΛΟΓΙΣΜΟΣ:ΚΥΡΙΑ ΕΣΟΔΑ", font); 
