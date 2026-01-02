@@ -50,10 +50,7 @@ public class ChartsView {
     private static final String ACCENT = "#3b82f6";
 
     // Refined monochromatic chart colors - blues and grays
-    private static final String[] CHART_COLORS = {
-        "#3b82f6", "#60a5fa", "#93c5fd", "#bfdbfe", "#dbeafe",
-        "#6366f1", "#818cf8", "#a5b4fc", "#c7d2fe", "#e0e7ff"
-    };
+    private static final String[] CHART_COLORS = {"#3b82f6", "#60a5fa", "#93c5fd", "#bfdbfe", "#dbeafe", "#6366f1", "#818cf8", "#a5b4fc", "#c7d2fe", "#e0e7ff"};
 
     private final VBox view;
     private VBox chartContainer;
@@ -189,33 +186,33 @@ public class ChartsView {
     private String getButtonStyle(boolean active) {
         if (active) {
             return "-fx-background-color: " + ACCENT + ";" +
-                   "-fx-text-fill: white;" +
-                   "-fx-background-radius: 6;" +
-                   "-fx-border-color: transparent;" +
-                   "-fx-border-radius: 6;" +
-                   "-fx-padding: 8 14;" +
-                   "-fx-font-size: 12px;" +
-                   "-fx-cursor: hand;";
+                    "-fx-text-fill: white;" +
+                    "-fx-background-radius: 6;" +
+                    "-fx-border-color: transparent;" +
+                    "-fx-border-radius: 6;" +
+                    "-fx-padding: 8 14;" +
+                    "-fx-font-size: 12px;" +
+                    "-fx-cursor: hand;";
         }
         return "-fx-background-color: transparent;" +
-               "-fx-text-fill: " + TEXT_SECONDARY + ";" +
-               "-fx-background-radius: 6;" +
-               "-fx-border-color: " + BORDER_COLOR + ";" +
-               "-fx-border-radius: 6;" +
-               "-fx-padding: 8 14;" +
-               "-fx-font-size: 12px;" +
-               "-fx-cursor: hand;";
+                "-fx-text-fill: " + TEXT_SECONDARY + ";" +
+                "-fx-background-radius: 6;" +
+                "-fx-border-color: " + BORDER_COLOR + ";" +
+                "-fx-border-radius: 6;" +
+                "-fx-padding: 8 14;" +
+                "-fx-font-size: 12px;" +
+                "-fx-cursor: hand;";
     }
 
     private String getButtonHoverStyle() {
         return "-fx-background-color: " + BG_TERTIARY + ";" +
-               "-fx-text-fill: " + TEXT_PRIMARY + ";" +
-               "-fx-background-radius: 6;" +
-               "-fx-border-color: " + BORDER_COLOR + ";" +
-               "-fx-border-radius: 6;" +
-               "-fx-padding: 8 14;" +
-               "-fx-font-size: 12px;" +
-               "-fx-cursor: hand;";
+                "-fx-text-fill: " + TEXT_PRIMARY + ";" +
+                "-fx-background-radius: 6;" +
+                "-fx-border-color: " + BORDER_COLOR + ";" +
+                "-fx-border-radius: 6;" +
+                "-fx-padding: 8 14;" +
+                "-fx-font-size: 12px;" +
+                "-fx-cursor: hand;";
     }
 
     private void setActiveButton(Button btn) {
@@ -228,25 +225,25 @@ public class ChartsView {
 
     private void styleComboBox(ComboBox<String> combo) {
         combo.setStyle(
-            "-fx-background-color: " + BG_SECONDARY + ";" +
-            "-fx-text-fill: " + TEXT_PRIMARY + ";" +
-            "-fx-background-radius: 6;" +
-            "-fx-border-color: " + BORDER_COLOR + ";" +
-            "-fx-border-radius: 6;" +
-            "-fx-font-size: 12px;"
+                "-fx-background-color: " + BG_SECONDARY + ";" +
+                        "-fx-text-fill: " + TEXT_PRIMARY + ";" +
+                        "-fx-background-radius: 6;" +
+                        "-fx-border-color: " + BORDER_COLOR + ";" +
+                        "-fx-border-radius: 6;" +
+                        "-fx-font-size: 12px;"
         );
     }
 
     private void styleTextField(TextField field) {
         field.setStyle(
-            "-fx-background-color: " + BG_SECONDARY + ";" +
-            "-fx-text-fill: " + TEXT_PRIMARY + ";" +
-            "-fx-prompt-text-fill: " + TEXT_MUTED + ";" +
-            "-fx-background-radius: 6;" +
-            "-fx-border-color: " + BORDER_COLOR + ";" +
-            "-fx-border-radius: 6;" +
-            "-fx-padding: 8 12;" +
-            "-fx-font-size: 12px;"
+                "-fx-background-color: " + BG_SECONDARY + ";" +
+                        "-fx-text-fill: " + TEXT_PRIMARY + ";" +
+                        "-fx-prompt-text-fill: " + TEXT_MUTED + ";" +
+                        "-fx-background-radius: 6;" +
+                        "-fx-border-color: " + BORDER_COLOR + ";" +
+                        "-fx-border-radius: 6;" +
+                        "-fx-padding: 8 12;" +
+                        "-fx-font-size: 12px;"
         );
     }
 
@@ -362,10 +359,10 @@ public class ChartsView {
         String borderColor = positive ? "rgba(34, 197, 94, 0.3)" : "rgba(239, 68, 68, 0.3)";
 
         card.setStyle(
-            "-fx-background-color: " + bgColor + ";" +
-            "-fx-background-radius: 8;" +
-            "-fx-border-color: " + borderColor + ";" +
-            "-fx-border-radius: 8;"
+                "-fx-background-color: " + bgColor + ";" +
+                        "-fx-background-radius: 8;" +
+                        "-fx-border-color: " + borderColor + ";" +
+                        "-fx-border-radius: 8;"
         );
 
         Label titleLbl = new Label(positive ? "Πλεόνασμα" : "Έλλειμμα");
@@ -461,9 +458,9 @@ public class ChartsView {
         infoCards.setPadding(new Insets(8, 0, 0, 0));
 
         infoCards.getChildren().addAll(
-            createInfoChip("Επίπεδο " + revenue.getLevelOfHierarchy()),
-            createInfoChip("Ανώτερες: " + totalSupers),
-            createInfoChip("Υποκατηγορίες: " + totalSubs)
+                createInfoChip("Επίπεδο " + revenue.getLevelOfHierarchy()),
+                createInfoChip("Ανώτερες: " + totalSupers),
+                createInfoChip("Υποκατηγορίες: " + totalSubs)
         );
 
         content.getChildren().add(infoCards);
@@ -474,11 +471,11 @@ public class ChartsView {
     private Label createInfoChip(String text) {
         Label chip = new Label(text);
         chip.setStyle(
-            "-fx-background-color: " + BG_TERTIARY + ";" +
-            "-fx-text-fill: " + TEXT_SECONDARY + ";" +
-            "-fx-padding: 6 12;" +
-            "-fx-background-radius: 12;" +
-            "-fx-font-size: 11px;"
+                "-fx-background-color: " + BG_TERTIARY + ";" +
+                        "-fx-text-fill: " + TEXT_SECONDARY + ";" +
+                        "-fx-padding: 6 12;" +
+                        "-fx-background-radius: 12;" +
+                        "-fx-font-size: 11px;"
         );
         return chip;
     }
@@ -532,10 +529,10 @@ public class ChartsView {
 
         content.getChildren().addAll(headerSection, chartSection, dataSection);
         content.setStyle(
-            "-fx-background-color: " + BG_SECONDARY + ";" +
-            "-fx-background-radius: 12;" +
-            "-fx-border-color: " + BORDER_COLOR + ";" +
-            "-fx-border-radius: 12;"
+                "-fx-background-color: " + BG_SECONDARY + ";" +
+                        "-fx-background-radius: 12;" +
+                        "-fx-border-color: " + BORDER_COLOR + ";" +
+                        "-fx-border-radius: 12;"
         );
 
         return content;
