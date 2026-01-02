@@ -92,7 +92,7 @@ public class BudgetRevenueChangesService {
                 // Recursively apply to deeper levels
                 setAmountOfAllSubCategoriesWithEqualDistribution((T) subCategory, revenues, changeOfSubCategory);
             }
-        } catch (RuntimeException e) {
+        } catch (IllegalArgumentException e) {
             return;
         }
     }
@@ -129,7 +129,7 @@ public class BudgetRevenueChangesService {
 
             // Termination condition: leaf level reached (code length 10)
             if (parent.getCode().length() == 10) {
-                throw new RuntimeException();
+                return;
             }
 
             // Recursive call for each subcategory
