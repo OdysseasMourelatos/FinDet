@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 public class BudgetExpense extends BudgetEntry {
 
-    private String entityCode;
-    private String entityName;
-    private String serviceCode;
-    private String serviceName;
+    private final String entityCode;
+    private final String entityName;
+    private final String serviceCode;
+    private final String serviceName;
     protected static ArrayList <BudgetExpense> budgetExpenses = new ArrayList<>();
 
     public BudgetExpense(String entityCode, String entityName, String serviceCode, String serviceName, String code, String description, String category, long amount) {
@@ -17,10 +17,6 @@ public class BudgetExpense extends BudgetEntry {
         this.serviceCode = serviceCode;
         this.serviceName = serviceName;
         budgetExpenses.add(this);
-    }
-
-    public BudgetExpense(String code, String description, String category, long amount) {
-        super(code, description, category, amount);
     }
 
     public String getEntityCode() {

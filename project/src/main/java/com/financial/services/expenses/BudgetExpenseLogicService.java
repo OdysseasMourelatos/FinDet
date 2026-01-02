@@ -1,6 +1,5 @@
 package com.financial.services.expenses;
 
-import com.financial.entries.Entity;
 import com.financial.entries.BudgetExpense;
 
 import java.util.ArrayList;
@@ -75,20 +74,6 @@ public class BudgetExpenseLogicService {
         return expensesPerCategory;
     }
 
-    //Sums Of Every Entity
-    public static ArrayList<? extends BudgetExpense> getSumOfEveryEntity(ArrayList<? extends BudgetExpense> expenses) {
-        ArrayList<BudgetExpense> expensesPerEntity = new ArrayList<>();
-        for (Entity entity : Entity.getEntities()) {
-            long sum = 0;
-            for (BudgetExpense expense : expenses) {
-                if (entity.getEntityCode().equals(expense.getEntityCode())) {
-                    sum += expense.getAmount();
-                }
-            }
-            expensesPerEntity.add(new BudgetExpense(entity.getEntityCode(), entity.getEntityName(), "ΕΞΟΔΑ", sum));
-        }
-        return expensesPerEntity;
-    }
 
     public static String getDescriptionWithCode(String code, ArrayList<? extends BudgetExpense> expenses) {
         return expenses.stream().filter(e -> e.getCode().equals(code)).findFirst().map(BudgetExpense::getDescription).orElse("Περιγραφή μη διαθέσιμη");
