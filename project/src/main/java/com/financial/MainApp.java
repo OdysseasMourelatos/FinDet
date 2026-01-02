@@ -93,6 +93,7 @@ public class MainApp extends Application {
 
             String historicalExpenses = basePath + "/data/ΚΡΑΤΙΚΟΣ_ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΕΞΟΔΑ_ΠΕΝΤΑΕΤΙΑΣ_ΚΑΤΑ_ΜΕΙΖΟΝΑ_ΚΑΤΗΓΟΡΙΑ_ΔΑΠΑΝΗΣ.csv";
             if (new File(historicalExpenses).exists()) {
+                DataInput.mergeBudgetExpensesOfBaseYearWithMultiYearBudgetExpenses(2025);
                 DataInput.advancedCSVReader(historicalExpenses, "HISTORICAL_BUDGET_EXPENSES");
             }
 
