@@ -25,8 +25,8 @@ public class MultiYearBudgetExpense extends MultiYearBudgetEntry {
     private long regularAmount;
     private long publicInvestmentAmount;
 
-    public MultiYearBudgetExpense(String entityCode, String entityName, String code, String description, String category, long regularAmount, long publicInvestmentAmount, int year) {
-        super(code, description, category, regularAmount + publicInvestmentAmount,  year);
+    public MultiYearBudgetExpense(String entityCode, String entityName, long regularAmount, long publicInvestmentAmount, int year) {
+        super(regularAmount + publicInvestmentAmount,  year);
         this.entityCode = entityCode;
         this.entityName = entityName;
         this.regularAmount = regularAmount;
@@ -93,6 +93,14 @@ public class MultiYearBudgetExpense extends MultiYearBudgetEntry {
 
     public long getPublicInvestmentAmount() {
         return publicInvestmentAmount;
+    }
+
+    public String getEntityCode() {
+        return entityCode;
+    }
+
+    public String getEntityName() {
+        return entityName;
     }
 
     @Override

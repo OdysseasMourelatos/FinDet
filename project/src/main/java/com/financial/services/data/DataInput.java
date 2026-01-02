@@ -1,52 +1,28 @@
 package com.financial.services.data;
 
-import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import com.financial.entries.*;
+import com.financial.multi_year_analysis.entries.MultiYearBudgetExpense;
 import com.financial.multi_year_analysis.entries.MultiYearBudgetRevenue;
+import com.financial.multi_year_analysis.entries.MultiYearEntity;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 
 public class DataInput {
 
-    public static void simpleCSVReader(String filePath) {
-        String line;
-        int lineNumber = 0;
-        BufferedReader reader = null;
-
-        try {
-            reader = new BufferedReader(new FileReader(filePath));
-            while ((line = reader.readLine()) != null) {
-                lineNumber++;
-                if (lineNumber == 1) {
-                    continue;
-                }
-                String[] values = line.split(",");
-                if (values.length > 5) {
-                    System.out.println("Σφάλμα στη γραμμή: " + Arrays.toString(values));
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                reader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public static void advancedCSVReader(String filePath) {
+    public static void advancedCSVReader(String filePath, String forcedType) {
         CSVReader reader = null;
         try {
             reader = new CSVReader(new FileReader(filePath));
             String[] header = reader.readNext();
             String csvType = determineCSVType(header);
+            if (csvType.equals("HISTORICAL_GENERIC")) {
+                csvType = forcedType;
+            }
             String[] values;
             while ((values = reader.readNext()) != null) {
                 processCSVRow(csvType, values);
@@ -81,8 +57,12 @@ public class DataInput {
             return "REGULAR_EXPENSES_PER_SERVICE";
         } else if (headerSet.size() == 3) {
             return "REGULAR_REVENUES";
-        } else if (headerSet.size() == 4) {
-            return "HISTORICAL_BUDGET_REVENUES";
+        } else if (headerSet.contains("Έτος")) {
+            if (headerSet.size() == 4) {
+                return "HISTORICAL_GENERIC";
+            } else if (headerSet.contains("Τακτικός Προϋπολογισμός")) {
+                return "HISTORICAL_BUDGET_EXPENSES_PER_ENTITY";
+            }
         }
         return "UNKNOWN";
     }
@@ -94,6 +74,8 @@ public class DataInput {
             case "REGULAR_EXPENSES_PER_SERVICE" -> createRegularBudgetExpenseFromCSV(values);
             case "PUBLIC_INVESTMENT_EXPENSES_PER_SERVICE" -> createPublicInvestmentBudgetExpenseFromCSV(values);
             case "HISTORICAL_BUDGET_REVENUES" -> createHistoricalBudgetRevenueFromCSV(values);
+            case "HISTORICAL_BUDGET_EXPENSES" -> createHistoricalBudgetExpenseFromCSV(values);
+            case "HISTORICAL_BUDGET_EXPENSES_PER_ENTITY" -> createHistoricalBudgetExpensePerEntityFromCSV(values);
             case "UNKNOWN" -> System.out.println("Σφάλμα: Άγνωστος τύπος CSV.");
             default -> System.out.println("Σφάλμα στη γραμμή: " + Arrays.toString(values));
         }
@@ -161,6 +143,11 @@ public class DataInput {
         entityMap.keySet().stream().sorted().forEach(entityCode -> new Entity(entityCode, entityMap.get(entityCode)));
     }
 
+    public static void createMultiYearEntityFromCSV() {
+        Map<String, String> entityMap = MultiYearBudgetExpense.getMultiYearBudgetExpensesOfEntities().stream().collect(Collectors.toMap(MultiYearBudgetExpense::getEntityCode, MultiYearBudgetExpense::getEntityName, (existing, replacement) -> existing));
+        entityMap.keySet().stream().sorted().forEach(entityCode -> new MultiYearEntity(entityCode, entityMap.get(entityCode)));
+    }
+
     private static void createHistoricalBudgetRevenueFromCSV(String [] values) {
         String code = values[0];
         String description = values[1];
@@ -170,9 +157,33 @@ public class DataInput {
         MultiYearBudgetRevenue multiYearBudgetRevenue = new MultiYearBudgetRevenue(code, description, category, amount, year);
     }
 
+    private static void createHistoricalBudgetExpenseFromCSV(String [] values) {
+        String code = values[0];
+        String description = values[1];
+        String category = "ΕΞΟΔΑ";
+        long amount = Long.parseLong(values[2]);
+        int year = Integer.parseInt(values[3]);
+        MultiYearBudgetExpense multiYearBudgetExpense = new MultiYearBudgetExpense(code, description, category, amount, year);
+    }
+
+    private static void createHistoricalBudgetExpensePerEntityFromCSV(String [] values) {
+        String entityCode = values[0];
+        String entityName = values[1];
+        long regularAmount = Long.parseLong(values[2]);
+        long publicInvestmentAmount = Long.parseLong(values[3]);
+        int year = Integer.parseInt(values[4]);
+        MultiYearBudgetExpense multiYearBudgetExpense = new MultiYearBudgetExpense(entityCode, entityName, regularAmount, publicInvestmentAmount, year);
+    }
+
     public static void mergeBudgetRevenuesOfBaseYearWithMultiYearBudgetRevenues(int baseYear) {
         for (BudgetRevenue br : BudgetRevenue.getMainBudgetRevenues()) {
             MultiYearBudgetRevenue multiYearBudgetRevenue = new MultiYearBudgetRevenue(br.getCode(), br.getDescription(), br.getCategory(), br.getAmount(), baseYear);
+        }
+    }
+
+    public static void mergeBudgetExpensesPerEntityOfBaseYearWithMultiYearBudgetExpensesPerEntity(int baseYear) {
+        for (Entity entity : Entity.getEntities()) {
+            MultiYearBudgetExpense multiYearBudgetExpense = new MultiYearBudgetExpense(entity.getEntityCode(), entity.getEntityName(), entity.calculateRegularSum(), entity.calculatePublicInvestmentSum(), baseYear);
         }
     }
 }

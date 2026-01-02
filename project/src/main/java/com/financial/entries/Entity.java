@@ -182,7 +182,7 @@ public class Entity implements EntityLogic {
     //IMPLEMENTATION OF CHANGES
 
     public void implementChangesInAllExpenseCategoriesOfAllServices(double percentage, long fixedAmount, BudgetType budgetType) {
-        ExpenseAdjustmentStrategy strategy = null;
+        ExpenseAdjustmentStrategy strategy;
         if (fixedAmount == 0) {
             strategy = new FilteredExpenseAdjustmentStrategy(new MatchAllFilter(), new PercentageOperation());
         } else {
@@ -192,7 +192,7 @@ public class Entity implements EntityLogic {
     }
 
     public void implementChangesInSpecificExpenseCategoryOfAllServices(String expenseCode, double percentage, long fixedAmount, BudgetType budgetType) {
-        ExpenseAdjustmentStrategy strategy = null;
+        ExpenseAdjustmentStrategy strategy;
         if (fixedAmount == 0) {
             strategy = new FilteredExpenseAdjustmentStrategy(new AccountFilter(expenseCode), new PercentageOperation());
         } else {
@@ -202,7 +202,7 @@ public class Entity implements EntityLogic {
     }
 
     public void implementChangesInAllExpenseCategoriesOfSpecificService(String serviceCode, double percentage, long fixedAmount, BudgetType budgetType) {
-        ExpenseAdjustmentStrategy strategy = null;
+        ExpenseAdjustmentStrategy strategy;
         if (fixedAmount == 0) {
             strategy = new FilteredExpenseAdjustmentStrategy(new ServiceFilter(serviceCode), new PercentageOperation());
         } else {

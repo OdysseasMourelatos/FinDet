@@ -15,6 +15,14 @@ public abstract class MultiYearBudgetEntry {
         this.year = year;
     }
 
+    public MultiYearBudgetEntry(long amount, int year) {
+        this.code = null;
+        this.description = null;
+        this.category = null;
+        this.amount = amount;
+        this.year = year;
+    }
+
     public String getCode() {
         return code;
     }
