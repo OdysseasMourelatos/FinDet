@@ -1,6 +1,8 @@
 package com.financial.entries;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class BudgetExpense extends BudgetEntry {
 
@@ -17,6 +19,21 @@ public class BudgetExpense extends BudgetEntry {
         this.serviceCode = serviceCode;
         this.serviceName = serviceName;
         budgetExpenses.add(this);
+    }
+
+    public static Map<String, Long> getSumOfEveryBudgetExpenseCategory() {
+        Map<String, Long> regularMap = RegularBudgetExpense.getSumOfEveryRegularExpenseCategory();
+        Map<String, Long> pibMap = PublicInvestmentBudgetExpense.getSumOfEveryPublicInvestmentExpenseCategory();
+
+        // Δημιουργούμε ένα νέο Map ξεκινώντας με τα δεδομένα του Τακτικού
+        Map<String, Long> combinedMap = new LinkedHashMap<>(regularMap);
+
+        // Προσθέτουμε τα δεδομένα του ΠΔΕ
+        pibMap.forEach((serviceCode, amount) ->
+                combinedMap.merge(serviceCode, amount, Long::sum)
+        );
+
+        return combinedMap;
     }
 
     public String getEntityCode() {

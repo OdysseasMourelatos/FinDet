@@ -35,7 +35,7 @@ public class PublicInvestmentBudgetCoFundedExpense extends PublicInvestmentBudge
         return BudgetExpenseLogicService.calculateSum(pibCoFundedExpenses);
     }
 
-    public static Map<String, Long> getSumOfEveryExpenseCategory() {
+    public static Map<String, Long> getSumOfEveryPublicInvestmentCoFundedExpenseCategory() {
         return BudgetExpenseLogicService.getSumOfEveryExpenseCategory(pibCoFundedExpenses);
     }
 

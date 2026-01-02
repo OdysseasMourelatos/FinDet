@@ -83,7 +83,7 @@ public class PublicInvestmentBudgetCoFundedExpenseTest {
 
     @Test
     void testGetSumOfEveryExpenseCategory() {
-        Map<String, Long> categorySums = PublicInvestmentBudgetCoFundedExpense.getSumOfEveryExpenseCategory();
+        Map<String, Long> categorySums = PublicInvestmentBudgetCoFundedExpense.getSumOfEveryPublicInvestmentCoFundedExpenseCategory();
         // Εφόσον όλες οι εγγραφές έχουν code "29", το Map πρέπει να έχει 1 entry με το συνολικό ποσό
         assertEquals(92000000L, categorySums.get("29"));
         assertEquals(1, categorySums.size());
