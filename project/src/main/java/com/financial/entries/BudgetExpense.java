@@ -36,6 +36,10 @@ public class BudgetExpense extends BudgetEntry {
         return combinedMap;
     }
 
+    public static long calculateSum() {
+        return RegularBudgetExpense.calculateSum() + PublicInvestmentBudgetExpense.calculateSum();
+    }
+
     public String getEntityCode() {
         return entityCode;
     }

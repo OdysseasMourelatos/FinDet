@@ -1,14 +1,14 @@
 package com.financial.ui.views;
 
-import com.financial.entries.BudgetRevenue;
-import com.financial.entries.PublicInvestmentBudgetExpense;
-import com.financial.entries.RegularBudgetExpense;
-import com.financial.ui.Theme;
+import com.financial.entries.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import com.financial.services.expenses.BudgetExpenseLogicService;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.TranslateTransition;
@@ -39,16 +39,21 @@ import javafx.util.Duration;
  */
 public class ChartsView {
 
-    // Use Theme class constants
-    private static final String BG_PRIMARY = Theme.BG_BASE;
-    private static final String BG_SECONDARY = Theme.BG_SURFACE;
-    private static final String BG_TERTIARY = Theme.BG_ELEVATED;
-    private static final String TEXT_PRIMARY = Theme.TEXT_PRIMARY;
-    private static final String TEXT_SECONDARY = Theme.TEXT_SECONDARY;
-    private static final String TEXT_MUTED = Theme.TEXT_MUTED;
-    private static final String BORDER_COLOR = Theme.BORDER_DEFAULT;
-    private static final String ACCENT = Theme.ACCENT_LIGHT;
-    private static final String[] CHART_COLORS = Theme.CHART_PALETTE;
+    // Design constants
+    private static final String BG_PRIMARY = "#0a0a0f";
+    private static final String BG_SECONDARY = "#12121a";
+    private static final String BG_TERTIARY = "#1a1a24";
+    private static final String TEXT_PRIMARY = "#e4e4e7";
+    private static final String TEXT_SECONDARY = "#71717a";
+    private static final String TEXT_MUTED = "#52525b";
+    private static final String BORDER_COLOR = "#27272a";
+    private static final String ACCENT = "#3b82f6";
+
+    // Refined monochromatic chart colors - blues and grays
+    private static final String[] CHART_COLORS = {
+        "#3b82f6", "#60a5fa", "#93c5fd", "#bfdbfe", "#dbeafe",
+        "#6366f1", "#818cf8", "#a5b4fc", "#c7d2fe", "#e0e7ff"
+    };
 
     private final VBox view;
     private VBox chartContainer;
@@ -296,19 +301,13 @@ public class ChartsView {
         currentChartView = "expenses";
         chartContainer.getChildren().clear();
 
-        Map<String, Long> expensesByEntity = new HashMap<>();
-        for (RegularBudgetExpense e : RegularBudgetExpense.getAllRegularBudgetExpenses()) {
-            if (e.getCode().charAt(0) <= '3') {
-                expensesByEntity.merge(e.getEntityName(), e.getAmount(), Long::sum);
-            }
-        }
-        for (PublicInvestmentBudgetExpense e : PublicInvestmentBudgetExpense.getAllPublicInvestmentBudgetExpenses()) {
-            if (e.getCode().charAt(0) <= '3') {
-                expensesByEntity.merge(e.getEntityName(), e.getAmount(), Long::sum);
-            }
+        Map<String, Long> expenses = new HashMap<>();
+
+        for (Map.Entry<String, Long> entry : BudgetExpense.getSumOfEveryBudgetExpenseCategory().entrySet()) {
+            expenses.put(BudgetExpenseLogicService.getDescriptionWithCode(entry.getKey(), BudgetExpense.getBudgetExpenses()), entry.getValue());
         }
 
-        List<Map.Entry<String, Long>> sorted = expensesByEntity.entrySet().stream().sorted((a, b) -> Long.compare(b.getValue(), a.getValue())).limit(8).collect(Collectors.toList());
+        List<Map.Entry<String, Long>> sorted = expenses.entrySet().stream().sorted((a, b) -> Long.compare(b.getValue(), a.getValue())).collect(Collectors.toList());
 
         if (sorted.isEmpty()) {
             showNoData();
@@ -327,8 +326,8 @@ public class ChartsView {
         currentChartView = "comparison";
         chartContainer.getChildren().clear();
 
-        long totalRevenue = BudgetRevenue.getAllBudgetRevenues().stream().filter(r -> r.getCode().length() == 2 && r.getCode().charAt(0) <= '3').mapToLong(BudgetRevenue::getAmount).sum();
-        long totalExpense = RegularBudgetExpense.getAllRegularBudgetExpenses().stream().filter(e -> e.getCode().charAt(0) <= '3').mapToLong(RegularBudgetExpense::getAmount).sum() + PublicInvestmentBudgetExpense.getAllPublicInvestmentBudgetExpenses().stream().filter(e -> e.getCode().charAt(0) <= '3').mapToLong(PublicInvestmentBudgetExpense::getAmount).sum();
+        long totalRevenue = BudgetRevenue.calculateSum();
+        long totalExpense = BudgetExpense.calculateSum();
 
         if (totalRevenue == 0 && totalExpense == 0) {
             showNoData();
@@ -384,15 +383,8 @@ public class ChartsView {
         chartContainer.getChildren().clear();
 
         Map<String, Long> expensesByMinistry = new HashMap<>();
-        for (RegularBudgetExpense e : RegularBudgetExpense.getAllRegularBudgetExpenses()) {
-            if (e.getCode().charAt(0) <= '3') {
-                expensesByMinistry.merge(e.getEntityName(), e.getAmount(), Long::sum);
-            }
-        }
-        for (PublicInvestmentBudgetExpense e : PublicInvestmentBudgetExpense.getAllPublicInvestmentBudgetExpenses()) {
-            if (e.getCode().charAt(0) <= '3') {
-                expensesByMinistry.merge(e.getEntityName(), e.getAmount(), Long::sum);
-            }
+        for (Entity entity : Entity.getEntities()) {
+            expensesByMinistry.put(entity.getEntityName(), entity.calculateTotalSum());
         }
 
         List<Map.Entry<String, Long>> sorted = expensesByMinistry.entrySet().stream().sorted((a, b) -> Long.compare(b.getValue(), a.getValue())).limit(10).collect(Collectors.toList());
