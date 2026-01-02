@@ -30,7 +30,7 @@ public class BudgetExpenseConvertToPdf {
                 table.addCell(PdfFormat.createCenteredCell("Ποσό", font));
                 for (Map.Entry<String, Long> entry : entity.getTotalSumOfEveryExpenseCategory().entrySet()) {
                     table.addCell(PdfFormat.createCenteredCell(entry.getKey(), font));
-                    table.addCell(PdfFormat.createCenteredCell(RegularBudgetExpense.getDescriptionWithCode(entry.getKey()), font));
+                    table.addCell(PdfFormat.createCenteredCell(BudgetExpense.getDescriptionWithCode(entry.getKey()), font));
                     table.addCell(PdfFormat.createCenteredCell(String.format("%,d", entry.getValue()), font));
                 }
 
