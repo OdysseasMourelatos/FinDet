@@ -2,13 +2,14 @@ package com.financial.entries;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.stat.inference.TTest;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.apache.commons.math3.distribution.NormalDistribution;
 
 
-public class Stat {
+public class StatisticalExpenses {
     public static Map<String, Long> getMinistrySums() {
         Map<String, Long> sum = new HashMap<>();
         for (Entity entity : Entity.entities) {
@@ -17,14 +18,14 @@ public class Stat {
         return sum;
 }
 
-    public static Map<String, Long> sortMinistrySumsascendingorder(Map<String, Long> sum) {
+    public static Map<String, Long> sortMinistrySumsAscendingOrder(Map<String, Long> sum) {
         Map<String, Long> sortedMapasc = new LinkedHashMap<>();
         sum.entrySet().stream().sorted(Map.Entry.comparingByValue()).forEach(entry -> sortedMapasc.put(entry.getKey(), entry.getValue()));
         return sortedMapasc;
     } 
 
-    public static Map<String, Long> sortMinistrySumsdescendingorder(Map<String, Long> sum) {
-         Map<String, Long> sortedMapdesc = new LinkedHashMap<>();
+    public static Map<String, Long> sortMinistrySumsDescendingOrder(Map<String, Long> sum) {
+        Map<String, Long> sortedMapdesc = new LinkedHashMap<>();
         sum.entrySet().stream().sorted(Map.Entry.<String, Long>comparingByValue().reversed()).forEach(entry -> sortedMapdesc.put(entry.getKey(), entry.getValue()));
         return sortedMapdesc;
     }
@@ -40,20 +41,38 @@ public class Stat {
         return stats;
     }
 
-    public static void findOutliers(Map<String, Long> sum, DescriptiveStatistics stats) {
+    public static ArrayList<String> findOutliersZscore(Map<String, Long> sum, DescriptiveStatistics stats) {
         double mean = stats.getMean();
         double std = stats.getStandardDeviation();
+        ArrayList<String> outliersz = new ArrayList<>();
         if (std == 0) {
-            System.out.println("No variance, no outliers.");
-            return;
+           // System.out.println("No variance, no outliers.");
+            return outliersz;
         } else {
             for (Map.Entry<String, Long> entry : sum.entrySet()) {
                 double z = (entry.getValue() - mean)/std;
                 if (Math.abs(z) > 2) {
-                    System.out.println(entry.getKey());
+                    outliersz.add(entry.getKey());
                 }
             }  
+        return outliersz;    
         }
+    }
+
+    public static ArrayList<String> findOutliersIQR(Map<String, Long> sum, DescriptiveStatistics stats) {
+        ArrayList<String> outliersiq = new ArrayList<>();
+        double q1 = stats.getPercentile(25);
+        double q3 = stats.getPercentile(75);
+        double iqr = q3 - q1;
+        double lowerBound = q1 - 1.5 * iqr;
+        double upperBound = q3 + 1.5 * iqr;
+        for (Map.Entry<String, Long> entry : sum.entrySet()) {
+            double value = entry.getValue();
+            if (value < lowerBound || value > upperBound) {
+                outliersiq.add(entry.getKey());
+            }
+        }
+        return outliersiq;
     }
 
 
