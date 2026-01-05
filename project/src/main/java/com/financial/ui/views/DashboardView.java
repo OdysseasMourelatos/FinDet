@@ -142,12 +142,7 @@ public class DashboardView {
     private VBox createStatCard(String title, String value, String valueColor, String subtitle, String type) {
         VBox card = new VBox(12);
         card.setPadding(new Insets(20));
-        card.setStyle(
-            "-fx-background-color: " + Theme.BG_SURFACE + ";" +
-            "-fx-background-radius: " + Theme.RADIUS_LG + ";" +
-            "-fx-border-color: " + Theme.BORDER_MUTED + ";" +
-            "-fx-border-radius: " + Theme.RADIUS_LG + ";"
-        );
+        card.setStyle(Theme.card());
 
         // Top row with icon
         HBox topRow = new HBox(12);
@@ -181,19 +176,9 @@ public class DashboardView {
 
         card.getChildren().addAll(topRow, valueLabel, subtitleLabel);
 
-        // Hover effect
-        card.setOnMouseEntered(e -> card.setStyle(
-            "-fx-background-color: " + Theme.BG_ELEVATED + ";" +
-            "-fx-background-radius: " + Theme.RADIUS_LG + ";" +
-            "-fx-border-color: " + Theme.BORDER_DEFAULT + ";" +
-            "-fx-border-radius: " + Theme.RADIUS_LG + ";"
-        ));
-        card.setOnMouseExited(e -> card.setStyle(
-            "-fx-background-color: " + Theme.BG_SURFACE + ";" +
-            "-fx-background-radius: " + Theme.RADIUS_LG + ";" +
-            "-fx-border-color: " + Theme.BORDER_MUTED + ";" +
-            "-fx-border-radius: " + Theme.RADIUS_LG + ";"
-        ));
+        // Hover effect using Theme methods
+        card.setOnMouseEntered(e -> card.setStyle(Theme.cardHover()));
+        card.setOnMouseExited(e -> card.setStyle(Theme.card()));
 
         return card;
     }

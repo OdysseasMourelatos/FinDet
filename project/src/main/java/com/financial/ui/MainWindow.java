@@ -29,31 +29,24 @@ public class MainWindow {
     private NavButton activeButton;
     private Region currentView;
 
-    // Views
-    private final DashboardView dashboardView;
-    private final RevenuesView revenuesView;
-    private final ExpensesView expensesView;
-    private final EntitiesView entitiesView;
-    private final AccountExplorerView accountExplorerView;
-    private final BudgetChangesView budgetChangesView;
-    private final ChartsView chartsView;
-    private final StatisticsView statisticsView;
-    private final ExportView exportView;
+    // Views - lazily initialized
+    private DashboardView dashboardView;
+    private RevenuesView revenuesView;
+    private ExpensesView expensesView;
+    private EntitiesView entitiesView;
+    private AccountExplorerView accountExplorerView;
+    private BudgetChangesView budgetChangesView;
+    private ChartsView chartsView;
+    private StatisticsView statisticsView;
+    private ExportView exportView;
 
     public MainWindow() {
         root = new BorderPane();
         root.setStyle("-fx-background-color: " + Theme.BG_BASE + ";");
 
-        // Initialize views
+        // Only initialize dashboard view eagerly (shown by default)
+        // Other views are lazily initialized when first accessed
         dashboardView = new DashboardView();
-        revenuesView = new RevenuesView();
-        expensesView = new ExpensesView();
-        entitiesView = new EntitiesView();
-        accountExplorerView = new AccountExplorerView();
-        budgetChangesView = new BudgetChangesView();
-        chartsView = new ChartsView();
-        statisticsView = new StatisticsView();
-        exportView = new ExportView();
 
         // Create sidebar
         sidebar = createSidebar();
@@ -71,6 +64,63 @@ public class MainWindow {
         root.setTop(header);
         root.setLeft(sidebar);
         root.setCenter(contentArea);
+    }
+
+    // Lazy view getters - initialize views only when first accessed
+    private Region getRevenuesView() {
+        if (revenuesView == null) {
+            revenuesView = new RevenuesView();
+        }
+        return revenuesView.getView();
+    }
+
+    private Region getExpensesView() {
+        if (expensesView == null) {
+            expensesView = new ExpensesView();
+        }
+        return expensesView.getView();
+    }
+
+    private Region getEntitiesView() {
+        if (entitiesView == null) {
+            entitiesView = new EntitiesView();
+        }
+        return entitiesView.getView();
+    }
+
+    private Region getAccountExplorerView() {
+        if (accountExplorerView == null) {
+            accountExplorerView = new AccountExplorerView();
+        }
+        return accountExplorerView.getView();
+    }
+
+    private Region getBudgetChangesView() {
+        if (budgetChangesView == null) {
+            budgetChangesView = new BudgetChangesView();
+        }
+        return budgetChangesView.getView();
+    }
+
+    private Region getChartsView() {
+        if (chartsView == null) {
+            chartsView = new ChartsView();
+        }
+        return chartsView.getView();
+    }
+
+    private Region getStatisticsView() {
+        if (statisticsView == null) {
+            statisticsView = new StatisticsView();
+        }
+        return statisticsView.getView();
+    }
+
+    private Region getExportView() {
+        if (exportView == null) {
+            exportView = new ExportView();
+        }
+        return exportView.getView();
     }
 
     private HBox createHeader() {
@@ -191,16 +241,16 @@ public class MainWindow {
         Label exportSection = createSectionLabel("ΕΞΑΓΩΓΗ");
         NavButton exportBtn = new NavButton("Εξαγωγή PDF", "export");
 
-        // Click handlers
+        // Click handlers - using lazy getters for views
         dashboardBtn.setOnAction(() -> navigateTo(dashboardBtn, dashboardView.getView()));
-        revenuesBtn.setOnAction(() -> navigateTo(revenuesBtn, revenuesView.getView()));
-        expensesBtn.setOnAction(() -> navigateTo(expensesBtn, expensesView.getView()));
-        entitiesBtn.setOnAction(() -> navigateTo(entitiesBtn, entitiesView.getView()));
-        explorerBtn.setOnAction(() -> navigateTo(explorerBtn, accountExplorerView.getView()));
-        changesBtn.setOnAction(() -> navigateTo(changesBtn, budgetChangesView.getView()));
-        chartsBtn.setOnAction(() -> navigateTo(chartsBtn, chartsView.getView()));
-        statisticalBtn.setOnAction(() -> navigateTo(statisticalBtn, statisticsView.getView()));
-        exportBtn.setOnAction(() -> navigateTo(exportBtn, exportView.getView()));
+        revenuesBtn.setOnAction(() -> navigateTo(revenuesBtn, getRevenuesView()));
+        expensesBtn.setOnAction(() -> navigateTo(expensesBtn, getExpensesView()));
+        entitiesBtn.setOnAction(() -> navigateTo(entitiesBtn, getEntitiesView()));
+        explorerBtn.setOnAction(() -> navigateTo(explorerBtn, getAccountExplorerView()));
+        changesBtn.setOnAction(() -> navigateTo(changesBtn, getBudgetChangesView()));
+        chartsBtn.setOnAction(() -> navigateTo(chartsBtn, getChartsView()));
+        statisticalBtn.setOnAction(() -> navigateTo(statisticalBtn, getStatisticsView()));
+        exportBtn.setOnAction(() -> navigateTo(exportBtn, getExportView()));
 
         Region spacer = new Region();
         VBox.setVgrow(spacer, Priority.ALWAYS);
