@@ -27,9 +27,8 @@ public class MultiYearEntity {
      * 
      * @param entityCode the unique identifier code for this entity
      * @param entityName the display name of this entity
-     * @param multiYearExpensesOfEntity initial list of expenses (will be replaced with loaded expenses)
      */
-    public MultiYearEntity(String entityCode, String entityName, List<MultiYearBudgetExpense> multiYearExpensesOfEntity) {
+    public MultiYearEntity(String entityCode, String entityName) {
         this.entityCode = entityCode;
         this.entityName = entityName;
         // Link with expenses from the specific entity
