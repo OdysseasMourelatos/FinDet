@@ -37,8 +37,17 @@ public class MultiYearEntity {
     }
 
     /**
+     * Returns the complete list of all multi-year entities.
+     *
+     * @return a list containing all entity entries created
+     */
+    public static List<MultiYearEntity> getMultiYearEntities() {
+        return multiYearEntities;
+    }
+
+    /**
      * Searches for and returns an entity with the specified entity code.
-     * 
+     *
      * @param entityCode the entity code to search for
      * @return the matching MultiYearEntity, or null if no entity with that code exists
      */

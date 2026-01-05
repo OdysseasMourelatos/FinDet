@@ -34,10 +34,19 @@ public class MultiYearBudgetRevenue extends MultiYearBudgetEntry {
 
     /**
      * Returns the complete list of all historical budget revenues.
-     * 
+     *
      * @return a list containing all revenue entries created
      */
     public static List<MultiYearBudgetRevenue> getHistoricalBudgetRevenues() {
+        return historicalBudgetRevenues;
+    }
+
+    /**
+     * Alias for getHistoricalBudgetRevenues() for API consistency.
+     *
+     * @return a list containing all revenue entries created
+     */
+    public static List<MultiYearBudgetRevenue> getMultiYearBudgetRevenues() {
         return historicalBudgetRevenues;
     }
 
