@@ -56,6 +56,7 @@ public class ChartsView {
     private ScrollPane scrollPane;
     private ComboBox<String> chartTypeCombo;
     private TextField searchField;
+    private Button searchBtn;
     private Button activeButton;
     private String currentChartType = "Pie Chart";
     private String currentChartView = "placeholder";
@@ -102,7 +103,7 @@ public class ChartsView {
     private HBox createControls() {
         HBox controls = new HBox(8);
         controls.setPadding(new Insets(0, 24, 16, 24));
-        controls.setAlignment(Pos.CENTER_LEFT);
+        controls.setAlignment(Pos.BOTTOM_LEFT);
 
         // Chart type selector
         chartTypeCombo = new ComboBox<>();
@@ -142,28 +143,45 @@ public class ChartsView {
             showMinistryExpenses();
         });
 
-        // Spacer
+        // Separator
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        Label customTitle = new Label("CUSTOM ΔΙΑΓΡΑΜΜΑ");
+        customTitle.setStyle("-fx-font-size: 10px; -fx-text-fill: " + TEXT_MUTED + "; -fx-font-weight: bold; -fx-letter-spacing: 1px; -fx-padding: 0 0 0 30;");
+
 
         // Search
         searchField = new TextField();
         searchField.setPromptText("Κωδικός...");
-        searchField.setPrefWidth(100);
+        searchField.setPrefWidth(180);
         styleTextField(searchField);
 
-        Button searchBtn = createChartButton("Κατανομή");
-        searchBtn.setOnAction(e -> {
-            setActiveButton(searchBtn);
-            showCodeHierarchyChart();
-        });
-        searchField.setOnAction(e -> {
-            setActiveButton(searchBtn);
-            showCodeHierarchyChart();
-        });
+        searchBtn = createChartButton("Κατανομή");
+        searchBtn.setOnAction(e -> handleContextualSearch());
+        searchField.setOnAction(e -> handleContextualSearch());
 
-        controls.getChildren().addAll(chartTypeCombo, sep1, revenuesBtn, expensesBtn, comparisonBtn, ministryBtn, spacer, searchField, searchBtn);
+        HBox searchRow = new HBox(8, searchField, searchBtn);
+        searchRow.setAlignment(Pos.CENTER_LEFT);
+
+        VBox searchContainer = new VBox(4, customTitle, searchRow);
+        searchContainer.setAlignment(Pos.BOTTOM_LEFT);
+
+        controls.getChildren().addAll(chartTypeCombo, sep1, revenuesBtn, expensesBtn, comparisonBtn, ministryBtn, spacer, searchContainer);
+
         return controls;
+    }
+
+    private void handleContextualSearch() {
+        String code = searchField.getText().trim();
+        if (code.isEmpty()) {
+            return;
+        }
+        switch (currentChartView) {
+            case "revenues" -> showRevenueHierarchyChart();
+            case "expenses" -> showMinistryExpenseCategoryHierarchyChart();
+            case "ministry" -> showMinistryServiceHierarchyChart();
+        }
     }
 
     private Button createChartButton(String text) {
@@ -252,7 +270,7 @@ public class ChartsView {
             case "expenses" -> showExpenseBreakdown();
             case "comparison" -> showComparison();
             case "ministry" -> showMinistryExpenses();
-            case "hierarchy" -> showCodeHierarchyChart();
+            case "hierarchy" -> showRevenueHierarchyChart();
             default -> showPlaceholder();
         }
     }
@@ -277,6 +295,9 @@ public class ChartsView {
 
     private void showRevenueBreakdown() {
         currentChartView = "revenues";
+        searchField.setDisable(false);
+        searchField.setPromptText("Κωδικός Εσόδων...");
+        searchBtn.setText("Κατανομή Εσόδων");
         chartContainer.getChildren().clear();
 
         List<BudgetRevenue> revenues = BudgetRevenue.getMainBudgetRevenues();
@@ -286,7 +307,7 @@ public class ChartsView {
         }
 
         long total = BudgetRevenue.calculateSum();
-        List<ChartItem> items = revenues.stream().map(r -> new ChartItem(r.getDescription(), r.getAmount())).collect(Collectors.toList());
+        List<ChartItem> items = revenues.stream().map(r -> new ChartItem(r.getDescription() + " (" + r.getCode() + ")", r.getAmount())).collect(Collectors.toList());
 
         VBox content = createChartContent("Κατανομή Εσόδων", "Ανάλυση κατηγοριών εσόδων", items, total);
         animateIn(content);
@@ -295,6 +316,9 @@ public class ChartsView {
 
     private void showExpenseBreakdown() {
         currentChartView = "expenses";
+        searchField.setDisable(false);
+        searchField.setPromptText("Κωδικός Υπουργείου...");
+        searchBtn.setText("Κατανομή Εξόδων");
         chartContainer.getChildren().clear();
 
         Map<String, Long> expenses = new HashMap<>();
@@ -320,6 +344,9 @@ public class ChartsView {
 
     private void showComparison() {
         currentChartView = "comparison";
+        searchField.setDisable(true);
+        searchBtn.setText("Μη Διαθέσιμο");
+        searchField.setPromptText("Μη διαθέσιμο στη σύγκριση");
         chartContainer.getChildren().clear();
 
         long totalRevenue = BudgetRevenue.calculateSum();
@@ -376,6 +403,9 @@ public class ChartsView {
 
     private void showMinistryExpenses() {
         currentChartView = "ministry";
+        searchField.setDisable(false);
+        searchField.setPromptText("Κωδικός Υπουργείου...");
+        searchBtn.setText("Κατανομή Ειδικών Φορέων");
         chartContainer.getChildren().clear();
 
         Map<String, Long> expensesByMinistry = new HashMap<>();
@@ -398,13 +428,12 @@ public class ChartsView {
         chartContainer.getChildren().add(content);
     }
 
-    private void showCodeHierarchyChart() {
+    private void showRevenueHierarchyChart() {
         String code = searchField.getText().trim();
         if (code.isEmpty()) {
             return;
         }
 
-        currentChartView = "hierarchy";
 
         BudgetRevenue revenue = BudgetRevenue.findBudgetRevenueWithCode(code);
         if (revenue == null) {
@@ -439,17 +468,17 @@ public class ChartsView {
         ArrayList<BudgetRevenue> nextLevel = revenue.getNextLevelSubCategories();
         if (nextLevel != null) {
             for (BudgetRevenue sub : nextLevel) {
-                items.add(new ChartItem(sub.getCode() + " " + truncate(sub.getDescription(), 60), sub.getAmount()));
+                items.add(new ChartItem(truncate(sub.getDescription(), 60) + " (" + sub.getCode() + ")", sub.getAmount()));
             }
         }
 
         long total = items.stream().mapToLong(i -> i.amount).sum();
 
-        VBox content = createChartContent("Κατανομή: " + code, revenue.getDescription(), items, total);
+        VBox content = createChartContent(revenue.getDescription(), "Κατανομή Λογαριασμού Εσόδων", items, total);
 
         // Add hierarchy info card
-        ArrayList<BudgetRevenue> subCats = revenue.getAllSubCategories();
-        int totalSubs = (subCats != null) ? subCats.size() : 0;
+        ArrayList<BudgetRevenue> subCats = revenue.getNextLevelSubCategories();
+        int nextLevelSubs = (subCats != null) ? subCats.size() : 0;
         int totalSupers = (superCats != null) ? superCats.size() : 0;
 
         HBox infoCards = new HBox(12);
@@ -459,10 +488,98 @@ public class ChartsView {
         infoCards.getChildren().addAll(
                 createInfoChip("Επίπεδο " + revenue.getLevelOfHierarchy()),
                 createInfoChip("Ανώτερες: " + totalSupers),
-                createInfoChip("Υποκατηγορίες: " + totalSubs)
+                createInfoChip("Υποκατηγορίες: " + nextLevelSubs)
         );
 
         content.getChildren().add(infoCards);
+        animateIn(content);
+        chartContainer.getChildren().add(content);
+    }
+
+    private void showMinistryExpenseCategoryHierarchyChart() {
+        String code = searchField.getText().trim();
+        if (code.isEmpty()) {
+            return;
+        }
+
+        Entity entity = Entity.findEntityWithEntityCode(code);
+        if (entity == null) {
+            chartContainer.getChildren().clear();
+            VBox errorBox = new VBox(8);
+            errorBox.setAlignment(Pos.CENTER);
+            errorBox.setPadding(new Insets(40));
+
+            Label errorIcon = new Label("!");
+            errorIcon.setStyle("-fx-font-size: 24px; -fx-text-fill: #ef4444; -fx-font-weight: bold;");
+
+            Label error = new Label("Δεν βρέθηκε φορέας με κωδικό: " + code);
+            error.setStyle("-fx-font-size: 13px; -fx-text-fill: " + TEXT_SECONDARY + ";");
+
+            errorBox.getChildren().addAll(errorIcon, error);
+            chartContainer.getChildren().add(errorBox);
+            return;
+        }
+
+        chartContainer.getChildren().clear();
+
+        // Build items
+        List<ChartItem> items = new ArrayList<>();
+
+        Map<String, Long> expensesByMinistry = entity.getTotalSumOfEveryExpenseCategory();
+        if (!expensesByMinistry.isEmpty()) {
+            for (Map.Entry<String, Long> entry : expensesByMinistry.entrySet()) {
+                items.add(new ChartItem(truncate(BudgetExpense.getDescriptionWithCode(entry.getKey()), 150) + " (" + entry.getKey() + ")", entry.getValue()));
+            }
+        }
+
+        long total = items.stream().mapToLong(i -> i.amount).sum();
+
+        VBox content = createChartContent(entity.getEntityName(), "Κατανομή Εξόδων", items, total);
+
+        animateIn(content);
+        chartContainer.getChildren().add(content);
+    }
+
+    private void showMinistryServiceHierarchyChart() {
+        String code = searchField.getText().trim();
+        if (code.isEmpty()) {
+            return;
+        }
+
+        Entity entity = Entity.findEntityWithEntityCode(code);
+        if (entity == null) {
+            chartContainer.getChildren().clear();
+            VBox errorBox = new VBox(8);
+            errorBox.setAlignment(Pos.CENTER);
+            errorBox.setPadding(new Insets(40));
+
+            Label errorIcon = new Label("!");
+            errorIcon.setStyle("-fx-font-size: 24px; -fx-text-fill: #ef4444; -fx-font-weight: bold;");
+
+            Label error = new Label("Δεν βρέθηκε φορέας με κωδικό: " + code);
+            error.setStyle("-fx-font-size: 13px; -fx-text-fill: " + TEXT_SECONDARY + ";");
+
+            errorBox.getChildren().addAll(errorIcon, error);
+            chartContainer.getChildren().add(errorBox);
+            return;
+        }
+
+        chartContainer.getChildren().clear();
+
+        // Build items
+        List<ChartItem> items = new ArrayList<>();
+
+        Map<String, Long> expensesByService = entity.getTotalSumOfEveryService();
+        if (!expensesByService.isEmpty()) {
+            for (Map.Entry<String, Long> entry : expensesByService.entrySet()) {
+                items.add(new ChartItem(truncate(entity.getServiceNameWithCode(entry.getKey()), 300) + " (" + entry.getKey() + ")", entry.getValue()));
+            }
+        }
+
+        long total = items.stream().mapToLong(i -> i.amount).sum();
+
+        VBox content = createChartContent(entity.getEntityName(), "Κατανομή Ειδικών Φορέων", items, total);
+
         animateIn(content);
         chartContainer.getChildren().add(content);
     }
@@ -482,7 +599,7 @@ public class ChartsView {
     private VBox createChartContent(String title, String subtitle, List<ChartItem> items, long total) {
         VBox content = new VBox(0);
         content.setAlignment(Pos.TOP_CENTER);
-        content.setMaxWidth(700);
+        content.setMaxWidth(950);
 
         // Header section
         VBox headerSection = new VBox(2);
@@ -546,8 +663,8 @@ public class ChartsView {
         PieChart chart = new PieChart(pieData);
         chart.setLegendVisible(false);
         chart.setLabelsVisible(false);
-        chart.setPrefSize(280, 280);
-        chart.setMaxSize(280, 280);
+        chart.setPrefSize(450, 450);
+        chart.setMaxSize(450, 450);
         chart.setStyle("-fx-background-color: transparent;");
 
         // Apply monochromatic colors and tooltips
@@ -585,14 +702,14 @@ public class ChartsView {
 
         BarChart<String, Number> chart = new BarChart<>(xAxis, yAxis);
         chart.setLegendVisible(false);
-        chart.setPrefHeight(280);
+        chart.setPrefHeight(450);
         chart.setStyle("-fx-background-color: transparent;");
         chart.setHorizontalGridLinesVisible(false);
         chart.setVerticalGridLinesVisible(false);
 
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         for (ChartItem item : items) {
-            String shortName = truncate(item.name, 10);
+            String shortName = truncate(item.name, 20);
             series.getData().add(new XYChart.Data<>(shortName, item.amount));
         }
 
@@ -631,7 +748,8 @@ public class ChartsView {
 
             HBox row = new HBox(0);
             row.setAlignment(Pos.CENTER_LEFT);
-            row.setPadding(new Insets(12, 16, 12, 16));
+            row.setPadding(new Insets(14, 16, 14, 16));
+            row.setMinHeight(Region.USE_PREF_SIZE);
 
             String baseStyle = isLastRow ? "" : "-fx-border-color: transparent transparent " + BORDER_COLOR + " transparent; -fx-border-width: 0 0 1 0;";
             row.setStyle(baseStyle);
@@ -643,9 +761,11 @@ public class ChartsView {
             colorDot.setStyle("-fx-background-color: " + color + "; -fx-background-radius: 3;");
 
             // Name
-            Label nameLabel = new Label(truncate(item.name, 40));
-            nameLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + TEXT_PRIMARY + ";");
-            nameLabel.setPadding(new Insets(0, 0, 0, 12));
+            Label nameLabel = new Label(item.name);
+            nameLabel.setWrapText(true);
+            nameLabel.setMaxWidth(450);
+            nameLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + TEXT_PRIMARY + "; -fx-line-spacing: 2px;");
+            nameLabel.setPadding(new Insets(0, 15, 0, 12));
             HBox.setHgrow(nameLabel, Priority.ALWAYS);
 
             // Percentage bar fill
@@ -659,6 +779,7 @@ public class ChartsView {
             barContainer.setStyle("-fx-background-color: " + BORDER_COLOR + "; -fx-background-radius: 2;");
             barContainer.setPrefWidth(80);
             barContainer.setMaxWidth(80);
+            HBox.setMargin(barContainer, new Insets(0, 0, 4, 0));
 
             // Percentage text
             Label pctLabel = new Label(String.format("%.1f%%", pct));
@@ -668,6 +789,10 @@ public class ChartsView {
 
             // Amount
             Label amtLabel = new Label(formatAmount(item.amount));
+            amtLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + TEXT_PRIMARY + "; -fx-font-weight: 500;");
+            amtLabel.setMinWidth(80);
+            amtLabel.setAlignment(Pos.CENTER_RIGHT);
+
             amtLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + TEXT_PRIMARY + "; -fx-font-weight: 500;");
             amtLabel.setMinWidth(80);
             amtLabel.setAlignment(Pos.CENTER_RIGHT);
