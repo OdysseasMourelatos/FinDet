@@ -2,7 +2,6 @@ package com.financial.statistical_analysis;
 
 import com.financial.entries.Entity;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -34,41 +33,37 @@ public class StatisticalExpenses {
         for (long sums : sum.values()) {
             stats.addValue(sums);
         }
-        //System.out.println("Mean: " + stats.getMean());
-        //System.out.println("Median: " + stats.getPercentile(50));
-        //System.out.println("Standard Deviation: " + stats.getStandardDeviation());
         return stats;
     }
 
-    public static ArrayList<String> findOutliersZscore(Map<String, Long> sum, DescriptiveStatistics stats) {
+    public static Map<String, Long> findOutliersZscore(Map<String, Long> sum, DescriptiveStatistics stats) {
         double mean = stats.getMean();
         double std = stats.getStandardDeviation();
-        ArrayList<String> outliersz = new ArrayList<>();
+        Map<String, Long> outliersz = new HashMap<>();
         if (std == 0) {
-           // System.out.println("No variance, no outliers.");
             return outliersz;
         } else {
             for (Map.Entry<String, Long> entry : sum.entrySet()) {
                 double z = (entry.getValue() - mean) / std;
                 if (Math.abs(z) > 2) {
-                    outliersz.add(entry.getKey());
+                    outliersz.put(entry.getKey(), entry.getValue());
                 }
             }
             return outliersz;
         }
     }
 
-    public static ArrayList<String> findOutliersIQR(Map<String, Long> sum, DescriptiveStatistics stats) {
-        ArrayList<String> outliersiq = new ArrayList<>();
+    public static Map<String, Long> findOutliersIQR(Map<String, Long> sum, DescriptiveStatistics stats) {
+        Map<String, Long> outliersiq = new HashMap<>();
         double q1 = stats.getPercentile(25);
         double q3 = stats.getPercentile(75);
         double iqr = q3 - q1;
         double lowerBound = q1 - 1.5 * iqr;
         double upperBound = q3 + 1.5 * iqr;
         for (Map.Entry<String, Long> entry : sum.entrySet()) {
-            double value = entry.getValue();
+            long value = entry.getValue();
             if (value < lowerBound || value > upperBound) {
-                outliersiq.add(entry.getKey());
+                outliersiq.put(entry.getKey(), value);
             }
         }
         return outliersiq;
