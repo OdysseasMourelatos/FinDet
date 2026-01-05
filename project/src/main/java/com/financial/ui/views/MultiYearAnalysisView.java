@@ -2,24 +2,21 @@ package com.financial.ui.views;
 
 import com.financial.entries.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.*;
 
+import com.financial.multi_year_analysis.entries.MultiYearBudgetExpense;
+import com.financial.multi_year_analysis.entries.MultiYearBudgetRevenue;
+import com.financial.multi_year_analysis.entries.MultiYearEntity;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.TranslateTransition;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.PieChart;
+import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -36,7 +33,7 @@ import javafx.util.Duration;
 /**
  * Charts view - displays budget visualizations.
  */
-public class ChartsView {
+public class MultiYearAnalysisView {
 
     // Design constants
     private static final String BG_PRIMARY = "#0a0a0f";
@@ -61,7 +58,7 @@ public class ChartsView {
     private String currentChartType = "Pie Chart";
     private String currentChartView = "placeholder";
 
-    public ChartsView() {
+    public MultiYearAnalysisView() {
         view = new VBox(0);
         view.setStyle("-fx-background-color: " + BG_PRIMARY + ";");
 
@@ -90,10 +87,10 @@ public class ChartsView {
         VBox header = new VBox(4);
         header.setPadding(new Insets(32, 24, 16, 24));
 
-        Label title = new Label("Γραφήματα");
+        Label title = new Label("Πολυετής Ανάλυση");
         title.setStyle("-fx-font-size: 24px; -fx-font-weight: 600; -fx-text-fill: " + TEXT_PRIMARY + ";");
 
-        Label subtitle = new Label("Οπτικοποίηση δεδομένων προϋπολογισμού");
+        Label subtitle = new Label("Εξέλιξη μεγεθών σε βάθος χρόνου");
         subtitle.setStyle("-fx-font-size: 13px; -fx-text-fill: " + TEXT_SECONDARY + ";");
 
         header.getChildren().addAll(title, subtitle);
@@ -107,8 +104,8 @@ public class ChartsView {
 
         // Chart type selector
         chartTypeCombo = new ComboBox<>();
-        chartTypeCombo.getItems().addAll("Pie Chart", "Bar Chart");
-        chartTypeCombo.setValue("Pie Chart");
+        chartTypeCombo.getItems().addAll("Line Chart", "Bar Chart");
+        chartTypeCombo.setValue("Line Chart");
         styleComboBox(chartTypeCombo);
         chartTypeCombo.setPrefWidth(120);
         chartTypeCombo.setOnAction(e -> {
@@ -123,7 +120,7 @@ public class ChartsView {
         // Chart buttons
         Button revenuesBtn = createChartButton("Έσοδα");
         Button expensesBtn = createChartButton("Έξοδα");
-        Button comparisonBtn = createChartButton("Σύγκριση");
+        Button comparisonBtn = createChartButton("Έλλειμμα/Πλεόνασμα");
         Button ministryBtn = createChartButton("Υπουργεία");
 
         revenuesBtn.setOnAction(e -> {
@@ -140,7 +137,7 @@ public class ChartsView {
         });
         ministryBtn.setOnAction(e -> {
             setActiveButton(ministryBtn);
-            showMinistryExpenses();
+            showMinistryBreakdown();
         });
 
         // Separator
@@ -157,7 +154,7 @@ public class ChartsView {
         searchField.setPrefWidth(180);
         styleTextField(searchField);
 
-        searchBtn = createChartButton("Κατανομή");
+        searchBtn = createChartButton("Εξέλιξη");
         searchBtn.setOnAction(e -> handleContextualSearch());
         searchField.setOnAction(e -> handleContextualSearch());
 
@@ -178,9 +175,9 @@ public class ChartsView {
             return;
         }
         switch (currentChartView) {
-            case "revenues" -> showRevenueHierarchyChart();
-            case "expenses" -> showMinistryExpenseCategoryHierarchyChart();
-            case "ministry" -> showMinistryServiceHierarchyChart();
+            case "revenues" -> showRevenueAnalysisChart();
+            case "expenses" -> showExpenseAnalysisChart();
+            case "ministry" -> showMinistryAnalysisChart();
         }
     }
 
@@ -269,8 +266,8 @@ public class ChartsView {
             case "revenues" -> showRevenueBreakdown();
             case "expenses" -> showExpenseBreakdown();
             case "comparison" -> showComparison();
-            case "ministry" -> showMinistryExpenses();
-            case "hierarchy" -> showRevenueHierarchyChart();
+            case "ministry" -> showMinistryBreakdown();
+            case "hierarchy" -> showRevenueAnalysisChart();
             default -> showPlaceholder();
         }
     }
@@ -297,19 +294,24 @@ public class ChartsView {
         currentChartView = "revenues";
         searchField.setDisable(false);
         searchField.setPromptText("Κωδικός Εσόδων...");
-        searchBtn.setText("Κατανομή Εσόδων");
+        searchBtn.setText("Εξέλιξη Εσόδων");
         chartContainer.getChildren().clear();
 
-        List<BudgetRevenue> revenues = BudgetRevenue.getMainBudgetRevenues();
-        if (revenues.isEmpty()) {
+        Map<Integer, Long> sumOfAllYears = MultiYearBudgetRevenue.getSumOfAllYears();
+        if (sumOfAllYears.isEmpty()) {
             showNoData();
             return;
         }
 
-        long total = BudgetRevenue.calculateSum();
-        List<ChartItem> items = revenues.stream().map(r -> new ChartItem(r.getDescription() + " (" + r.getCode() + ")", r.getAmount())).collect(Collectors.toList());
+        List<ChartItem> items = new ArrayList<>();
 
-        VBox content = createChartContent("Κατανομή Εσόδων", "Ανάλυση κατηγοριών εσόδων", items, total);
+        long total = 0;
+        for (Map.Entry<Integer, Long> sumOfYear : sumOfAllYears.entrySet()) {
+            total = total + sumOfYear.getValue();
+            items.add(new ChartItem(String.valueOf(sumOfYear.getKey()), sumOfYear.getValue()));
+        }
+
+        VBox content = createChartContent("Εξέλιξη Εσόδων", "Εξέλιξη αθροίσματος εσόδων σε βάθος χρόνου", items, total);
         animateIn(content);
         chartContainer.getChildren().add(content);
     }
@@ -317,27 +319,25 @@ public class ChartsView {
     private void showExpenseBreakdown() {
         currentChartView = "expenses";
         searchField.setDisable(false);
-        searchField.setPromptText("Κωδικός Υπουργείου...");
-        searchBtn.setText("Κατανομή Εξόδων");
+        searchField.setPromptText("Κωδικός Εξόδων...");
+        searchBtn.setText("Εξέλιξη Εξόδων");
         chartContainer.getChildren().clear();
 
-        Map<String, Long> expenses = new HashMap<>();
-
-        for (Map.Entry<String, Long> entry : BudgetExpense.getSumOfEveryBudgetExpenseCategory().entrySet()) {
-            expenses.put(BudgetExpense.getDescriptionWithCode(entry.getKey()), entry.getValue());
-        }
-
-        List<Map.Entry<String, Long>> sorted = expenses.entrySet().stream().sorted((a, b) -> Long.compare(b.getValue(), a.getValue())).collect(Collectors.toList());
-
-        if (sorted.isEmpty()) {
+        Map<Integer, Long> sumOfAllYears = MultiYearBudgetExpense.getSumOfAllYears();
+        if (sumOfAllYears.isEmpty()) {
             showNoData();
             return;
         }
 
-        long total = sorted.stream().mapToLong(Map.Entry::getValue).sum();
-        List<ChartItem> items = sorted.stream().map(e -> new ChartItem(e.getKey(), e.getValue())).collect(Collectors.toList());
+        List<ChartItem> items = new ArrayList<>();
 
-        VBox content = createChartContent("Κατανομή Εξόδων", "Ανάλυση κατηγοριών εξόδων", items, total);
+        long total = 0;
+        for (Map.Entry<Integer, Long> sumOfYear : sumOfAllYears.entrySet()) {
+            total = total + sumOfYear.getValue();
+            items.add(new ChartItem(String.valueOf(sumOfYear.getKey()), sumOfYear.getValue()));
+        }
+
+        VBox content = createChartContent("Εξέλιξη Εξόδων", "Εξέλιξη αθροίσματος εξόδων σε βάθος χρόνου", items, total);
         animateIn(content);
         chartContainer.getChildren().add(content);
     }
@@ -346,28 +346,42 @@ public class ChartsView {
         currentChartView = "comparison";
         searchField.setDisable(true);
         searchBtn.setText("Μη Διαθέσιμο");
-        searchField.setPromptText("Μη διαθέσιμο στη σύγκριση");
+        searchField.setPromptText("Μη διαθέσιμο");
         chartContainer.getChildren().clear();
 
-        long totalRevenue = BudgetRevenue.calculateSum();
-        long totalExpense = BudgetExpense.calculateSum();
+        Map<Integer, Long> revenues = MultiYearBudgetRevenue.getSumOfAllYears();
+        Map<Integer, Long> expenses = MultiYearBudgetExpense.getSumOfAllYears();
 
-        if (totalRevenue == 0 && totalExpense == 0) {
+        if (revenues.isEmpty() || expenses.isEmpty()) {
             showNoData();
             return;
         }
 
+        Set<Integer> allYears = new TreeSet<>();
+        allYears.addAll(revenues.keySet());
+        allYears.addAll(expenses.keySet());
+
         List<ChartItem> items = new ArrayList<>();
-        items.add(new ChartItem("Έσοδα", totalRevenue));
-        items.add(new ChartItem("Έξοδα", totalExpense));
+        long totalBalance = 0;
 
-        long total = totalRevenue + totalExpense;
-        VBox content = createChartContent("Σύγκριση Εσόδων - Εξόδων", "Συνολική εικόνα προϋπολογισμού", items, total);
+        for (Integer year : allYears) {
+            long rev = revenues.getOrDefault(year, 0L);
+            long exp = expenses.getOrDefault(year, 0L);
+            long diff = rev - exp;
 
-        // Add balance card
-        long balance = totalRevenue - totalExpense;
-        VBox balanceCard = createBalanceCard(balance);
-        content.getChildren().add(balanceCard);
+            items.add(new ChartItem(String.valueOf(year), (long) diff));
+            totalBalance += diff;
+        }
+
+        VBox content = createChartContent(
+                "Εξέλιξη Ελλείμματος/Πλεονάσματος",
+                "Διαφορά Εσόδων - Εξόδων ανά έτος",
+                items,
+                totalBalance
+        );
+
+        VBox balanceCard = createBalanceCard(totalBalance);
+        content.getChildren().add(1, balanceCard);
 
         animateIn(content);
         chartContainer.getChildren().add(content);
@@ -401,42 +415,43 @@ public class ChartsView {
         return card;
     }
 
-    private void showMinistryExpenses() {
+    private void showMinistryBreakdown() {
         currentChartView = "ministry";
         searchField.setDisable(false);
-        searchField.setPromptText("Κωδικός Υπουργείου...");
-        searchBtn.setText("Κατανομή Ειδικών Φορέων");
+        searchField.setPromptText("Κωδικός Φορέα...");
+        searchBtn.setText("Εξέλιξη Εξόδων");
         chartContainer.getChildren().clear();
 
-        Map<String, Long> expensesByMinistry = new HashMap<>();
-        for (Entity entity : Entity.getEntities()) {
-            expensesByMinistry.put(entity.getEntityName(), entity.calculateTotalSum());
-        }
+        VBox promptBox = new VBox(20);
+        promptBox.setAlignment(Pos.CENTER);
+        promptBox.setPadding(new Insets(100, 20, 100, 20));
 
-        List<Map.Entry<String, Long>> sorted = expensesByMinistry.entrySet().stream().sorted((a, b) -> Long.compare(b.getValue(), a.getValue())).limit(10).collect(Collectors.toList());
+        Label titleLabel = new Label("Ανάλυση Εξόδων Υπουργείου");
+        titleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: " + TEXT_PRIMARY + ";");
 
-        if (sorted.isEmpty()) {
-            showNoData();
-            return;
-        }
+        Label instructionLabel = new Label("Πληκτρολογήστε τον κωδικό του Φορέα στο πεδίο αναζήτησης\nγια να δείτε την εξέλιξη των δαπανών του σε βάθος χρόνου.");
+        instructionLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: " + TEXT_SECONDARY + "; -fx-text-alignment: center;");
+        instructionLabel.setWrapText(true);
 
-        long total = sorted.stream().mapToLong(Map.Entry::getValue).sum();
-        List<ChartItem> items = sorted.stream().map(e -> new ChartItem(e.getKey(), e.getValue())).collect(Collectors.toList());
+        Label arrowIcon = new Label("↗");
+        arrowIcon.setStyle("-fx-font-size: 32px; -fx-text-fill: " + ACCENT + ";");
 
-        VBox content = createChartContent("Έξοδα ανά Υπουργείο", "Κατανομή δαπανών", items, total);
-        animateIn(content);
-        chartContainer.getChildren().add(content);
+        promptBox.getChildren().addAll(titleLabel, instructionLabel, arrowIcon);
+
+        animateIn(promptBox);
+        chartContainer.getChildren().add(promptBox);
     }
 
-    private void showRevenueHierarchyChart() {
+    private void showRevenueAnalysisChart() {
         String code = searchField.getText().trim();
         if (code.isEmpty()) {
             return;
         }
 
+        List<MultiYearBudgetRevenue> revenues = MultiYearBudgetRevenue.getMultiYearBudgetRevenuesOfSpecificCode(code);
+        revenues.sort(Comparator.comparingInt(MultiYearBudgetRevenue::getYear));
 
-        BudgetRevenue revenue = BudgetRevenue.findBudgetRevenueWithCode(code);
-        if (revenue == null) {
+        if (revenues.isEmpty()) {
             chartContainer.getChildren().clear();
             VBox errorBox = new VBox(8);
             errorBox.setAlignment(Pos.CENTER);
@@ -455,54 +470,79 @@ public class ChartsView {
 
         chartContainer.getChildren().clear();
 
-        // Build hierarchy items
-        List<ChartItem> items = new ArrayList<>();
+        // Build items
+        List<ChartItem> items = new LinkedList<>();
 
-        ArrayList<BudgetRevenue> superCats = revenue.getAllSuperCategories();
-        if (superCats != null) {
-            for (int i = superCats.size() - 1; i >= 0; i--) {
-                BudgetRevenue sup = superCats.get(i);
+        String description = null;
+        for (MultiYearBudgetRevenue revenue : revenues) {
+            if (description == null) {
+                description = revenue.getDescription();
             }
-        }
-
-        ArrayList<BudgetRevenue> nextLevel = revenue.getNextLevelSubCategories();
-        if (nextLevel != null) {
-            for (BudgetRevenue sub : nextLevel) {
-                items.add(new ChartItem(truncate(sub.getDescription(), 60) + " (" + sub.getCode() + ")", sub.getAmount()));
-            }
+            items.add(new ChartItem(String.valueOf(revenue.getYear()), revenue.getAmount()));
         }
 
         long total = items.stream().mapToLong(i -> i.amount).sum();
 
-        VBox content = createChartContent(revenue.getDescription(), "Κατανομή Λογαριασμού Εσόδων", items, total);
+        VBox content = createChartContent(description, "Εξέλιξη Λογαριασμού Εσόδων", items, total);
 
-        // Add hierarchy info card
-        ArrayList<BudgetRevenue> subCats = revenue.getNextLevelSubCategories();
-        int nextLevelSubs = (subCats != null) ? subCats.size() : 0;
-        int totalSupers = (superCats != null) ? superCats.size() : 0;
-
-        HBox infoCards = new HBox(12);
-        infoCards.setAlignment(Pos.CENTER);
-        infoCards.setPadding(new Insets(8, 0, 0, 0));
-
-        infoCards.getChildren().addAll(
-                createInfoChip("Επίπεδο " + revenue.getLevelOfHierarchy()),
-                createInfoChip("Ανώτερες: " + totalSupers),
-                createInfoChip("Υποκατηγορίες: " + nextLevelSubs)
-        );
-
-        content.getChildren().add(infoCards);
         animateIn(content);
         chartContainer.getChildren().add(content);
     }
 
-    private void showMinistryExpenseCategoryHierarchyChart() {
+    private void showExpenseAnalysisChart() {
         String code = searchField.getText().trim();
         if (code.isEmpty()) {
             return;
         }
 
-        Entity entity = Entity.findEntityWithEntityCode(code);
+        List<MultiYearBudgetExpense> expenses = MultiYearBudgetExpense.getMultiYearBudgetExpensesOfSpecificCode(code);
+        expenses.sort(Comparator.comparingInt(MultiYearBudgetExpense::getYear));
+
+        if (expenses.isEmpty()) {
+            chartContainer.getChildren().clear();
+            VBox errorBox = new VBox(8);
+            errorBox.setAlignment(Pos.CENTER);
+            errorBox.setPadding(new Insets(40));
+
+            Label errorIcon = new Label("!");
+            errorIcon.setStyle("-fx-font-size: 24px; -fx-text-fill: #ef4444; -fx-font-weight: bold;");
+
+            Label error = new Label("Δεν βρέθηκε λογαριασμός με κωδικό: " + code);
+            error.setStyle("-fx-font-size: 13px; -fx-text-fill: " + TEXT_SECONDARY + ";");
+
+            errorBox.getChildren().addAll(errorIcon, error);
+            chartContainer.getChildren().add(errorBox);
+            return;
+        }
+
+        chartContainer.getChildren().clear();
+
+        // Build items
+        List<ChartItem> items = new LinkedList<>();
+
+        String description = null;
+        for (MultiYearBudgetExpense expense : expenses) {
+            if (description == null) {
+                description = expense.getDescription();
+            }
+            items.add(new ChartItem(String.valueOf(expense.getYear()), expense.getAmount()));
+        }
+
+        long total = items.stream().mapToLong(i -> i.amount).sum();
+
+        VBox content = createChartContent(description, "Εξέλιξη Λογαριασμού Εσόδων", items, total);
+
+        animateIn(content);
+        chartContainer.getChildren().add(content);
+    }
+
+    private void showMinistryAnalysisChart() {
+        String code = searchField.getText().trim();
+        if (code.isEmpty()) {
+            return;
+        }
+
+        MultiYearEntity entity = MultiYearEntity.findMultiYearEntityWithCode(code);
         if (entity == null) {
             chartContainer.getChildren().clear();
             VBox errorBox = new VBox(8);
@@ -525,60 +565,16 @@ public class ChartsView {
         // Build items
         List<ChartItem> items = new ArrayList<>();
 
-        Map<String, Long> expensesByMinistry = entity.getTotalSumOfEveryExpenseCategory();
-        if (!expensesByMinistry.isEmpty()) {
-            for (Map.Entry<String, Long> entry : expensesByMinistry.entrySet()) {
-                items.add(new ChartItem(truncate(BudgetExpense.getDescriptionWithCode(entry.getKey()), 150) + " (" + entry.getKey() + ")", entry.getValue()));
+        Map<Integer, Long> expensesPerYear = entity.getTotalExpensesOfEntityPerYear();
+        if (!expensesPerYear.isEmpty()) {
+            for (Map.Entry<Integer, Long> entry : expensesPerYear.entrySet()) {
+                items.add(new ChartItem(String.valueOf(entry.getKey()), entry.getValue()));
             }
         }
 
         long total = items.stream().mapToLong(i -> i.amount).sum();
 
-        VBox content = createChartContent(entity.getEntityName(), "Κατανομή Εξόδων", items, total);
-
-        animateIn(content);
-        chartContainer.getChildren().add(content);
-    }
-
-    private void showMinistryServiceHierarchyChart() {
-        String code = searchField.getText().trim();
-        if (code.isEmpty()) {
-            return;
-        }
-
-        Entity entity = Entity.findEntityWithEntityCode(code);
-        if (entity == null) {
-            chartContainer.getChildren().clear();
-            VBox errorBox = new VBox(8);
-            errorBox.setAlignment(Pos.CENTER);
-            errorBox.setPadding(new Insets(40));
-
-            Label errorIcon = new Label("!");
-            errorIcon.setStyle("-fx-font-size: 24px; -fx-text-fill: #ef4444; -fx-font-weight: bold;");
-
-            Label error = new Label("Δεν βρέθηκε φορέας με κωδικό: " + code);
-            error.setStyle("-fx-font-size: 13px; -fx-text-fill: " + TEXT_SECONDARY + ";");
-
-            errorBox.getChildren().addAll(errorIcon, error);
-            chartContainer.getChildren().add(errorBox);
-            return;
-        }
-
-        chartContainer.getChildren().clear();
-
-        // Build items
-        List<ChartItem> items = new ArrayList<>();
-
-        Map<String, Long> expensesByService = entity.getTotalSumOfEveryService();
-        if (!expensesByService.isEmpty()) {
-            for (Map.Entry<String, Long> entry : expensesByService.entrySet()) {
-                items.add(new ChartItem(truncate(entity.getServiceNameWithCode(entry.getKey()), 300) + " (" + entry.getKey() + ")", entry.getValue()));
-            }
-        }
-
-        long total = items.stream().mapToLong(i -> i.amount).sum();
-
-        VBox content = createChartContent(entity.getEntityName(), "Κατανομή Ειδικών Φορέων", items, total);
+        VBox content = createChartContent(entity.getEntityName(), "Κατανομή Εξόδων Φορέα", items, total);
 
         animateIn(content);
         chartContainer.getChildren().add(content);
@@ -623,7 +619,7 @@ public class ChartsView {
             BarChart<String, Number> chart = createBarChart(items);
             chartSection.getChildren().add(chart);
         } else {
-            PieChart chart = createPieChart(items, total);
+            LineChart chart = createLineChart(items);
             chartSection.getChildren().add(chart);
         }
 
@@ -654,44 +650,63 @@ public class ChartsView {
         return content;
     }
 
-    private PieChart createPieChart(List<ChartItem> items, long total) {
-        ObservableList<PieChart.Data> pieData = FXCollections.observableArrayList();
+    private LineChart<String, Number> createLineChart(List<ChartItem> items) {
+        // 1. Ορισμός αξόνων
+        CategoryAxis xAxis = new CategoryAxis();
+        xAxis.setLabel("Έτος");
+        xAxis.setTickLabelFill(javafx.scene.paint.Color.web(TEXT_SECONDARY));
+
+        NumberAxis yAxis = new NumberAxis();
+        yAxis.setLabel("Ποσό (€)");
+        yAxis.setTickLabelFill(javafx.scene.paint.Color.web(TEXT_SECONDARY));
+        yAxis.setForceZeroInRange(false); // Επιτρέπει στο γράφημα να εστιάσει στις διακυμάνσεις
+
+        // 2. Δημιουργία του Chart
+        LineChart<String, Number> lineChart = new LineChart<>(xAxis, yAxis);
+        lineChart.setLegendVisible(false);
+        lineChart.setAnimated(true);
+        lineChart.setCreateSymbols(true); // Εμφανίζει κύκλους στα σημεία δεδομένων
+        lineChart.setPrefSize(800, 450);
+        lineChart.setStyle("-fx-background-color: transparent;");
+
+        // 3. Προετοιμασία δεδομένων (Series)
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+
         for (ChartItem item : items) {
-            pieData.add(new PieChart.Data(item.name, item.amount));
+            XYChart.Data<String, Number> dataPoint = new XYChart.Data<>(item.name, item.amount);
+            series.getData().add(dataPoint);
         }
 
-        PieChart chart = new PieChart(pieData);
-        chart.setLegendVisible(false);
-        chart.setLabelsVisible(false);
-        chart.setPrefSize(450, 450);
-        chart.setMaxSize(450, 450);
-        chart.setStyle("-fx-background-color: transparent;");
+        lineChart.getData().add(series);
 
-        // Apply monochromatic colors and tooltips
-        int colorIndex = 0;
-        for (PieChart.Data data : chart.getData()) {
-            String color = CHART_COLORS[colorIndex % CHART_COLORS.length];
-            data.getNode().setStyle("-fx-pie-color: " + color + ";");
+        // 4. Styling και Tooltips (μετά την προσθήκη των δεδομένων)
+        applyLineChartStyle(lineChart, series);
 
-            double pct = (data.getPieValue() * 100.0) / total;
-            Tooltip tooltip = new Tooltip(data.getName() + "\n" + formatAmount((long) data.getPieValue()) + " (" + String.format("%.1f%%", pct) + ")");
-            tooltip.setShowDelay(Duration.millis(100));
-            tooltip.setStyle("-fx-font-size: 11px; -fx-background-color: " + BG_PRIMARY + "; -fx-text-fill: " + TEXT_PRIMARY + "; -fx-background-radius: 4;");
-            Tooltip.install(data.getNode(), tooltip);
+        return lineChart;
+    }
 
-            // Hover effect
-            final String originalColor = color;
-            data.getNode().setOnMouseEntered(e -> {
-                data.getNode().setStyle("-fx-pie-color: " + originalColor + "; -fx-opacity: 0.8;");
-            });
-            data.getNode().setOnMouseExited(e -> {
-                data.getNode().setStyle("-fx-pie-color: " + originalColor + ";");
-            });
-
-            colorIndex++;
+    private void applyLineChartStyle(LineChart<String, Number> chart, XYChart.Series<String, Number> series) {
+        // Styling της γραμμής
+        Node line = series.getNode().lookup(".chart-series-line");
+        if (line != null) {
+            line.setStyle("-fx-stroke: " + ACCENT + "; -fx-stroke-width: 3px;");
         }
 
-        return chart;
+        // Styling και Tooltips για κάθε σημείο (Data Point)
+        for (XYChart.Data<String, Number> data : series.getData()) {
+            Node symbol = data.getNode();
+            if (symbol != null) {
+                symbol.setStyle("-fx-background-color: " + ACCENT + ", white; -fx-background-radius: 5px; -fx-padding: 5px;");
+
+                Tooltip tooltip = new Tooltip(data.getXValue() + ": " + formatAmount(data.getYValue().longValue()));
+                tooltip.setShowDelay(Duration.millis(100));
+                Tooltip.install(symbol, tooltip);
+
+                // Hover effects
+                symbol.setOnMouseEntered(e -> symbol.setScaleX(1.5));
+                symbol.setOnMouseExited(e -> symbol.setScaleX(1.0));
+            }
+        }
     }
 
     private BarChart<String, Number> createBarChart(List<ChartItem> items) {
@@ -781,12 +796,6 @@ public class ChartsView {
             barContainer.setMaxWidth(80);
             HBox.setMargin(barContainer, new Insets(0, 0, 4, 0));
 
-            // Percentage text
-            Label pctLabel = new Label(String.format("%.1f%%", pct));
-            pctLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: " + TEXT_MUTED + ";");
-            pctLabel.setMinWidth(45);
-            pctLabel.setPadding(new Insets(0, 0, 0, 8));
-
             // Amount
             Label amtLabel = new Label(formatAmount(item.amount));
             amtLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + TEXT_PRIMARY + "; -fx-font-weight: 500;");
@@ -797,7 +806,7 @@ public class ChartsView {
             amtLabel.setMinWidth(80);
             amtLabel.setAlignment(Pos.CENTER_RIGHT);
 
-            row.getChildren().addAll(colorDot, nameLabel, barContainer, pctLabel, amtLabel);
+            row.getChildren().addAll(colorDot, nameLabel, barContainer, amtLabel);
 
             // Hover effect
             final String rowBaseStyle = baseStyle;
