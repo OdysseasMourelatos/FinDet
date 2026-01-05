@@ -226,7 +226,7 @@ public class MainWindow {
         NavButton exportBtn = new NavButton("Εξαγωγή PDF", "export");
 
         // Click handlers - using lazy getters for views
-        dashboardBtn.setOnAction(() -> navigateTo(dashboardBtn, dashboardView.getView()));
+        dashboardBtn.setOnAction(() -> navigateToDashboard(dashboardBtn));
         revenuesBtn.setOnAction(() -> navigateTo(revenuesBtn, getRevenuesView()));
         expensesBtn.setOnAction(() -> navigateTo(expensesBtn, getExpensesView()));
         entitiesBtn.setOnAction(() -> navigateTo(entitiesBtn, getEntitiesView()));
@@ -322,6 +322,45 @@ public class MainWindow {
             contentArea.getChildren().clear();
 
             // Prepare new view
+            view.setOpacity(0);
+            view.setTranslateY(10);
+            contentArea.getChildren().add(view);
+            currentView = view;
+
+            // Fade in new view
+            FadeTransition fadeIn = new FadeTransition(Duration.millis(200), view);
+            fadeIn.setFromValue(0);
+            fadeIn.setToValue(1);
+
+            TranslateTransition slideIn = new TranslateTransition(Duration.millis(200), view);
+            slideIn.setFromY(10);
+            slideIn.setToY(0);
+
+            ParallelTransition parallel = new ParallelTransition(fadeIn, slideIn);
+            parallel.play();
+        });
+
+        fadeOut.play();
+    }
+
+    private void navigateToDashboard(NavButton button) {
+        Region view = dashboardView.getView();
+
+        // Always replay animations when navigating to dashboard
+        setActiveButton(button);
+
+        // Fade out old view
+        FadeTransition fadeOut = new FadeTransition(Duration.millis(150), currentView);
+        fadeOut.setFromValue(1);
+        fadeOut.setToValue(0);
+
+        fadeOut.setOnFinished(e -> {
+            contentArea.getChildren().clear();
+
+            // Replay dashboard animations
+            dashboardView.replayAnimations();
+
+            // Prepare view
             view.setOpacity(0);
             view.setTranslateY(10);
             contentArea.getChildren().add(view);

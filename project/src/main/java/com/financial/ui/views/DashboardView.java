@@ -33,6 +33,11 @@ public class DashboardView {
     private final ScrollPane scrollPane;
     private final VBox view;
 
+    // Store references for animation replay
+    private HBox primaryMetricsContainer;
+    private HBox secondaryMetricsContainer;
+    private VBox distributionContainer;
+
     public DashboardView() {
         view = new VBox(40);
         view.setPadding(new Insets(48, 56, 56, 56));
@@ -42,15 +47,15 @@ public class DashboardView {
         HBox header = createHeader();
 
         // Animated primary metrics
-        HBox primaryMetrics = createPrimaryMetrics();
+        primaryMetricsContainer = createPrimaryMetrics();
 
         // Live secondary stats
-        HBox secondaryMetrics = createSecondaryMetrics();
+        secondaryMetricsContainer = createSecondaryMetrics();
 
         // Interactive distribution
-        VBox distribution = createDistribution();
+        distributionContainer = createDistribution();
 
-        view.getChildren().addAll(header, primaryMetrics, secondaryMetrics, distribution);
+        view.getChildren().addAll(header, primaryMetricsContainer, secondaryMetricsContainer, distributionContainer);
 
         scrollPane = new ScrollPane(view);
         scrollPane.setFitToWidth(true);
@@ -566,6 +571,27 @@ public class DashboardView {
         viewFade.setToValue(1);
         viewFade.setDelay(Duration.millis(50));
         viewFade.play();
+    }
+
+    /**
+     * Replays all dashboard animations. Called when navigating back to dashboard.
+     */
+    public void replayAnimations() {
+        // Store the header (first child, not animated)
+        HBox header = (HBox) view.getChildren().get(0);
+
+        // Clear and rebuild animated sections
+        view.getChildren().clear();
+
+        // Recreate animated sections
+        primaryMetricsContainer = createPrimaryMetrics();
+        secondaryMetricsContainer = createSecondaryMetrics();
+        distributionContainer = createDistribution();
+
+        view.getChildren().addAll(header, primaryMetricsContainer, secondaryMetricsContainer, distributionContainer);
+
+        // Replay entrance animation
+        animateEntrance();
     }
 
     public Region getView() {
