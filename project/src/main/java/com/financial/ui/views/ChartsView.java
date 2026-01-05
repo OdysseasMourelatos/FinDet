@@ -407,8 +407,15 @@ public class ChartsView {
         chartContainer.getChildren().clear();
 
         Map<String, Long> expensesByMinistry = new HashMap<>();
-        for (Entity entity : Entity.getEntities()) {
-            expensesByMinistry.put(entity.getEntityName(), entity.calculateTotalSum());
+        for (RegularBudgetExpense e : RegularBudgetExpense.getAllRegularBudgetExpenses()) {
+            if (e.getCode().charAt(0) <= '3') {
+                expensesByMinistry.merge(e.getEntityName(), e.getAmount(), Long::sum);
+            }
+        }
+        for (PublicInvestmentBudgetExpense e : PublicInvestmentBudgetExpense.getAllPublicInvestmentBudgetExpenses()) {
+            if (e.getCode().charAt(0) <= '3') {
+                expensesByMinistry.merge(e.getEntityName(), e.getAmount(), Long::sum);
+            }
         }
 
         List<Map.Entry<String, Long>> sorted = expensesByMinistry.entrySet().stream().sorted((a, b) -> Long.compare(b.getValue(), a.getValue())).limit(10).collect(Collectors.toList());
