@@ -110,6 +110,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-math3</artifactId>
+            <version>3.6.1</version>
+        </dependency>
+
+        <dependency>
             <groupId>io.github.mkpaz</groupId>
             <artifactId>atlantafx-base</artifactId>
             <version>2.0.1</version>
@@ -130,11 +136,7 @@
             <artifactId>jfreechart</artifactId>
             <version>1.5.3</version>
         </dependency>
-        <dependency>
-            <groupId>de.vandermeer</groupId>
-            <artifactId>asciitable</artifactId>
-            <version>0.3.2</version>
-        </dependency>
+
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
