@@ -1,7 +1,7 @@
 package com.financial.ui.views;
 
 import com.financial.entries.*;
-
+import com.financial.ui.Theme;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,18 +38,16 @@ import javafx.util.Duration;
  */
 public class ChartsView {
 
-    // Design constants
-    private static final String BG_PRIMARY = "#0a0a0f";
-    private static final String BG_SECONDARY = "#12121a";
-    private static final String BG_TERTIARY = "#1a1a24";
-    private static final String TEXT_PRIMARY = "#e4e4e7";
-    private static final String TEXT_SECONDARY = "#71717a";
-    private static final String TEXT_MUTED = "#52525b";
-    private static final String BORDER_COLOR = "#27272a";
-    private static final String ACCENT = "#3b82f6";
-
-    // Refined monochromatic chart colors - blues and grays
-    private static final String[] CHART_COLORS = {"#3b82f6", "#60a5fa", "#93c5fd", "#bfdbfe", "#dbeafe", "#6366f1", "#818cf8", "#a5b4fc", "#c7d2fe", "#e0e7ff"};
+    // Use Theme class constants
+    private static final String BG_PRIMARY = Theme.BG_BASE;
+    private static final String BG_SECONDARY = Theme.BG_SURFACE;
+    private static final String BG_TERTIARY = Theme.BG_ELEVATED;
+    private static final String TEXT_PRIMARY = Theme.TEXT_PRIMARY;
+    private static final String TEXT_SECONDARY = Theme.TEXT_SECONDARY;
+    private static final String TEXT_MUTED = Theme.TEXT_MUTED;
+    private static final String BORDER_COLOR = Theme.BORDER_DEFAULT;
+    private static final String ACCENT = Theme.ACCENT_LIGHT;
+    private static final String[] CHART_COLORS = Theme.CHART_PALETTE;
 
     private final VBox view;
     private VBox chartContainer;

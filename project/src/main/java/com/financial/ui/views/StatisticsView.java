@@ -3,6 +3,7 @@ package com.financial.ui.views;
 import com.financial.statistical_analysis.FrequencyRow;
 import com.financial.statistical_analysis.FrequencyTable;
 import com.financial.statistical_analysis.StatisticalExpenses;
+import com.financial.ui.Theme;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -37,14 +38,15 @@ import java.util.stream.Collectors;
 
 public class StatisticsView {
 
-    private static final String BG_PRIMARY = "#0a0a0f";
-    private static final String BG_SECONDARY = "#12121a";
-    private static final String TEXT_PRIMARY = "#e4e4e7";
-    private static final String TEXT_SECONDARY = "#71717a";
-    private static final String BORDER_COLOR = "#27272a";
-    private static final String ACCENT_COLOR = "#3b82f6";
-    private static final String ACCENT = "#3b82f6";
-    private static final String BG_TERTIARY = "#1a1a24";
+    // Use Theme class constants for consistent styling
+    private static final String BG_PRIMARY = Theme.BG_BASE;
+    private static final String BG_SECONDARY = Theme.BG_SURFACE;
+    private static final String TEXT_PRIMARY = Theme.TEXT_PRIMARY;
+    private static final String TEXT_SECONDARY = Theme.TEXT_SECONDARY;
+    private static final String BORDER_COLOR = Theme.BORDER_DEFAULT;
+    private static final String ACCENT_COLOR = Theme.ACCENT_BRIGHT;
+    private static final String ACCENT = Theme.ACCENT_LIGHT;
+    private static final String BG_TERTIARY = Theme.BG_ELEVATED;
 
     private Button activeButton = null;
     private final VBox view;

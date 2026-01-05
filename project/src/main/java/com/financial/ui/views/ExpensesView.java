@@ -6,6 +6,7 @@ import com.financial.entries.PublicInvestmentBudgetExpense;
 import com.financial.entries.PublicInvestmentBudgetNationalExpense;
 import com.financial.entries.PublicInvestmentBudgetCoFundedExpense;
 import com.financial.entries.RegularBudgetExpense;
+import com.financial.ui.Theme;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,6 +14,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
@@ -21,23 +23,19 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Expenses view - displays budget expenses with filtering options.
+ * Expenses view - displays budget expenses with clean, modern tabs.
  */
 public class ExpensesView {
 
-    // Design constants
-    private static final String BG_PRIMARY = "#0a0a0f";
-    private static final String BG_SECONDARY = "#12121a";
-    private static final String TEXT_PRIMARY = "#e4e4e7";
-    private static final String TEXT_SECONDARY = "#71717a";
-    private static final String BORDER_COLOR = "#27272a";
-
+    private final ScrollPane scrollPane;
     private final VBox view;
     private TabPane tabPane;
 
@@ -62,14 +60,14 @@ public class ExpensesView {
 
     public ExpensesView() {
         view = new VBox(0);
-        view.setStyle("-fx-background-color: " + BG_PRIMARY + ";");
+        view.setStyle("-fx-background-color: " + Theme.BG_BASE + ";");
 
         // Header
         VBox header = createHeader();
 
         // Tab pane
         tabPane = new TabPane();
-        tabPane.setStyle("-fx-background-color: " + BG_PRIMARY + ";");
+        tabPane.setStyle("-fx-background-color: " + Theme.BG_BASE + ";");
         VBox.setVgrow(tabPane, Priority.ALWAYS);
 
         Tab regularTab = new Tab("Τακτικός Προϋπολογισμός");
@@ -83,25 +81,53 @@ public class ExpensesView {
         tabPane.getTabs().addAll(regularTab, investmentTab);
 
         view.getChildren().addAll(header, tabPane);
+
+        // Wrap in scroll pane
+        scrollPane = new ScrollPane(view);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+        scrollPane.setStyle(
+            "-fx-background: " + Theme.BG_BASE + ";" +
+            "-fx-background-color: " + Theme.BG_BASE + ";" +
+            "-fx-border-color: transparent;"
+        );
     }
 
     private VBox createHeader() {
-        VBox header = new VBox(4);
-        header.setPadding(new Insets(32, 24, 24, 24));
+        VBox header = new VBox(6);
+        header.setPadding(new Insets(32, 24, 20, 24));
+
+        HBox titleRow = new HBox(12);
+        titleRow.setAlignment(Pos.CENTER_LEFT);
+
+        // Expense icon
+        Circle icon = new Circle(16);
+        icon.setFill(javafx.scene.paint.Color.web(Theme.ERROR, 0.15));
+
+        Label iconText = new Label("-");
+        iconText.setStyle(
+            "-fx-font-size: 18px;" +
+            "-fx-font-weight: bold;" +
+            "-fx-text-fill: " + Theme.ERROR_LIGHT + ";"
+        );
+
+        StackPane iconContainer = new StackPane(icon, iconText);
 
         Label title = new Label("Έξοδα Προϋπολογισμού");
-        title.setStyle("-fx-font-size: 24px; -fx-font-weight: 600; -fx-text-fill: " + TEXT_PRIMARY + ";");
+        title.setStyle(Theme.pageTitle());
+
+        titleRow.getChildren().addAll(iconContainer, title);
 
         Label subtitle = new Label("Διαχείριση και προβολή εξόδων κρατικού προϋπολογισμού");
-        subtitle.setStyle("-fx-font-size: 13px; -fx-text-fill: " + TEXT_SECONDARY + ";");
+        subtitle.setStyle(Theme.subtitle());
 
-        header.getChildren().addAll(title, subtitle);
+        header.getChildren().addAll(titleRow, subtitle);
         return header;
     }
 
     private VBox createRegularExpensesContent() {
         VBox container = new VBox(0);
-        container.setStyle("-fx-background-color: " + BG_PRIMARY + ";");
+        container.setStyle("-fx-background-color: " + Theme.BG_BASE + ";");
 
         // Filter section
         HBox filterRow = new HBox(12);
@@ -110,8 +136,16 @@ public class ExpensesView {
 
         regularSearchField = new TextField();
         regularSearchField.setPromptText("Αναζήτηση...");
-        regularSearchField.setPrefWidth(200);
-        styleTextField(regularSearchField);
+        regularSearchField.setPrefWidth(220);
+        regularSearchField.setStyle(Theme.textField());
+
+        regularSearchField.focusedProperty().addListener((obs, wasFocused, isFocused) -> {
+            regularSearchField.setStyle(isFocused ? Theme.textFieldFocused() : Theme.textField());
+        });
+
+        VBox entityBox = new VBox(4);
+        Label entityLabel = new Label("Φορέας");
+        entityLabel.setStyle(Theme.mutedText());
 
         regularEntityFilter = new ComboBox<>();
         regularEntityFilter.getItems().add("Όλοι οι φορείς");
@@ -119,30 +153,45 @@ public class ExpensesView {
             regularEntityFilter.getItems().add(entity.getEntityCode() + " - " + entity.getEntityName());
         }
         regularEntityFilter.setValue("Όλοι οι φορείς");
-        styleComboBox(regularEntityFilter);
-        regularEntityFilter.setPrefWidth(220);
+        regularEntityFilter.setStyle(Theme.comboBox());
+        regularEntityFilter.setPrefWidth(240);
+
+        entityBox.getChildren().addAll(entityLabel, regularEntityFilter);
+
+        VBox levelBox = new VBox(4);
+        Label levelLabel = new Label("Επίπεδο");
+        levelLabel.setStyle(Theme.mutedText());
 
         regularLevelFilter = new ComboBox<>();
         regularLevelFilter.getItems().addAll("Όλα τα επίπεδα", "Επίπεδο 1", "Επίπεδο 2", "Επίπεδο 3", "Επίπεδο 4", "Επίπεδο 5");
         regularLevelFilter.setValue("Όλα τα επίπεδα");
-        styleComboBox(regularLevelFilter);
+        regularLevelFilter.setStyle(Theme.comboBox());
         regularLevelFilter.setPrefWidth(140);
 
-        filterRow.getChildren().addAll(regularSearchField, regularEntityFilter, regularLevelFilter);
+        levelBox.getChildren().addAll(levelLabel, regularLevelFilter);
+
+        filterRow.getChildren().addAll(regularSearchField, entityBox, levelBox);
 
         // Stats bar
         HBox statsBar = new HBox(24);
         statsBar.setPadding(new Insets(12, 24, 12, 24));
         statsBar.setAlignment(Pos.CENTER_LEFT);
-        statsBar.setStyle("-fx-background-color: " + BG_SECONDARY + "; -fx-border-color: " + BORDER_COLOR + "; -fx-border-width: 1 0;");
+        statsBar.setStyle(
+            "-fx-background-color: " + Theme.BG_SURFACE + ";" +
+            "-fx-border-color: " + Theme.BORDER_MUTED + ";" +
+            "-fx-border-width: 1 0;"
+        );
 
         regularCountLabel = new Label();
-        regularCountLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + TEXT_SECONDARY + ";");
+        regularCountLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: " + Theme.TEXT_SECONDARY + ";");
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
 
         regularTotalLabel = new Label();
-        regularTotalLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + TEXT_SECONDARY + ";");
+        regularTotalLabel.setStyle("-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: " + Theme.ERROR_LIGHT + ";");
 
-        statsBar.getChildren().addAll(regularCountLabel, regularTotalLabel);
+        statsBar.getChildren().addAll(regularCountLabel, spacer, regularTotalLabel);
 
         // Table
         regularData = FXCollections.observableArrayList(RegularBudgetExpense.getAllRegularBudgetExpenses());
@@ -168,30 +217,34 @@ public class ExpensesView {
 
     private TableView<RegularBudgetExpense> createRegularTable() {
         TableView<RegularBudgetExpense> table = new TableView<>(regularData);
-        table.setStyle("-fx-background-color: " + BG_SECONDARY + "; -fx-background-radius: 8; -fx-border-color: " + BORDER_COLOR + "; -fx-border-radius: 8;");
+        table.setStyle(Theme.table());
 
         TableColumn<RegularBudgetExpense, String> entityCodeCol = new TableColumn<>("Φορέας");
         entityCodeCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getEntityCode()));
-        entityCodeCol.setPrefWidth(70);
+        entityCodeCol.setPrefWidth(80);
 
         TableColumn<RegularBudgetExpense, String> serviceCol = new TableColumn<>("Υπηρεσία");
         serviceCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getServiceName()));
-        serviceCol.setPrefWidth(160);
+        serviceCol.setPrefWidth(180);
 
         TableColumn<RegularBudgetExpense, String> codeCol = new TableColumn<>("Κωδικός");
         codeCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getCode()));
-        codeCol.setPrefWidth(80);
+        codeCol.setPrefWidth(90);
 
         TableColumn<RegularBudgetExpense, String> descCol = new TableColumn<>("Περιγραφή");
         descCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getDescription()));
-        descCol.setPrefWidth(280);
+        descCol.setPrefWidth(300);
 
         TableColumn<RegularBudgetExpense, String> amountCol = new TableColumn<>("Ποσό");
-        amountCol.setCellValueFactory(d -> new SimpleStringProperty(formatAmount(d.getValue().getAmount())));
-        amountCol.setPrefWidth(100);
+        amountCol.setCellValueFactory(d -> new SimpleStringProperty(Theme.formatAmount(d.getValue().getAmount())));
+        amountCol.setPrefWidth(120);
         amountCol.setStyle("-fx-alignment: CENTER-RIGHT;");
 
         table.getColumns().addAll(entityCodeCol, serviceCol, codeCol, descCol, amountCol);
+
+        Label placeholder = new Label("Δεν βρέθηκαν εγγραφές");
+        placeholder.setStyle("-fx-text-fill: " + Theme.TEXT_MUTED + "; -fx-font-size: 14px;");
+        table.setPlaceholder(placeholder);
 
         return table;
     }
@@ -201,7 +254,11 @@ public class ExpensesView {
         String selectedEntity = regularEntityFilter.getValue();
         String selectedLevel = regularLevelFilter.getValue();
 
-        List<RegularBudgetExpense> filtered = RegularBudgetExpense.getAllRegularBudgetExpenses().stream().filter(e -> matchesSearch(e, searchText)).filter(e -> matchesEntity(e, selectedEntity)).filter(e -> matchesLevel(e, selectedLevel)).collect(Collectors.toList());
+        List<RegularBudgetExpense> filtered = RegularBudgetExpense.getAllRegularBudgetExpenses().stream().
+                filter(e -> matchesSearch(e, searchText)).
+                filter(e -> matchesEntity(e, selectedEntity)).
+                filter(e -> matchesLevel(e, selectedLevel)).
+                collect(Collectors.toList());
 
         regularData.setAll(filtered);
         updateRegularStats();
@@ -210,12 +267,12 @@ public class ExpensesView {
     private void updateRegularStats() {
         long total = regularData.stream().mapToLong(RegularBudgetExpense::getAmount).sum();
         regularCountLabel.setText(regularData.size() + " εγγραφές");
-        regularTotalLabel.setText("Σύνολο: " + formatAmount(total));
+        regularTotalLabel.setText("Σύνολο: " + Theme.formatAmount(total));
     }
 
     private VBox createPublicInvestmentExpensesContent() {
         VBox container = new VBox(0);
-        container.setStyle("-fx-background-color: " + BG_PRIMARY + ";");
+        container.setStyle("-fx-background-color: " + Theme.BG_BASE + ";");
 
         // Filter section
         HBox filterRow = new HBox(12);
@@ -225,7 +282,15 @@ public class ExpensesView {
         pibSearchField = new TextField();
         pibSearchField.setPromptText("Αναζήτηση...");
         pibSearchField.setPrefWidth(200);
-        styleTextField(pibSearchField);
+        pibSearchField.setStyle(Theme.textField());
+
+        pibSearchField.focusedProperty().addListener((obs, wasFocused, isFocused) -> {
+            pibSearchField.setStyle(isFocused ? Theme.textFieldFocused() : Theme.textField());
+        });
+
+        VBox entityBox = new VBox(4);
+        Label entityLabel = new Label("Φορέας");
+        entityLabel.setStyle(Theme.mutedText());
 
         pibEntityFilter = new ComboBox<>();
         pibEntityFilter.getItems().add("Όλοι οι φορείς");
@@ -233,36 +298,57 @@ public class ExpensesView {
             pibEntityFilter.getItems().add(entity.getEntityCode() + " - " + entity.getEntityName());
         }
         pibEntityFilter.setValue("Όλοι οι φορείς");
-        styleComboBox(pibEntityFilter);
+        pibEntityFilter.setStyle(Theme.comboBox());
         pibEntityFilter.setPrefWidth(220);
+
+        entityBox.getChildren().addAll(entityLabel, pibEntityFilter);
+
+        VBox typeBox = new VBox(4);
+        Label typeLabel = new Label("Τύπος");
+        typeLabel.setStyle(Theme.mutedText());
 
         pibTypeFilter = new ComboBox<>();
         pibTypeFilter.getItems().addAll("Όλοι οι τύποι", "Εθνικό", "Συγχρηματοδοτούμενο");
         pibTypeFilter.setValue("Όλοι οι τύποι");
-        styleComboBox(pibTypeFilter);
+        pibTypeFilter.setStyle(Theme.comboBox());
         pibTypeFilter.setPrefWidth(160);
+
+        typeBox.getChildren().addAll(typeLabel, pibTypeFilter);
+
+        VBox levelBox = new VBox(4);
+        Label levelLabel = new Label("Επίπεδο");
+        levelLabel.setStyle(Theme.mutedText());
 
         pibLevelFilter = new ComboBox<>();
         pibLevelFilter.getItems().addAll("Όλα τα επίπεδα", "Επίπεδο 1", "Επίπεδο 2", "Επίπεδο 3", "Επίπεδο 4", "Επίπεδο 5");
         pibLevelFilter.setValue("Όλα τα επίπεδα");
-        styleComboBox(pibLevelFilter);
+        pibLevelFilter.setStyle(Theme.comboBox());
         pibLevelFilter.setPrefWidth(140);
 
-        filterRow.getChildren().addAll(pibSearchField, pibEntityFilter, pibTypeFilter, pibLevelFilter);
+        levelBox.getChildren().addAll(levelLabel, pibLevelFilter);
+
+        filterRow.getChildren().addAll(pibSearchField, entityBox, typeBox, levelBox);
 
         // Stats bar
         HBox statsBar = new HBox(24);
         statsBar.setPadding(new Insets(12, 24, 12, 24));
         statsBar.setAlignment(Pos.CENTER_LEFT);
-        statsBar.setStyle("-fx-background-color: " + BG_SECONDARY + "; -fx-border-color: " + BORDER_COLOR + "; -fx-border-width: 1 0;");
+        statsBar.setStyle(
+            "-fx-background-color: " + Theme.BG_SURFACE + ";" +
+            "-fx-border-color: " + Theme.BORDER_MUTED + ";" +
+            "-fx-border-width: 1 0;"
+        );
 
         pibCountLabel = new Label();
-        pibCountLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + TEXT_SECONDARY + ";");
+        pibCountLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: " + Theme.TEXT_SECONDARY + ";");
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
 
         pibTotalLabel = new Label();
-        pibTotalLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + TEXT_SECONDARY + ";");
+        pibTotalLabel.setStyle("-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: " + Theme.ERROR_LIGHT + ";");
 
-        statsBar.getChildren().addAll(pibCountLabel, pibTotalLabel);
+        statsBar.getChildren().addAll(pibCountLabel, spacer, pibTotalLabel);
 
         // Table
         pibData = FXCollections.observableArrayList();
@@ -295,7 +381,7 @@ public class ExpensesView {
 
     private TableView<BudgetExpense> createPibTable() {
         TableView<BudgetExpense> table = new TableView<>(pibData);
-        table.setStyle("-fx-background-color: " + BG_SECONDARY + "; -fx-background-radius: 8; -fx-border-color: " + BORDER_COLOR + "; -fx-border-radius: 8;");
+        table.setStyle(Theme.table());
 
         TableColumn<BudgetExpense, String> typeCol = new TableColumn<>("Τύπος");
         typeCol.setCellValueFactory(d -> {
@@ -304,30 +390,34 @@ public class ExpensesView {
             }
             return new SimpleStringProperty("-");
         });
-        typeCol.setPrefWidth(80);
+        typeCol.setPrefWidth(90);
 
         TableColumn<BudgetExpense, String> entityCodeCol = new TableColumn<>("Φορέας");
         entityCodeCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getEntityCode()));
-        entityCodeCol.setPrefWidth(70);
+        entityCodeCol.setPrefWidth(80);
 
         TableColumn<BudgetExpense, String> serviceCol = new TableColumn<>("Υπηρεσία");
         serviceCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getServiceName()));
-        serviceCol.setPrefWidth(140);
+        serviceCol.setPrefWidth(160);
 
         TableColumn<BudgetExpense, String> codeCol = new TableColumn<>("Κωδικός");
         codeCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getCode()));
-        codeCol.setPrefWidth(80);
+        codeCol.setPrefWidth(90);
 
         TableColumn<BudgetExpense, String> descCol = new TableColumn<>("Περιγραφή");
         descCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getDescription()));
-        descCol.setPrefWidth(240);
+        descCol.setPrefWidth(260);
 
         TableColumn<BudgetExpense, String> amountCol = new TableColumn<>("Ποσό");
-        amountCol.setCellValueFactory(d -> new SimpleStringProperty(formatAmount(d.getValue().getAmount())));
-        amountCol.setPrefWidth(100);
+        amountCol.setCellValueFactory(d -> new SimpleStringProperty(Theme.formatAmount(d.getValue().getAmount())));
+        amountCol.setPrefWidth(120);
         amountCol.setStyle("-fx-alignment: CENTER-RIGHT;");
 
         table.getColumns().addAll(typeCol, entityCodeCol, serviceCol, codeCol, descCol, amountCol);
+
+        Label placeholder = new Label("Δεν βρέθηκαν εγγραφές");
+        placeholder.setStyle("-fx-text-fill: " + Theme.TEXT_MUTED + "; -fx-font-size: 14px;");
+        table.setPlaceholder(placeholder);
 
         return table;
     }
@@ -340,7 +430,11 @@ public class ExpensesView {
 
         List<BudgetExpense> baseList = getBasePibList(selectedType);
 
-        List<BudgetExpense> filtered = baseList.stream().filter(e -> matchesSearch(e, searchText)).filter(e -> matchesEntity(e, selectedEntity)).filter(e -> matchesLevel(e, selectedLevel)).collect(Collectors.toList());
+        List<BudgetExpense> filtered = baseList.stream().
+                filter(e -> matchesSearch(e, searchText)).
+                filter(e -> matchesEntity(e, selectedEntity)).
+                filter(e -> matchesLevel(e, selectedLevel)).
+                collect(Collectors.toList());
 
         pibData.setAll(filtered);
         updatePibStats();
@@ -348,38 +442,20 @@ public class ExpensesView {
 
     private List<BudgetExpense> getBasePibList(String type) {
         return switch (type) {
-            case "Εθνικό" -> PublicInvestmentBudgetNationalExpense.getAllPublicInvestmentBudgetNationalExpenses().stream().map(e -> (BudgetExpense) e).collect(Collectors.toList());
-            case "Συγχρηματοδοτούμενο" -> PublicInvestmentBudgetCoFundedExpense.getAllPublicInvestmentBudgetCoFundedExpenses().stream().map(e -> (BudgetExpense) e).collect(Collectors.toList());
-            default -> PublicInvestmentBudgetExpense.getAllPublicInvestmentBudgetExpenses().stream().map(e -> (BudgetExpense) e).collect(Collectors.toList());
+            case "Εθνικό" -> PublicInvestmentBudgetNationalExpense.getAllPublicInvestmentBudgetNationalExpenses().
+                    stream().map(e -> (BudgetExpense) e).collect(Collectors.toList());
+            case "Συγχρηματοδοτούμενο" -> PublicInvestmentBudgetCoFundedExpense.
+                    getAllPublicInvestmentBudgetCoFundedExpenses().
+                    stream().map(e -> (BudgetExpense) e).collect(Collectors.toList());
+            default -> PublicInvestmentBudgetExpense.getAllPublicInvestmentBudgetExpenses().
+                    stream().map(e -> (BudgetExpense) e).collect(Collectors.toList());
         };
     }
 
     private void updatePibStats() {
         long total = pibData.stream().mapToLong(BudgetExpense::getAmount).sum();
         pibCountLabel.setText(pibData.size() + " εγγραφές");
-        pibTotalLabel.setText("Σύνολο: " + formatAmount(total));
-    }
-
-    private void styleTextField(TextField field) {
-        field.setStyle(
-            "-fx-background-color: " + BG_SECONDARY + ";" +
-            "-fx-text-fill: " + TEXT_PRIMARY + ";" +
-            "-fx-prompt-text-fill: " + TEXT_SECONDARY + ";" +
-            "-fx-background-radius: 6;" +
-            "-fx-border-color: " + BORDER_COLOR + ";" +
-            "-fx-border-radius: 6;" +
-            "-fx-padding: 8 12;"
-        );
-    }
-
-    private void styleComboBox(ComboBox<String> combo) {
-        combo.setStyle(
-            "-fx-background-color: " + BG_SECONDARY + ";" +
-            "-fx-text-fill: " + TEXT_PRIMARY + ";" +
-            "-fx-background-radius: 6;" +
-            "-fx-border-color: " + BORDER_COLOR + ";" +
-            "-fx-border-radius: 6;"
-        );
+        pibTotalLabel.setText("Σύνολο: " + Theme.formatAmount(total));
     }
 
     private boolean matchesSearch(BudgetExpense e, String searchText) {
@@ -387,7 +463,10 @@ public class ExpensesView {
             return true;
         }
         String lower = searchText.toLowerCase();
-        return e.getCode().toLowerCase().contains(lower) || e.getDescription().toLowerCase().contains(lower) || e.getEntityName().toLowerCase().contains(lower) || e.getServiceName().toLowerCase().contains(lower);
+        return e.getCode().toLowerCase().contains(lower) ||
+               e.getDescription().toLowerCase().contains(lower) ||
+               e.getEntityName().toLowerCase().contains(lower) ||
+               e.getServiceName().toLowerCase().contains(lower);
     }
 
     private boolean matchesEntity(BudgetExpense e, String selectedEntity) {
@@ -424,16 +503,7 @@ public class ExpensesView {
         };
     }
 
-    private String formatAmount(long amount) {
-        if (amount >= 1_000_000_000) {
-            return String.format("%.2f δισ.", amount / 1_000_000_000.0);
-        } else if (amount >= 1_000_000) {
-            return String.format("%.2f εκ.", amount / 1_000_000.0);
-        }
-        return String.format("%,d €", amount);
-    }
-
     public Region getView() {
-        return view;
+        return scrollPane;
     }
 }

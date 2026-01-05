@@ -52,7 +52,7 @@ public class MultiYearBudgetExpense extends MultiYearBudgetEntry {
      * Constructs an entity-specific MultiYearBudgetExpense with separate tracking
      * for regular and public investment amounts. The total amount is calculated
      * as the sum of regular and public investment amounts.
-     * 
+     *
      * @param entityCode the unique identifier code for the entity incurring this expense
      * @param entityName the name of the entity
      * @param regularAmount the regular expense amount (non-investment spending)
@@ -67,7 +67,6 @@ public class MultiYearBudgetExpense extends MultiYearBudgetEntry {
         this.publicInvestmentAmount = publicInvestmentAmount;
         multiYearBudgetExpensesOfEntities.add(this);
     }
-
 
     public static List<MultiYearBudgetExpense> getMultiYearBudgetExpensesOfEntities() {
         return multiYearBudgetExpensesOfEntities;
@@ -179,7 +178,6 @@ public class MultiYearBudgetExpense extends MultiYearBudgetEntry {
      * 
      * @return a string containing all expense entry details
      */
-
     public String getEntityCode() {
         return entityCode;
     }

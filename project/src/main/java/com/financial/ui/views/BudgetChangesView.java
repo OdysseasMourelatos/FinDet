@@ -4,6 +4,7 @@ import com.financial.entries.BudgetRevenue;
 import com.financial.entries.RegularBudgetRevenue;
 import com.financial.entries.PublicInvestmentBudgetNationalRevenue;
 import com.financial.entries.PublicInvestmentBudgetCoFundedRevenue;
+import com.financial.ui.Theme;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
@@ -15,13 +16,16 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
@@ -30,21 +34,11 @@ import java.util.Map;
 
 /**
  * Budget Changes view - allows users to make changes to revenue accounts
- * and see animated results showing before/after values.
+ * with gamified feedback showing before/after values.
  */
 public class BudgetChangesView {
 
-    // Design constants
-    private static final String BG_PRIMARY = "#0a0a0f";
-    private static final String BG_SECONDARY = "#12121a";
-    private static final String BG_TERTIARY = "#1a1a24";
-    private static final String TEXT_PRIMARY = "#e4e4e7";
-    private static final String TEXT_SECONDARY = "#71717a";
-    private static final String BORDER_COLOR = "#27272a";
-    private static final String ACCENT = "#3b82f6";
-    private static final String SUCCESS = "#22c55e";
-    private static final String ERROR = "#ef4444";
-
+    private final ScrollPane scrollPane;
     private final VBox view;
 
     // Form components
@@ -63,7 +57,7 @@ public class BudgetChangesView {
 
     public BudgetChangesView() {
         view = new VBox(0);
-        view.setStyle("-fx-background-color: " + BG_PRIMARY + ";");
+        view.setStyle("-fx-background-color: " + Theme.BG_BASE + ";");
 
         // Header
         VBox header = createHeader();
@@ -76,19 +70,46 @@ public class BudgetChangesView {
         VBox.setVgrow(resultsContainer, Priority.ALWAYS);
 
         view.getChildren().addAll(header, formSection, resultsContainer);
+
+        // Wrap in scroll pane
+        scrollPane = new ScrollPane(view);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+        scrollPane.setStyle(
+            "-fx-background: " + Theme.BG_BASE + ";" +
+            "-fx-background-color: " + Theme.BG_BASE + ";" +
+            "-fx-border-color: transparent;"
+        );
     }
 
     private VBox createHeader() {
-        VBox header = new VBox(4);
+        VBox header = new VBox(6);
         header.setPadding(new Insets(32, 24, 24, 24));
 
+        HBox titleRow = new HBox(12);
+        titleRow.setAlignment(Pos.CENTER_LEFT);
+
+        Circle icon = new Circle(16);
+        icon.setFill(javafx.scene.paint.Color.web(Theme.WARNING, 0.15));
+
+        Label iconText = new Label("~");
+        iconText.setStyle(
+            "-fx-font-size: 16px;" +
+            "-fx-font-weight: bold;" +
+            "-fx-text-fill: " + Theme.WARNING_LIGHT + ";"
+        );
+
+        StackPane iconContainer = new StackPane(icon, iconText);
+
         Label title = new Label("Αλλαγές Προϋπολογισμού");
-        title.setStyle("-fx-font-size: 24px; -fx-font-weight: 600; -fx-text-fill: " + TEXT_PRIMARY + ";");
+        title.setStyle(Theme.pageTitle());
+
+        titleRow.getChildren().addAll(iconContainer, title);
 
         Label subtitle = new Label("Εφαρμογή αλλαγών σε λογαριασμούς με αυτόματη ενημέρωση ιεραρχίας");
-        subtitle.setStyle("-fx-font-size: 13px; -fx-text-fill: " + TEXT_SECONDARY + ";");
+        subtitle.setStyle(Theme.subtitle());
 
-        header.getChildren().addAll(title, subtitle);
+        header.getChildren().addAll(titleRow, subtitle);
         return header;
     }
 
@@ -98,16 +119,11 @@ public class BudgetChangesView {
 
         VBox formCard = new VBox(20);
         formCard.setPadding(new Insets(20));
-        formCard.setStyle(
-            "-fx-background-color: " + BG_SECONDARY + ";" +
-            "-fx-background-radius: 8;" +
-            "-fx-border-color: " + BORDER_COLOR + ";" +
-            "-fx-border-radius: 8;"
-        );
+        formCard.setStyle(Theme.card());
 
         // Form title
         Label formTitle = new Label("Παράμετροι Αλλαγής");
-        formTitle.setStyle("-fx-font-size: 14px; -fx-font-weight: 600; -fx-text-fill: " + TEXT_PRIMARY + ";");
+        formTitle.setStyle(Theme.sectionHeader());
 
         // Row 1: Budget type and Account code
         HBox row1 = new HBox(16);
@@ -122,14 +138,17 @@ public class BudgetChangesView {
         );
         budgetTypeCombo.setValue("Τακτικός Προϋπολογισμός");
         budgetTypeCombo.setPrefWidth(220);
-        styleComboBox(budgetTypeCombo);
+        budgetTypeCombo.setStyle(Theme.comboBox());
         budgetTypeBox.getChildren().add(budgetTypeCombo);
 
         VBox codeBox = createFormField("Κωδικός Λογαριασμού");
         accountCodeField = new TextField();
         accountCodeField.setPromptText("π.χ. 11, 111, 11101");
         accountCodeField.setPrefWidth(180);
-        styleTextField(accountCodeField);
+        accountCodeField.setStyle(Theme.textField());
+        accountCodeField.focusedProperty().addListener((obs, wasFocused, isFocused) -> {
+            accountCodeField.setStyle(isFocused ? Theme.textFieldFocused() : Theme.textField());
+        });
         codeBox.getChildren().add(accountCodeField);
 
         row1.getChildren().addAll(budgetTypeBox, codeBox);
@@ -142,7 +161,10 @@ public class BudgetChangesView {
         changeValueField = new TextField();
         changeValueField.setPromptText("π.χ. 10000, 10%");
         changeValueField.setPrefWidth(140);
-        styleTextField(changeValueField);
+        changeValueField.setStyle(Theme.textField());
+        changeValueField.focusedProperty().addListener((obs, wasFocused, isFocused) -> {
+            changeValueField.setStyle(isFocused ? Theme.textFieldFocused() : Theme.textField());
+        });
         changeBox.getChildren().add(changeValueField);
 
         VBox changeTypeBox = createFormField("Τύπος Αλλαγής");
@@ -154,7 +176,7 @@ public class BudgetChangesView {
         );
         changeTypeCombo.setValue("Μεταβολή (+/-)");
         changeTypeCombo.setPrefWidth(160);
-        styleComboBox(changeTypeCombo);
+        changeTypeCombo.setStyle(Theme.comboBox());
         changeTypeBox.getChildren().add(changeTypeCombo);
 
         VBox distBox = createFormField("Κατανομή σε Υποκατηγορίες");
@@ -165,7 +187,7 @@ public class BudgetChangesView {
         );
         distributionCombo.setValue("Ποσοστιαία");
         distributionCombo.setPrefWidth(140);
-        styleComboBox(distributionCombo);
+        distributionCombo.setStyle(Theme.comboBox());
         distBox.getChildren().add(distributionCombo);
 
         row2.getChildren().addAll(changeBox, changeTypeBox, distBox);
@@ -176,38 +198,13 @@ public class BudgetChangesView {
         buttonRow.setPadding(new Insets(8, 0, 0, 0));
 
         executeButton = new Button("Εκτέλεση Αλλαγής");
-        executeButton.setStyle(
-            "-fx-background-color: " + ACCENT + ";" +
-            "-fx-text-fill: white;" +
-            "-fx-font-weight: 600;" +
-            "-fx-font-size: 13px;" +
-            "-fx-background-radius: 6;" +
-            "-fx-padding: 10 24;" +
-            "-fx-cursor: hand;"
-        );
+        executeButton.setStyle(Theme.buttonPrimary());
+        executeButton.setOnMouseEntered(e -> executeButton.setStyle(Theme.buttonPrimaryHover()));
+        executeButton.setOnMouseExited(e -> executeButton.setStyle(Theme.buttonPrimary()));
         executeButton.setOnAction(e -> executeChange());
 
-        executeButton.setOnMouseEntered(e -> executeButton.setStyle(
-            "-fx-background-color: #2563eb;" +
-            "-fx-text-fill: white;" +
-            "-fx-font-weight: 600;" +
-            "-fx-font-size: 13px;" +
-            "-fx-background-radius: 6;" +
-            "-fx-padding: 10 24;" +
-            "-fx-cursor: hand;"
-        ));
-        executeButton.setOnMouseExited(e -> executeButton.setStyle(
-            "-fx-background-color: " + ACCENT + ";" +
-            "-fx-text-fill: white;" +
-            "-fx-font-weight: 600;" +
-            "-fx-font-size: 13px;" +
-            "-fx-background-radius: 6;" +
-            "-fx-padding: 10 24;" +
-            "-fx-cursor: hand;"
-        ));
-
         statusLabel = new Label("");
-        statusLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + TEXT_SECONDARY + ";");
+        statusLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + Theme.TEXT_SECONDARY + ";");
 
         buttonRow.getChildren().addAll(executeButton, statusLabel);
 
@@ -219,7 +216,7 @@ public class BudgetChangesView {
     private VBox createFormField(String labelText) {
         VBox field = new VBox(6);
         Label label = new Label(labelText);
-        label.setStyle("-fx-font-size: 12px; -fx-text-fill: " + TEXT_SECONDARY + ";");
+        label.setStyle(Theme.mutedText());
         field.getChildren().add(label);
         return field;
     }
@@ -231,16 +228,11 @@ public class BudgetChangesView {
 
         VBox resultsCard = new VBox(16);
         resultsCard.setPadding(new Insets(20));
-        resultsCard.setStyle(
-            "-fx-background-color: " + BG_SECONDARY + ";" +
-            "-fx-background-radius: 8;" +
-            "-fx-border-color: " + BORDER_COLOR + ";" +
-            "-fx-border-radius: 8;"
-        );
+        resultsCard.setStyle(Theme.card());
         VBox.setVgrow(resultsCard, Priority.ALWAYS);
 
         Label resultsTitle = new Label("Αποτελέσματα Αλλαγών");
-        resultsTitle.setStyle("-fx-font-size: 14px; -fx-font-weight: 600; -fx-text-fill: " + TEXT_PRIMARY + ";");
+        resultsTitle.setStyle(Theme.sectionHeader());
 
         resultsData = FXCollections.observableArrayList();
         resultsTable = createResultsTable();
@@ -253,15 +245,10 @@ public class BudgetChangesView {
 
     private TableView<ChangeResult> createResultsTable() {
         TableView<ChangeResult> table = new TableView<>(resultsData);
-        table.setStyle(
-            "-fx-background-color: " + BG_TERTIARY + ";" +
-            "-fx-background-radius: 6;" +
-            "-fx-border-color: " + BORDER_COLOR + ";" +
-            "-fx-border-radius: 6;"
-        );
+        table.setStyle(Theme.table());
 
         Label placeholder = new Label("Εκτελέστε μια αλλαγή για να δείτε αποτελέσματα");
-        placeholder.setStyle("-fx-text-fill: " + TEXT_SECONDARY + ";");
+        placeholder.setStyle("-fx-text-fill: " + Theme.TEXT_MUTED + ";");
         table.setPlaceholder(placeholder);
 
         TableColumn<ChangeResult, String> codeCol = new TableColumn<>("Κωδικός");
@@ -304,8 +291,6 @@ public class BudgetChangesView {
         table.getColumns().add(changeCol);
         table.getColumns().add(roleCol);
 
-        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
         return table;
     }
 
@@ -316,7 +301,6 @@ public class BudgetChangesView {
         String changeType = changeTypeCombo.getValue();
         String distribution = distributionCombo.getValue();
 
-        // Validate inputs
         if (code.isEmpty()) {
             showError("Παρακαλώ εισάγετε κωδικό λογαριασμού");
             return;
@@ -326,7 +310,6 @@ public class BudgetChangesView {
             return;
         }
 
-        // Find the revenue based on budget type
         BudgetRevenue targetRevenue = findRevenue(code, budgetType);
         if (targetRevenue == null) {
             showError("Δεν βρέθηκε λογαριασμός με κωδικό: " + code);
@@ -334,13 +317,8 @@ public class BudgetChangesView {
         }
 
         try {
-            // Store before values
             Map<String, Long> beforeValues = captureValues(targetRevenue, budgetType);
-
-            // Parse change value and apply
             applyChange(targetRevenue, changeValue, changeType, distribution, budgetType);
-
-            // Store after values
             Map<String, Long> afterValues = captureValues(targetRevenue, budgetType);
 
             for (Map.Entry<String, Long> beforeEntry : beforeValues.entrySet()) {
@@ -352,9 +330,7 @@ public class BudgetChangesView {
             }
             // Display results with animation
             displayResults(targetRevenue, beforeValues, afterValues, budgetType);
-
-            showSuccess("Η αλλαγή εφαρμόστηκε επιτυχώς");
-
+            showSuccess("Η αλλαγή εφαρμόστηκε επιτυχώς!");
         } catch (NumberFormatException e) {
             showError("Μη έγκυρη τιμή. Χρησιμοποιήστε αριθμό ή ποσοστό (π.χ. 10000 ή 10%)");
         } catch (IllegalArgumentException e) {
@@ -375,11 +351,8 @@ public class BudgetChangesView {
 
     private Map<String, Long> captureValues(BudgetRevenue revenue, String budgetType) {
         Map<String, Long> values = new HashMap<>();
-
-        // Capture target value
         values.put(revenue.getCode(), revenue.getAmount());
 
-        // Capture super categories
         ArrayList<BudgetRevenue> superCats = revenue.getAllSuperCategories();
         if (superCats != null) {
             for (BudgetRevenue sup : superCats) {
@@ -387,7 +360,6 @@ public class BudgetChangesView {
             }
         }
 
-        // Capture sub categories
         ArrayList<BudgetRevenue> subCats = revenue.getAllSubCategories();
         if (subCats != null) {
             for (BudgetRevenue sub : subCats) {
@@ -399,22 +371,19 @@ public class BudgetChangesView {
     }
 
     private void applyChange(BudgetRevenue revenue, String changeValue, String changeType, String distribution, String budgetType) {
-        // Parse change value
         double numericValue;
         boolean isPercentage = changeValue.contains("%");
-        boolean isFinal = changeValue.toLowerCase().contains("τελικό") || changeValue.toLowerCase().contains("τελικο");
 
         String cleanValue = changeValue.replaceAll("[^0-9.\\-]", "");
         numericValue = Double.parseDouble(cleanValue);
 
-        // Determine change amount
         long changeAmount;
         double percentage = 0;
 
         if (changeType.equals("Ποσοστό (%)") || isPercentage) {
             percentage = numericValue / 100.0;
             changeAmount = (long) (revenue.getAmount() * percentage);
-        } else if (changeType.equals("Τελικό Υπόλοιπο") || isFinal) {
+        } else if (changeType.equals("Τελικό Υπόλοιπο")) {
             changeAmount = (long) numericValue - revenue.getAmount();
             if (revenue.getAmount() != 0) {
                 percentage = (double) changeAmount / revenue.getAmount();
@@ -426,7 +395,6 @@ public class BudgetChangesView {
             }
         }
 
-        // Apply based on distribution method
         if (distribution.equals("Ισόποσα")) {
             applyEqualDistribution(revenue, changeAmount, budgetType);
         } else {
@@ -457,7 +425,6 @@ public class BudgetChangesView {
     private void displayResults(BudgetRevenue targetRevenue, Map<String, Long> before, Map<String, Long> after, String budgetType) {
         resultsData.clear();
 
-        // Add super categories first (in reverse order so highest level is first)
         ArrayList<BudgetRevenue> superCats = targetRevenue.getAllSuperCategories();
         if (superCats != null) {
             for (int i = superCats.size() - 1; i >= 0; i--) {
@@ -466,10 +433,8 @@ public class BudgetChangesView {
             }
         }
 
-        // Add target
-        addResultRow(targetRevenue, before, after, "★ Στόχος");
+        addResultRow(targetRevenue, before, after, "* Στόχος");
 
-        // Add sub categories
         ArrayList<BudgetRevenue> subCats = targetRevenue.getAllSubCategories();
         if (subCats != null) {
             for (BudgetRevenue sub : subCats) {
@@ -477,7 +442,6 @@ public class BudgetChangesView {
             }
         }
 
-        // Animate results
         animateResults();
     }
 
@@ -497,17 +461,17 @@ public class BudgetChangesView {
 
         String changeStr;
         if (change >= 0) {
-            changeStr = String.format("+%,d € (+%.1f%%)", change, percentChange);
+            changeStr = String.format("+%,d (%.1f%%)", change, percentChange);
         } else {
-            changeStr = String.format("%,d € (%.1f%%)", change, percentChange);
+            changeStr = String.format("%,d (%.1f%%)", change, percentChange);
         }
 
         ChangeResult result = new ChangeResult(
             revenue.getCode(),
             truncateDescription(revenue.getDescription(), 35),
             String.valueOf(revenue.getLevelOfHierarchy()),
-            formatAmount(beforeVal),
-            formatAmount(afterVal),
+            Theme.formatAmount(beforeVal),
+            Theme.formatAmount(afterVal),
             changeStr,
             role
         );
@@ -523,15 +487,6 @@ public class BudgetChangesView {
             return desc;
         }
         return desc.substring(0, maxLength - 3) + "...";
-    }
-
-    private String formatAmount(long amount) {
-        if (amount >= 1_000_000_000) {
-            return String.format("%.2f δισ.", amount / 1_000_000_000.0);
-        } else if (amount >= 1_000_000) {
-            return String.format("%.2f εκ.", amount / 1_000_000.0);
-        }
-        return String.format("%,d €", amount);
     }
 
     private void animateResults() {
@@ -552,42 +507,19 @@ public class BudgetChangesView {
     }
 
     private void showError(String message) {
-        statusLabel.setText("✕ " + message);
-        statusLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + ERROR + "; -fx-font-weight: 500;");
+        statusLabel.setText("! " + message);
+        statusLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + Theme.ERROR_LIGHT + "; -fx-font-weight: 500;");
     }
 
     private void showSuccess(String message) {
-        statusLabel.setText("✓ " + message);
-        statusLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + SUCCESS + "; -fx-font-weight: 500;");
-    }
-
-    private void styleComboBox(ComboBox<String> combo) {
-        combo.setStyle(
-            "-fx-background-color: " + BG_TERTIARY + ";" +
-            "-fx-text-fill: " + TEXT_PRIMARY + ";" +
-            "-fx-background-radius: 6;" +
-            "-fx-border-color: " + BORDER_COLOR + ";" +
-            "-fx-border-radius: 6;"
-        );
-    }
-
-    private void styleTextField(TextField field) {
-        field.setStyle(
-            "-fx-background-color: " + BG_TERTIARY + ";" +
-            "-fx-text-fill: " + TEXT_PRIMARY + ";" +
-            "-fx-prompt-text-fill: " + TEXT_SECONDARY + ";" +
-            "-fx-background-radius: 6;" +
-            "-fx-border-color: " + BORDER_COLOR + ";" +
-            "-fx-border-radius: 6;" +
-            "-fx-padding: 8 12;"
-        );
+        statusLabel.setText("+ " + message);
+        statusLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + Theme.SUCCESS_LIGHT + "; -fx-font-weight: 500;");
     }
 
     public Region getView() {
-        return view;
+        return scrollPane;
     }
 
-    // Inner class for result data
     public static class ChangeResult {
         public final String code;
         public final String description;
