@@ -3,8 +3,10 @@ package com.financial.ui.views;
 import com.financial.entries.*;
 import com.financial.ui.Theme;
 import javafx.animation.FadeTransition;
+import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
@@ -143,6 +145,7 @@ public class DashboardView {
         VBox card = new VBox(12);
         card.setPadding(new Insets(20));
         card.setStyle(Theme.card());
+        card.setCursor(Cursor.HAND);
 
         // Top row with icon
         HBox topRow = new HBox(12);
@@ -176,9 +179,19 @@ public class DashboardView {
 
         card.getChildren().addAll(topRow, valueLabel, subtitleLabel);
 
-        // Hover effect using Theme methods
-        card.setOnMouseEntered(e -> card.setStyle(Theme.cardHover()));
-        card.setOnMouseExited(e -> card.setStyle(Theme.card()));
+        // Hover effect with slide animation
+        card.setOnMouseEntered(e -> {
+            card.setStyle(Theme.cardHover());
+            TranslateTransition translate = new TranslateTransition(Duration.millis(120), card);
+            translate.setToY(-4);
+            translate.play();
+        });
+        card.setOnMouseExited(e -> {
+            card.setStyle(Theme.card());
+            TranslateTransition translate = new TranslateTransition(Duration.millis(120), card);
+            translate.setToY(0);
+            translate.play();
+        });
 
         return card;
     }
@@ -258,12 +271,13 @@ public class DashboardView {
         VBox card = new VBox(6);
         card.setPadding(new Insets(16));
         card.setAlignment(Pos.CENTER_LEFT);
-        card.setStyle(
-            "-fx-background-color: " + bgColor + ";" +
+        card.setCursor(Cursor.HAND);
+
+        String baseStyle = "-fx-background-color: " + bgColor + ";" +
             "-fx-background-radius: " + Theme.RADIUS_MD + ";" +
             "-fx-border-color: transparent;" +
-            "-fx-border-radius: " + Theme.RADIUS_MD + ";"
-        );
+            "-fx-border-radius: " + Theme.RADIUS_MD + ";";
+        card.setStyle(baseStyle);
 
         Label titleLabel = new Label(title);
         titleLabel.setStyle(
@@ -279,6 +293,21 @@ public class DashboardView {
         );
 
         card.getChildren().addAll(titleLabel, valueLabel);
+
+        // Hover effect with slide animation
+        card.setOnMouseEntered(e -> {
+            card.setStyle(baseStyle + "-fx-border-color: " + accentColor + "; -fx-border-width: 1;");
+            TranslateTransition translate = new TranslateTransition(Duration.millis(120), card);
+            translate.setToY(-3);
+            translate.play();
+        });
+        card.setOnMouseExited(e -> {
+            card.setStyle(baseStyle);
+            TranslateTransition translate = new TranslateTransition(Duration.millis(120), card);
+            translate.setToY(0);
+            translate.play();
+        });
+
         return card;
     }
 
@@ -286,19 +315,20 @@ public class DashboardView {
         VBox card = new VBox(6);
         card.setPadding(new Insets(16));
         card.setAlignment(Pos.CENTER_LEFT);
-        card.setStyle(
-            "-fx-background-color: " + Theme.GOLD_SUBTLE + ";" +
+        card.setCursor(Cursor.HAND);
+
+        String baseStyle = "-fx-background-color: " + Theme.GOLD_SUBTLE + ";" +
             "-fx-background-radius: " + Theme.RADIUS_MD + ";" +
             "-fx-border-color: transparent;" +
-            "-fx-border-radius: " + Theme.RADIUS_MD + ";"
-        );
+            "-fx-border-radius: " + Theme.RADIUS_MD + ";";
+        card.setStyle(baseStyle);
 
         HBox titleRow = new HBox(6);
         titleRow.setAlignment(Pos.CENTER_LEFT);
 
-        Label trophy = new Label("*");
+        Label trophy = new Label("★");
         trophy.setStyle(
-            "-fx-font-size: 12px;" +
+            "-fx-font-size: 14px;" +
             "-fx-text-fill: " + Theme.GOLD + ";"
         );
 
@@ -318,6 +348,21 @@ public class DashboardView {
         );
 
         card.getChildren().addAll(titleRow, valueLabel);
+
+        // Hover effect with slide animation
+        card.setOnMouseEntered(e -> {
+            card.setStyle(baseStyle + "-fx-border-color: " + Theme.GOLD + "; -fx-border-width: 1;");
+            TranslateTransition translate = new TranslateTransition(Duration.millis(120), card);
+            translate.setToY(-3);
+            translate.play();
+        });
+        card.setOnMouseExited(e -> {
+            card.setStyle(baseStyle);
+            TranslateTransition translate = new TranslateTransition(Duration.millis(120), card);
+            translate.setToY(0);
+            translate.play();
+        });
+
         return card;
     }
 
@@ -365,6 +410,7 @@ public class DashboardView {
         VBox card = new VBox(16);
         card.setPadding(new Insets(20));
         card.setStyle(Theme.card());
+        card.setCursor(Cursor.HAND);
 
         Label titleLabel = new Label(title);
         titleLabel.setStyle(
@@ -386,6 +432,21 @@ public class DashboardView {
         }
 
         card.getChildren().addAll(titleLabel, items);
+
+        // Hover effect with slide animation
+        card.setOnMouseEntered(e -> {
+            card.setStyle(Theme.cardHover());
+            TranslateTransition translate = new TranslateTransition(Duration.millis(120), card);
+            translate.setToY(-4);
+            translate.play();
+        });
+        card.setOnMouseExited(e -> {
+            card.setStyle(Theme.card());
+            TranslateTransition translate = new TranslateTransition(Duration.millis(120), card);
+            translate.setToY(0);
+            translate.play();
+        });
+
         return card;
     }
 
@@ -457,6 +518,7 @@ public class DashboardView {
         VBox section = new VBox(16);
         section.setPadding(new Insets(20));
         section.setStyle(Theme.card());
+        section.setCursor(Cursor.HAND);
 
         HBox headerRow = new HBox(12);
         headerRow.setAlignment(Pos.CENTER_LEFT);
@@ -498,6 +560,21 @@ public class DashboardView {
         );
 
         section.getChildren().addAll(headerRow, grid, hint);
+
+        // Hover effect with slide animation
+        section.setOnMouseEntered(e -> {
+            section.setStyle(Theme.cardHover());
+            TranslateTransition translate = new TranslateTransition(Duration.millis(120), section);
+            translate.setToY(-4);
+            translate.play();
+        });
+        section.setOnMouseExited(e -> {
+            section.setStyle(Theme.card());
+            TranslateTransition translate = new TranslateTransition(Duration.millis(120), section);
+            translate.setToY(0);
+            translate.play();
+        });
+
         return section;
     }
 

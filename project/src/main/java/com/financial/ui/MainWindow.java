@@ -373,7 +373,7 @@ public class MainWindow {
     }
 
     /**
-     * Custom navigation button with Apple-like styling
+     * Custom navigation button with futuristic hover animations
      */
     private class NavButton extends HBox {
         private boolean isActive = false;
@@ -381,16 +381,12 @@ public class MainWindow {
         private Runnable onAction;
 
         public NavButton(String text, String id) {
-            super(12);
+            super(8);
             setId(id);
             setAlignment(Pos.CENTER_LEFT);
-            setPadding(new Insets(10, 12, 10, 12));
+            setPadding(new Insets(10, 16, 10, 16));
             setMaxWidth(Double.MAX_VALUE);
             setCursor(javafx.scene.Cursor.HAND);
-
-            // Icon placeholder (small colored dot)
-            Circle icon = new Circle(4);
-            icon.setFill(javafx.scene.paint.Color.web(Theme.TEXT_MUTED));
 
             textLabel = new Label(text);
             textLabel.setStyle(
@@ -398,19 +394,18 @@ public class MainWindow {
                 "-fx-text-fill: " + Theme.TEXT_SECONDARY + ";"
             );
 
-            getChildren().addAll(icon, textLabel);
+            getChildren().add(textLabel);
             updateStyle();
 
             setOnMouseEntered(e -> {
                 if (!isActive) {
-                    setStyle(Theme.navButtonHover());
-                    textLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: " + Theme.TEXT_PRIMARY + ";");
+                    playHoverAnimation(true);
                 }
             });
 
             setOnMouseExited(e -> {
                 if (!isActive) {
-                    updateStyle();
+                    playHoverAnimation(false);
                 }
             });
 
@@ -419,6 +414,22 @@ public class MainWindow {
                     onAction.run();
                 }
             });
+        }
+
+        private void playHoverAnimation(boolean entering) {
+            // Smooth slide animation (no scale to keep crisp text)
+            TranslateTransition translate = new TranslateTransition(Duration.millis(120), this);
+            translate.setToX(entering ? 6 : 0);
+
+            // Update styles - no blur effects, just clean color changes
+            if (entering) {
+                setStyle(Theme.navButtonHover());
+                textLabel.setStyle("-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: " + Theme.TEXT_PRIMARY + ";");
+            } else {
+                updateStyle();
+            }
+
+            translate.play();
         }
 
         public void setOnAction(Runnable action) {
@@ -431,27 +442,22 @@ public class MainWindow {
         }
 
         private void updateStyle() {
+            // Reset transforms
+            setTranslateX(0);
+
             if (isActive) {
                 setStyle(Theme.navButtonActive());
                 textLabel.setStyle(
-                    "-fx-font-size: 13px;" +
-                    "-fx-font-weight: 600;" +
-                    "-fx-text-fill: " + Theme.ACCENT_BRIGHT + ";"
+                    "-fx-font-size: 14px;" +
+                    "-fx-font-weight: bold;" +
+                    "-fx-text-fill: " + Theme.TEXT_PRIMARY + ";"
                 );
-                // Update icon color
-                if (!getChildren().isEmpty() && getChildren().get(0) instanceof Circle icon) {
-                    icon.setFill(javafx.scene.paint.Color.web(Theme.ACCENT_BRIGHT));
-                }
             } else {
                 setStyle(Theme.navButton());
                 textLabel.setStyle(
                     "-fx-font-size: 13px;" +
                     "-fx-text-fill: " + Theme.TEXT_SECONDARY + ";"
                 );
-                // Reset icon color
-                if (!getChildren().isEmpty() && getChildren().get(0) instanceof Circle icon) {
-                    icon.setFill(javafx.scene.paint.Color.web(Theme.TEXT_MUTED));
-                }
             }
         }
     }
