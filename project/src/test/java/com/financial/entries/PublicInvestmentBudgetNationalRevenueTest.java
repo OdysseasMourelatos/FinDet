@@ -1,8 +1,5 @@
-package com.financial;
+package com.financial.entries;
 
-import com.financial.entries.BudgetRevenue;
-import com.financial.entries.PublicInvestmentBudgetNationalRevenue;
-import com.financial.entries.PublicInvestmentBudgetRevenue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
@@ -224,6 +221,115 @@ public class PublicInvestmentBudgetNationalRevenueTest {
 
         // 2. Το 15 μένει ανεπηρέαστο
         assertEquals(265000000L, revenue15.getAmount());
+    }
+
+    @Test
+    void implementChangesOfEqualDistributionReductionTest1() {
+        // Σενάριο: Μείωση 500.000€ στην κατηγορία 15 (Ρίζα του 2ου δέντρου)
+        long reduction = -500000L;
+
+        long initial15 = revenue15.getAmount();
+        long initial156 = revenue156.getAmount();
+        long initial15609 = revenue15609.getAmount();
+        long initial13 = revenue13.getAmount(); // Για έλεγχο isolation
+
+        // Εκτέλεση
+        revenue15.implementChangesOfEqualDistribution(reduction);
+
+        // 1. Έλεγχος Ρίζας (15)
+        assertEquals(initial15 + reduction, revenue15.getAmount());
+
+        // 2. Downward Propagation (15 -> 156 -> 15609)
+        // Επειδή υπάρχει 1 παιδί σε κάθε επίπεδο, όλο το ποσό περνάει κάτω
+        assertEquals(initial156 + reduction, revenue156.getAmount());
+        assertEquals(initial15609 + reduction, revenue15609.getAmount());
+
+        // 3. Isolation Check (Το δέντρο 13 δεν πρέπει να επηρεαστεί)
+        assertEquals(initial13, revenue13.getAmount());
+    }
+
+    @Test
+    void implementChangesOfEqualDistributionReductionTest2() {
+        // Σενάριο: Ισόποση μείωση 2.000.000€ στο 134 (Μεσαίο επίπεδο του 1ου κλάδου)
+        long reduction = -2000000L;
+
+        long initial13 = revenue13.getAmount();
+        long initial134 = revenue134.getAmount();
+        long initial13409 = revenue13409.getAmount();
+        long initial15 = revenue15.getAmount(); // Για έλεγχο isolation
+
+        // Εκτέλεση στο 134
+        revenue134.implementChangesOfEqualDistribution(reduction);
+
+        // 1. Έλεγχος Target (134)
+        assertEquals(initial134 + reduction, revenue134.getAmount());
+
+        // 2. Upward Propagation (Ο γονέας 13 μειώνεται)
+        assertEquals(initial13 + reduction, revenue13.getAmount());
+
+        // 3. Downward Propagation (Το παιδί 13409 μειώνεται)
+        assertEquals(initial13409 + reduction, revenue13409.getAmount());
+
+        // 4. Isolation Check (Ο άλλος κλάδος 15 μένει ανεπηρέαστος)
+        assertEquals(initial15, revenue15.getAmount());
+    }
+
+    @Test
+    void implementChangesOfPercentageAdjustmentReductionTest1() {
+        // Σενάριο: Ποσοστιαία μείωση 20% στην κατηγορία 13 (Ρίζα του 1ου δέντρου)
+        double percentage = -0.2;
+
+        long initial13 = revenue13.getAmount();
+        long initial134 = revenue134.getAmount();
+        long initial13409 = revenue13409.getAmount();
+        long initial15 = revenue15.getAmount(); // Για έλεγχο isolation
+
+        long changeAmount = (long) (initial13 * percentage);
+
+        // Εκτέλεση
+        revenue13.implementChangesOfPercentageAdjustment(percentage);
+
+        // 1. Έλεγχος Ρίζας (13)
+        assertEquals(initial13 + changeAmount, revenue13.getAmount());
+
+        // 2. Downward Propagation (Τα παιδιά μειώνονται κατά 20%)
+        long expected134 = (long) (initial134 * (1 + percentage));
+        long expected13409 = (long) (initial13409 * (1 + percentage));
+
+        assertEquals(expected134, revenue134.getAmount());
+        assertEquals(expected13409, revenue13409.getAmount());
+
+        // 3. Isolation Check (Το δέντρο 15 δεν πρέπει να επηρεαστεί)
+        assertEquals(initial15, revenue15.getAmount());
+    }
+
+    @Test
+    void implementChangesOfPercentageAdjustmentReductionTest2() {
+        // Σενάριο: Ποσοστιαία μείωση 15% στο 156 (Μεσαίο επίπεδο του 2ου κλάδου)
+        double percentage = -0.15;
+
+        long initial15 = revenue15.getAmount();
+        long initial156 = revenue156.getAmount();
+        long initial15609 = revenue15609.getAmount();
+        long initial13 = revenue13.getAmount(); // Για έλεγχο isolation
+
+        long changeAmount = (long) (initial156 * percentage);
+
+        // Εκτέλεση στο 156
+        revenue156.implementChangesOfPercentageAdjustment(percentage);
+
+        // 1. Έλεγχος Target (156)
+        assertEquals(initial156 + changeAmount, revenue156.getAmount());
+
+        // 2. Upward Propagation (Ο γονέας 15 μειώνεται κατά το απόλυτο ποσό)
+        assertEquals(initial15 + changeAmount, revenue15.getAmount());
+
+        // 3. Downward Propagation (Το παιδί 15609 μειώνεται κατά το ποσοστό)
+        long expectedChild = (long) (initial15609 * (1 + percentage));
+        assertEquals(expectedChild, revenue15609.getAmount());
+
+        // 4. Isolation Check (Ο άλλος κλάδος 13 μένει ανεπηρέαστος)
+        assertEquals(initial13, revenue13.getAmount());
     }
 
     @Test

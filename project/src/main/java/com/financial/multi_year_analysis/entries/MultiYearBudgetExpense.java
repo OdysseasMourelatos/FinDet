@@ -52,23 +52,24 @@ public class MultiYearBudgetExpense extends MultiYearBudgetEntry {
      * Constructs an entity-specific MultiYearBudgetExpense with separate tracking
      * for regular and public investment amounts. The total amount is calculated
      * as the sum of regular and public investment amounts.
-     * 
+     *
      * @param entityCode the unique identifier code for the entity incurring this expense
      * @param entityName the name of the entity
-     * @param code the unique identifier code for this expense entry
-     * @param description a textual description of the expense
-     * @param category the category this expense belongs to
      * @param regularAmount the regular expense amount (non-investment spending)
      * @param publicInvestmentAmount the public investment expense amount
      * @param year the fiscal year this expense applies to
      */
-    public MultiYearBudgetExpense(String entityCode, String entityName, String code, String description, String category, long regularAmount, long publicInvestmentAmount, int year) {
-        super(code, description, category, regularAmount + publicInvestmentAmount,  year);
+    public MultiYearBudgetExpense(String entityCode, String entityName, long regularAmount, long publicInvestmentAmount, int year) {
+        super(regularAmount + publicInvestmentAmount,  year);
         this.entityCode = entityCode;
         this.entityName = entityName;
         this.regularAmount = regularAmount;
         this.publicInvestmentAmount = publicInvestmentAmount;
-        multiYearBudgetExpenses.add(this);
+        multiYearBudgetExpensesOfEntities.add(this);
+    }
+
+    public static List<MultiYearBudgetExpense> getMultiYearBudgetExpensesOfEntities() {
+        return multiYearBudgetExpensesOfEntities;
     }
 
     /**
@@ -177,6 +178,14 @@ public class MultiYearBudgetExpense extends MultiYearBudgetEntry {
      * 
      * @return a string containing all expense entry details
      */
+    public String getEntityCode() {
+        return entityCode;
+    }
+
+    public String getEntityName() {
+        return entityName;
+    }
+
     @Override
     public String toString () {
         return super.toString();

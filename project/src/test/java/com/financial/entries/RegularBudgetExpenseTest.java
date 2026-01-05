@@ -1,6 +1,5 @@
-package com.financial;
+package com.financial.entries;
 
-import com.financial.entries.RegularBudgetExpense;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -136,6 +135,8 @@ public class RegularBudgetExpenseTest {
                 RegularBudgetExpense.getDescriptionWithCode("99"));
     }
 
+    //Tests ONLY for increases
+
     @Test
     void implementGlobalIncreaseInCertainRegularExpenseCategoryWithPercentageAllocationTest1() {
         // Εφαρμογή αύξησης 10% στην κατηγορία 21
@@ -162,7 +163,7 @@ public class RegularBudgetExpenseTest {
         }
     }
 
-    //Tests ONLY for increases
+
 
     @Test
     void implementGlobalIncreaseInCertainRegularExpenseCategoryWithPercentageAllocationTest2() {
@@ -231,6 +232,65 @@ public class RegularBudgetExpenseTest {
                 assertEquals(105000L, expense.getAmount()); // 100.000 + 5.000
             }
         }
+    }
+
+    //Tests ONLY for decreases
+
+    @Test
+    void implementGlobalDecreaseInCertainCategorySuccessTest() {
+        // Σενάριο: Μείωση 50% στην κατηγορία "24"
+        // Αρχικά: 850.000 και 15.605.000. Και τα δύο επιτρέπουν τη μείωση.
+        double percentage = -0.50;
+        RegularBudgetExpense.implementGlobalChangesInCertainRegularExpenseCategoryWithPercentageAllocation("24", percentage, 0);
+
+        RegularBudgetExpense e1 = RegularBudgetExpense.findRegularBudgetExpenseWithCodes("1001", "1001-101-0000000", "24");
+        RegularBudgetExpense e2 = RegularBudgetExpense.findRegularBudgetExpenseWithCodes("1003", "1003-201-0000000", "24");
+
+        assertEquals(425000L, e1.getAmount());
+        assertEquals(7802500L, e2.getAmount());
+    }
+
+    @Test
+    void implementGlobalDecreaseInAllCategoriesSuccessTest() {
+        // Σενάριο: Σταθερή μείωση 10.000.
+        // Ο μικρότερος λογαριασμός είναι 12.000, άρα όλοι οι λογαριασμοί πρέπει να μειωθούν κανονικά.
+        long fixedReduction = -10000L;
+        RegularBudgetExpense.implementGlobalChangesInAllExpenseCategoriesWithPercentageAllocation(0, fixedReduction);
+
+        RegularBudgetExpense smallest = RegularBudgetExpense.findRegularBudgetExpenseWithCodes("1003", "1003-101-0000000", "22");
+        assertEquals(2000L, smallest.getAmount());
+    }
+
+    @Test
+    void implementGlobalDecreaseLeadingToNegativeFailureTest1() {
+        // ΣΕΝΑΡΙΟ ΑΠΟΤΥΧΙΑΣ: Μείωση 120% στην κατηγορία "31"
+        // Ο λογαριασμός 1001-31 έχει 53.000. Η μείωση τον κάνει αρνητικό.
+        // ΠΡΟΣΔΟΚΙΑ: Το ποσό να παραμείνει 53.000 (να μην αλλάξει καθόλου).
+
+        long originalAmount = 53000L;
+        double dangerousPercentage = -1.20;
+
+        RegularBudgetExpense.implementGlobalChangesInCertainRegularExpenseCategoryWithPercentageAllocation("31", dangerousPercentage, 0);
+
+        RegularBudgetExpense e = RegularBudgetExpense.findRegularBudgetExpenseWithCodes("1001", "1001-101-0000000", "31");
+
+        assertEquals(originalAmount, e.getAmount());
+    }
+
+    @Test
+    void implementGlobalDecreaseLeadingToNegativeFailureTest2() {
+        // ΣΕΝΑΡΙΟ ΑΠΟΤΥΧΙΑΣ: Αφαίρεση 50.000 από όλους.
+        // Ο λογαριασμός 1003-101-22 έχει 12.000.
+        // ΠΡΟΣΔΟΚΙΑ: Το ποσό να παραμείνει 12.000.
+
+        long originalAmount = 12000L;
+        long excessiveFixedAmount = -50000L;
+
+        RegularBudgetExpense.implementGlobalChangesInAllExpenseCategoriesWithPercentageAllocation(0, excessiveFixedAmount);
+
+        RegularBudgetExpense e = RegularBudgetExpense.findRegularBudgetExpenseWithCodes("1003", "1003-101-0000000", "22");
+
+        assertEquals(originalAmount, e.getAmount());
     }
 
     @Test

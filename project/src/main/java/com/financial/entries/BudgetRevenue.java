@@ -5,18 +5,50 @@ import com.financial.services.revenues.BudgetRevenueLogic;
 
 import java.util.*;
 
+/**
+ * The base class for all budget revenue entries in the system.
+ * <p>
+ * This class serves as the central point for aggregating financial data from
+ * multiple sources (Regular and Public Investment). It maintains a global registry
+ * of all revenue entries and provides fundamental logic for hierarchical levels,
+ * code-based sorting, and duplicate merging.
+ */
 public class BudgetRevenue extends BudgetEntry implements BudgetRevenueLogic {
 
-    //Constructors & Fields
+    /**
+     * Global registry of all consolidated budget revenue instances.
+     */
     protected static ArrayList <BudgetRevenue> budgetRevenues = new ArrayList<>();
 
+    /**
+     * Basic constructor for general budget entries.
+     *
+     * @param code        the unique financial code
+     * @param description a brief description of the entry
+     * @param category    the financial category
+     * @param amount      the total financial amount
+     */
     public BudgetRevenue(String code, String description, String category, long amount) {
         super(code, description, category, amount);
     }
 
+    /** The portion of revenue derived from the regular budget. */
     private long regularAmount;
+
+    /** The portion of revenue derived from the public investment budget. */
     private long publicInvestmentAmount;
 
+    /**
+     * Detailed constructor for consolidated budget revenues.
+     * Automatically registers the instance in the global static registry.
+     *
+     * @param code                   the unique financial code
+     * @param description            a brief description
+     * @param category               the financial category
+     * @param regularAmount          the amount from regular resources
+     * @param publicInvestmentAmount the amount from investment resources
+     * @param amount                 the total combined amount
+     */
     public BudgetRevenue(String code, String description, String category, long regularAmount, long publicInvestmentAmount, long amount) {
         super(code, description, category, amount);
         this.regularAmount = regularAmount;
@@ -24,6 +56,10 @@ public class BudgetRevenue extends BudgetEntry implements BudgetRevenueLogic {
         budgetRevenues.add(this);
     }
 
+    /**
+     * Sorts the global revenue list alphabetically by code.
+     * This is a prerequisite for the duplicate filtering process.
+     */
     public static void sortBudgetRevenuesByCode() {
         Collections.sort(budgetRevenues, new Comparator<BudgetRevenue>() {
             @Override
@@ -33,19 +69,23 @@ public class BudgetRevenue extends BudgetEntry implements BudgetRevenueLogic {
         });
     }
 
+    /**
+     * Merges duplicate revenue entries in the global registry.
+     * <p>
+     * When multiple objects share the same code (e.g., from different data inputs),
+     * their amounts are summed into a single consolidated object to ensure
+     * budget integrity.
+     */
     public static void filterBudgetRevenues() {
         ArrayList<Integer> repeatedRevenues = new ArrayList<>();
         //Finds codes that are repeated in the list
-        // Adds to a new list the 2 placements in the list where we have repeated codes
         for (int i = 1; i < budgetRevenues.size(); i++) {
             if (budgetRevenues.get(i).getCode().equals(budgetRevenues.get(i - 1).getCode())) {
                 repeatedRevenues.add(i);
             }
         }
-         /*With a loop starting from the end of the list
-         we in a way merge those values that are repeated into a single object
-         then remove the other one
-       */
+
+        // Merge repeated values into a single object and remove the redundant ones
         for (int j = repeatedRevenues.size() - 1; j >= 0; j--) {
             Integer i = repeatedRevenues.get(j);
             BudgetRevenue b1 = budgetRevenues.get(i);
@@ -57,45 +97,72 @@ public class BudgetRevenue extends BudgetEntry implements BudgetRevenueLogic {
         }
     }
 
-    //Class Methods
-
+    /**
+     * Returns the global list of all consolidated budget revenues.
+     * @return an ArrayList of all instances
+     */
     public static ArrayList<BudgetRevenue> getAllBudgetRevenues() {
         return budgetRevenues;
     }
 
+    /**
+     * Retrieves top-level (2-digit code) revenues.
+     * @return an ArrayList of main budget categories
+     */
     public static ArrayList<BudgetRevenue> getMainBudgetRevenues() {
         return BudgetRevenueLogicService.getMainBudgetRevenues(getAllBudgetRevenues());
     }
 
+    /**
+     * Searches for a consolidated revenue entry by its code.
+     * @param code the code to search for
+     * @return the matching entry or null
+     */
     public static BudgetRevenue findBudgetRevenueWithCode(String code) {
         return BudgetRevenueLogicService.findRevenueWithCode(code, budgetRevenues);
     }
 
+    /**
+     * Retrieves all revenues starting with a specific code prefix.
+     * @param code the code prefix
+     * @return a list of matching entries
+     */
     public static ArrayList<BudgetRevenue> getBudgetRevenuesStartingWithCode(String code) {
         return BudgetRevenueLogicService.getRevenuesStartingWithCode(code, budgetRevenues);
     }
 
-    //Sum Method
+    /**
+     * Calculates the total sum of all main budget categories.
+     * @return the total budget sum
+     */
     public static long calculateSum() {
         return BudgetRevenueLogicService.calculateSum(budgetRevenues);
     }
 
-    //Method that all subclasses easily inherit
-
+    /**
+     * Determines the hierarchical level of the entry based on the length of its code.
+     * <ul>
+     * <li>Level 1: 2 digits (e.g., "11")</li>
+     * <li>Level 2: 3 digits</li>
+     * <li>Level 3: 5 digits</li>
+     * <li>Level 4: 7 digits</li>
+     * <li>Level 5: 10 digits</li>
+     * </ul>
+     *
+     * @return the level index (1-5), or 0 for unknown lengths
+     */
     public int getLevelOfHierarchy() {
         return switch (getCode().length()) {
-            case 2 -> 1;   // "11" - top level
-            case 3 -> 2;   // "111" - second level
-            case 5 -> 3;   // "11101" - third level
-            case 7 -> 4;   // "1110103" - fourth level
-            case 10 -> 5;  // "1110103001" - fifth level
-            default -> 0;  // unknown
+            case 2 -> 1;
+            case 3 -> 2;
+            case 5 -> 3;
+            case 7 -> 4;
+            case 10 -> 5;
+            default -> 0;
         };
     }
 
-    //*Implementation of methods (Logic)*
-
-    //Supercategories methods
+    /* Hierarchy Navigation Implementation */
 
     @Override
     public BudgetRevenue getAboveLevelSuperCategory() {
@@ -107,9 +174,6 @@ public class BudgetRevenue extends BudgetEntry implements BudgetRevenueLogic {
         return BudgetRevenueLogicService.getAllSuperCategories(this, budgetRevenues);
     }
 
-
-    //Subcategories methods
-
     @Override
     public ArrayList<BudgetRevenue> getNextLevelSubCategories() {
         return BudgetRevenueLogicService.getNextLevelSubCategories(this, budgetRevenues);
@@ -120,7 +184,7 @@ public class BudgetRevenue extends BudgetEntry implements BudgetRevenueLogic {
         return BudgetRevenueLogicService.getAllSubCategories(this, budgetRevenues);
     }
 
-    //Getters & Setters
+    /* Getters & Setters */
 
     public long getRegularAmount() {
         return regularAmount;
@@ -130,6 +194,11 @@ public class BudgetRevenue extends BudgetEntry implements BudgetRevenueLogic {
         return publicInvestmentAmount;
     }
 
+    /**
+     * Sets the public investment portion of the revenue.
+     * @param amount the new amount (non-negative)
+     * @param update if true, synchronizes the total amount field
+     */
     public void setPublicInvestmentAmount(long amount, boolean update) {
         if (amount >= 0) {
             this.publicInvestmentAmount = amount;
@@ -139,6 +208,11 @@ public class BudgetRevenue extends BudgetEntry implements BudgetRevenueLogic {
         }
     }
 
+    /**
+     * Sets the regular budget portion of the revenue.
+     * @param amount the new amount (non-negative)
+     * @param update if true, synchronizes the total amount field
+     */
     public void setRegularAmount(long amount, boolean update) {
         if (amount >= 0) {
             this.regularAmount = amount;

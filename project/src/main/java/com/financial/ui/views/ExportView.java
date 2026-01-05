@@ -415,8 +415,8 @@ public class ExportView {
 
     private void exportRevenues() {
         try {
-            BudgetRevenueConvertToPdf.createPdf("output/ΕΣΟΔΑ_ΚΡΑΤΙΚΟΥ_ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ.pdf");
-            showStatus("ΕΣΟΔΑ_ΚΡΑΤΙΚΟΥ_ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ.pdf δημιουργήθηκε", true);
+            BudgetRevenueConvertToPdf.createPdf("data/output/ΕΣΟΔΑ_ΚΡΑΤΙΚΟΥ_ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ.pdf");
+            showStatus("Το αρχείο ΕΣΟΔΑ_ΚΡΑΤΙΚΟΥ_ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ.pdf δημιουργήθηκε!", true);
         } catch (Exception e) {
             showStatus("Σφάλμα: " + e.getMessage(), false);
         }
@@ -424,8 +424,8 @@ public class ExportView {
 
     private void exportExpenses() {
         try {
-            BudgetExpenseConvertToPdf.createPdf("output/ΕΞΟΔΑ_ΚΡΑΤΙΚΟΥ_ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ.pdf");
-            showStatus("ΕΞΟΔΑ_ΚΡΑΤΙΚΟΥ_ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ.pdf δημιουργήθηκε", true);
+            BudgetExpenseConvertToPdf.createPdf("data/output/ΕΞΟΔΑ_ΚΡΑΤΙΚΟΥ_ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ.pdf");
+            showStatus("Το αρχείο ΕΞΟΔΑ_ΚΡΑΤΙΚΟΥ_ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ.pdf δημιουργήθηκε!", true);
         } catch (Exception e) {
             showStatus("Σφάλμα: " + e.getMessage(), false);
         }
@@ -433,9 +433,9 @@ public class ExportView {
 
     private void exportFullBudget() {
         try {
-            BudgetRevenueConvertToPdf.createPdf("output/ΕΣΟΔΑ_ΚΡΑΤΙΚΟΥ_ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ.pdf");
-            BudgetExpenseConvertToPdf.createPdf("output/ΕΞΟΔΑ_ΚΡΑΤΙΚΟΥ_ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ.pdf");
-            showStatus("Και τα δύο αρχεία PDF δημιουργήθηκαν", true);
+            BudgetRevenueConvertToPdf.createPdf("data/output/ΕΣΟΔΑ_ΚΡΑΤΙΚΟΥ_ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ.pdf");
+            BudgetExpenseConvertToPdf.createPdf("data/output/ΕΞΟΔΑ_ΚΡΑΤΙΚΟΥ_ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ.pdf");
+            showStatus("Τα αρχεία PDF δημιουργήθηκαν επιτυχώς!", true);
         } catch (Exception e) {
             showStatus("Σφάλμα: " + e.getMessage(), false);
         }

@@ -23,6 +23,20 @@ public interface EntityLogic {
     String getPublicInvestmentNationalServiceNameWithCode(String serviceCode);
     String getPublicInvestmentCoFundedServiceNameWithCode(String serviceCode);
 
+    default String getPublicInvestmentServiceNameWithCode(String serviceCode) {
+        if (getPublicInvestmentCoFundedServiceNameWithCode(serviceCode) != null) {
+            return getPublicInvestmentCoFundedServiceNameWithCode(serviceCode);
+        }
+        return getPublicInvestmentNationalServiceNameWithCode(serviceCode);
+    }
+
+    default String getServiceNameWithCode(String serviceCode) {
+        if (getPublicInvestmentServiceNameWithCode(serviceCode) != null) {
+            return getPublicInvestmentServiceNameWithCode(serviceCode);
+        }
+        return getRegularServiceNameWithCode(serviceCode);
+    }
+
     //Get all service codes
     List<String> getAllRegularServiceCodes();
     List<String> getAllPublicInvestmentNationalServiceCodes();

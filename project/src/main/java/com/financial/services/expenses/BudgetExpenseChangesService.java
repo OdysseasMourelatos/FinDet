@@ -2,7 +2,7 @@ package com.financial.services.expenses;
 
 import com.financial.entries.BudgetExpense;
 import com.financial.strategies.ExpenseAdjustmentStrategy;
-import com.financial.strategies.PercentageAllocationAdjustmentStrategy;
+import com.financial.strategies.FilteredExpenseAdjustmentStrategy;
 import com.financial.strategies.filters.AccountFilter;
 import com.financial.strategies.filters.MatchAllFilter;
 import com.financial.strategies.operations.FixedAmountOperation;
@@ -19,9 +19,9 @@ public class BudgetExpenseChangesService {
     public static void implementGlobalChangesInCertainExpenseCategoryWithPercentageAllocation(String code, double percentage, long fixedAmount, ArrayList<? extends BudgetExpense> expenses) {
         ExpenseAdjustmentStrategy strategy;
         if (fixedAmount == 0) {
-            strategy = new PercentageAllocationAdjustmentStrategy(new AccountFilter(code), new PercentageOperation());
+            strategy = new FilteredExpenseAdjustmentStrategy(new AccountFilter(code), new PercentageOperation());
         } else {
-            strategy = new PercentageAllocationAdjustmentStrategy(new AccountFilter(code), new FixedAmountOperation());
+            strategy = new FilteredExpenseAdjustmentStrategy(new AccountFilter(code), new FixedAmountOperation());
         }
         strategy.applyAdjustment(expenses, percentage, fixedAmount);
     }
@@ -29,9 +29,9 @@ public class BudgetExpenseChangesService {
     public static void implementGlobalChangesInAllExpenseCategoriesWithPercentageAllocation(double percentage, long fixedAmount, ArrayList<? extends BudgetExpense> expenses) {
         ExpenseAdjustmentStrategy strategy;
         if (fixedAmount == 0) {
-            strategy = new PercentageAllocationAdjustmentStrategy(new MatchAllFilter(), new PercentageOperation());
+            strategy = new FilteredExpenseAdjustmentStrategy(new MatchAllFilter(), new PercentageOperation());
         } else {
-            strategy = new PercentageAllocationAdjustmentStrategy(new MatchAllFilter(), new FixedAmountOperation());
+            strategy = new FilteredExpenseAdjustmentStrategy(new MatchAllFilter(), new FixedAmountOperation());
         }
         strategy.applyAdjustment(expenses, percentage, fixedAmount);
     }

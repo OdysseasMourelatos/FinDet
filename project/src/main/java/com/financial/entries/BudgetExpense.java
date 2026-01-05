@@ -1,13 +1,17 @@
 package com.financial.entries;
 
+import com.financial.services.expenses.BudgetExpenseLogicService;
+
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class BudgetExpense extends BudgetEntry {
 
-    private String entityCode;
-    private String entityName;
-    private String serviceCode;
-    private String serviceName;
+    private final String entityCode;
+    private final String entityName;
+    private final String serviceCode;
+    private final String serviceName;
     protected static ArrayList <BudgetExpense> budgetExpenses = new ArrayList<>();
 
     public BudgetExpense(String entityCode, String entityName, String serviceCode, String serviceName, String code, String description, String category, long amount) {
@@ -19,8 +23,27 @@ public class BudgetExpense extends BudgetEntry {
         budgetExpenses.add(this);
     }
 
-    public BudgetExpense(String code, String description, String category, long amount) {
-        super(code, description, category, amount);
+    public static Map<String, Long> getSumOfEveryBudgetExpenseCategory() {
+        Map<String, Long> regularMap = RegularBudgetExpense.getSumOfEveryRegularExpenseCategory();
+        Map<String, Long> pibMap = PublicInvestmentBudgetExpense.getSumOfEveryPublicInvestmentExpenseCategory();
+
+        // Δημιουργούμε ένα νέο Map ξεκινώντας με τα δεδομένα του Τακτικού
+        Map<String, Long> combinedMap = new LinkedHashMap<>(regularMap);
+
+        // Προσθέτουμε τα δεδομένα του ΠΔΕ
+        pibMap.forEach((serviceCode, amount) ->
+                combinedMap.merge(serviceCode, amount, Long::sum)
+        );
+
+        return combinedMap;
+    }
+
+    public static long calculateSum() {
+        return RegularBudgetExpense.calculateSum() + PublicInvestmentBudgetExpense.calculateSum();
+    }
+
+    public static String getDescriptionWithCode(String code) {
+        return BudgetExpenseLogicService.getDescriptionWithCode(code, budgetExpenses);
     }
 
     public String getEntityCode() {

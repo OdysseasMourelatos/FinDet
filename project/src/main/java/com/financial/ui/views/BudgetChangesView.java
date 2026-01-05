@@ -320,10 +320,21 @@ public class BudgetChangesView {
             Map<String, Long> beforeValues = captureValues(targetRevenue, budgetType);
             applyChange(targetRevenue, changeValue, changeType, distribution, budgetType);
             Map<String, Long> afterValues = captureValues(targetRevenue, budgetType);
+
+            for (Map.Entry<String, Long> beforeEntry : beforeValues.entrySet()) {
+                for (Map.Entry<String, Long> afterEntry : afterValues.entrySet()) {
+                    if (beforeEntry.getKey().equals(afterEntry.getKey()) && (beforeEntry.getValue() - afterEntry.getValue()) == 0) {
+                        throw new IllegalArgumentException();
+                    }
+                }
+            }
+            // Display results with animation
             displayResults(targetRevenue, beforeValues, afterValues, budgetType);
             showSuccess("Η αλλαγή εφαρμόστηκε επιτυχώς!");
         } catch (NumberFormatException e) {
             showError("Μη έγκυρη τιμή. Χρησιμοποιήστε αριθμό ή ποσοστό (π.χ. 10000 ή 10%)");
+        } catch (IllegalArgumentException e) {
+            showError("Η αλλαγή απέτυχε, καθώς ένας ή παραπάνω λογαριασμοί θα είχαν αρνητικό υπόλοιπο");
         } catch (Exception e) {
             showError("Σφάλμα: " + e.getMessage());
         }

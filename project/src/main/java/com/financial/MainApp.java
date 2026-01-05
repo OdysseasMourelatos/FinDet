@@ -35,6 +35,9 @@ public class MainApp extends Application {
         // Configure stage
         primaryStage.setTitle("FinDet - Διαχείριση Κρατικού Προϋπολογισμού");
         primaryStage.setScene(scene);
+
+        primaryStage.setResizable(true);
+
         primaryStage.setMinWidth(900);
         primaryStage.setMinHeight(600);
         primaryStage.show();
@@ -49,29 +52,29 @@ public class MainApp extends Application {
 
         try {
             // Load Regular Budget Revenues
-            String regularRevenues = basePath + "/data/ΤΑΚΤΙΚΟΣ_ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΕΣΟΔΑ.csv";
+            String regularRevenues = basePath + "/data/input/ΤΑΚΤΙΚΟΣ_ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΕΣΟΔΑ.csv";
             if (new File(regularRevenues).exists()) {
-                DataInput.advancedCSVReader(regularRevenues);
+                DataInput.advancedCSVReader(regularRevenues, null);
             }
 
             // Load Public Investment Revenues
-            String publicRevenues = basePath + "/data/ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΔΗΜΟΣΙΩΝ_ΕΠΕΝΔΥΣΕΩΝ_ΕΣΟΔΑ.csv";
+            String publicRevenues = basePath + "/data/input/ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΔΗΜΟΣΙΩΝ_ΕΠΕΝΔΥΣΕΩΝ_ΕΣΟΔΑ.csv";
             if (new File(publicRevenues).exists()) {
-                DataInput.advancedCSVReader(publicRevenues);
+                DataInput.advancedCSVReader(publicRevenues, null);
             }
 
             // Load Regular Budget Expenses
             String regularExpenses = basePath
-                + "/data/ΤΑΚΤΙΚΟΣ_ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΠΙΣΤΩΣΕΙΣ_ΚΑΤΑ_ΕΙΔΙΚΟ_ΦΟΡΕΑ_ΚΑΙ_ΜΕΙΖΟΝΑ_ΚΑΤΗΓΟΡΙΑ_ΔΑΠΑΝΗΣ.csv";
+                + "/data/input/ΤΑΚΤΙΚΟΣ_ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΠΙΣΤΩΣΕΙΣ_ΚΑΤΑ_ΕΙΔΙΚΟ_ΦΟΡΕΑ_ΚΑΙ_ΜΕΙΖΟΝΑ_ΚΑΤΗΓΟΡΙΑ_ΔΑΠΑΝΗΣ.csv";
             if (new File(regularExpenses).exists()) {
-                DataInput.advancedCSVReader(regularExpenses);
+                DataInput.advancedCSVReader(regularExpenses, null);
             }
 
             // Load Public Investment Expenses
             String publicExpenses = basePath
-                + "/data/ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΔΗΜΟΣΙΩΝ_ΕΠΕΝΔΥΣΕΩΝ_ΠΙΣΤΩΣΕΙΣ_ΚΑΤΑ_ΕΙΔΙΚΟ_ΦΟΡΕΑ_ΚΑΙ_ΜΕΙΖΟΝΑ_ΚΑΤΗΓΟΡΙΑ_ΔΑΠΑΝΗΣ.csv";
+                + "/data/input/ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΔΗΜΟΣΙΩΝ_ΕΠΕΝΔΥΣΕΩΝ_ΠΙΣΤΩΣΕΙΣ_ΚΑΤΑ_ΕΙΔΙΚΟ_ΦΟΡΕΑ_ΚΑΙ_ΜΕΙΖΟΝΑ_ΚΑΤΗΓΟΡΙΑ_ΔΑΠΑΝΗΣ.csv";
             if (new File(publicExpenses).exists()) {
-                DataInput.advancedCSVReader(publicExpenses);
+                DataInput.advancedCSVReader(publicExpenses, null);
             }
 
             // Create entities and process data
@@ -80,12 +83,24 @@ public class MainApp extends Application {
             PublicInvestmentBudgetRevenue.filterPublicInvestmentBudgetRevenues();
             BudgetRevenue.sortBudgetRevenuesByCode();
             BudgetRevenue.filterBudgetRevenues();
-            DataInput.mergeBudgetRevenuesOfBaseYearWithMultiYearBudgetRevenues(2025);
 
             // Load historical data
-            String historical = basePath + "/data/ΚΡΑΤΙΚΟΣ_ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΕΣΟΔΑ_ΠΕΝΤΑΕΤΙΑΣ.csv";
-            if (new File(historical).exists()) {
-                DataInput.advancedCSVReader(historical);
+            String historicalRevenue = basePath + "/data/input/ΚΡΑΤΙΚΟΣ_ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΕΣΟΔΑ_ΠΕΝΤΑΕΤΙΑΣ.csv";
+            if (new File(historicalRevenue).exists()) {
+                DataInput.mergeBudgetRevenuesOfBaseYearWithMultiYearBudgetRevenues(2025);
+                DataInput.advancedCSVReader(historicalRevenue, "HISTORICAL_BUDGET_REVENUES");
+            }
+
+            String historicalExpenses = basePath + "/data/input/ΚΡΑΤΙΚΟΣ ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΕΞΟΔΑ_ΠΕΝΤΑΕΤΙΑΣ_ΚΑΤΑ_ΜΕΙΖΟΝΑ_ΚΑΤΗΓΟΡΙΑ_ΔΑΠΑΝΗΣ.csv";
+            if (new File(historicalExpenses).exists()) {
+                DataInput.advancedCSVReader(historicalExpenses, "HISTORICAL_BUDGET_EXPENSES");
+            }
+
+            String historicalExpensesPerEntity = basePath + "/data/input/ΚΡΑΤΙΚΟΣ ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΕΞΟΔΑ_ΠΕΝΤΑΕΤΙΑΣ_ΚΑΤΑ_ΦΟΡΕΑ.csv";
+            if (new File(historicalExpensesPerEntity).exists()) {
+                DataInput.createMultiYearEntityFromCSV();
+                DataInput.mergeBudgetExpensesPerEntityOfBaseYearWithMultiYearBudgetExpensesPerEntity(2025);
+                DataInput.advancedCSVReader(historicalExpensesPerEntity, null);
             }
 
             System.out.println("Budget data loaded successfully!");
@@ -106,7 +121,7 @@ public class MainApp extends Application {
         };
 
         for (String path : possiblePaths) {
-            File testFile = new File(path + "/data/ΤΑΚΤΙΚΟΣ_ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΕΣΟΔΑ.csv");
+            File testFile = new File(path + "/data/input/ΤΑΚΤΙΚΟΣ_ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΕΣΟΔΑ.csv");
             if (testFile.exists()) {
                 return path;
             }

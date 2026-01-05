@@ -1,8 +1,5 @@
-package com.financial;
+package com.financial.entries;
 
-import com.financial.entries.BudgetRevenue;
-import com.financial.entries.PublicInvestmentBudgetCoFundedRevenue;
-import com.financial.entries.PublicInvestmentBudgetRevenue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
@@ -222,6 +219,111 @@ public class PublicInvestmentBudgetCoFundedRevenueTest {
         assertEquals(initial13 + change, revenue13.getAmount());
         assertEquals(initial135 + change, revenue135.getAmount());
         assertEquals(initial13501 + change, revenue13501.getAmount());
+    }
+
+    @Test
+    void implementChangesOfEqualDistributionReductionTest1() {
+        // Σενάριο: Μείωση 20.000.000€ στη Ρίζα (13)
+        long reduction = -20000000L;
+
+        long initial13 = revenue13.getAmount();
+        long initial135 = revenue135.getAmount();
+        long initial13501 = revenue13501.getAmount();
+        long initial1350101 = revenue1350101.getAmount();
+
+        // Εκτέλεση
+        revenue13.implementChangesOfEqualDistribution(reduction);
+
+        // 1. Έλεγχος Ρίζας
+        assertEquals(initial13 + reduction, revenue13.getAmount());
+
+        // 2. Έλεγχος Downward Propagation
+        // Σημείωση: Στο setup μας κάθε κόμβος έχει μόνο 1 παιδί.
+        // Άρα το split είναι: reduction / 1 = reduction.
+        long splitReduction = reduction;
+
+        assertEquals(initial135 + splitReduction, revenue135.getAmount());
+        assertEquals(initial13501 + splitReduction, revenue13501.getAmount());
+        assertEquals(initial1350101 + splitReduction, revenue1350101.getAmount());
+    }
+
+    @Test
+    void iimplementChangesOfEqualDistributionReductionTest2() {
+        // Σενάριο: Ισόποση μείωση 10.000.000€ στο επίπεδο 135 (Πρώτο μεσαίο επίπεδο)
+        long reduction = -10000000L;
+
+        long initial13 = revenue13.getAmount();
+        long initial135 = revenue135.getAmount();
+        long initial13501 = revenue13501.getAmount();
+        long initial1350101 = revenue1350101.getAmount();
+
+        // Εκτέλεση στο 135
+        revenue135.implementChangesOfEqualDistribution(reduction);
+
+        // 1. Έλεγχος Target (135)
+        assertEquals(initial135 + reduction, revenue135.getAmount());
+
+        // 2. Upward Propagation (Ο γονέας 13 μειώνεται κατά το ίδιο ποσό)
+        assertEquals(initial13 + reduction, revenue13.getAmount());
+
+        // 3. Downward Propagation (Τα παιδιά 13501 και 1350101 μειώνονται κατά το ίδιο ποσό)
+        // Εφόσον υπάρχει 1 παιδί ανά επίπεδο, όλο το ποσό μεταφέρεται.
+        assertEquals(initial13501 + reduction, revenue13501.getAmount());
+        assertEquals(initial1350101 + reduction, revenue1350101.getAmount());
+    }
+
+    @Test
+    void implementChangesOfPercentageAdjustmentReductionTest1() {
+        // Σενάριο: Ποσοστιαία μείωση 5% στο επίπεδο 13501 (Δεύτερο μεσαίο επίπεδο)
+        double percentage = -0.05;
+
+        long initial135 = revenue135.getAmount(); // Γονέας
+        long initial13501 = revenue13501.getAmount(); // Target
+        long initial1350101 = revenue1350101.getAmount(); // Παιδί
+
+        long changeAmount = (long) (initial13501 * percentage);
+
+        // Εκτέλεση στο 13501
+        revenue13501.implementChangesOfPercentageAdjustment(percentage);
+
+        // 1. Έλεγχος Target (13501)
+        assertEquals(initial13501 + changeAmount, revenue13501.getAmount());
+
+        // 2. Upward Propagation (Ο γονέας 135 μειώνεται κατά το απόλυτο ποσό της αλλαγής)
+        assertEquals(initial135 + changeAmount, revenue135.getAmount());
+
+        // 3. Downward Propagation (Το παιδί 1350101 μειώνεται κατά το ποσοστό)
+        long expectedChild = (long) (initial1350101 * (1 + percentage));
+        assertEquals(expectedChild, revenue1350101.getAmount());
+    }
+
+    @Test
+    void implementChangesOfPercentageAdjustmentReductionTest2() {
+        // Σενάριο: Ποσοστιαία μείωση 10% στο μεσαίο επίπεδο (135)
+        double percentage = -0.1;
+
+        long initial13 = revenue13.getAmount();
+        long initial135 = revenue135.getAmount();
+        long initial13501 = revenue13501.getAmount();
+        long initial1350101 = revenue1350101.getAmount(); // 1.308.000.000
+
+        long changeOnSelf = (long) (initial135 * percentage);
+
+        // Εκτέλεση
+        revenue135.implementChangesOfPercentageAdjustment(percentage);
+
+        // 1. Έλεγχος Target (135)
+        assertEquals(initial135 + changeOnSelf, revenue135.getAmount());
+
+        // 2. Upward Propagation (Ο γονέας 13 μειώνεται κατά το απόλυτο ποσό της αλλαγής του παιδιού)
+        assertEquals(initial13 + changeOnSelf, revenue13.getAmount());
+
+        // 3. Downward Propagation (Τα παιδιά μειώνονται κατά το ποσοστό -10%)
+        long expected13501 = (long) (initial13501 * (1 + percentage));
+        long expected1350101 = (long) (initial1350101 * (1 + percentage));
+
+        assertEquals(expected13501, revenue13501.getAmount());
+        assertEquals(expected1350101, revenue1350101.getAmount());
     }
 
     @Test

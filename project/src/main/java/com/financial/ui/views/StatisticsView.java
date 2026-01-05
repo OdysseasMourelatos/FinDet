@@ -45,7 +45,10 @@ public class StatisticsView {
     private static final String TEXT_SECONDARY = Theme.TEXT_SECONDARY;
     private static final String BORDER_COLOR = Theme.BORDER_DEFAULT;
     private static final String ACCENT_COLOR = Theme.ACCENT_BRIGHT;
+    private static final String ACCENT = Theme.ACCENT_LIGHT;
+    private static final String BG_TERTIARY = Theme.BG_ELEVATED;
 
+    private Button activeButton = null;
     private final VBox view;
     private final VBox contentArea;
 
@@ -59,10 +62,10 @@ public class StatisticsView {
         navBar.setPadding(new Insets(0, 24, 20, 24));
         navBar.setAlignment(Pos.CENTER_LEFT);
 
-        Button descriptiveBtn = createNavButton("Περιγραφικά Στατιστικά");
-        Button frequencyBtn = createNavButton("Πίνακας Συχνοτήτων");
-        Button histogramBtn = createNavButton("Ιστόγραμμα");
-        Button polygonBtn = createNavButton("Πολυγωνική γραμμή");
+        Button descriptiveBtn = createStatButton("Περιγραφικά Στατιστικά");
+        Button frequencyBtn = createStatButton("Πίνακας Συχνοτήτων");
+        Button histogramBtn = createStatButton("Ιστόγραμμα");
+        Button polygonBtn = createStatButton("Πολυγωνική γραμμή");
 
         navBar.getChildren().addAll(descriptiveBtn, frequencyBtn, histogramBtn, polygonBtn);
 
@@ -74,10 +77,25 @@ public class StatisticsView {
         placeholder.setStyle("-fx-text-fill: " + TEXT_SECONDARY + "; -fx-font-size: 14px;");
         contentArea.getChildren().add(placeholder);
 
-        descriptiveBtn.setOnAction(e -> updateContent("Descriptive"));
-        frequencyBtn.setOnAction(e -> updateContent("Frequency"));
-        histogramBtn.setOnAction(e -> updateContent("Histogram"));
-        polygonBtn.setOnAction(e -> updateContent("Polygon"));
+        descriptiveBtn.setOnAction(e -> {
+            setActiveButton(descriptiveBtn);
+            updateContent("Descriptive");
+        });
+
+        frequencyBtn.setOnAction(e -> {
+            setActiveButton(frequencyBtn);
+            updateContent("Frequency");
+        });
+
+        histogramBtn.setOnAction(e -> {
+            setActiveButton(histogramBtn);
+            updateContent("Histogram");
+        });
+
+        polygonBtn.setOnAction(e -> {
+            setActiveButton(polygonBtn);
+            updateContent("Polygon");
+        });
 
         view.getChildren().addAll(header, navBar, contentArea);
     }
@@ -93,16 +111,60 @@ public class StatisticsView {
         return header;
     }
 
-    private Button createNavButton(String text) {
+    private Button createStatButton(String text) {
         Button btn = new Button(text);
-        btn.setPrefHeight(40);
-        btn.setPadding(new Insets(0, 20, 0, 20));
-        btn.setCursor(javafx.scene.Cursor.HAND);
-        String style = "-fx-background-color: " + BG_SECONDARY + "; -fx-text-fill: " + TEXT_PRIMARY + "; -fx-font-size: 13px; -fx-background-radius: 8; -fx-border-color: " + BORDER_COLOR + "; -fx-border-radius: 8; -fx-border-width: 1;";
-        btn.setStyle(style);
-        btn.setOnMouseEntered(e -> btn.setStyle(style + "-fx-border-color: " + ACCENT_COLOR + ";"));
-        btn.setOnMouseExited(e -> btn.setStyle(style));
+        btn.setStyle(getButtonStyle(false));
+        btn.setOnMouseEntered(e -> {
+            if (btn != activeButton) {
+                btn.setStyle(getButtonHoverStyle());
+            }
+        });
+        btn.setOnMouseExited(e -> {
+            if (btn != activeButton) {
+                btn.setStyle(getButtonStyle(false));
+            }
+        });
         return btn;
+    }
+
+    private String getButtonStyle(boolean active) {
+        if (active) {
+            return "-fx-background-color: " + ACCENT + ";" +
+                    "-fx-text-fill: white;" +
+                    "-fx-background-radius: 6;" +
+                    "-fx-border-color: transparent;" +
+                    "-fx-border-radius: 6;" +
+                    "-fx-padding: 8 14;" +
+                    "-fx-font-size: 12px;" +
+                    "-fx-cursor: hand;";
+        }
+        return "-fx-background-color: transparent;" +
+                "-fx-text-fill: " + TEXT_SECONDARY + ";" +
+                "-fx-background-radius: 6;" +
+                "-fx-border-color: " + BORDER_COLOR + ";" +
+                "-fx-border-radius: 6;" +
+                "-fx-padding: 8 14;" +
+                "-fx-font-size: 12px;" +
+                "-fx-cursor: hand;";
+    }
+
+    private String getButtonHoverStyle() {
+        return "-fx-background-color: " + BG_TERTIARY + ";" +
+                "-fx-text-fill: " + TEXT_PRIMARY + ";" +
+                "-fx-background-radius: 6;" +
+                "-fx-border-color: " + BORDER_COLOR + ";" +
+                "-fx-border-radius: 6;" +
+                "-fx-padding: 8 14;" +
+                "-fx-font-size: 12px;" +
+                "-fx-cursor: hand;";
+    }
+
+    private void setActiveButton(Button btn) {
+        if (activeButton != null) {
+            activeButton.setStyle(getButtonStyle(false));
+        }
+        activeButton = btn;
+        btn.setStyle(getButtonStyle(true));
     }
 
     private void updateContent(String type) {
