@@ -1,13 +1,6 @@
 package com.financial.ui;
 
-import com.financial.ui.views.DashboardView;
-import com.financial.ui.views.RevenuesView;
-import com.financial.ui.views.ExpensesView;
-import com.financial.ui.views.EntitiesView;
-import com.financial.ui.views.AccountExplorerView;
-import com.financial.ui.views.BudgetChangesView;
-import com.financial.ui.views.ChartsView;
-import com.financial.ui.views.ExportView;
+import com.financial.ui.views.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -38,6 +31,7 @@ public class MainWindow {
     private final AccountExplorerView accountExplorerView;
     private final BudgetChangesView budgetChangesView;
     private final ChartsView chartsView;
+    private final StatisticsView statisticsView;
     private final ExportView exportView;
 
     public MainWindow() {
@@ -51,6 +45,7 @@ public class MainWindow {
         accountExplorerView = new AccountExplorerView();
         budgetChangesView = new BudgetChangesView();
         chartsView = new ChartsView();
+        statisticsView = new StatisticsView();
         exportView = new ExportView();
 
         // Create sidebar
@@ -111,7 +106,9 @@ public class MainWindow {
         Button explorerBtn = createNavButton("Εξερεύνηση", "explorer");
         Button changesBtn = createNavButton("Αλλαγές", "changes");
         Button chartsBtn = createNavButton("Γραφήματα", "charts");
+        Button statisticalBtn = createNavButton("Στατιστική Ανάλυση", "statistics");
         Button exportBtn = createNavButton("Εξαγωγή", "export");
+
 
         // Set dashboard as active by default
         setActiveButton(dashboardBtn);
@@ -145,6 +142,10 @@ public class MainWindow {
             setActiveButton(chartsBtn);
             showView(chartsView.getView());
         });
+        statisticalBtn.setOnAction(e -> {
+            setActiveButton(statisticalBtn);
+            showView(statisticsView.getView());
+        });
         exportBtn.setOnAction(e -> {
             setActiveButton(exportBtn);
             showView(exportView.getView());
@@ -169,6 +170,7 @@ public class MainWindow {
             changesBtn,
             new Separator(),
             chartsBtn,
+            statisticalBtn,
             exportBtn,
             spacer,
             footerLabel
