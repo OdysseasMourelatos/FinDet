@@ -181,6 +181,12 @@ public class DataInput {
         }
     }
 
+    public static void mergeBudgetExpensesOfBaseYearWithMultiYearBudgetExpenses(int baseYear) {
+        for (Map.Entry<String, Long> entry : BudgetExpense.getSumOfEveryBudgetExpenseCategory().entrySet()) {
+            MultiYearBudgetExpense multiYearBudgetExpense = new MultiYearBudgetExpense(entry.getKey(), BudgetExpense.getDescriptionWithCode(entry.getKey()), "ΕΞΟΔΑ", entry.getValue(), baseYear);
+        }
+    }
+
     public static void mergeBudgetExpensesPerEntityOfBaseYearWithMultiYearBudgetExpensesPerEntity(int baseYear) {
         for (Entity entity : Entity.getEntities()) {
             MultiYearBudgetExpense multiYearBudgetExpense = new MultiYearBudgetExpense(entity.getEntityCode(), entity.getEntityName(), entity.calculateRegularSum(), entity.calculatePublicInvestmentSum(), baseYear);
