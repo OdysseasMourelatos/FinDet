@@ -52,7 +52,7 @@ public class MultiYearBudgetExpense extends MultiYearBudgetEntry {
      * Constructs an entity-specific MultiYearBudgetExpense with separate tracking
      * for regular and public investment amounts. The total amount is calculated
      * as the sum of regular and public investment amounts.
-     *
+     * 
      * @param entityCode the unique identifier code for the entity incurring this expense
      * @param entityName the name of the entity
      * @param regularAmount the regular expense amount (non-investment spending)
@@ -68,28 +68,6 @@ public class MultiYearBudgetExpense extends MultiYearBudgetEntry {
         multiYearBudgetExpensesOfEntities.add(this);
     }
 
-    /**
-     * Constructs an entity-specific MultiYearBudgetExpense with full details including
-     * code, description, and category, plus separate tracking for regular and public
-     * investment amounts.
-     *
-     * @param entityCode the unique identifier code for the entity
-     * @param entityName the name of the entity
-     * @param code the expense code
-     * @param description a textual description of the expense
-     * @param category the category this expense belongs to
-     * @param regularAmount the regular expense amount
-     * @param publicInvestmentAmount the public investment expense amount
-     * @param year the fiscal year this expense applies to
-     */
-    public MultiYearBudgetExpense(String entityCode, String entityName, String code, String description, String category, long regularAmount, long publicInvestmentAmount, int year) {
-        super(code, description, category, regularAmount + publicInvestmentAmount, year);
-        this.entityCode = entityCode;
-        this.entityName = entityName;
-        this.regularAmount = regularAmount;
-        this.publicInvestmentAmount = publicInvestmentAmount;
-        multiYearBudgetExpensesOfEntities.add(this);
-    }
 
     public static List<MultiYearBudgetExpense> getMultiYearBudgetExpensesOfEntities() {
         return multiYearBudgetExpensesOfEntities;
@@ -201,6 +179,7 @@ public class MultiYearBudgetExpense extends MultiYearBudgetEntry {
      * 
      * @return a string containing all expense entry details
      */
+
     public String getEntityCode() {
         return entityCode;
     }

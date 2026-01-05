@@ -76,8 +76,8 @@ public class DataInput {
             case "HISTORICAL_BUDGET_REVENUES" -> createHistoricalBudgetRevenueFromCSV(values);
             case "HISTORICAL_BUDGET_EXPENSES" -> createHistoricalBudgetExpenseFromCSV(values);
             case "HISTORICAL_BUDGET_EXPENSES_PER_ENTITY" -> createHistoricalBudgetExpensePerEntityFromCSV(values);
-            case "UNKNOWN" -> { } // Skip unknown CSV types silently
-            default -> { } // Skip unrecognized rows silently
+            case "UNKNOWN" -> System.out.println("Σφάλμα: Άγνωστος τύπος CSV.");
+            default -> System.out.println("Σφάλμα στη γραμμή: " + Arrays.toString(values));
         }
     }
 
@@ -178,6 +178,12 @@ public class DataInput {
     public static void mergeBudgetRevenuesOfBaseYearWithMultiYearBudgetRevenues(int baseYear) {
         for (BudgetRevenue br : BudgetRevenue.getMainBudgetRevenues()) {
             MultiYearBudgetRevenue multiYearBudgetRevenue = new MultiYearBudgetRevenue(br.getCode(), br.getDescription(), br.getCategory(), br.getAmount(), baseYear);
+        }
+    }
+
+    public static void mergeBudgetExpensesOfBaseYearWithMultiYearBudgetExpenses(int baseYear) {
+        for (Map.Entry<String, Long> entry : BudgetExpense.getSumOfEveryBudgetExpenseCategory().entrySet()) {
+            MultiYearBudgetExpense multiYearBudgetExpense = new MultiYearBudgetExpense(entry.getKey(), BudgetExpense.getDescriptionWithCode(entry.getKey()), "ΕΞΟΔΑ", entry.getValue(), baseYear);
         }
     }
 

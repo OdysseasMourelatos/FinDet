@@ -91,16 +91,17 @@ public class MainApp extends Application {
                 DataInput.advancedCSVReader(historicalRevenue, "HISTORICAL_BUDGET_REVENUES");
             }
 
-            String historicalExpenses = basePath + "/data/input/ΚΡΑΤΙΚΟΣ ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΕΞΟΔΑ_ΠΕΝΤΑΕΤΙΑΣ_ΚΑΤΑ_ΜΕΙΖΟΝΑ_ΚΑΤΗΓΟΡΙΑ_ΔΑΠΑΝΗΣ.csv";
+            String historicalExpenses = basePath + "/data/input/ΚΡΑΤΙΚΟΣ_ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΕΞΟΔΑ_ΠΕΝΤΑΕΤΙΑΣ_ΚΑΤΑ_ΜΕΙΖΟΝΑ_ΚΑΤΗΓΟΡΙΑ_ΔΑΠΑΝΗΣ.csv";
             if (new File(historicalExpenses).exists()) {
+                DataInput.mergeBudgetExpensesOfBaseYearWithMultiYearBudgetExpenses(2025);
                 DataInput.advancedCSVReader(historicalExpenses, "HISTORICAL_BUDGET_EXPENSES");
             }
 
-            String historicalExpensesPerEntity = basePath + "/data/input/ΚΡΑΤΙΚΟΣ ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΕΞΟΔΑ_ΠΕΝΤΑΕΤΙΑΣ_ΚΑΤΑ_ΦΟΡΕΑ.csv";
+            String historicalExpensesPerEntity = basePath + "/data/input/ΚΡΑΤΙΚΟΣ_ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ_ΕΞΟΔΑ_ΠΕΝΤΑΕΤΙΑΣ_ΚΑΤΑ_ΦΟΡΕΑ.csv";
             if (new File(historicalExpensesPerEntity).exists()) {
-                DataInput.createMultiYearEntityFromCSV();
                 DataInput.mergeBudgetExpensesPerEntityOfBaseYearWithMultiYearBudgetExpensesPerEntity(2025);
                 DataInput.advancedCSVReader(historicalExpensesPerEntity, null);
+                DataInput.createMultiYearEntityFromCSV();
             }
 
             System.out.println("Budget data loaded successfully!");

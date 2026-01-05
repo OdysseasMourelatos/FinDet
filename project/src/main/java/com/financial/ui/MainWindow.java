@@ -36,6 +36,7 @@ public class MainWindow {
     private AccountExplorerView accountExplorerView;
     private BudgetChangesView budgetChangesView;
     private ChartsView chartsView;
+    private MultiYearAnalysisView multiYearAnalysisView;
     private StatisticsView statisticsView;
     private ExportView exportView;
 
@@ -106,6 +107,13 @@ public class MainWindow {
             chartsView = new ChartsView();
         }
         return chartsView.getView();
+    }
+
+    private Region getMultiYearAnalysisView() {
+        if (multiYearAnalysisView == null) {
+            multiYearAnalysisView = new MultiYearAnalysisView();
+        }
+        return multiYearAnalysisView.getView();
     }
 
     private Region getStatisticsView() {
@@ -219,6 +227,7 @@ public class MainWindow {
 
         NavButton changesBtn = new NavButton("Αλλαγές", "changes");
         NavButton chartsBtn = new NavButton("Γραφήματα", "charts");
+        NavButton multiYearBtn = new NavButton("Πολυετής Ανάλυση", "multiYear");
         NavButton statisticalBtn = new NavButton("Στατιστική", "statistics");
 
         // Export section
@@ -233,6 +242,7 @@ public class MainWindow {
         explorerBtn.setOnAction(() -> navigateTo(explorerBtn, getAccountExplorerView()));
         changesBtn.setOnAction(() -> navigateTo(changesBtn, getBudgetChangesView()));
         chartsBtn.setOnAction(() -> navigateTo(chartsBtn, getChartsView()));
+        multiYearBtn.setOnAction(() -> navigateTo(multiYearBtn, getMultiYearAnalysisView()));
         statisticalBtn.setOnAction(() -> navigateTo(statisticalBtn, getStatisticsView()));
         exportBtn.setOnAction(() -> navigateTo(exportBtn, getExportView()));
 
@@ -252,6 +262,7 @@ public class MainWindow {
             analysisSection,
             changesBtn,
             chartsBtn,
+            multiYearBtn,
             statisticalBtn,
             exportSection,
             exportBtn,

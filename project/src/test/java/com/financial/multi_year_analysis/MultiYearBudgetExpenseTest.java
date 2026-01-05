@@ -109,7 +109,7 @@ public class MultiYearBudgetExpenseTest {
 
     @Test
     void getDescriptionAndCategoryBranchCoverageTest() {
-        MultiYearBudgetExpense multiYearBudgetExpense = new MultiYearBudgetExpense("99999", "TEST", "99", "ΤΕΣΤ ΔΑΠΑΝΕΣ", "ΕΞΟΔΑ", 0L, 0L, 2025);
+        MultiYearBudgetExpense multiYearBudgetExpense = new MultiYearBudgetExpense("99999", "ΤΕΣΤ ΔΑΠΑΝΕΣ", "ΕΞΟΔΑ", 0L, 2025);
         assertEquals(multiYearBudgetExpense.getDescription(), "ΤΕΣΤ ΔΑΠΑΝΕΣ");
         assertEquals(multiYearBudgetExpense.getCategory(), "ΕΞΟΔΑ");
 

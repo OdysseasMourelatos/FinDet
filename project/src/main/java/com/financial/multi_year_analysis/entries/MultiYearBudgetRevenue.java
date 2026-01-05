@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  * @version 1.0
  */
 public class MultiYearBudgetRevenue extends MultiYearBudgetEntry {
-    protected static List<MultiYearBudgetRevenue> historicalBudgetRevenues = new ArrayList<>();
+    protected static List<MultiYearBudgetRevenue> multiYearBudgetRevenues = new ArrayList<>();
 
     /**
      * Constructs a new MultiYearBudgetRevenue and automatically adds it to the
@@ -29,7 +29,7 @@ public class MultiYearBudgetRevenue extends MultiYearBudgetEntry {
      */
     public MultiYearBudgetRevenue(String code, String description, String category, long amount, int year) {
         super(code, description, category, amount, year);
-        historicalBudgetRevenues.add(this);
+        multiYearBudgetRevenues.add(this);
     }
 
     /**
@@ -37,17 +37,8 @@ public class MultiYearBudgetRevenue extends MultiYearBudgetEntry {
      *
      * @return a list containing all revenue entries created
      */
-    public static List<MultiYearBudgetRevenue> getHistoricalBudgetRevenues() {
-        return historicalBudgetRevenues;
-    }
-
-    /**
-     * Alias for getHistoricalBudgetRevenues() for API consistency.
-     *
-     * @return a list containing all revenue entries created
-     */
     public static List<MultiYearBudgetRevenue> getMultiYearBudgetRevenues() {
-        return historicalBudgetRevenues;
+        return multiYearBudgetRevenues;
     }
 
     /**
@@ -56,9 +47,9 @@ public class MultiYearBudgetRevenue extends MultiYearBudgetEntry {
      * @param year the fiscal year to filter by
      * @return a list of revenue entries matching the specified year
      */
-    public static List<MultiYearBudgetRevenue> getHistoricalBudgetRevenuesOfSpecificYear(int year) {
+    public static List<MultiYearBudgetRevenue> getMultiYearBudgetRevenuesOfSpecificYear(int year) {
         List<MultiYearBudgetRevenue> historicalBudgetRevenuesOfSpecificYear = new ArrayList<>();
-        for (MultiYearBudgetRevenue hbr : historicalBudgetRevenues) {
+        for (MultiYearBudgetRevenue hbr : multiYearBudgetRevenues) {
             if (hbr.getYear() == year) {
                 historicalBudgetRevenuesOfSpecificYear.add(hbr);
             }
@@ -73,9 +64,9 @@ public class MultiYearBudgetRevenue extends MultiYearBudgetEntry {
      * @param code the revenue code to filter by
      * @return a list of revenue entries matching the specified code
      */
-    public static List<MultiYearBudgetRevenue> getHistoricalBudgetRevenuesOfSpecificCode(String code) {
+    public static List<MultiYearBudgetRevenue> getMultiYearBudgetRevenuesOfSpecificCode(String code) {
         List<MultiYearBudgetRevenue> historicalBudgetRevenuesOfSpecificCode = new ArrayList<>();
-        for (MultiYearBudgetRevenue hbr : historicalBudgetRevenues) {
+        for (MultiYearBudgetRevenue hbr : multiYearBudgetRevenues) {
             if (hbr.getCode().equals(code)) {
                 historicalBudgetRevenuesOfSpecificCode.add(hbr);
             }
@@ -92,7 +83,7 @@ public class MultiYearBudgetRevenue extends MultiYearBudgetEntry {
      */
     public static long getSumOfSpecificYear(int year) {
         long sum = 0;
-        for (MultiYearBudgetRevenue hbr : historicalBudgetRevenues) {
+        for (MultiYearBudgetRevenue hbr : multiYearBudgetRevenues) {
             if (hbr.getYear() == year) {
                 sum += hbr.getAmount();
             }
@@ -109,7 +100,7 @@ public class MultiYearBudgetRevenue extends MultiYearBudgetEntry {
      */
     public static Map<Integer, Long> getSumOfAllYears() {
         Map<Integer, Long> sumOfAllYears = new HashMap<>();
-        List<Integer> uniqueYears = historicalBudgetRevenues.stream().map(MultiYearBudgetRevenue::getYear).distinct().sorted().collect(Collectors.toList());
+        List<Integer> uniqueYears = multiYearBudgetRevenues.stream().map(MultiYearBudgetRevenue::getYear).distinct().sorted().collect(Collectors.toList());
         for (Integer year : uniqueYears) {
             sumOfAllYears.put(year, getSumOfSpecificYear(year));
         }
