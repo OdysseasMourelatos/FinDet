@@ -3,25 +3,30 @@ package com.financial.ui.views;
 import com.financial.entries.*;
 import com.financial.ui.Theme;
 import javafx.animation.FadeTransition;
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.ScaleTransition;
+import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.GridPane;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Circle;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 /**
- * Dashboard view - main overview screen with gamified Greek government budget stats.
- * "You are the President for One Day - Here's Your Kingdom's Treasury"
+ * Dashboard view - Dynamic, immersive Apple-inspired design.
+ * Animated counters, breathing effects, responsive interactions.
  */
 public class DashboardView {
 
@@ -29,28 +34,24 @@ public class DashboardView {
     private final VBox view;
 
     public DashboardView() {
-        view = new VBox(24);
-        view.setPadding(new Insets(32));
+        view = new VBox(40);
+        view.setPadding(new Insets(48, 56, 56, 56));
         view.setStyle("-fx-background-color: " + Theme.BG_BASE + ";");
 
-        // Welcome header with gamified messaging
-        VBox header = createHeader();
+        // Header
+        HBox header = createHeader();
 
-        // Budget overview - "Your Treasury"
-        HBox statsRow = createStatsRow();
+        // Animated primary metrics
+        HBox primaryMetrics = createPrimaryMetrics();
 
-        // Quick actions / insights section
-        HBox quickInsights = createQuickInsights();
+        // Live secondary stats
+        HBox secondaryMetrics = createSecondaryMetrics();
 
-        // Budget breakdown section
-        VBox breakdownSection = createBreakdownSection();
+        // Interactive distribution
+        VBox distribution = createDistribution();
 
-        // Info section
-        VBox infoSection = createInfoSection();
+        view.getChildren().addAll(header, primaryMetrics, secondaryMetrics, distribution);
 
-        view.getChildren().addAll(header, statsRow, quickInsights, breakdownSection, infoSection);
-
-        // Wrap in scroll pane
         scrollPane = new ScrollPane(view);
         scrollPane.setFitToWidth(true);
         scrollPane.setStyle(
@@ -59,358 +60,373 @@ public class DashboardView {
             "-fx-border-color: transparent;"
         );
 
-        // Animate entrance
+        // Staggered entrance animation
         animateEntrance();
     }
 
-    private VBox createHeader() {
-        VBox header = new VBox(8);
+    private HBox createHeader() {
+        HBox header = new HBox(16);
+        header.setAlignment(Pos.CENTER_LEFT);
 
-        // Greeting with gamification
-        Label greeting = new Label("Καλώς ήρθατε, Πρόεδρε");
-        greeting.setStyle(
+        VBox titleBox = new VBox(6);
+
+        Label title = new Label("Επισκόπηση");
+        title.setStyle(
+            "-fx-font-size: 34px;" +
+            "-fx-font-weight: 700;" +
+            "-fx-text-fill: " + Theme.TEXT_PRIMARY + ";"
+        );
+
+        Label subtitle = new Label("Κρατικός Προϋπολογισμός 2025");
+        subtitle.setStyle(
             "-fx-font-size: 14px;" +
-            "-fx-text-fill: " + Theme.ACCENT_BRIGHT + ";" +
-            "-fx-font-weight: 500;"
-        );
-
-        Label title = new Label("Επισκόπηση Κρατικού Προϋπολογισμού");
-        title.setStyle(Theme.pageTitle());
-
-        Label subtitle = new Label("Ελληνική Δημοκρατία - Οικονομικό Έτος 2025");
-        subtitle.setStyle(Theme.subtitle());
-
-        header.getChildren().addAll(greeting, title, subtitle);
-        return header;
-    }
-
-    private HBox createStatsRow() {
-        HBox row = new HBox(16);
-        row.setAlignment(Pos.CENTER_LEFT);
-
-        // Calculate totals
-        long totalRegularRevenue = RegularBudgetRevenue.calculateSum();
-        long totalPublicInvestmentRevenue = PublicInvestmentBudgetRevenue.calculateSum();
-        long totalRevenue = BudgetRevenue.calculateSum();
-
-        long totalRegularExpense = RegularBudgetExpense.calculateSum();
-        long totalPublicInvestmentExpense = PublicInvestmentBudgetExpense.calculateSum();
-        long totalExpense = totalRegularExpense + totalPublicInvestmentExpense;
-
-        long balance = totalRevenue - totalExpense;
-
-        // Create stat cards with gamified design
-        VBox revenueCard = createStatCard(
-            "Συνολικά Έσοδα",
-            Theme.formatAmount(totalRevenue),
-            Theme.SUCCESS_LIGHT,
-            "Τακτικός: " + Theme.formatAmount(totalRegularRevenue),
-            "revenues"
-        );
-
-        VBox expenseCard = createStatCard(
-            "Συνολικά Έξοδα",
-            Theme.formatAmount(totalExpense),
-            Theme.ERROR_LIGHT,
-            "Τακτικός: " + Theme.formatAmount(totalRegularExpense),
-            "expenses"
-        );
-
-        VBox balanceCard = createStatCard(
-            "Δημοσιονομικό Ισοζύγιο",
-            Theme.formatAmount(balance),
-            balance >= 0 ? Theme.SUCCESS_LIGHT : Theme.ERROR_LIGHT,
-            balance >= 0 ? "Πλεόνασμα" : "Έλλειμμα",
-            "balance"
-        );
-
-        VBox investmentCard = createStatCard(
-            "Δημόσιες Επενδύσεις",
-            Theme.formatAmount(totalPublicInvestmentRevenue),
-            Theme.INFO,
-            "Πρόγραμμα Δημοσίων Επενδύσεων",
-            "investments"
-        );
-
-        HBox.setHgrow(revenueCard, Priority.ALWAYS);
-        HBox.setHgrow(expenseCard, Priority.ALWAYS);
-        HBox.setHgrow(balanceCard, Priority.ALWAYS);
-        HBox.setHgrow(investmentCard, Priority.ALWAYS);
-
-        row.getChildren().addAll(revenueCard, expenseCard, balanceCard, investmentCard);
-        return row;
-    }
-
-    private VBox createStatCard(String title, String value, String valueColor, String subtitle, String type) {
-        VBox card = new VBox(12);
-        card.setPadding(new Insets(20));
-        card.setStyle(Theme.card());
-        card.setCursor(Cursor.HAND);
-
-        // Top row with icon
-        HBox topRow = new HBox(12);
-        topRow.setAlignment(Pos.CENTER_LEFT);
-
-        // Icon indicator based on type
-        StackPane iconContainer = createCardIcon(type, valueColor);
-
-        Label titleLabel = new Label(title);
-        titleLabel.setStyle(
-            "-fx-font-size: 13px;" +
-            "-fx-text-fill: " + Theme.TEXT_SECONDARY + ";"
-        );
-
-        topRow.getChildren().addAll(iconContainer, titleLabel);
-
-        // Value
-        Label valueLabel = new Label(value);
-        valueLabel.setStyle(
-            "-fx-font-size: 26px;" +
-            "-fx-font-weight: bold;" +
-            "-fx-text-fill: " + valueColor + ";"
-        );
-
-        // Subtitle with badge style
-        Label subtitleLabel = new Label(subtitle);
-        subtitleLabel.setStyle(
-            "-fx-font-size: 11px;" +
             "-fx-text-fill: " + Theme.TEXT_MUTED + ";"
         );
 
-        card.getChildren().addAll(topRow, valueLabel, subtitleLabel);
+        titleBox.getChildren().addAll(title, subtitle);
 
-        // Hover effect with slide animation
-        card.setOnMouseEntered(e -> {
-            card.setStyle(Theme.cardHover());
-            TranslateTransition translate = new TranslateTransition(Duration.millis(120), card);
-            translate.setToY(-4);
-            translate.play();
-        });
-        card.setOnMouseExited(e -> {
-            card.setStyle(Theme.card());
-            TranslateTransition translate = new TranslateTransition(Duration.millis(120), card);
-            translate.setToY(0);
-            translate.play();
-        });
-
-        return card;
+        header.getChildren().add(titleBox);
+        return header;
     }
 
-    private StackPane createCardIcon(String type, String color) {
-        StackPane container = new StackPane();
-        container.setPrefSize(32, 32);
-        container.setMinSize(32, 32);
+    private HBox createPrimaryMetrics() {
+        HBox row = new HBox(24);
+        row.setAlignment(Pos.TOP_LEFT);
 
-        Circle bg = new Circle(16);
-        bg.setFill(javafx.scene.paint.Color.web(color, 0.15));
+        long totalRevenue = BudgetRevenue.calculateSum();
+        long totalExpense = RegularBudgetExpense.calculateSum() + PublicInvestmentBudgetExpense.calculateSum();
+        long balance = totalRevenue - totalExpense;
 
-        // Simple icon representation
-        String iconChar = switch (type) {
-            case "revenues" -> "+";
-            case "expenses" -> "-";
-            case "balance" -> "=";
-            case "investments" -> "*";
-            default -> "?";
-        };
-        Label icon = new Label(iconChar);
-        icon.setStyle(
-            "-fx-font-size: 16px;" +
-            "-fx-font-weight: bold;" +
-            "-fx-text-fill: " + color + ";"
-        );
-
-        container.getChildren().addAll(bg, icon);
-        return container;
-    }
-
-    private HBox createQuickInsights() {
-        HBox row = new HBox(16);
-        row.setAlignment(Pos.CENTER_LEFT);
-
-        // Calculate some quick insights
-        int revenueCount = BudgetRevenue.getAllBudgetRevenues().size();
-        int entityCount = Entity.getEntities().size();
-
-        // Budget health indicator
-        VBox healthCard = createInsightCard(
-            "Κατάσταση Προϋπολογισμού",
-            "Ισορροπημένος",
+        VBox revenue = createAnimatedMetricCard(
+            "Έσοδα",
+            totalRevenue,
             Theme.SUCCESS_LIGHT,
-            Theme.SUCCESS_SUBTLE
+            0
         );
 
-        // Data loaded indicator
-        VBox dataCard = createInsightCard(
-            "Δεδομένα Φορτώθηκαν",
-            revenueCount + " εγγραφές",
-            Theme.ACCENT_BRIGHT,
-            Theme.ACCENT_SUBTLE
+        VBox expense = createAnimatedMetricCard(
+            "Έξοδα",
+            totalExpense,
+            Theme.ERROR_LIGHT,
+            100
         );
 
-        // Entities indicator
-        VBox entitiesCard = createInsightCard(
-            "Ενεργοί Φορείς",
-            entityCount + " υπουργεία",
-            Theme.INFO,
-            Theme.INFO_SUBTLE
+        VBox balanceCard = createAnimatedMetricCard(
+            "Ισοζύγιο",
+            balance,
+            balance >= 0 ? Theme.SUCCESS_LIGHT : Theme.ERROR_LIGHT,
+            200
         );
 
-        // Achievement-style card (gamification)
-        VBox achievementCard = createAchievementCard();
+        HBox.setHgrow(revenue, Priority.ALWAYS);
+        HBox.setHgrow(expense, Priority.ALWAYS);
+        HBox.setHgrow(balanceCard, Priority.ALWAYS);
 
-        HBox.setHgrow(healthCard, Priority.ALWAYS);
-        HBox.setHgrow(dataCard, Priority.ALWAYS);
-        HBox.setHgrow(entitiesCard, Priority.ALWAYS);
-        HBox.setHgrow(achievementCard, Priority.ALWAYS);
-
-        row.getChildren().addAll(healthCard, dataCard, entitiesCard, achievementCard);
+        row.getChildren().addAll(revenue, expense, balanceCard);
         return row;
     }
 
-    private VBox createInsightCard(String title, String value, String accentColor, String bgColor) {
-        VBox card = new VBox(6);
-        card.setPadding(new Insets(16));
-        card.setAlignment(Pos.CENTER_LEFT);
+    private VBox createAnimatedMetricCard(String label, long targetValue, String accentColor, int delayMs) {
+        VBox card = new VBox(14);
+        card.setPadding(new Insets(28, 32, 28, 32));
         card.setCursor(Cursor.HAND);
 
-        String baseStyle = "-fx-background-color: " + bgColor + ";" +
-            "-fx-background-radius: " + Theme.RADIUS_MD + ";" +
-            "-fx-border-color: transparent;" +
-            "-fx-border-radius: " + Theme.RADIUS_MD + ";";
+        String baseStyle = "-fx-background-color: rgba(255,255,255,0.02);" +
+            "-fx-background-radius: 18;" +
+            "-fx-border-color: rgba(255,255,255,0.05);" +
+            "-fx-border-radius: 18;";
         card.setStyle(baseStyle);
 
-        Label titleLabel = new Label(title);
-        titleLabel.setStyle(
-            "-fx-font-size: 11px;" +
-            "-fx-text-fill: " + Theme.TEXT_SECONDARY + ";"
+        // Label
+        Label labelNode = new Label(label);
+        labelNode.setStyle(
+            "-fx-font-size: 13px;" +
+            "-fx-font-weight: 500;" +
+            "-fx-text-fill: " + Theme.TEXT_MUTED + ";"
         );
 
-        Label valueLabel = new Label(value);
-        valueLabel.setStyle(
-            "-fx-font-size: 14px;" +
+        // Animated value counter
+        Label valueNode = new Label("0 €");
+        valueNode.setStyle(
+            "-fx-font-size: 32px;" +
             "-fx-font-weight: 600;" +
-            "-fx-text-fill: " + accentColor + ";"
+            "-fx-text-fill: " + Theme.TEXT_PRIMARY + ";"
         );
 
-        card.getChildren().addAll(titleLabel, valueLabel);
+        // Animate counting up
+        animateCounter(valueNode, targetValue, delayMs);
 
-        // Hover effect with slide animation
+        // Accent bar with width animation
+        StackPane accentContainer = new StackPane();
+        accentContainer.setAlignment(Pos.CENTER_LEFT);
+
+        Rectangle accentBg = new Rectangle(60, 4);
+        accentBg.setFill(Color.web("rgba(255,255,255,0.05)"));
+        accentBg.setArcWidth(4);
+        accentBg.setArcHeight(4);
+
+        Rectangle accent = new Rectangle(0, 4);
+        accent.setFill(Color.web(accentColor));
+        accent.setArcWidth(4);
+        accent.setArcHeight(4);
+
+        // Animate accent bar
+        Timeline accentAnim = new Timeline(
+            new KeyFrame(Duration.ZERO, new KeyValue(accent.widthProperty(), 0)),
+            new KeyFrame(Duration.millis(800),
+                new KeyValue(accent.widthProperty(), 40, Interpolator.EASE_OUT))
+        );
+        accentAnim.setDelay(Duration.millis(delayMs + 300));
+        accentAnim.play();
+
+        accentContainer.getChildren().addAll(accentBg, accent);
+
+        card.getChildren().addAll(labelNode, valueNode, accentContainer);
+
+        // Interactive hover with scale and glow
+        String hoverStyle = "-fx-background-color: rgba(255,255,255,0.04);" +
+            "-fx-background-radius: 18;" +
+            "-fx-border-color: " + accentColor + "40;" +
+            "-fx-border-radius: 18;";
+
+        DropShadow shadow = new DropShadow();
+        shadow.setColor(Color.web(accentColor, 0.15));
+        shadow.setRadius(20);
+        shadow.setOffsetY(4);
+
         card.setOnMouseEntered(e -> {
-            card.setStyle(baseStyle + "-fx-border-color: " + accentColor + "; -fx-border-width: 1;");
-            TranslateTransition translate = new TranslateTransition(Duration.millis(120), card);
-            translate.setToY(-3);
-            translate.play();
+            card.setStyle(hoverStyle);
+            card.setEffect(shadow);
+
+            ScaleTransition scale = new ScaleTransition(Duration.millis(200), card);
+            scale.setToX(1.02);
+            scale.setToY(1.02);
+            scale.play();
+
+            TranslateTransition lift = new TranslateTransition(Duration.millis(200), card);
+            lift.setToY(-4);
+            lift.play();
         });
+
         card.setOnMouseExited(e -> {
             card.setStyle(baseStyle);
-            TranslateTransition translate = new TranslateTransition(Duration.millis(120), card);
-            translate.setToY(0);
-            translate.play();
+            card.setEffect(null);
+
+            ScaleTransition scale = new ScaleTransition(Duration.millis(200), card);
+            scale.setToX(1.0);
+            scale.setToY(1.0);
+            scale.play();
+
+            TranslateTransition lift = new TranslateTransition(Duration.millis(200), card);
+            lift.setToY(0);
+            lift.play();
+        });
+
+        // Click ripple effect
+        card.setOnMousePressed(e -> {
+            ScaleTransition press = new ScaleTransition(Duration.millis(100), card);
+            press.setToX(0.98);
+            press.setToY(0.98);
+            press.play();
+        });
+
+        card.setOnMouseReleased(e -> {
+            ScaleTransition release = new ScaleTransition(Duration.millis(100), card);
+            release.setToX(1.02);
+            release.setToY(1.02);
+            release.play();
         });
 
         return card;
     }
 
-    private VBox createAchievementCard() {
-        VBox card = new VBox(6);
-        card.setPadding(new Insets(16));
-        card.setAlignment(Pos.CENTER_LEFT);
-        card.setCursor(Cursor.HAND);
+    private void animateCounter(Label label, long targetValue, int delayMs) {
+        Timeline timeline = new Timeline();
+        int frames = 40;
+        long duration = 1200;
 
-        String baseStyle = "-fx-background-color: " + Theme.GOLD_SUBTLE + ";" +
-            "-fx-background-radius: " + Theme.RADIUS_MD + ";" +
-            "-fx-border-color: transparent;" +
-            "-fx-border-radius: " + Theme.RADIUS_MD + ";";
-        card.setStyle(baseStyle);
+        for (int i = 0; i <= frames; i++) {
+            double progress = (double) i / frames;
+            // Ease out cubic
+            double eased = 1 - Math.pow(1 - progress, 3);
+            long currentValue = (long) (targetValue * eased);
 
-        HBox titleRow = new HBox(6);
-        titleRow.setAlignment(Pos.CENTER_LEFT);
+            KeyFrame keyFrame = new KeyFrame(
+                Duration.millis(delayMs + (duration * i / frames)),
+                event -> label.setText(Theme.formatAmount(currentValue))
+            );
+            timeline.getKeyFrames().add(keyFrame);
+        }
 
-        Label trophy = new Label("★");
-        trophy.setStyle(
-            "-fx-font-size: 14px;" +
-            "-fx-text-fill: " + Theme.GOLD + ";"
-        );
-
-        Label titleLabel = new Label("Επίτευγμα");
-        titleLabel.setStyle(
-            "-fx-font-size: 11px;" +
-            "-fx-text-fill: " + Theme.TEXT_SECONDARY + ";"
-        );
-
-        titleRow.getChildren().addAll(trophy, titleLabel);
-
-        Label valueLabel = new Label("Πρώτη Ημέρα!");
-        valueLabel.setStyle(
-            "-fx-font-size: 14px;" +
-            "-fx-font-weight: 600;" +
-            "-fx-text-fill: " + Theme.GOLD + ";"
-        );
-
-        card.getChildren().addAll(titleRow, valueLabel);
-
-        // Hover effect with slide animation
-        card.setOnMouseEntered(e -> {
-            card.setStyle(baseStyle + "-fx-border-color: " + Theme.GOLD + "; -fx-border-width: 1;");
-            TranslateTransition translate = new TranslateTransition(Duration.millis(120), card);
-            translate.setToY(-3);
-            translate.play();
-        });
-        card.setOnMouseExited(e -> {
-            card.setStyle(baseStyle);
-            TranslateTransition translate = new TranslateTransition(Duration.millis(120), card);
-            translate.setToY(0);
-            translate.play();
-        });
-
-        return card;
+        timeline.play();
     }
 
-    private VBox createBreakdownSection() {
-        VBox section = new VBox(16);
+    private HBox createSecondaryMetrics() {
+        HBox row = new HBox(20);
+        row.setAlignment(Pos.CENTER_LEFT);
+        row.setPadding(new Insets(8, 0, 8, 0));
 
-        Label sectionTitle = new Label("Ανάλυση Προϋπολογισμού");
-        sectionTitle.setStyle(Theme.sectionHeader());
+        int records = BudgetRevenue.getAllBudgetRevenues().size();
+        int entities = Entity.getEntities().size();
+        long pde = PublicInvestmentBudgetRevenue.calculateSum();
 
-        HBox breakdownRow = new HBox(16);
+        row.getChildren().addAll(
+            createInteractiveChip("Εγγραφές", String.valueOf(records), Theme.ACCENT_BRIGHT, 300),
+            createInteractiveChip("Φορείς", String.valueOf(entities), Theme.INFO, 400),
+            createInteractiveChip("ΠΔΕ", Theme.formatAmount(pde), Theme.WARNING_LIGHT, 500)
+        );
 
-        // Revenue breakdown
-        VBox revenueBreakdown = createBreakdownCard(
-            "Κατανομή Εσόδων",
-            new String[]{"Τακτικός Προϋπολογισμός", "ΠΔΕ Εθνικό", "ΠΔΕ Συγχρηματοδοτούμενο"},
+        return row;
+    }
+
+    private HBox createInteractiveChip(String label, String value, String accentColor, int delayMs) {
+        HBox chip = new HBox(10);
+        chip.setAlignment(Pos.CENTER_LEFT);
+        chip.setPadding(new Insets(12, 18, 12, 18));
+        chip.setCursor(Cursor.HAND);
+
+        String baseStyle = "-fx-background-color: rgba(255,255,255,0.03);" +
+            "-fx-background-radius: 12;" +
+            "-fx-border-color: rgba(255,255,255,0.05);" +
+            "-fx-border-radius: 12;";
+        chip.setStyle(baseStyle);
+
+        // Initial state - hidden
+        chip.setOpacity(0);
+        chip.setTranslateY(10);
+
+        Label labelNode = new Label(label);
+        labelNode.setStyle(
+            "-fx-font-size: 11px;" +
+            "-fx-text-fill: " + Theme.TEXT_MUTED + ";" +
+            "-fx-font-weight: 500;"
+        );
+
+        Label valueNode = new Label(value);
+        valueNode.setStyle(
+            "-fx-font-size: 14px;" +
+            "-fx-text-fill: " + accentColor + ";" +
+            "-fx-font-weight: 600;"
+        );
+
+        chip.getChildren().addAll(labelNode, valueNode);
+
+        // Entrance animation
+        FadeTransition fade = new FadeTransition(Duration.millis(400), chip);
+        fade.setFromValue(0);
+        fade.setToValue(1);
+        fade.setDelay(Duration.millis(delayMs));
+
+        TranslateTransition slide = new TranslateTransition(Duration.millis(400), chip);
+        slide.setFromY(10);
+        slide.setToY(0);
+        slide.setDelay(Duration.millis(delayMs));
+        slide.setInterpolator(Interpolator.EASE_OUT);
+
+        fade.play();
+        slide.play();
+
+        // Hover effect
+        String hoverStyle = "-fx-background-color: rgba(255,255,255,0.06);" +
+            "-fx-background-radius: 12;" +
+            "-fx-border-color: " + accentColor + "30;" +
+            "-fx-border-radius: 12;";
+
+        chip.setOnMouseEntered(e -> {
+            chip.setStyle(hoverStyle);
+            ScaleTransition scale = new ScaleTransition(Duration.millis(150), chip);
+            scale.setToX(1.05);
+            scale.setToY(1.05);
+            scale.play();
+        });
+
+        chip.setOnMouseExited(e -> {
+            chip.setStyle(baseStyle);
+            ScaleTransition scale = new ScaleTransition(Duration.millis(150), chip);
+            scale.setToX(1.0);
+            scale.setToY(1.0);
+            scale.play();
+        });
+
+        return chip;
+    }
+
+    private VBox createDistribution() {
+        VBox section = new VBox(20);
+
+        Label sectionLabel = new Label("Κατανομή Προϋπολογισμού");
+        sectionLabel.setStyle(
+            "-fx-font-size: 15px;" +
+            "-fx-font-weight: 600;" +
+            "-fx-text-fill: " + Theme.TEXT_PRIMARY + ";"
+        );
+
+        HBox cards = new HBox(20);
+
+        VBox revenueCard = createDistributionCard(
+            "Έσοδα",
+            new String[]{"Τακτικός", "ΠΔΕ Εθνικό", "ΠΔΕ Συγχρ."},
             new long[]{
                 RegularBudgetRevenue.calculateSum(),
                 PublicInvestmentBudgetNationalRevenue.calculateSum(),
                 PublicInvestmentBudgetCoFundedRevenue.calculateSum()
             },
-            Theme.SUCCESS_LIGHT
+            Theme.SUCCESS_LIGHT,
+            700
         );
 
-        // Expense breakdown
-        VBox expenseBreakdown = createBreakdownCard(
-            "Κατανομή Εξόδων",
-            new String[]{"Τακτικός Προϋπολογισμός", "Δημόσιες Επενδύσεις"},
+        VBox expenseCard = createDistributionCard(
+            "Έξοδα",
+            new String[]{"Τακτικός", "Δημ. Επενδύσεις"},
             new long[]{
                 RegularBudgetExpense.calculateSum(),
                 PublicInvestmentBudgetExpense.calculateSum()
             },
-            Theme.ERROR_LIGHT
+            Theme.ERROR_LIGHT,
+            800
         );
 
-        HBox.setHgrow(revenueBreakdown, Priority.ALWAYS);
-        HBox.setHgrow(expenseBreakdown, Priority.ALWAYS);
+        HBox.setHgrow(revenueCard, Priority.ALWAYS);
+        HBox.setHgrow(expenseCard, Priority.ALWAYS);
 
-        breakdownRow.getChildren().addAll(revenueBreakdown, expenseBreakdown);
-
-        section.getChildren().addAll(sectionTitle, breakdownRow);
+        cards.getChildren().addAll(revenueCard, expenseCard);
+        section.getChildren().addAll(sectionLabel, cards);
         return section;
     }
 
-    private VBox createBreakdownCard(String title, String[] labels, long[] values, String accentColor) {
-        VBox card = new VBox(16);
-        card.setPadding(new Insets(20));
-        card.setStyle(Theme.card());
+    private VBox createDistributionCard(String title, String[] labels, long[] values, String accent, int delayMs) {
+        VBox card = new VBox(18);
+        card.setPadding(new Insets(24, 28, 24, 28));
         card.setCursor(Cursor.HAND);
+
+        String baseStyle = "-fx-background-color: rgba(255,255,255,0.02);" +
+            "-fx-background-radius: 18;" +
+            "-fx-border-color: rgba(255,255,255,0.05);" +
+            "-fx-border-radius: 18;";
+        card.setStyle(baseStyle);
+
+        // Initial state
+        card.setOpacity(0);
+        card.setTranslateY(20);
+
+        // Entrance animation
+        FadeTransition fade = new FadeTransition(Duration.millis(500), card);
+        fade.setFromValue(0);
+        fade.setToValue(1);
+        fade.setDelay(Duration.millis(delayMs));
+
+        TranslateTransition slide = new TranslateTransition(Duration.millis(500), card);
+        slide.setFromY(20);
+        slide.setToY(0);
+        slide.setDelay(Duration.millis(delayMs));
+        slide.setInterpolator(Interpolator.EASE_OUT);
+
+        fade.play();
+        slide.play();
+
+        // Header
+        HBox header = new HBox();
+        header.setAlignment(Pos.CENTER_LEFT);
 
         Label titleLabel = new Label(title);
         titleLabel.setStyle(
@@ -419,191 +435,137 @@ public class DashboardView {
             "-fx-text-fill: " + Theme.TEXT_PRIMARY + ";"
         );
 
-        VBox items = new VBox(12);
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
 
         long total = 0;
         for (long v : values) {
             total += v;
         }
 
+        Label totalLabel = new Label(Theme.formatAmount(total));
+        totalLabel.setStyle(
+            "-fx-font-size: 13px;" +
+            "-fx-font-weight: 500;" +
+            "-fx-text-fill: " + accent + ";"
+        );
+
+        header.getChildren().addAll(titleLabel, spacer, totalLabel);
+
+        // Items with animated bars
+        VBox items = new VBox(14);
         for (int i = 0; i < labels.length; i++) {
-            HBox item = createBreakdownItem(labels[i], values[i], total, accentColor, i);
-            items.getChildren().add(item);
+            items.getChildren().add(createAnimatedDistributionRow(
+                labels[i], values[i], total, accent, i, delayMs + 200 + (i * 100)
+            ));
         }
 
-        card.getChildren().addAll(titleLabel, items);
+        card.getChildren().addAll(header, items);
 
-        // Hover effect with slide animation
+        // Hover
+        String hoverStyle = "-fx-background-color: rgba(255,255,255,0.04);" +
+            "-fx-background-radius: 18;" +
+            "-fx-border-color: " + accent + "30;" +
+            "-fx-border-radius: 18;";
+
+        DropShadow shadow = new DropShadow();
+        shadow.setColor(Color.web(accent, 0.1));
+        shadow.setRadius(16);
+        shadow.setOffsetY(4);
+
         card.setOnMouseEntered(e -> {
-            card.setStyle(Theme.cardHover());
-            TranslateTransition translate = new TranslateTransition(Duration.millis(120), card);
-            translate.setToY(-4);
-            translate.play();
+            card.setStyle(hoverStyle);
+            card.setEffect(shadow);
+            TranslateTransition lift = new TranslateTransition(Duration.millis(200), card);
+            lift.setToY(-3);
+            lift.play();
         });
+
         card.setOnMouseExited(e -> {
-            card.setStyle(Theme.card());
-            TranslateTransition translate = new TranslateTransition(Duration.millis(120), card);
-            translate.setToY(0);
-            translate.play();
+            card.setStyle(baseStyle);
+            card.setEffect(null);
+            TranslateTransition lift = new TranslateTransition(Duration.millis(200), card);
+            lift.setToY(0);
+            lift.play();
         });
 
         return card;
     }
 
-    private HBox createBreakdownItem(String label, long value, long total, String accentColor, int index) {
-        HBox item = new HBox(12);
-        item.setAlignment(Pos.CENTER_LEFT);
-
-        // Color indicator
-        Rectangle colorBar = new Rectangle(4, 24);
-        colorBar.setFill(javafx.scene.paint.Color.web(accentColor, 1.0 - (index * 0.25)));
-        colorBar.setArcWidth(2);
-        colorBar.setArcHeight(2);
-
-        // Label
-        VBox labelBox = new VBox(2);
-        HBox.setHgrow(labelBox, Priority.ALWAYS);
+    private HBox createAnimatedDistributionRow(String label, long value, long total, String accent, int idx, int delayMs) {
+        HBox row = new HBox(14);
+        row.setAlignment(Pos.CENTER_LEFT);
 
         Label nameLabel = new Label(label);
         nameLabel.setStyle(
             "-fx-font-size: 13px;" +
-            "-fx-text-fill: " + Theme.TEXT_PRIMARY + ";"
+            "-fx-text-fill: " + Theme.TEXT_SECONDARY + ";"
         );
+        nameLabel.setMinWidth(120);
 
-        // Progress bar
-        double percentage = total > 0 ? (value * 100.0 / total) : 0;
-        HBox progressContainer = new HBox();
-        progressContainer.setPrefHeight(4);
-        progressContainer.setMaxWidth(200);
-        progressContainer.setStyle(
-            "-fx-background-color: " + Theme.BG_MUTED + ";" +
-            "-fx-background-radius: 2;"
+        // Animated progress bar
+        StackPane progressContainer = new StackPane();
+        progressContainer.setAlignment(Pos.CENTER_LEFT);
+        HBox.setHgrow(progressContainer, Priority.ALWAYS);
+
+        Rectangle bg = new Rectangle(200, 6);
+        bg.setFill(Color.web("rgba(255,255,255,0.04)"));
+        bg.setArcWidth(6);
+        bg.setArcHeight(6);
+        bg.widthProperty().bind(progressContainer.widthProperty());
+
+        double pct = total > 0 ? (value * 100.0 / total) : 0;
+        Rectangle bar = new Rectangle(0, 6);
+        double opacity = 1.0 - (idx * 0.2);
+        bar.setFill(Color.web(accent, opacity));
+        bar.setArcWidth(6);
+        bar.setArcHeight(6);
+
+        // Animate bar width
+        Timeline barAnim = new Timeline(
+            new KeyFrame(Duration.ZERO, new KeyValue(bar.widthProperty(), 0)),
+            new KeyFrame(Duration.millis(600),
+                new KeyValue(bar.widthProperty(), Math.max(pct * 1.8, 8), Interpolator.EASE_OUT))
         );
+        barAnim.setDelay(Duration.millis(delayMs));
+        barAnim.play();
 
-        Region progressBar = new Region();
-        progressBar.setPrefWidth(percentage * 2);
-        progressBar.setPrefHeight(4);
-        progressBar.setStyle(
-            "-fx-background-color: " + accentColor + ";" +
-            "-fx-background-radius: 2;"
-        );
-        progressContainer.getChildren().add(progressBar);
+        progressContainer.getChildren().addAll(bg, bar);
 
-        labelBox.getChildren().addAll(nameLabel, progressContainer);
-
-        // Value
-        VBox valueBox = new VBox(2);
-        valueBox.setAlignment(Pos.CENTER_RIGHT);
-
-        Label valueLabel = new Label(Theme.formatAmount(value));
-        valueLabel.setStyle(
-            "-fx-font-size: 13px;" +
-            "-fx-font-weight: 600;" +
-            "-fx-text-fill: " + Theme.TEXT_PRIMARY + ";"
-        );
-
-        Label percentLabel = new Label(String.format("%.1f%%", percentage));
-        percentLabel.setStyle(
-            "-fx-font-size: 11px;" +
+        // Percentage label
+        Label pctLabel = new Label(String.format("%.0f%%", pct));
+        pctLabel.setStyle(
+            "-fx-font-size: 12px;" +
+            "-fx-font-weight: 500;" +
             "-fx-text-fill: " + Theme.TEXT_MUTED + ";"
         );
+        pctLabel.setMinWidth(40);
+        pctLabel.setAlignment(Pos.CENTER_RIGHT);
 
-        valueBox.getChildren().addAll(valueLabel, percentLabel);
+        row.getChildren().addAll(nameLabel, progressContainer, pctLabel);
 
-        item.getChildren().addAll(colorBar, labelBox, valueBox);
-        return item;
-    }
-
-    private VBox createInfoSection() {
-        VBox section = new VBox(16);
-        section.setPadding(new Insets(20));
-        section.setStyle(Theme.card());
-        section.setCursor(Cursor.HAND);
-
-        HBox headerRow = new HBox(12);
-        headerRow.setAlignment(Pos.CENTER_LEFT);
-
-        Circle infoIcon = new Circle(12);
-        infoIcon.setFill(javafx.scene.paint.Color.web(Theme.ACCENT_PRIMARY));
-
-        Label sectionTitle = new Label("Πληροφορίες Συστήματος");
-        sectionTitle.setStyle(
-            "-fx-font-size: 15px;" +
-            "-fx-font-weight: 600;" +
-            "-fx-text-fill: " + Theme.TEXT_PRIMARY + ";"
-        );
-
-        headerRow.getChildren().addAll(infoIcon, sectionTitle);
-
-        GridPane grid = new GridPane();
-        grid.setHgap(40);
-        grid.setVgap(12);
-        grid.setPadding(new Insets(12, 0, 0, 0));
-
-        int revenueCount = BudgetRevenue.getAllBudgetRevenues().size();
-        int regularRevenueCount = RegularBudgetRevenue.getAllRegularBudgetRevenues().size();
-        int publicInvestmentRevenueCount = PublicInvestmentBudgetRevenue.getAllPublicInvestmentBudgetRevenues().size();
-        int expenseCount = RegularBudgetExpense.getAllRegularBudgetExpenses().size() +
-                          PublicInvestmentBudgetExpense.getAllPublicInvestmentBudgetExpenses().size();
-
-        addInfoRow(grid, 0, "Συνολικές Εγγραφές Εσόδων", String.valueOf(revenueCount));
-        addInfoRow(grid, 1, "Εγγραφές Τακτικού Προϋπολογισμού", String.valueOf(regularRevenueCount));
-        addInfoRow(grid, 2, "Εγγραφές ΠΔΕ", String.valueOf(publicInvestmentRevenueCount));
-        addInfoRow(grid, 3, "Συνολικές Εγγραφές Εξόδων", String.valueOf(expenseCount));
-
-        // Hint
-        Label hint = new Label("Χρησιμοποιήστε την πλοήγηση για να εξερευνήσετε τα δεδομένα του προϋπολογισμού");
-        hint.setStyle(
-            "-fx-font-size: 12px;" +
-            "-fx-text-fill: " + Theme.TEXT_MUTED + ";" +
-            "-fx-padding: 12 0 0 0;"
-        );
-
-        section.getChildren().addAll(headerRow, grid, hint);
-
-        // Hover effect with slide animation
-        section.setOnMouseEntered(e -> {
-            section.setStyle(Theme.cardHover());
-            TranslateTransition translate = new TranslateTransition(Duration.millis(120), section);
-            translate.setToY(-4);
-            translate.play();
+        // Row hover highlight
+        row.setOnMouseEntered(e -> {
+            nameLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: " + Theme.TEXT_PRIMARY + ";");
+            pctLabel.setStyle("-fx-font-size: 12px; -fx-font-weight: 600; -fx-text-fill: " + accent + ";");
         });
-        section.setOnMouseExited(e -> {
-            section.setStyle(Theme.card());
-            TranslateTransition translate = new TranslateTransition(Duration.millis(120), section);
-            translate.setToY(0);
-            translate.play();
+        row.setOnMouseExited(e -> {
+            nameLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: " + Theme.TEXT_SECONDARY + ";");
+            pctLabel.setStyle("-fx-font-size: 12px; -fx-font-weight: 500; -fx-text-fill: " + Theme.TEXT_MUTED + ";");
         });
 
-        return section;
-    }
-
-    private void addInfoRow(GridPane grid, int row, String label, String value) {
-        Label labelNode = new Label(label);
-        labelNode.setStyle(
-            "-fx-text-fill: " + Theme.TEXT_SECONDARY + ";" +
-            "-fx-font-size: 13px;"
-        );
-
-        Label valueNode = new Label(value);
-        valueNode.setStyle(
-            "-fx-text-fill: " + Theme.TEXT_PRIMARY + ";" +
-            "-fx-font-size: 13px;" +
-            "-fx-font-weight: 600;"
-        );
-
-        grid.add(labelNode, 0, row);
-        grid.add(valueNode, 1, row);
+        return row;
     }
 
     private void animateEntrance() {
+        // Staggered fade in for the whole view
         view.setOpacity(0);
 
-        FadeTransition fade = new FadeTransition(Duration.millis(300), view);
-        fade.setFromValue(0);
-        fade.setToValue(1);
-        fade.setDelay(Duration.millis(100));
-        fade.play();
+        FadeTransition viewFade = new FadeTransition(Duration.millis(600), view);
+        viewFade.setFromValue(0);
+        viewFade.setToValue(1);
+        viewFade.setDelay(Duration.millis(50));
+        viewFade.play();
     }
 
     public Region getView() {

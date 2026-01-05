@@ -3,271 +3,431 @@ package com.financial.ui.views;
 import com.financial.pdf.BudgetRevenueConvertToPdf;
 import com.financial.pdf.BudgetExpenseConvertToPdf;
 import com.financial.ui.Theme;
+import javafx.animation.FadeTransition;
+import javafx.animation.Interpolator;
+import javafx.animation.ScaleTransition;
+import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
+import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Circle;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 /**
- * Export view - export budget data to PDF with clean Apple-like design.
+ * Export view - Apple-like immersive design for PDF export.
+ * Clean, crisp layout with subtle animations.
  */
 public class ExportView {
 
     private final ScrollPane scrollPane;
     private final VBox view;
-    private final Label statusLabel;
+    private VBox statusSection;
 
     public ExportView() {
-        view = new VBox(24);
-        view.setPadding(new Insets(32, 24, 24, 24));
+        view = new VBox(40);
+        view.setPadding(new Insets(48, 56, 56, 56));
         view.setStyle("-fx-background-color: " + Theme.BG_BASE + ";");
 
         // Header
         VBox header = createHeader();
 
-        // Export cards container
-        VBox cardsContainer = new VBox(16);
-        cardsContainer.setPadding(new Insets(0, 0, 16, 0));
+        // Export options as clean cards
+        VBox exportOptions = createExportOptions();
 
-        // Export cards
-        VBox revenueCard = createExportCard(
-            "Έσοδα Προϋπολογισμού",
-            "Εξαγωγή όλων των εσόδων κρατικού προϋπολογισμού σε μορφή PDF",
-            Theme.SUCCESS_LIGHT,
-            "+",
-            this::exportRevenues
-        );
-
-        VBox expenseCard = createExportCard(
-            "Έξοδα Προϋπολογισμού",
-            "Εξαγωγή όλων των εξόδων κρατικού προϋπολογισμού σε μορφή PDF",
-            Theme.ERROR_LIGHT,
-            "-",
-            this::exportExpenses
-        );
-
-        VBox fullCard = createExportCard(
-            "Πλήρης Προϋπολογισμός",
-            "Εξαγωγή εσόδων και εξόδων σε ξεχωριστά αρχεία PDF",
-            Theme.ACCENT_BRIGHT,
-            "=",
-            this::exportFullBudget
-        );
-
-        cardsContainer.getChildren().addAll(revenueCard, expenseCard, fullCard);
-
-        // Status section
-        VBox statusSection = createStatusSection();
+        // Status section (initially empty)
+        statusSection = createStatusSection();
 
         // Info section
         VBox infoSection = createInfoSection();
 
-        view.getChildren().addAll(header, cardsContainer, statusSection, infoSection);
+        view.getChildren().addAll(header, exportOptions, statusSection, infoSection);
 
-        // Wrap in scroll pane
         scrollPane = new ScrollPane(view);
         scrollPane.setFitToWidth(true);
-        scrollPane.setFitToHeight(true);
         scrollPane.setStyle(
             "-fx-background: " + Theme.BG_BASE + ";" +
             "-fx-background-color: " + Theme.BG_BASE + ";" +
             "-fx-border-color: transparent;"
         );
 
-        // Initialize status
-        statusLabel = new Label("");
+        // Entrance animation
+        animateEntrance();
     }
 
     private VBox createHeader() {
         VBox header = new VBox(6);
 
-        HBox titleRow = new HBox(12);
-        titleRow.setAlignment(Pos.CENTER_LEFT);
-
-        Circle icon = new Circle(16);
-        icon.setFill(javafx.scene.paint.Color.web(Theme.ACCENT_LIGHT, 0.15));
-
-        Label iconText = new Label(">");
-        iconText.setStyle(
-            "-fx-font-size: 16px;" +
-            "-fx-font-weight: bold;" +
-            "-fx-text-fill: " + Theme.ACCENT_BRIGHT + ";"
+        Label title = new Label("Εξαγωγή PDF");
+        title.setStyle(
+            "-fx-font-size: 34px;" +
+            "-fx-font-weight: 700;" +
+            "-fx-text-fill: " + Theme.TEXT_PRIMARY + ";"
         );
 
-        StackPane iconContainer = new StackPane(icon, iconText);
+        Label subtitle = new Label("Δημιουργία εγγράφων για τον κρατικό προϋπολογισμό");
+        subtitle.setStyle(
+            "-fx-font-size: 14px;" +
+            "-fx-text-fill: " + Theme.TEXT_MUTED + ";"
+        );
 
-        Label title = new Label("Εξαγωγή Δεδομένων");
-        title.setStyle(Theme.pageTitle());
-
-        titleRow.getChildren().addAll(iconContainer, title);
-
-        Label subtitle = new Label("Δημιουργία εγγράφων PDF για τον κρατικό προϋπολογισμό");
-        subtitle.setStyle(Theme.subtitle());
-
-        header.getChildren().addAll(titleRow, subtitle);
+        header.getChildren().addAll(title, subtitle);
         return header;
     }
 
-    private VBox createExportCard(String title, String description, String accentColor, String iconChar, Runnable action) {
-        VBox card = new VBox(0);
-        card.setStyle(Theme.card());
+    private VBox createExportOptions() {
+        VBox container = new VBox(20);
 
-        HBox content = new HBox(16);
-        content.setAlignment(Pos.CENTER_LEFT);
-        content.setPadding(new Insets(20));
+        // Three export cards with staggered animation
+        HBox cardsRow = new HBox(20);
 
-        // Icon
-        StackPane iconBox = new StackPane();
-        iconBox.setPrefSize(48, 48);
-        iconBox.setMinSize(48, 48);
+        VBox revenueCard = createExportCard(
+            "Έσοδα",
+            "Εξαγωγή εσόδων κρατικού προϋπολογισμού",
+            Theme.SUCCESS_LIGHT,
+            "↓",
+            this::exportRevenues,
+            0
+        );
 
-        Circle iconBg = new Circle(24);
-        iconBg.setFill(javafx.scene.paint.Color.web(accentColor, 0.15));
+        VBox expenseCard = createExportCard(
+            "Έξοδα",
+            "Εξαγωγή εξόδων κρατικού προϋπολογισμού",
+            Theme.ERROR_LIGHT,
+            "↓",
+            this::exportExpenses,
+            100
+        );
+
+        VBox fullCard = createExportCard(
+            "Πλήρης",
+            "Εξαγωγή εσόδων και εξόδων",
+            Theme.ACCENT_BRIGHT,
+            "⇊",
+            this::exportFullBudget,
+            200
+        );
+
+        HBox.setHgrow(revenueCard, Priority.ALWAYS);
+        HBox.setHgrow(expenseCard, Priority.ALWAYS);
+        HBox.setHgrow(fullCard, Priority.ALWAYS);
+
+        cardsRow.getChildren().addAll(revenueCard, expenseCard, fullCard);
+        container.getChildren().add(cardsRow);
+
+        return container;
+    }
+
+    private VBox createExportCard(String title, String description, String accentColor,
+                                   String iconChar, Runnable action, int delayMs) {
+        VBox card = new VBox(16);
+        card.setPadding(new Insets(28, 32, 28, 32));
+        card.setAlignment(Pos.CENTER);
+        card.setCursor(Cursor.HAND);
+
+        String baseStyle = "-fx-background-color: rgba(255,255,255,0.02);" +
+            "-fx-background-radius: 18;" +
+            "-fx-border-color: rgba(255,255,255,0.05);" +
+            "-fx-border-radius: 18;";
+        card.setStyle(baseStyle);
+
+        // Initial state for animation
+        card.setOpacity(0);
+        card.setTranslateY(20);
+
+        // Icon container with accent background
+        StackPane iconContainer = new StackPane();
+        iconContainer.setPrefSize(56, 56);
+        iconContainer.setMinSize(56, 56);
+
+        Rectangle iconBg = new Rectangle(56, 56);
+        iconBg.setFill(Color.web(accentColor, 0.12));
+        iconBg.setArcWidth(16);
+        iconBg.setArcHeight(16);
 
         Label iconLabel = new Label(iconChar);
         iconLabel.setStyle(
-            "-fx-font-size: 20px;" +
-            "-fx-font-weight: bold;" +
+            "-fx-font-size: 24px;" +
+            "-fx-font-weight: 600;" +
             "-fx-text-fill: " + accentColor + ";"
         );
 
-        iconBox.getChildren().addAll(iconBg, iconLabel);
+        iconContainer.getChildren().addAll(iconBg, iconLabel);
 
-        // Text
-        VBox textBox = new VBox(4);
-        HBox.setHgrow(textBox, Priority.ALWAYS);
-
+        // Title
         Label titleLabel = new Label(title);
         titleLabel.setStyle(
-            "-fx-font-size: 16px;" +
+            "-fx-font-size: 18px;" +
             "-fx-font-weight: 600;" +
             "-fx-text-fill: " + Theme.TEXT_PRIMARY + ";"
         );
 
+        // Description
         Label descLabel = new Label(description);
         descLabel.setStyle(
             "-fx-font-size: 13px;" +
-            "-fx-text-fill: " + Theme.TEXT_SECONDARY + ";"
+            "-fx-text-fill: " + Theme.TEXT_MUTED + ";"
         );
         descLabel.setWrapText(true);
+        descLabel.setAlignment(Pos.CENTER);
 
-        textBox.getChildren().addAll(titleLabel, descLabel);
+        // Export button - minimal pill style
+        HBox button = createExportButton(accentColor);
 
-        // Button
-        Button exportBtn = new Button("Εξαγωγή PDF");
-        exportBtn.setStyle(
-            "-fx-background-color: " + accentColor + ";" +
-            "-fx-text-fill: " + Theme.BG_BASE + ";" +
-            "-fx-font-size: 13px;" +
-            "-fx-font-weight: 600;" +
-            "-fx-padding: 10 20;" +
-            "-fx-background-radius: " + Theme.RADIUS_SM + ";" +
-            "-fx-cursor: hand;"
-        );
+        card.getChildren().addAll(iconContainer, titleLabel, descLabel, button);
 
-        String hoverColor = accentColor.equals(Theme.SUCCESS_LIGHT) ? Theme.SUCCESS :
-                           accentColor.equals(Theme.ERROR_LIGHT) ? Theme.ERROR : Theme.ACCENT_PRIMARY;
+        // Entrance animation
+        FadeTransition fade = new FadeTransition(Duration.millis(500), card);
+        fade.setFromValue(0);
+        fade.setToValue(1);
+        fade.setDelay(Duration.millis(delayMs));
 
-        exportBtn.setOnMouseEntered(e -> exportBtn.setStyle(
-            "-fx-background-color: " + hoverColor + ";" +
-            "-fx-text-fill: white;" +
-            "-fx-font-size: 13px;" +
-            "-fx-font-weight: 600;" +
-            "-fx-padding: 10 20;" +
-            "-fx-background-radius: " + Theme.RADIUS_SM + ";" +
-            "-fx-cursor: hand;"
-        ));
+        TranslateTransition slide = new TranslateTransition(Duration.millis(500), card);
+        slide.setFromY(20);
+        slide.setToY(0);
+        slide.setDelay(Duration.millis(delayMs));
+        slide.setInterpolator(Interpolator.EASE_OUT);
 
-        exportBtn.setOnMouseExited(e -> exportBtn.setStyle(
-            "-fx-background-color: " + accentColor + ";" +
-            "-fx-text-fill: " + Theme.BG_BASE + ";" +
-            "-fx-font-size: 13px;" +
-            "-fx-font-weight: 600;" +
-            "-fx-padding: 10 20;" +
-            "-fx-background-radius: " + Theme.RADIUS_SM + ";" +
-            "-fx-cursor: hand;"
-        ));
+        fade.play();
+        slide.play();
 
-        exportBtn.setOnAction(e -> action.run());
+        // Interactive hover effects
+        String hoverStyle = "-fx-background-color: rgba(255,255,255,0.04);" +
+            "-fx-background-radius: 18;" +
+            "-fx-border-color: " + accentColor + "40;" +
+            "-fx-border-radius: 18;";
 
-        content.getChildren().addAll(iconBox, textBox, exportBtn);
-        card.getChildren().add(content);
+        DropShadow shadow = new DropShadow();
+        shadow.setColor(Color.web(accentColor, 0.15));
+        shadow.setRadius(20);
+        shadow.setOffsetY(4);
 
-        // Hover effect
-        card.setOnMouseEntered(e -> card.setStyle(Theme.cardHover()));
-        card.setOnMouseExited(e -> card.setStyle(Theme.card()));
+        card.setOnMouseEntered(e -> {
+            card.setStyle(hoverStyle);
+            card.setEffect(shadow);
+
+            ScaleTransition scale = new ScaleTransition(Duration.millis(200), card);
+            scale.setToX(1.02);
+            scale.setToY(1.02);
+            scale.play();
+
+            TranslateTransition lift = new TranslateTransition(Duration.millis(200), card);
+            lift.setToY(-4);
+            lift.play();
+        });
+
+        card.setOnMouseExited(e -> {
+            card.setStyle(baseStyle);
+            card.setEffect(null);
+
+            ScaleTransition scale = new ScaleTransition(Duration.millis(200), card);
+            scale.setToX(1.0);
+            scale.setToY(1.0);
+            scale.play();
+
+            TranslateTransition lift = new TranslateTransition(Duration.millis(200), card);
+            lift.setToY(0);
+            lift.play();
+        });
+
+        // Click effect
+        card.setOnMousePressed(e -> {
+            ScaleTransition press = new ScaleTransition(Duration.millis(100), card);
+            press.setToX(0.98);
+            press.setToY(0.98);
+            press.play();
+        });
+
+        card.setOnMouseReleased(e -> {
+            ScaleTransition release = new ScaleTransition(Duration.millis(100), card);
+            release.setToX(1.02);
+            release.setToY(1.02);
+            release.play();
+        });
+
+        // Click action
+        card.setOnMouseClicked(e -> action.run());
 
         return card;
+    }
+
+    private HBox createExportButton(String accentColor) {
+        HBox button = new HBox(8);
+        button.setAlignment(Pos.CENTER);
+        button.setPadding(new Insets(10, 20, 10, 20));
+        button.setStyle(
+            "-fx-background-color: " + accentColor + ";" +
+            "-fx-background-radius: 20;"
+        );
+
+        Label label = new Label("Εξαγωγή");
+        label.setStyle(
+            "-fx-font-size: 13px;" +
+            "-fx-font-weight: 600;" +
+            "-fx-text-fill: " + Theme.BG_BASE + ";"
+        );
+
+        button.getChildren().add(label);
+        return button;
     }
 
     private VBox createStatusSection() {
         VBox section = new VBox(8);
         section.setId("status-section");
-
         return section;
     }
 
     private VBox createInfoSection() {
-        VBox section = new VBox(12);
-        section.setPadding(new Insets(20));
-        section.setStyle(Theme.card());
+        VBox section = new VBox(16);
+        section.setPadding(new Insets(28, 32, 28, 32));
+        section.setCursor(Cursor.HAND);
 
-        Label infoTitle = new Label("Πληροφορίες Εξαγωγής");
+        String baseStyle = "-fx-background-color: rgba(255,255,255,0.02);" +
+            "-fx-background-radius: 18;" +
+            "-fx-border-color: rgba(255,255,255,0.05);" +
+            "-fx-border-radius: 18;";
+        section.setStyle(baseStyle);
+
+        // Initial state for animation
+        section.setOpacity(0);
+        section.setTranslateY(20);
+
+        // Animate entrance
+        FadeTransition fade = new FadeTransition(Duration.millis(500), section);
+        fade.setFromValue(0);
+        fade.setToValue(1);
+        fade.setDelay(Duration.millis(400));
+
+        TranslateTransition slide = new TranslateTransition(Duration.millis(500), section);
+        slide.setFromY(20);
+        slide.setToY(0);
+        slide.setDelay(Duration.millis(400));
+        slide.setInterpolator(Interpolator.EASE_OUT);
+
+        fade.play();
+        slide.play();
+
+        // Header
+        Label infoTitle = new Label("Πληροφορίες");
         infoTitle.setStyle(
             "-fx-font-size: 15px;" +
             "-fx-font-weight: 600;" +
             "-fx-text-fill: " + Theme.TEXT_PRIMARY + ";"
         );
 
-        VBox bullets = new VBox(8);
-        bullets.setPadding(new Insets(8, 0, 0, 0));
+        // Info items
+        VBox items = new VBox(12);
 
-        String[] infos = {
-            "Τα αρχεία PDF αποθηκεύονται στον φάκελο output/",
-            "Περιλαμβάνουν αναλυτικά στοιχεία ανά κατηγορία",
-            "Μορφοποίηση κατάλληλη για επίσημη χρήση"
-        };
+        items.getChildren().addAll(
+            createInfoItem("Αποθήκευση", "Τα αρχεία αποθηκεύονται στο output/", Theme.ACCENT_BRIGHT),
+            createInfoItem("Μορφή", "Αναλυτικά στοιχεία ανά κατηγορία", Theme.INFO),
+            createInfoItem("Χρήση", "Κατάλληλα για επίσημη χρήση", Theme.SUCCESS_LIGHT)
+        );
 
-        for (String info : infos) {
-            HBox bullet = new HBox(8);
-            bullet.setAlignment(Pos.CENTER_LEFT);
+        section.getChildren().addAll(infoTitle, items);
 
-            Label dot = new Label("•");
-            dot.setStyle("-fx-text-fill: " + Theme.ACCENT_BRIGHT + "; -fx-font-size: 14px;");
+        // Hover effect
+        String hoverStyle = "-fx-background-color: rgba(255,255,255,0.04);" +
+            "-fx-background-radius: 18;" +
+            "-fx-border-color: rgba(255,255,255,0.08);" +
+            "-fx-border-radius: 18;";
 
-            Label text = new Label(info);
-            text.setStyle("-fx-text-fill: " + Theme.TEXT_SECONDARY + "; -fx-font-size: 13px;");
+        section.setOnMouseEntered(e -> {
+            section.setStyle(hoverStyle);
+            TranslateTransition lift = new TranslateTransition(Duration.millis(200), section);
+            lift.setToY(-2);
+            lift.play();
+        });
 
-            bullet.getChildren().addAll(dot, text);
-            bullets.getChildren().add(bullet);
-        }
+        section.setOnMouseExited(e -> {
+            section.setStyle(baseStyle);
+            TranslateTransition lift = new TranslateTransition(Duration.millis(200), section);
+            lift.setToY(0);
+            lift.play();
+        });
 
-        section.getChildren().addAll(infoTitle, bullets);
         return section;
+    }
+
+    private HBox createInfoItem(String label, String value, String accentColor) {
+        HBox item = new HBox(12);
+        item.setAlignment(Pos.CENTER_LEFT);
+
+        // Accent dot
+        Rectangle dot = new Rectangle(6, 6);
+        dot.setFill(Color.web(accentColor));
+        dot.setArcWidth(6);
+        dot.setArcHeight(6);
+
+        // Label
+        Label labelNode = new Label(label);
+        labelNode.setStyle(
+            "-fx-font-size: 13px;" +
+            "-fx-font-weight: 500;" +
+            "-fx-text-fill: " + Theme.TEXT_SECONDARY + ";"
+        );
+        labelNode.setMinWidth(80);
+
+        // Value
+        Label valueNode = new Label(value);
+        valueNode.setStyle(
+            "-fx-font-size: 13px;" +
+            "-fx-text-fill: " + Theme.TEXT_MUTED + ";"
+        );
+
+        item.getChildren().addAll(dot, labelNode, valueNode);
+
+        // Hover highlight
+        item.setOnMouseEntered(e -> {
+            labelNode.setStyle(
+                "-fx-font-size: 13px;" +
+                "-fx-font-weight: 500;" +
+                "-fx-text-fill: " + Theme.TEXT_PRIMARY + ";"
+            );
+            valueNode.setStyle(
+                "-fx-font-size: 13px;" +
+                "-fx-text-fill: " + accentColor + ";"
+            );
+        });
+
+        item.setOnMouseExited(e -> {
+            labelNode.setStyle(
+                "-fx-font-size: 13px;" +
+                "-fx-font-weight: 500;" +
+                "-fx-text-fill: " + Theme.TEXT_SECONDARY + ";"
+            );
+            valueNode.setStyle(
+                "-fx-font-size: 13px;" +
+                "-fx-text-fill: " + Theme.TEXT_MUTED + ";"
+            );
+        });
+
+        return item;
     }
 
     private void exportRevenues() {
         try {
             BudgetRevenueConvertToPdf.createPdf("output/ΕΣΟΔΑ_ΚΡΑΤΙΚΟΥ_ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ.pdf");
-            showStatus("Το αρχείο ΕΣΟΔΑ_ΚΡΑΤΙΚΟΥ_ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ.pdf δημιουργήθηκε επιτυχώς!", true);
+            showStatus("ΕΣΟΔΑ_ΚΡΑΤΙΚΟΥ_ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ.pdf δημιουργήθηκε", true);
         } catch (Exception e) {
-            showStatus("Σφάλμα κατά την εξαγωγή: " + e.getMessage(), false);
+            showStatus("Σφάλμα: " + e.getMessage(), false);
         }
     }
 
     private void exportExpenses() {
         try {
             BudgetExpenseConvertToPdf.createPdf("output/ΕΞΟΔΑ_ΚΡΑΤΙΚΟΥ_ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ.pdf");
-            showStatus("Το αρχείο ΕΞΟΔΑ_ΚΡΑΤΙΚΟΥ_ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ.pdf δημιουργήθηκε επιτυχώς!", true);
+            showStatus("ΕΞΟΔΑ_ΚΡΑΤΙΚΟΥ_ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ.pdf δημιουργήθηκε", true);
         } catch (Exception e) {
-            showStatus("Σφάλμα κατά την εξαγωγή: " + e.getMessage(), false);
+            showStatus("Σφάλμα: " + e.getMessage(), false);
         }
     }
 
@@ -275,42 +435,75 @@ public class ExportView {
         try {
             BudgetRevenueConvertToPdf.createPdf("output/ΕΣΟΔΑ_ΚΡΑΤΙΚΟΥ_ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ.pdf");
             BudgetExpenseConvertToPdf.createPdf("output/ΕΞΟΔΑ_ΚΡΑΤΙΚΟΥ_ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ.pdf");
-            showStatus("Τα αρχεία PDF δημιουργήθηκαν επιτυχώς!", true);
+            showStatus("Και τα δύο αρχεία PDF δημιουργήθηκαν", true);
         } catch (Exception e) {
-            showStatus("Σφάλμα κατά την εξαγωγή: " + e.getMessage(), false);
+            showStatus("Σφάλμα: " + e.getMessage(), false);
         }
     }
 
     private void showStatus(String message, boolean success) {
-        // Find status section and update
-        VBox statusSection = (VBox) view.lookup("#status-section");
-        if (statusSection != null) {
-            statusSection.getChildren().clear();
+        statusSection.getChildren().clear();
 
-            HBox statusBox = new HBox(12);
-            statusBox.setAlignment(Pos.CENTER_LEFT);
-            statusBox.setPadding(new Insets(16));
-            statusBox.setStyle(
-                "-fx-background-color: " + (success ? Theme.SUCCESS_SUBTLE : Theme.ERROR_SUBTLE) + ";" +
-                "-fx-background-radius: " + Theme.RADIUS_MD + ";"
-            );
+        HBox statusBox = new HBox(12);
+        statusBox.setAlignment(Pos.CENTER_LEFT);
+        statusBox.setPadding(new Insets(16, 20, 16, 20));
 
-            Label icon = new Label(success ? "+" : "!");
-            icon.setStyle(
-                "-fx-font-size: 16px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: " + (success ? Theme.SUCCESS_LIGHT : Theme.ERROR_LIGHT) + ";"
-            );
+        String bgColor = success ? "rgba(63, 185, 80, 0.1)" : "rgba(248, 81, 73, 0.1)";
+        String borderColor = success ? "rgba(63, 185, 80, 0.2)" : "rgba(248, 81, 73, 0.2)";
+        String textColor = success ? Theme.SUCCESS_LIGHT : Theme.ERROR_LIGHT;
 
-            Label text = new Label(message);
-            text.setStyle(
-                "-fx-font-size: 14px;" +
-                "-fx-text-fill: " + (success ? Theme.SUCCESS_LIGHT : Theme.ERROR_LIGHT) + ";"
-            );
+        statusBox.setStyle(
+            "-fx-background-color: " + bgColor + ";" +
+            "-fx-background-radius: 12;" +
+            "-fx-border-color: " + borderColor + ";" +
+            "-fx-border-radius: 12;"
+        );
 
-            statusBox.getChildren().addAll(icon, text);
-            statusSection.getChildren().add(statusBox);
-        }
+        // Icon
+        Label icon = new Label(success ? "✓" : "!");
+        icon.setStyle(
+            "-fx-font-size: 16px;" +
+            "-fx-font-weight: 600;" +
+            "-fx-text-fill: " + textColor + ";"
+        );
+
+        // Message
+        Label text = new Label(message);
+        text.setStyle(
+            "-fx-font-size: 14px;" +
+            "-fx-font-weight: 500;" +
+            "-fx-text-fill: " + textColor + ";"
+        );
+
+        statusBox.getChildren().addAll(icon, text);
+
+        // Animate in
+        statusBox.setOpacity(0);
+        statusBox.setTranslateY(-10);
+
+        statusSection.getChildren().add(statusBox);
+
+        FadeTransition fade = new FadeTransition(Duration.millis(300), statusBox);
+        fade.setFromValue(0);
+        fade.setToValue(1);
+
+        TranslateTransition slide = new TranslateTransition(Duration.millis(300), statusBox);
+        slide.setFromY(-10);
+        slide.setToY(0);
+        slide.setInterpolator(Interpolator.EASE_OUT);
+
+        fade.play();
+        slide.play();
+    }
+
+    private void animateEntrance() {
+        view.setOpacity(0);
+
+        FadeTransition viewFade = new FadeTransition(Duration.millis(600), view);
+        viewFade.setFromValue(0);
+        viewFade.setToValue(1);
+        viewFade.setDelay(Duration.millis(50));
+        viewFade.play();
     }
 
     public Region getView() {

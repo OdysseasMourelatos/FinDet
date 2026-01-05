@@ -7,7 +7,6 @@ import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -163,22 +162,7 @@ public class MainWindow {
         Label yearBadge = new Label("2025");
         yearBadge.setStyle(Theme.badge(Theme.ACCENT_SUBTLE, Theme.ACCENT_BRIGHT));
 
-        // Status indicator
-        HBox statusBox = new HBox(8);
-        statusBox.setAlignment(Pos.CENTER);
-
-        Circle statusDot = new Circle(4);
-        statusDot.setFill(javafx.scene.paint.Color.web(Theme.SUCCESS_LIGHT));
-
-        Label statusLabel = new Label("Ενεργός");
-        statusLabel.setStyle(
-            "-fx-font-size: 12px;" +
-            "-fx-text-fill: " + Theme.TEXT_SECONDARY + ";"
-        );
-
-        statusBox.getChildren().addAll(statusDot, statusLabel);
-
-        header.getChildren().addAll(emblem, titleBox, spacer, yearBadge, statusBox);
+        header.getChildren().addAll(emblem, titleBox, spacer, yearBadge);
         return header;
     }
 
@@ -195,15 +179,15 @@ public class MainWindow {
         Circle inner = new Circle(16);
         inner.setFill(javafx.scene.paint.Color.web(Theme.BG_SURFACE));
 
-        // Greek cross simplified
-        Label cross = new Label("+");
-        cross.setStyle(
-            "-fx-font-size: 20px;" +
+        // Greek Delta symbol for FinDet
+        Label symbol = new Label("Δ");
+        symbol.setStyle(
+            "-fx-font-size: 18px;" +
             "-fx-font-weight: bold;" +
             "-fx-text-fill: " + Theme.ACCENT_PRIMARY + ";"
         );
 
-        emblem.getChildren().addAll(outer, inner, cross);
+        emblem.getChildren().addAll(outer, inner, symbol);
         return emblem;
     }
 
@@ -265,12 +249,10 @@ public class MainWindow {
             expensesBtn,
             entitiesBtn,
             explorerBtn,
-            createSeparator(),
             analysisSection,
             changesBtn,
             chartsBtn,
             statisticalBtn,
-            createSeparator(),
             exportSection,
             exportBtn,
             spacer,
@@ -289,13 +271,6 @@ public class MainWindow {
             "-fx-padding: 16 8 8 8;"
         );
         return label;
-    }
-
-    private Separator createSeparator() {
-        Separator sep = new Separator();
-        sep.setStyle("-fx-background-color: " + Theme.BORDER_MUTED + ";");
-        VBox.setMargin(sep, new Insets(8, 0, 8, 0));
-        return sep;
     }
 
     private VBox createFooter() {
