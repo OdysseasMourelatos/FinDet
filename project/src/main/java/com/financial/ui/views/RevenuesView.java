@@ -5,6 +5,7 @@ import com.financial.entries.RegularBudgetRevenue;
 import com.financial.entries.PublicInvestmentBudgetRevenue;
 import com.financial.entries.PublicInvestmentBudgetNationalRevenue;
 import com.financial.entries.PublicInvestmentBudgetCoFundedRevenue;
+import com.financial.ui.Theme;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,6 +13,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -19,22 +21,17 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Revenues view - displays budget revenues in a table with filtering options.
+ * Revenues view - displays budget revenues with Apple-like clean design.
  */
 public class RevenuesView {
 
-    // Design constants
-    private static final String BG_PRIMARY = "#0a0a0f";
-    private static final String BG_SECONDARY = "#12121a";
-    private static final String TEXT_PRIMARY = "#e4e4e7";
-    private static final String TEXT_SECONDARY = "#71717a";
-    private static final String BORDER_COLOR = "#27272a";
-
+    private final ScrollPane scrollPane;
     private final VBox view;
     private TableView<BudgetRevenue> table;
     private ObservableList<BudgetRevenue> tableData;
@@ -46,7 +43,7 @@ public class RevenuesView {
 
     public RevenuesView() {
         view = new VBox(0);
-        view.setStyle("-fx-background-color: " + BG_PRIMARY + ";");
+        view.setStyle("-fx-background-color: " + Theme.BG_BASE + ";");
 
         // Header section
         VBox header = createHeader();
@@ -77,19 +74,47 @@ public class RevenuesView {
         budgetTypeFilter.setOnAction(e -> applyFilters());
 
         view.getChildren().addAll(header, filterSection, statsBar, tableContainer);
+
+        // Wrap in scroll pane for consistency
+        scrollPane = new ScrollPane(view);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+        scrollPane.setStyle(
+            "-fx-background: " + Theme.BG_BASE + ";" +
+            "-fx-background-color: " + Theme.BG_BASE + ";" +
+            "-fx-border-color: transparent;"
+        );
     }
 
     private VBox createHeader() {
-        VBox header = new VBox(4);
-        header.setPadding(new Insets(32, 24, 24, 24));
+        VBox header = new VBox(6);
+        header.setPadding(new Insets(32, 24, 20, 24));
+
+        HBox titleRow = new HBox(12);
+        titleRow.setAlignment(Pos.CENTER_LEFT);
+
+        // Revenue icon
+        Circle icon = new Circle(16);
+        icon.setFill(javafx.scene.paint.Color.web(Theme.SUCCESS, 0.15));
+
+        Label iconText = new Label("+");
+        iconText.setStyle(
+            "-fx-font-size: 18px;" +
+            "-fx-font-weight: bold;" +
+            "-fx-text-fill: " + Theme.SUCCESS_LIGHT + ";"
+        );
+
+        javafx.scene.layout.StackPane iconContainer = new javafx.scene.layout.StackPane(icon, iconText);
 
         Label title = new Label("Έσοδα Προϋπολογισμού");
-        title.setStyle("-fx-font-size: 24px; -fx-font-weight: 600; -fx-text-fill: " + TEXT_PRIMARY + ";");
+        title.setStyle(Theme.pageTitle());
+
+        titleRow.getChildren().addAll(iconContainer, title);
 
         Label subtitle = new Label("Διαχείριση και προβολή εσόδων κρατικού προϋπολογισμού");
-        subtitle.setStyle("-fx-font-size: 13px; -fx-text-fill: " + TEXT_SECONDARY + ";");
+        subtitle.setStyle(Theme.subtitle());
 
-        header.getChildren().addAll(title, subtitle);
+        header.getChildren().addAll(titleRow, subtitle);
         return header;
     }
 
@@ -100,19 +125,24 @@ public class RevenuesView {
 
         // Search field
         searchField = new TextField();
-        searchField.setPromptText("Αναζήτηση...");
-        searchField.setPrefWidth(240);
-        searchField.setStyle(
-            "-fx-background-color: " + BG_SECONDARY + ";" +
-            "-fx-text-fill: " + TEXT_PRIMARY + ";" +
-            "-fx-prompt-text-fill: " + TEXT_SECONDARY + ";" +
-            "-fx-background-radius: 6;" +
-            "-fx-border-color: " + BORDER_COLOR + ";" +
-            "-fx-border-radius: 6;" +
-            "-fx-padding: 8 12;"
-        );
+        searchField.setPromptText("Αναζήτηση κωδικού ή περιγραφής...");
+        searchField.setPrefWidth(280);
+        searchField.setStyle(Theme.textField());
+
+        // Focus styling
+        searchField.focusedProperty().addListener((obs, wasFocused, isFocused) -> {
+            if (isFocused) {
+                searchField.setStyle(Theme.textFieldFocused());
+            } else {
+                searchField.setStyle(Theme.textField());
+            }
+        });
 
         // Level filter
+        VBox levelBox = new VBox(4);
+        Label levelLabel = new Label("Επίπεδο");
+        levelLabel.setStyle(Theme.mutedText());
+
         levelFilter = new ComboBox<>();
         levelFilter.getItems().addAll(
             "Όλα τα επίπεδα",
@@ -123,10 +153,16 @@ public class RevenuesView {
             "Επίπεδο 5"
         );
         levelFilter.setValue("Όλα τα επίπεδα");
-        styleComboBox(levelFilter);
-        levelFilter.setPrefWidth(160);
+        levelFilter.setStyle(Theme.comboBox());
+        levelFilter.setPrefWidth(140);
+
+        levelBox.getChildren().addAll(levelLabel, levelFilter);
 
         // Budget type filter
+        VBox typeBox = new VBox(4);
+        Label typeLabel = new Label("Τύπος");
+        typeLabel.setStyle(Theme.mutedText());
+
         budgetTypeFilter = new ComboBox<>();
         budgetTypeFilter.getItems().addAll(
             "Όλοι οι τύποι",
@@ -136,61 +172,62 @@ public class RevenuesView {
             "ΠΔΕ Συγχρ/νο"
         );
         budgetTypeFilter.setValue("Όλοι οι τύποι");
-        styleComboBox(budgetTypeFilter);
-        budgetTypeFilter.setPrefWidth(160);
+        budgetTypeFilter.setStyle(Theme.comboBox());
+        budgetTypeFilter.setPrefWidth(140);
 
-        filterRow.getChildren().addAll(searchField, levelFilter, budgetTypeFilter);
+        typeBox.getChildren().addAll(typeLabel, budgetTypeFilter);
+
+        filterRow.getChildren().addAll(searchField, levelBox, typeBox);
         return filterRow;
-    }
-
-    private void styleComboBox(ComboBox<String> combo) {
-        combo.setStyle(
-            "-fx-background-color: " + BG_SECONDARY + ";" +
-            "-fx-text-fill: " + TEXT_PRIMARY + ";" +
-            "-fx-background-radius: 6;" +
-            "-fx-border-color: " + BORDER_COLOR + ";" +
-            "-fx-border-radius: 6;"
-        );
     }
 
     private HBox createStatsBar() {
         HBox statsBar = new HBox(24);
         statsBar.setPadding(new Insets(12, 24, 12, 24));
         statsBar.setAlignment(Pos.CENTER_LEFT);
-        statsBar.setStyle("-fx-background-color: " + BG_SECONDARY + "; -fx-border-color: " + BORDER_COLOR + "; -fx-border-width: 1 0;");
+        statsBar.setStyle(
+            "-fx-background-color: " + Theme.BG_SURFACE + ";" +
+            "-fx-border-color: " + Theme.BORDER_MUTED + ";" +
+            "-fx-border-width: 1 0;"
+        );
 
         countLabel = new Label();
-        countLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + TEXT_SECONDARY + ";");
+        countLabel.setStyle(
+            "-fx-font-size: 13px;" +
+            "-fx-text-fill: " + Theme.TEXT_SECONDARY + ";"
+        );
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
 
         totalLabel = new Label();
-        totalLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + TEXT_SECONDARY + ";");
+        totalLabel.setStyle(
+            "-fx-font-size: 13px;" +
+            "-fx-font-weight: 600;" +
+            "-fx-text-fill: " + Theme.SUCCESS_LIGHT + ";"
+        );
 
-        statsBar.getChildren().addAll(countLabel, totalLabel);
+        statsBar.getChildren().addAll(countLabel, spacer, totalLabel);
         return statsBar;
     }
 
     private TableView<BudgetRevenue> createTable() {
         TableView<BudgetRevenue> tableView = new TableView<>();
-        tableView.setStyle(
-            "-fx-background-color: " + BG_SECONDARY + ";" +
-            "-fx-background-radius: 8;" +
-            "-fx-border-color: " + BORDER_COLOR + ";" +
-            "-fx-border-radius: 8;"
-        );
+        tableView.setStyle(Theme.table());
 
         TableColumn<BudgetRevenue, String> codeCol = new TableColumn<>("Κωδικός");
         codeCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCode()));
-        codeCol.setPrefWidth(90);
+        codeCol.setPrefWidth(100);
         codeCol.setStyle("-fx-alignment: CENTER-LEFT;");
 
         TableColumn<BudgetRevenue, String> levelCol = new TableColumn<>("Επ.");
         levelCol.setCellValueFactory(data -> new SimpleStringProperty(String.valueOf(data.getValue().getLevelOfHierarchy())));
-        levelCol.setPrefWidth(45);
+        levelCol.setPrefWidth(50);
         levelCol.setStyle("-fx-alignment: CENTER;");
 
         TableColumn<BudgetRevenue, String> descCol = new TableColumn<>("Περιγραφή");
         descCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDescription()));
-        descCol.setPrefWidth(380);
+        descCol.setPrefWidth(400);
 
         TableColumn<BudgetRevenue, String> regularCol = new TableColumn<>("Τακτικός");
         regularCol.setCellValueFactory(data -> {
@@ -200,7 +237,7 @@ public class RevenuesView {
             }
             return new SimpleStringProperty(formatAmount(r.getRegularAmount()));
         });
-        regularCol.setPrefWidth(110);
+        regularCol.setPrefWidth(120);
         regularCol.setStyle("-fx-alignment: CENTER-RIGHT;");
 
         TableColumn<BudgetRevenue, String> investmentCol = new TableColumn<>("ΠΔΕ");
@@ -211,17 +248,25 @@ public class RevenuesView {
             }
             return new SimpleStringProperty(formatAmount(r.getPublicInvestmentAmount()));
         });
-        investmentCol.setPrefWidth(110);
+        investmentCol.setPrefWidth(120);
         investmentCol.setStyle("-fx-alignment: CENTER-RIGHT;");
 
         TableColumn<BudgetRevenue, String> totalCol = new TableColumn<>("Σύνολο");
         totalCol.setCellValueFactory(data -> new SimpleStringProperty(formatAmount(data.getValue().getAmount())));
-        totalCol.setPrefWidth(120);
+        totalCol.setPrefWidth(130);
         totalCol.setStyle("-fx-alignment: CENTER-RIGHT;");
 
         tableView.getColumns().addAll(codeCol, levelCol, descCol, regularCol, investmentCol, totalCol);
         tableView.setItems(tableData);
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        // Empty state placeholder
+        Label placeholder = new Label("Δεν βρέθηκαν εγγραφές");
+        placeholder.setStyle(
+            "-fx-text-fill: " + Theme.TEXT_MUTED + ";" +
+            "-fx-font-size: 14px;"
+        );
+        tableView.setPlaceholder(placeholder);
 
         return tableView;
     }
@@ -238,7 +283,10 @@ public class RevenuesView {
 
         List<? extends BudgetRevenue> baseList = getBaseListByType(selectedType);
 
-        List<BudgetRevenue> filtered = baseList.stream().filter(r -> matchesSearchText(r, searchText)).filter(r -> matchesLevel(r, selectedLevel)).collect(Collectors.toList());
+        List<BudgetRevenue> filtered = baseList.stream().
+                filter(r -> matchesSearchText(r, searchText)).
+                filter(r -> matchesLevel(r, selectedLevel)).
+                collect(Collectors.toList());
 
         tableData.setAll(filtered);
         updateStats();
@@ -259,7 +307,8 @@ public class RevenuesView {
             return true;
         }
         String lowerSearch = searchText.toLowerCase();
-        return r.getCode().toLowerCase().contains(lowerSearch) || r.getDescription().toLowerCase().contains(lowerSearch);
+        return r.getCode().toLowerCase().contains(lowerSearch) ||
+               r.getDescription().toLowerCase().contains(lowerSearch);
     }
 
     private boolean matchesLevel(BudgetRevenue r, String selectedLevel) {
@@ -280,19 +329,14 @@ public class RevenuesView {
     private void updateStats() {
         long total = tableData.stream().mapToLong(BudgetRevenue::getAmount).sum();
         countLabel.setText(tableData.size() + " εγγραφές");
-        totalLabel.setText("Σύνολο: " + formatAmount(total));
+        totalLabel.setText("Σύνολο: " + Theme.formatAmount(total));
     }
 
     private String formatAmount(long amount) {
-        if (amount >= 1_000_000_000) {
-            return String.format("%.2f δισ.", amount / 1_000_000_000.0);
-        } else if (amount >= 1_000_000) {
-            return String.format("%.2f εκ.", amount / 1_000_000.0);
-        }
-        return String.format("%,d €", amount);
+        return Theme.formatAmount(amount);
     }
 
     public Region getView() {
-        return view;
+        return scrollPane;
     }
 }

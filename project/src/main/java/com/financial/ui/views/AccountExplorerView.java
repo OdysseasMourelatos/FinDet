@@ -1,6 +1,7 @@
 package com.financial.ui.views;
 
 import com.financial.entries.BudgetRevenue;
+import com.financial.ui.Theme;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -8,29 +9,25 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
 
 /**
- * Account Explorer view - search by code and display hierarchy.
+ * Account Explorer view - search by code and display hierarchy with clean design.
  */
 public class AccountExplorerView {
 
-    // Design constants
-    private static final String BG_PRIMARY = "#0a0a0f";
-    private static final String BG_SECONDARY = "#12121a";
-    private static final String TEXT_PRIMARY = "#e4e4e7";
-    private static final String TEXT_SECONDARY = "#71717a";
-    private static final String BORDER_COLOR = "#27272a";
-    private static final String ACCENT = "#3b82f6";
-
+    private final ScrollPane scrollPane;
     private final VBox view;
     private TextField searchField;
     private Label selectedAccountLabel;
@@ -43,7 +40,7 @@ public class AccountExplorerView {
 
     public AccountExplorerView() {
         view = new VBox(0);
-        view.setStyle("-fx-background-color: " + BG_PRIMARY + ";");
+        view.setStyle("-fx-background-color: " + Theme.BG_BASE + ";");
 
         // Header
         VBox header = createHeader();
@@ -56,24 +53,52 @@ public class AccountExplorerView {
 
         // Tables section
         HBox tablesSection = createTablesSection();
+        VBox.setVgrow(tablesSection, Priority.ALWAYS);
 
         // Status bar
         HBox statusBar = createStatusBar();
 
         view.getChildren().addAll(header, searchSection, accountCard, tablesSection, statusBar);
+
+        // Wrap in scroll pane
+        scrollPane = new ScrollPane(view);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+        scrollPane.setStyle(
+            "-fx-background: " + Theme.BG_BASE + ";" +
+            "-fx-background-color: " + Theme.BG_BASE + ";" +
+            "-fx-border-color: transparent;"
+        );
     }
 
     private VBox createHeader() {
-        VBox header = new VBox(4);
-        header.setPadding(new Insets(32, 24, 16, 24));
+        VBox header = new VBox(6);
+        header.setPadding(new Insets(32, 24, 20, 24));
+
+        HBox titleRow = new HBox(12);
+        titleRow.setAlignment(Pos.CENTER_LEFT);
+
+        Circle icon = new Circle(16);
+        icon.setFill(javafx.scene.paint.Color.web(Theme.ACCENT_LIGHT, 0.15));
+
+        Label iconText = new Label("?");
+        iconText.setStyle(
+            "-fx-font-size: 16px;" +
+            "-fx-font-weight: bold;" +
+            "-fx-text-fill: " + Theme.ACCENT_BRIGHT + ";"
+        );
+
+        StackPane iconContainer = new StackPane(icon, iconText);
 
         Label title = new Label("Εξερεύνηση Λογαριασμών");
-        title.setStyle("-fx-font-size: 24px; -fx-font-weight: 600; -fx-text-fill: " + TEXT_PRIMARY + ";");
+        title.setStyle(Theme.pageTitle());
 
-        Label subtitle = new Label("Αναζητήστε κωδικό για να δείτε την ιεραρχία κατηγοριών");
-        subtitle.setStyle("-fx-font-size: 13px; -fx-text-fill: " + TEXT_SECONDARY + ";");
+        titleRow.getChildren().addAll(iconContainer, title);
 
-        header.getChildren().addAll(title, subtitle);
+        Label subtitle = new Label("Αναζητήστε κωδικό για να δείτε την ιεραρχία κατηγοριών εσόδων");
+        subtitle.setStyle(Theme.subtitle());
+
+        header.getChildren().addAll(titleRow, subtitle);
         return header;
     }
 
@@ -85,26 +110,16 @@ public class AccountExplorerView {
         searchField = new TextField();
         searchField.setPromptText("Εισάγετε κωδικό (π.χ. 11, 111, 11101)");
         searchField.setPrefWidth(320);
-        searchField.setStyle(
-            "-fx-background-color: " + BG_SECONDARY + ";" +
-            "-fx-text-fill: " + TEXT_PRIMARY + ";" +
-            "-fx-prompt-text-fill: " + TEXT_SECONDARY + ";" +
-            "-fx-background-radius: 6;" +
-            "-fx-border-color: " + BORDER_COLOR + ";" +
-            "-fx-border-radius: 6;" +
-            "-fx-padding: 10 14;" +
-            "-fx-font-size: 14px;"
-        );
+        searchField.setStyle(Theme.textField());
+
+        searchField.focusedProperty().addListener((obs, wasFocused, isFocused) -> {
+            searchField.setStyle(isFocused ? Theme.textFieldFocused() : Theme.textField());
+        });
 
         Button searchButton = new Button("Αναζήτηση");
-        searchButton.setStyle(
-            "-fx-background-color: " + ACCENT + ";" +
-            "-fx-text-fill: white;" +
-            "-fx-font-weight: 600;" +
-            "-fx-background-radius: 6;" +
-            "-fx-padding: 10 20;" +
-            "-fx-cursor: hand;"
-        );
+        searchButton.setStyle(Theme.buttonPrimary());
+        searchButton.setOnMouseEntered(e -> searchButton.setStyle(Theme.buttonPrimaryHover()));
+        searchButton.setOnMouseExited(e -> searchButton.setStyle(Theme.buttonPrimary()));
         searchButton.setOnAction(e -> performSearch());
         searchField.setOnAction(e -> performSearch());
 
@@ -114,33 +129,24 @@ public class AccountExplorerView {
 
     private VBox createAccountCard() {
         VBox card = new VBox(8);
-        card.setPadding(new Insets(16, 24, 16, 24));
+        card.setPadding(new Insets(0, 24, 16, 24));
 
         VBox innerCard = new VBox(8);
         innerCard.setPadding(new Insets(16));
-        innerCard.setStyle(
-            "-fx-background-color: " + BG_SECONDARY + ";" +
-            "-fx-background-radius: 8;" +
-            "-fx-border-color: " + BORDER_COLOR + ";" +
-            "-fx-border-radius: 8;"
-        );
+        innerCard.setStyle(Theme.card());
 
         HBox topRow = new HBox(12);
         topRow.setAlignment(Pos.CENTER_LEFT);
 
         levelIndicator = new Label("");
-        levelIndicator.setStyle(
-            "-fx-background-color: " + ACCENT + ";" +
-            "-fx-text-fill: white;" +
-            "-fx-padding: 4 10;" +
-            "-fx-background-radius: 4;" +
-            "-fx-font-size: 11px;" +
-            "-fx-font-weight: 600;"
-        );
+        levelIndicator.setStyle(Theme.badge(Theme.ACCENT_PRIMARY, "white"));
         levelIndicator.setVisible(false);
 
         selectedAccountLabel = new Label("Εισάγετε κωδικό για αναζήτηση");
-        selectedAccountLabel.setStyle("-fx-font-size: 15px; -fx-text-fill: " + TEXT_SECONDARY + ";");
+        selectedAccountLabel.setStyle(
+            "-fx-font-size: 15px;" +
+            "-fx-text-fill: " + Theme.TEXT_SECONDARY + ";"
+        );
 
         topRow.getChildren().addAll(levelIndicator, selectedAccountLabel);
         innerCard.getChildren().add(topRow);
@@ -152,17 +158,13 @@ public class AccountExplorerView {
     private HBox createTablesSection() {
         HBox section = new HBox(16);
         section.setPadding(new Insets(0, 24, 16, 24));
-        VBox.setVgrow(section, Priority.ALWAYS);
 
-        // Initialize data
         superCategoriesData = FXCollections.observableArrayList();
         subCategoriesData = FXCollections.observableArrayList();
 
-        // Super categories
         VBox superBox = createTableBox("Ανώτερες Κατηγορίες", superCategoriesData, true);
         HBox.setHgrow(superBox, Priority.ALWAYS);
 
-        // Sub categories
         VBox subBox = createTableBox("Υποκατηγορίες", subCategoriesData, false);
         HBox.setHgrow(subBox, Priority.ALWAYS);
 
@@ -175,7 +177,11 @@ public class AccountExplorerView {
         VBox.setVgrow(box, Priority.ALWAYS);
 
         Label titleLabel = new Label(title);
-        titleLabel.setStyle("-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: " + TEXT_SECONDARY + ";");
+        titleLabel.setStyle(
+            "-fx-font-size: 13px;" +
+            "-fx-font-weight: 600;" +
+            "-fx-text-fill: " + Theme.TEXT_SECONDARY + ";"
+        );
 
         TableView<BudgetRevenue> table = createTable(data);
         VBox.setVgrow(table, Priority.ALWAYS);
@@ -203,13 +209,11 @@ public class AccountExplorerView {
 
     private TableView<BudgetRevenue> createTable(ObservableList<BudgetRevenue> data) {
         TableView<BudgetRevenue> table = new TableView<>();
-        table.setStyle(
-            "-fx-background-color: " + BG_SECONDARY + ";" +
-            "-fx-background-radius: 8;" +
-            "-fx-border-color: " + BORDER_COLOR + ";" +
-            "-fx-border-radius: 8;"
-        );
-        table.setPlaceholder(new Label(""));
+        table.setStyle(Theme.table());
+
+        Label placeholder = new Label("");
+        placeholder.setStyle("-fx-text-fill: " + Theme.TEXT_MUTED + ";");
+        table.setPlaceholder(placeholder);
 
         TableColumn<BudgetRevenue, String> codeCol = new TableColumn<>("Κωδικός");
         codeCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getCode()));
@@ -225,8 +229,8 @@ public class AccountExplorerView {
         descCol.setPrefWidth(200);
 
         TableColumn<BudgetRevenue, String> amountCol = new TableColumn<>("Ποσό");
-        amountCol.setCellValueFactory(d -> new SimpleStringProperty(formatAmount(d.getValue().getAmount())));
-        amountCol.setPrefWidth(90);
+        amountCol.setCellValueFactory(d -> new SimpleStringProperty(Theme.formatAmount(d.getValue().getAmount())));
+        amountCol.setPrefWidth(100);
         amountCol.setStyle("-fx-alignment: CENTER-RIGHT;");
 
         table.getColumns().addAll(codeCol, levelCol, descCol, amountCol);
@@ -239,10 +243,17 @@ public class AccountExplorerView {
         HBox bar = new HBox(24);
         bar.setPadding(new Insets(12, 24, 12, 24));
         bar.setAlignment(Pos.CENTER_LEFT);
-        bar.setStyle("-fx-background-color: " + BG_SECONDARY + "; -fx-border-color: " + BORDER_COLOR + "; -fx-border-width: 1 0 0 0;");
+        bar.setStyle(
+            "-fx-background-color: " + Theme.BG_SURFACE + ";" +
+            "-fx-border-color: " + Theme.BORDER_MUTED + ";" +
+            "-fx-border-width: 1 0 0 0;"
+        );
 
-        statusLabel = new Label("Διπλό κλικ σε εγγραφή για πλοήγηση");
-        statusLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + TEXT_SECONDARY + ";");
+        statusLabel = new Label("Διπλό κλικ σε εγγραφή για πλοήγηση στην ιεραρχία");
+        statusLabel.setStyle(
+            "-fx-font-size: 12px;" +
+            "-fx-text-fill: " + Theme.TEXT_SECONDARY + ";"
+        );
 
         bar.getChildren().add(statusLabel);
         return bar;
@@ -270,8 +281,11 @@ public class AccountExplorerView {
         levelIndicator.setVisible(true);
 
         // Update account info
-        selectedAccountLabel.setText(revenue.getCode() + "  •  " + revenue.getDescription() + "  •  " + formatAmount(revenue.getAmount()));
-        selectedAccountLabel.setStyle("-fx-font-size: 15px; -fx-text-fill: " + TEXT_PRIMARY + ";");
+        selectedAccountLabel.setText(revenue.getCode() + "  •  " + revenue.getDescription() + "  •  " + Theme.formatAmount(revenue.getAmount()));
+        selectedAccountLabel.setStyle(
+            "-fx-font-size: 15px;" +
+            "-fx-text-fill: " + Theme.TEXT_PRIMARY + ";"
+        );
 
         // Get hierarchy
         ArrayList<BudgetRevenue> superCategories = revenue.getAllSuperCategories();
@@ -291,28 +305,25 @@ public class AccountExplorerView {
         statusLabel.setText(
             "Ανώτερες: " + superCategoriesData.size() +
             "  •  Υποκατηγορίες: " + subCategoriesData.size() +
-            "  •  Σύνολο υποκατηγοριών: " + formatAmount(subTotal)
+            "  •  Σύνολο υποκατηγοριών: " + Theme.formatAmount(subTotal)
         );
-        statusLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + TEXT_SECONDARY + ";");
+        statusLabel.setStyle(
+            "-fx-font-size: 12px;" +
+            "-fx-text-fill: " + Theme.TEXT_SECONDARY + ";"
+        );
     }
 
     private void showError(String message) {
         levelIndicator.setVisible(false);
         selectedAccountLabel.setText(message);
-        selectedAccountLabel.setStyle("-fx-font-size: 15px; -fx-text-fill: #ef4444;");
+        selectedAccountLabel.setStyle(
+            "-fx-font-size: 15px;" +
+            "-fx-text-fill: " + Theme.ERROR_LIGHT + ";"
+        );
         statusLabel.setText("");
     }
 
-    private String formatAmount(long amount) {
-        if (amount >= 1_000_000_000) {
-            return String.format("%.2f δισ.", amount / 1_000_000_000.0);
-        } else if (amount >= 1_000_000) {
-            return String.format("%.2f εκ.", amount / 1_000_000.0);
-        }
-        return String.format("%,d €", amount);
-    }
-
     public Region getView() {
-        return view;
+        return scrollPane;
     }
 }
