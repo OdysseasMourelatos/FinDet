@@ -2,6 +2,7 @@ package com.financial.ui.views;
 
 import com.financial.statistical_analysis.FrequencyRow;
 import com.financial.statistical_analysis.FrequencyTable;
+import com.financial.statistical_analysis.StatisticalExpenses;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -16,6 +17,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.FlowPane;
 
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.BarChart;
@@ -23,7 +25,13 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.LineChart;
 
+import javafx.scene.shape.Line;
+import javafx.scene.paint.Color;
+
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -97,13 +105,126 @@ public class StatisticsView {
 
     private void updateContent(String type) {
         contentArea.getChildren().clear();
-        if (type.equals("Frequency")) {
-            showFrequencyTable();
-        } else if (type.equals("Histogram")) {
-            showHistogram();
-        } else if  (type.equals("Polygon")) {
-            showFrequencyPolygon();
+        switch (type) {
+            case "Descriptive" -> showDescriptiveStats();
+            case "Frequency" -> showFrequencyTable();
+            case "Histogram" -> showHistogram();
+            case "Polygon" -> showFrequencyPolygon();
         }
+    }
+
+    private void showDescriptiveStats() {
+        // 1. Λήψη δεδομένων από την StatisticalExpenses
+        java.util.Map<String, Long> sums = StatisticalExpenses.getMinistrySums();
+        DescriptiveStatistics stats = StatisticalExpenses.descriptiveStats(sums);
+
+        // 2. Δημιουργία Dashboard (FlowPane για αυτόματη αλλαγή σειράς)
+        FlowPane dashboard = new javafx.scene.layout.FlowPane(20, 20);
+        dashboard.setPadding(new Insets(10, 0, 0, 0));
+        dashboard.setAlignment(Pos.TOP_LEFT);
+
+        double q1 = stats.getPercentile(25);
+        double q3 = stats.getPercentile(75);
+        double iqr = q3 - q1;
+        double range = stats.getMax() - stats.getMin();
+
+        // 3. Προσθήκη καρτών με τους βασικούς δείκτες
+        dashboard.getChildren().addAll(
+                createStatCard("Μέσος Όρος (Mean)", formatSimplified(String.valueOf(stats.getMean()))),
+                createStatCard("Διάμεσος (Median - Q2)", formatSimplified(String.valueOf(stats.getPercentile(50)))),
+                createStatCard("Τυπική Απόκλιση (Std. Deviation) ", formatSimplified(String.valueOf(stats.getStandardDeviation()))),
+                createStatCard("1ο Τεταρτημόριο (Q1)", formatSimplified(String.valueOf(q1))),
+                createStatCard("3ο Τεταρτημόριο (Q3)", formatSimplified(String.valueOf(q3))),
+                createStatCard("Ενδοτεταρτημοριακό Εύρος (IQR)", formatSimplified(String.valueOf(iqr))),
+                createStatCard("Ελάχιστο (Min)", formatSimplified(String.valueOf(stats.getMin()))),
+                createStatCard("Μέγιστο (Max)", formatSimplified(String.valueOf(stats.getMax()))),
+                createStatCard("Εύρος (Range)", formatSimplified(String.valueOf(range))),
+                createStatCard("Ασυμμετρία (Skewness)", String.format("%.4f", stats.getSkewness())),
+                createStatCard("Κυρτότητα (Kurtosis)", String.format("%.4f", stats.getKurtosis())),
+                createStatCard("Συνολικοί Φορείς", String.valueOf(stats.getN()))
+        );
+
+        // 4. Εύρεση Outliers με δύο μεθόδους
+        Map<String, Long> outliersIQR = StatisticalExpenses.findOutliersIQR(sums, stats);
+        Map<String, Long> outliersZ = StatisticalExpenses.findOutliersZscore(sums, stats);
+
+        if (!outliersIQR.isEmpty() || !outliersZ.isEmpty()) {
+
+            VBox outliersContainer = new VBox(15);
+            outliersContainer.setPadding(new Insets(40, 0, 0, 0));
+
+            // --- Προσθήκη Κεντρικού Τίτλου Ενότητας ---
+            Label mainOutlierHeader = new Label("ΑΝΑΛΥΣΗ ΑΚΡΑΙΩΝ ΤΙΜΩΝ (OUTLIERS)");
+            mainOutlierHeader.setStyle("-fx-text-fill: #ef4444; -fx-font-size: 16px; -fx-font-weight: bold; -fx-letter-spacing: 2;");
+
+            Line separator = new Line(0, 0, 400, 0);
+            separator.setStroke(Color.web("#ef4444", 0.3));
+
+            // Προσθέτουμε τίτλο και γραμμή στο container
+            outliersContainer.getChildren().addAll(mainOutlierHeader, separator);
+
+            // Ενότητα IQR (Προσθήκη στο ΗΔΗ υπάρχον container)
+            if (!outliersIQR.isEmpty()) {
+                outliersContainer.getChildren().add(createOutlierSection("Μέθοδος IQR (Ενδοτεταρτημοριακό Εύρος):", outliersIQR));
+            }
+
+            // Ενότητα Z-Score (Προσθήκη στο ΗΔΗ υπάρχον container)
+            if (!outliersZ.isEmpty()) {
+                outliersContainer.getChildren().add(createOutlierSection("Μέθοδος Z-Score (Τυπικές Αποκλίσεις):", outliersZ));
+            }
+
+            // Τελικό Layout
+            VBox mainContainer = new VBox(20);
+            mainContainer.getChildren().addAll(dashboard, outliersContainer);
+            contentArea.getChildren().add(mainContainer);
+        } else {
+            contentArea.getChildren().add(dashboard);
+        }
+    }
+
+    private VBox createOutlierSection(String title, Map<String, Long> outliers) {
+        VBox section = new VBox(8);
+
+        Label lblTitle = new Label(title);
+        lblTitle.setStyle("-fx-text-fill: #ef4444; -fx-font-weight: bold; -fx-font-size: 14px;");
+
+        VBox list = new VBox(5);
+        list.setPadding(new Insets(0, 0, 0, 15)); // Εσοχή για τη λίστα
+
+        outliers.forEach((name, value) -> {
+            Label item = new Label("• " + name + " (" + formatSimplified(String.valueOf(value)) + ")");
+            item.setStyle("-fx-text-fill: " + TEXT_SECONDARY + "; -fx-font-size: 13px;");
+            item.setWrapText(true);
+            list.getChildren().add(item);
+        });
+
+        section.getChildren().addAll(lblTitle, list);
+        return section;
+    }
+
+    private VBox createStatCard(String title, String value) {
+        VBox card = new VBox(8);
+        card.setPrefSize(220, 100);
+        card.setPadding(new Insets(20));
+        card.setStyle("-fx-background-color: " + BG_SECONDARY + "; " +
+                "-fx-background-radius: 12; " +
+                "-fx-border-color: " + BORDER_COLOR + "; " +
+                "-fx-border-radius: 12; " +
+                "-fx-border-width: 1;");
+
+        Label lblTitle = new Label(title);
+        lblTitle.setStyle("-fx-text-fill: " + TEXT_SECONDARY + "; -fx-font-size: 12px; -fx-text-transform: uppercase;");
+
+        Label lblValue = new Label(value);
+        lblValue.setStyle("-fx-text-fill: " + ACCENT_COLOR + "; -fx-font-size: 18px; -fx-font-weight: bold;");
+
+        card.getChildren().addAll(lblTitle, lblValue);
+
+        // Εφέ κατά το πέρασμα του ποντικιού
+        card.setOnMouseEntered(e -> card.setStyle(card.getStyle() + "-fx-border-color: " + ACCENT_COLOR + ";"));
+        card.setOnMouseExited(e -> card.setStyle(card.getStyle() + "-fx-border-color: " + BORDER_COLOR + ";"));
+
+        return card;
     }
 
     private void showFrequencyTable() {
