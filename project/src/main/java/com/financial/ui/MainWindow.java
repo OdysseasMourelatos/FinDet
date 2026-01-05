@@ -7,7 +7,6 @@ import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -163,22 +162,7 @@ public class MainWindow {
         Label yearBadge = new Label("2025");
         yearBadge.setStyle(Theme.badge(Theme.ACCENT_SUBTLE, Theme.ACCENT_BRIGHT));
 
-        // Status indicator
-        HBox statusBox = new HBox(8);
-        statusBox.setAlignment(Pos.CENTER);
-
-        Circle statusDot = new Circle(4);
-        statusDot.setFill(javafx.scene.paint.Color.web(Theme.SUCCESS_LIGHT));
-
-        Label statusLabel = new Label("Ενεργός");
-        statusLabel.setStyle(
-            "-fx-font-size: 12px;" +
-            "-fx-text-fill: " + Theme.TEXT_SECONDARY + ";"
-        );
-
-        statusBox.getChildren().addAll(statusDot, statusLabel);
-
-        header.getChildren().addAll(emblem, titleBox, spacer, yearBadge, statusBox);
+        header.getChildren().addAll(emblem, titleBox, spacer, yearBadge);
         return header;
     }
 
@@ -195,15 +179,15 @@ public class MainWindow {
         Circle inner = new Circle(16);
         inner.setFill(javafx.scene.paint.Color.web(Theme.BG_SURFACE));
 
-        // Greek cross simplified
-        Label cross = new Label("+");
-        cross.setStyle(
-            "-fx-font-size: 20px;" +
+        // Greek Delta symbol for FinDet
+        Label symbol = new Label("Δ");
+        symbol.setStyle(
+            "-fx-font-size: 18px;" +
             "-fx-font-weight: bold;" +
             "-fx-text-fill: " + Theme.ACCENT_PRIMARY + ";"
         );
 
-        emblem.getChildren().addAll(outer, inner, cross);
+        emblem.getChildren().addAll(outer, inner, symbol);
         return emblem;
     }
 
@@ -265,12 +249,10 @@ public class MainWindow {
             expensesBtn,
             entitiesBtn,
             explorerBtn,
-            createSeparator(),
             analysisSection,
             changesBtn,
             chartsBtn,
             statisticalBtn,
-            createSeparator(),
             exportSection,
             exportBtn,
             spacer,
@@ -289,13 +271,6 @@ public class MainWindow {
             "-fx-padding: 16 8 8 8;"
         );
         return label;
-    }
-
-    private Separator createSeparator() {
-        Separator sep = new Separator();
-        sep.setStyle("-fx-background-color: " + Theme.BORDER_MUTED + ";");
-        VBox.setMargin(sep, new Insets(8, 0, 8, 0));
-        return sep;
     }
 
     private VBox createFooter() {
@@ -373,7 +348,7 @@ public class MainWindow {
     }
 
     /**
-     * Custom navigation button with Apple-like styling
+     * Custom navigation button with futuristic hover animations
      */
     private class NavButton extends HBox {
         private boolean isActive = false;
@@ -381,16 +356,12 @@ public class MainWindow {
         private Runnable onAction;
 
         public NavButton(String text, String id) {
-            super(12);
+            super(8);
             setId(id);
             setAlignment(Pos.CENTER_LEFT);
-            setPadding(new Insets(10, 12, 10, 12));
+            setPadding(new Insets(10, 16, 10, 16));
             setMaxWidth(Double.MAX_VALUE);
             setCursor(javafx.scene.Cursor.HAND);
-
-            // Icon placeholder (small colored dot)
-            Circle icon = new Circle(4);
-            icon.setFill(javafx.scene.paint.Color.web(Theme.TEXT_MUTED));
 
             textLabel = new Label(text);
             textLabel.setStyle(
@@ -398,19 +369,18 @@ public class MainWindow {
                 "-fx-text-fill: " + Theme.TEXT_SECONDARY + ";"
             );
 
-            getChildren().addAll(icon, textLabel);
+            getChildren().add(textLabel);
             updateStyle();
 
             setOnMouseEntered(e -> {
                 if (!isActive) {
-                    setStyle(Theme.navButtonHover());
-                    textLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: " + Theme.TEXT_PRIMARY + ";");
+                    playHoverAnimation(true);
                 }
             });
 
             setOnMouseExited(e -> {
                 if (!isActive) {
-                    updateStyle();
+                    playHoverAnimation(false);
                 }
             });
 
@@ -419,6 +389,22 @@ public class MainWindow {
                     onAction.run();
                 }
             });
+        }
+
+        private void playHoverAnimation(boolean entering) {
+            // Smooth slide animation (no scale to keep crisp text)
+            TranslateTransition translate = new TranslateTransition(Duration.millis(120), this);
+            translate.setToX(entering ? 6 : 0);
+
+            // Update styles - no blur effects, just clean color changes
+            if (entering) {
+                setStyle(Theme.navButtonHover());
+                textLabel.setStyle("-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: " + Theme.TEXT_PRIMARY + ";");
+            } else {
+                updateStyle();
+            }
+
+            translate.play();
         }
 
         public void setOnAction(Runnable action) {
@@ -431,27 +417,22 @@ public class MainWindow {
         }
 
         private void updateStyle() {
+            // Reset transforms
+            setTranslateX(0);
+
             if (isActive) {
                 setStyle(Theme.navButtonActive());
                 textLabel.setStyle(
-                    "-fx-font-size: 13px;" +
-                    "-fx-font-weight: 600;" +
-                    "-fx-text-fill: " + Theme.ACCENT_BRIGHT + ";"
+                    "-fx-font-size: 14px;" +
+                    "-fx-font-weight: bold;" +
+                    "-fx-text-fill: " + Theme.TEXT_PRIMARY + ";"
                 );
-                // Update icon color
-                if (!getChildren().isEmpty() && getChildren().get(0) instanceof Circle icon) {
-                    icon.setFill(javafx.scene.paint.Color.web(Theme.ACCENT_BRIGHT));
-                }
             } else {
                 setStyle(Theme.navButton());
                 textLabel.setStyle(
                     "-fx-font-size: 13px;" +
                     "-fx-text-fill: " + Theme.TEXT_SECONDARY + ";"
                 );
-                // Reset icon color
-                if (!getChildren().isEmpty() && getChildren().get(0) instanceof Circle icon) {
-                    icon.setFill(javafx.scene.paint.Color.web(Theme.TEXT_MUTED));
-                }
             }
         }
     }
