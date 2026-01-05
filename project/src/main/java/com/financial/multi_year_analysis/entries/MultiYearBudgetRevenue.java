@@ -40,7 +40,7 @@ public class MultiYearBudgetRevenue extends MultiYearBudgetEntry {
     public static List<MultiYearBudgetRevenue> getMultiYearBudgetRevenues() {
         return multiYearBudgetRevenues;
     }
-    
+
     /**
      * Retrieves all revenue entries for a specific fiscal year.
      * 
