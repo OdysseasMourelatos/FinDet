@@ -9,14 +9,22 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TableCell; // Αυτό έλειπε
+import javafx.scene.control.TableCell;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
+import javafx.scene.chart.XYChart;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.LineChart;
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class StatisticsView {
@@ -44,8 +52,9 @@ public class StatisticsView {
         Button descriptiveBtn = createNavButton("Περιγραφικά Στατιστικά");
         Button frequencyBtn = createNavButton("Πίνακας Συχνοτήτων");
         Button histogramBtn = createNavButton("Ιστόγραμμα");
+        Button polygonBtn = createNavButton("Πολυγωνική γραμμή");
 
-        navBar.getChildren().addAll(descriptiveBtn, frequencyBtn, histogramBtn);
+        navBar.getChildren().addAll(descriptiveBtn, frequencyBtn, histogramBtn, polygonBtn);
 
         contentArea = new VBox();
         contentArea.setPadding(new Insets(0, 24, 24, 24));
@@ -58,6 +67,7 @@ public class StatisticsView {
         descriptiveBtn.setOnAction(e -> updateContent("Descriptive"));
         frequencyBtn.setOnAction(e -> updateContent("Frequency"));
         histogramBtn.setOnAction(e -> updateContent("Histogram"));
+        polygonBtn.setOnAction(e -> updateContent("Polygon"));
 
         view.getChildren().addAll(header, navBar, contentArea);
     }
@@ -89,10 +99,10 @@ public class StatisticsView {
         contentArea.getChildren().clear();
         if (type.equals("Frequency")) {
             showFrequencyTable();
-        } else {
-            Label resultLabel = new Label("Προβολή: " + type);
-            resultLabel.setStyle("-fx-text-fill: " + TEXT_PRIMARY + "; -fx-font-size: 16px;");
-            contentArea.getChildren().add(resultLabel);
+        } else if (type.equals("Histogram")) {
+            showHistogram();
+        } else if  (type.equals("Polygon")) {
+            showFrequencyPolygon();
         }
     }
 
@@ -152,6 +162,86 @@ public class StatisticsView {
         table.getColumns().addAll(intervalCol, freqCol, percCol, cumFreqCol, cumPercCol);
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         contentArea.getChildren().add(table);
+    }
+
+    private void showHistogram() {
+        List<FrequencyRow> data = FrequencyTable.buildFromStat().stream().filter(row -> row.getFrequency() > 0).collect(Collectors.toList());
+
+        CategoryAxis xAxis = new CategoryAxis();
+        xAxis.setLabel("Κλίμακα Προϋπολογισμού");
+
+        NumberAxis yAxis = new NumberAxis();
+        yAxis.setLabel("Πλήθος Φορέων");
+        yAxis.setTickUnit(1);
+        yAxis.setMinorTickVisible(false);
+
+        BarChart<String, Number> histogram = new BarChart<>(xAxis, yAxis);
+        histogram.setTitle("Κατανομή Φορέων ανά Μέγεθος Δαπανών");
+        histogram.setLegendVisible(false);
+        histogram.setAnimated(false);
+
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+
+        for (FrequencyRow row : data) {
+            String[] parts = row.getInterval().split("-");
+            String label = formatSimplified(parts[0]) + " - " + formatSimplified(parts[1]);
+            series.getData().add(new XYChart.Data<>(label, row.getFrequency()));
+        }
+
+        histogram.getData().add(series);
+
+        for (XYChart.Data<String, Number> dataNode : series.getData()) {
+            dataNode.nodeProperty().addListener((obs, oldNode, newNode) -> {
+                if (newNode != null) {
+                    newNode.setStyle("-fx-bar-fill: #87CEEB;");
+                    Tooltip tooltip = new Tooltip(dataNode.getYValue().intValue() + " Φορείς");
+                    Tooltip.install(newNode, tooltip);
+                    newNode.setCursor(javafx.scene.Cursor.HAND);
+                }
+            });
+        }
+
+        histogram.setStyle("-fx-background-color: transparent;");
+        histogram.getStylesheets().add("data:text/css," +
+                ".default-color0.chart-bar { -fx-bar-fill: #87CEEB; }");
+
+        VBox.setVgrow(histogram, Priority.ALWAYS);
+        contentArea.getChildren().add(histogram);
+    }
+
+    private void showFrequencyPolygon() {
+        List<FrequencyRow> data = FrequencyTable.buildFromStat().stream().filter(row -> row.getFrequency() > 0).collect(Collectors.toList());
+
+        CategoryAxis xAxis = new CategoryAxis();
+        xAxis.setLabel("Κλίμακα Προϋπολογισμού");
+
+        NumberAxis yAxis = new NumberAxis();
+        yAxis.setLabel("Πλήθος Φορέων");
+        yAxis.setTickUnit(1);
+
+        LineChart<String, Number> lineChart = new LineChart<>(xAxis, yAxis);
+        lineChart.setTitle("Τάση Συγκέντρωσης Φορέων ανά Επίπεδο Δαπανών");
+        lineChart.setLegendVisible(false);
+        lineChart.setAnimated(false);
+
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+
+        for (FrequencyRow row : data) {
+            String[] parts = row.getInterval().split("-");
+            String label = formatSimplified(parts[0]) + " - " + formatSimplified(parts[1]);
+            series.getData().add(new XYChart.Data<>(label, row.getFrequency()));
+        }
+
+        lineChart.getData().add(series);
+
+        // Styling για να φαίνεται "Fintech"
+        lineChart.setStyle("-fx-background-color: transparent;");
+        lineChart.getStylesheets().add("data:text/css," +
+                ".chart-series-line { -fx-stroke: #87CEEB; -fx-stroke-width: 3px; } " +
+                ".chart-line-symbol { -fx-background-color: #ffffff, #87CEEB; -fx-background-radius: 5px; }");
+
+        VBox.setVgrow(lineChart, Priority.ALWAYS);
+        contentArea.getChildren().add(lineChart);
     }
 
     // Helper μέθοδοι για ομοιομορφία στο styling
