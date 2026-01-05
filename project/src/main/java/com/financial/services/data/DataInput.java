@@ -76,8 +76,8 @@ public class DataInput {
             case "HISTORICAL_BUDGET_REVENUES" -> createHistoricalBudgetRevenueFromCSV(values);
             case "HISTORICAL_BUDGET_EXPENSES" -> createHistoricalBudgetExpenseFromCSV(values);
             case "HISTORICAL_BUDGET_EXPENSES_PER_ENTITY" -> createHistoricalBudgetExpensePerEntityFromCSV(values);
-            case "UNKNOWN" -> System.out.println("Σφάλμα: Άγνωστος τύπος CSV.");
-            default -> System.out.println("Σφάλμα στη γραμμή: " + Arrays.toString(values));
+            case "UNKNOWN" -> { } // Skip unknown CSV types silently
+            default -> { } // Skip unrecognized rows silently
         }
     }
 

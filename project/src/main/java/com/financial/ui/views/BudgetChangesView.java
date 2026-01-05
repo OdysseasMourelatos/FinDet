@@ -1,9 +1,7 @@
 package com.financial.ui.views;
 
-import com.financial.entries.BudgetRevenue;
-import com.financial.entries.RegularBudgetRevenue;
-import com.financial.entries.PublicInvestmentBudgetNationalRevenue;
-import com.financial.entries.PublicInvestmentBudgetCoFundedRevenue;
+import com.financial.entries.*;
+import com.financial.services.BudgetType;
 import com.financial.ui.Theme;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
@@ -13,13 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -30,18 +22,20 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
- * Budget Changes view - allows users to make changes to revenue accounts
+ * Budget Changes view - allows users to make changes to revenue and expense accounts
  * with gamified feedback showing before/after values.
  */
 public class BudgetChangesView {
 
     private final ScrollPane scrollPane;
     private final VBox view;
+    private TabPane tabPane;
 
-    // Form components
+    // Revenue form components
     private ComboBox<String> budgetTypeCombo;
     private TextField accountCodeField;
     private TextField changeValueField;
@@ -50,10 +44,26 @@ public class BudgetChangesView {
     private Button executeButton;
     private Label statusLabel;
 
-    // Results area
+    // Revenue results area
     private VBox resultsContainer;
     private TableView<ChangeResult> resultsTable;
     private ObservableList<ChangeResult> resultsData;
+
+    // Expense form components
+    private ComboBox<String> expenseBudgetTypeCombo;
+    private ComboBox<String> expenseScopeCombo;
+    private ComboBox<String> expenseEntityCombo;
+    private ComboBox<String> expenseServiceCombo;
+    private ComboBox<String> expenseCategoryCombo;
+    private TextField expenseChangeValueField;
+    private ComboBox<String> expenseChangeTypeCombo;
+    private Button expenseExecuteButton;
+    private Label expenseStatusLabel;
+
+    // Expense results area
+    private VBox expenseResultsContainer;
+    private TableView<ExpenseChangeResult> expenseResultsTable;
+    private ObservableList<ExpenseChangeResult> expenseResultsData;
 
     public BudgetChangesView() {
         view = new VBox(0);
@@ -62,14 +72,25 @@ public class BudgetChangesView {
         // Header
         VBox header = createHeader();
 
-        // Form
-        VBox formSection = createFormSection();
+        // Create TabPane for Revenues and Expenses
+        tabPane = new TabPane();
+        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+        tabPane.setStyle("-fx-background-color: " + Theme.BG_BASE + ";");
+        VBox.setVgrow(tabPane, Priority.ALWAYS);
 
-        // Results
-        resultsContainer = createResultsSection();
-        VBox.setVgrow(resultsContainer, Priority.ALWAYS);
+        // Revenue Tab
+        Tab revenueTab = new Tab("Έσοδα");
+        VBox revenueContent = createRevenueTabContent();
+        revenueTab.setContent(revenueContent);
 
-        view.getChildren().addAll(header, formSection, resultsContainer);
+        // Expense Tab
+        Tab expenseTab = new Tab("Έξοδα");
+        VBox expenseContent = createExpenseTabContent();
+        expenseTab.setContent(expenseContent);
+
+        tabPane.getTabs().addAll(revenueTab, expenseTab);
+
+        view.getChildren().addAll(header, tabPane);
 
         // Wrap in scroll pane
         scrollPane = new ScrollPane(view);
@@ -80,6 +101,21 @@ public class BudgetChangesView {
             "-fx-background-color: " + Theme.BG_BASE + ";" +
             "-fx-border-color: transparent;"
         );
+    }
+
+    private VBox createRevenueTabContent() {
+        VBox content = new VBox(0);
+        content.setStyle("-fx-background-color: " + Theme.BG_BASE + ";");
+
+        // Form
+        VBox formSection = createFormSection();
+
+        // Results
+        resultsContainer = createResultsSection();
+        VBox.setVgrow(resultsContainer, Priority.ALWAYS);
+
+        content.getChildren().addAll(formSection, resultsContainer);
+        return content;
     }
 
     private VBox createHeader() {
@@ -537,6 +573,635 @@ public class BudgetChangesView {
             this.after = after;
             this.change = change;
             this.role = role;
+        }
+    }
+
+    // ==================== EXPENSE TAB METHODS ====================
+
+    private VBox createExpenseTabContent() {
+        VBox content = new VBox(0);
+        content.setStyle("-fx-background-color: " + Theme.BG_BASE + ";");
+
+        // Form
+        VBox formSection = createExpenseFormSection();
+
+        // Results
+        expenseResultsContainer = createExpenseResultsSection();
+        VBox.setVgrow(expenseResultsContainer, Priority.ALWAYS);
+
+        content.getChildren().addAll(formSection, expenseResultsContainer);
+        return content;
+    }
+
+    private VBox createExpenseFormSection() {
+        VBox section = new VBox(16);
+        section.setPadding(new Insets(16, 24, 24, 24));
+
+        VBox formCard = new VBox(20);
+        formCard.setPadding(new Insets(20));
+        formCard.setStyle(Theme.card());
+
+        // Form title
+        Label formTitle = new Label("Παράμετροι Αλλαγής Δαπανών");
+        formTitle.setStyle(Theme.sectionHeader());
+
+        // Row 1: Budget type and Scope
+        HBox row1 = new HBox(16);
+        row1.setAlignment(Pos.CENTER_LEFT);
+
+        VBox budgetTypeBox = createFormField("Τύπος Προϋπολογισμού");
+        expenseBudgetTypeCombo = new ComboBox<>();
+        expenseBudgetTypeCombo.getItems().addAll(
+            "Τακτικός Προϋπολογισμός",
+            "ΠΔΕ Εθνικό",
+            "ΠΔΕ Συγχρηματοδοτούμενο"
+        );
+        expenseBudgetTypeCombo.setValue("Τακτικός Προϋπολογισμός");
+        expenseBudgetTypeCombo.setPrefWidth(220);
+        expenseBudgetTypeCombo.setStyle(Theme.comboBox());
+        expenseBudgetTypeCombo.setOnAction(e -> updateExpenseEntityCombo());
+        budgetTypeBox.getChildren().add(expenseBudgetTypeCombo);
+
+        VBox scopeBox = createFormField("Εύρος Αλλαγής");
+        expenseScopeCombo = new ComboBox<>();
+        expenseScopeCombo.getItems().addAll(
+            "Καθολική (Όλοι οι Φορείς)",
+            "Ανά Φορέα",
+            "Ανά Υπηρεσία"
+        );
+        expenseScopeCombo.setValue("Καθολική (Όλοι οι Φορείς)");
+        expenseScopeCombo.setPrefWidth(200);
+        expenseScopeCombo.setStyle(Theme.comboBox());
+        expenseScopeCombo.setOnAction(e -> updateScopeVisibility());
+        scopeBox.getChildren().add(expenseScopeCombo);
+
+        row1.getChildren().addAll(budgetTypeBox, scopeBox);
+
+        // Row 2: Entity and Service selection
+        HBox row2 = new HBox(16);
+        row2.setAlignment(Pos.CENTER_LEFT);
+
+        VBox entityBox = createFormField("Φορέας");
+        expenseEntityCombo = new ComboBox<>();
+        expenseEntityCombo.setPrefWidth(300);
+        expenseEntityCombo.setStyle(Theme.comboBox());
+        expenseEntityCombo.setDisable(true);
+        expenseEntityCombo.setOnAction(e -> updateExpenseServiceCombo());
+        entityBox.getChildren().add(expenseEntityCombo);
+
+        VBox serviceBox = createFormField("Υπηρεσία");
+        expenseServiceCombo = new ComboBox<>();
+        expenseServiceCombo.setPrefWidth(300);
+        expenseServiceCombo.setStyle(Theme.comboBox());
+        expenseServiceCombo.setDisable(true);
+        serviceBox.getChildren().add(expenseServiceCombo);
+
+        row2.getChildren().addAll(entityBox, serviceBox);
+
+        // Row 3: Category, Change value, Change type
+        HBox row3 = new HBox(16);
+        row3.setAlignment(Pos.CENTER_LEFT);
+
+        VBox categoryBox = createFormField("Κατηγορία Δαπάνης (προαιρετικό)");
+        expenseCategoryCombo = new ComboBox<>();
+        expenseCategoryCombo.getItems().add("Όλες οι κατηγορίες");
+        expenseCategoryCombo.getItems().addAll(getExpenseCategoryOptions());
+        expenseCategoryCombo.setValue("Όλες οι κατηγορίες");
+        expenseCategoryCombo.setPrefWidth(250);
+        expenseCategoryCombo.setStyle(Theme.comboBox());
+        categoryBox.getChildren().add(expenseCategoryCombo);
+
+        VBox changeBox = createFormField("Τιμή Αλλαγής");
+        expenseChangeValueField = new TextField();
+        expenseChangeValueField.setPromptText("π.χ. 10000, 10%");
+        expenseChangeValueField.setPrefWidth(140);
+        expenseChangeValueField.setStyle(Theme.textField());
+        expenseChangeValueField.focusedProperty().addListener((obs, wasFocused, isFocused) -> {
+            expenseChangeValueField.setStyle(isFocused ? Theme.textFieldFocused() : Theme.textField());
+        });
+        changeBox.getChildren().add(expenseChangeValueField);
+
+        VBox changeTypeBox = createFormField("Τύπος Αλλαγής");
+        expenseChangeTypeCombo = new ComboBox<>();
+        expenseChangeTypeCombo.getItems().addAll(
+            "Ποσοστό (%)",
+            "Σταθερό Ποσό"
+        );
+        expenseChangeTypeCombo.setValue("Ποσοστό (%)");
+        expenseChangeTypeCombo.setPrefWidth(140);
+        expenseChangeTypeCombo.setStyle(Theme.comboBox());
+        changeTypeBox.getChildren().add(expenseChangeTypeCombo);
+
+        row3.getChildren().addAll(categoryBox, changeBox, changeTypeBox);
+
+        // Button row
+        HBox buttonRow = new HBox(16);
+        buttonRow.setAlignment(Pos.CENTER_LEFT);
+        buttonRow.setPadding(new Insets(8, 0, 0, 0));
+
+        expenseExecuteButton = new Button("Εκτέλεση Αλλαγής");
+        expenseExecuteButton.setStyle(Theme.buttonPrimary());
+        expenseExecuteButton.setOnMouseEntered(e -> expenseExecuteButton.setStyle(Theme.buttonPrimaryHover()));
+        expenseExecuteButton.setOnMouseExited(e -> expenseExecuteButton.setStyle(Theme.buttonPrimary()));
+        expenseExecuteButton.setOnAction(e -> executeExpenseChange());
+
+        expenseStatusLabel = new Label("");
+        expenseStatusLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + Theme.TEXT_SECONDARY + ";");
+
+        buttonRow.getChildren().addAll(expenseExecuteButton, expenseStatusLabel);
+
+        formCard.getChildren().addAll(formTitle, row1, row2, row3, buttonRow);
+        section.getChildren().add(formCard);
+
+        // Initialize entity combo
+        updateExpenseEntityCombo();
+
+        return section;
+    }
+
+    private List<String> getExpenseCategoryOptions() {
+        List<String> categories = new ArrayList<>();
+        categories.add("21 - Παροχές σε εργαζομένους");
+        categories.add("22 - Κοινωνικές παροχές");
+        categories.add("23 - Μεταβιβάσεις");
+        categories.add("24 - Αγορές αγαθών και υπηρεσιών");
+        categories.add("25 - Επιδοτήσεις");
+        categories.add("26 - Τόκοι");
+        categories.add("27 - Λοιπές δαπάνες");
+        categories.add("29 - Πιστώσεις υπό κατανομή");
+        categories.add("31 - Πάγια περιουσιακά στοιχεία");
+        categories.add("33 - Τιμαλφή");
+        categories.add("44 - Δάνεια");
+        categories.add("45 - Συμμετοχικοί τίτλοι");
+        categories.add("53 - Χρεωστικοί τίτλοι");
+        categories.add("54 - Δάνεια (αποπληρωμή)");
+        return categories;
+    }
+
+    private void updateScopeVisibility() {
+        String scope = expenseScopeCombo.getValue();
+        if (scope == null) {
+            return;
+        }
+
+        if (scope.equals("Καθολική (Όλοι οι Φορείς)")) {
+            expenseEntityCombo.setDisable(true);
+            expenseServiceCombo.setDisable(true);
+            expenseEntityCombo.setValue(null);
+            expenseServiceCombo.setValue(null);
+        } else if (scope.equals("Ανά Φορέα")) {
+            expenseEntityCombo.setDisable(false);
+            expenseServiceCombo.setDisable(true);
+            expenseServiceCombo.setValue(null);
+        } else if (scope.equals("Ανά Υπηρεσία")) {
+            expenseEntityCombo.setDisable(false);
+            expenseServiceCombo.setDisable(false);
+        }
+    }
+
+    private void updateExpenseEntityCombo() {
+        expenseEntityCombo.getItems().clear();
+        ArrayList<Entity> entities = Entity.getEntities();
+        for (Entity entity : entities) {
+            expenseEntityCombo.getItems().add(entity.getEntityCode() + " - " + entity.getEntityName());
+        }
+        if (!expenseEntityCombo.getItems().isEmpty()) {
+            expenseEntityCombo.setValue(expenseEntityCombo.getItems().get(0));
+            updateExpenseServiceCombo();
+        }
+    }
+
+    private void updateExpenseServiceCombo() {
+        expenseServiceCombo.getItems().clear();
+        String entitySelection = expenseEntityCombo.getValue();
+        if (entitySelection == null || entitySelection.isEmpty()) {
+            return;
+        }
+
+        String entityCode = entitySelection.split(" - ")[0];
+        Entity entity = Entity.findEntityWithEntityCode(entityCode);
+        if (entity == null) {
+            return;
+        }
+
+        String budgetType = expenseBudgetTypeCombo.getValue();
+        List<String> serviceCodes;
+
+        if (budgetType.equals("Τακτικός Προϋπολογισμός")) {
+            serviceCodes = entity.getAllRegularServiceCodes();
+        } else if (budgetType.equals("ΠΔΕ Εθνικό")) {
+            serviceCodes = entity.getAllPublicInvestmentNationalServiceCodes();
+        } else {
+            serviceCodes = entity.getAllPublicInvestmentCoFundedServiceCodes();
+        }
+
+        for (String serviceCode : serviceCodes) {
+            String serviceName = getServiceName(entity, serviceCode, budgetType);
+            expenseServiceCombo.getItems().add(serviceCode + " - " + truncateDescription(serviceName, 40));
+        }
+
+        if (!expenseServiceCombo.getItems().isEmpty()) {
+            expenseServiceCombo.setValue(expenseServiceCombo.getItems().get(0));
+        }
+    }
+
+    private String getServiceName(Entity entity, String serviceCode, String budgetType) {
+        if (budgetType.equals("Τακτικός Προϋπολογισμός")) {
+            return entity.getRegularServiceNameWithCode(serviceCode);
+        } else if (budgetType.equals("ΠΔΕ Εθνικό")) {
+            return entity.getPublicInvestmentNationalServiceNameWithCode(serviceCode);
+        } else {
+            return entity.getPublicInvestmentCoFundedServiceNameWithCode(serviceCode);
+        }
+    }
+
+    private VBox createExpenseResultsSection() {
+        VBox section = new VBox(0);
+        section.setPadding(new Insets(0, 24, 24, 24));
+        VBox.setVgrow(section, Priority.ALWAYS);
+
+        VBox resultsCard = new VBox(16);
+        resultsCard.setPadding(new Insets(20));
+        resultsCard.setStyle(Theme.card());
+        VBox.setVgrow(resultsCard, Priority.ALWAYS);
+
+        Label resultsTitle = new Label("Αποτελέσματα Αλλαγών Δαπανών");
+        resultsTitle.setStyle(Theme.sectionHeader());
+
+        expenseResultsData = FXCollections.observableArrayList();
+        expenseResultsTable = createExpenseResultsTable();
+        VBox.setVgrow(expenseResultsTable, Priority.ALWAYS);
+
+        resultsCard.getChildren().addAll(resultsTitle, expenseResultsTable);
+        section.getChildren().add(resultsCard);
+        return section;
+    }
+
+    private TableView<ExpenseChangeResult> createExpenseResultsTable() {
+        TableView<ExpenseChangeResult> table = new TableView<>(expenseResultsData);
+        table.setStyle(Theme.table());
+
+        Label placeholder = new Label("Εκτελέστε μια αλλαγή για να δείτε αποτελέσματα");
+        placeholder.setStyle("-fx-text-fill: " + Theme.TEXT_MUTED + ";");
+        table.setPlaceholder(placeholder);
+
+        TableColumn<ExpenseChangeResult, String> entityCol = new TableColumn<>("Φορέας");
+        entityCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().entityCode));
+        entityCol.setPrefWidth(70);
+
+        TableColumn<ExpenseChangeResult, String> serviceCol = new TableColumn<>("Υπηρεσία");
+        serviceCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().serviceName));
+        serviceCol.setPrefWidth(150);
+
+        TableColumn<ExpenseChangeResult, String> categoryCol = new TableColumn<>("Κατηγορία");
+        categoryCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().categoryCode));
+        categoryCol.setPrefWidth(70);
+
+        TableColumn<ExpenseChangeResult, String> descCol = new TableColumn<>("Περιγραφή");
+        descCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().description));
+        descCol.setPrefWidth(180);
+
+        TableColumn<ExpenseChangeResult, String> beforeCol = new TableColumn<>("Πριν");
+        beforeCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().before));
+        beforeCol.setPrefWidth(100);
+        beforeCol.setStyle("-fx-alignment: CENTER-RIGHT;");
+
+        TableColumn<ExpenseChangeResult, String> afterCol = new TableColumn<>("Μετά");
+        afterCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().after));
+        afterCol.setPrefWidth(100);
+        afterCol.setStyle("-fx-alignment: CENTER-RIGHT;");
+
+        TableColumn<ExpenseChangeResult, String> changeCol = new TableColumn<>("Μεταβολή");
+        changeCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().change));
+        changeCol.setPrefWidth(120);
+        changeCol.setStyle("-fx-alignment: CENTER-RIGHT;");
+
+        table.getColumns().add(entityCol);
+        table.getColumns().add(serviceCol);
+        table.getColumns().add(categoryCol);
+        table.getColumns().add(descCol);
+        table.getColumns().add(beforeCol);
+        table.getColumns().add(afterCol);
+        table.getColumns().add(changeCol);
+
+        return table;
+    }
+
+    private void executeExpenseChange() {
+        String changeValue = expenseChangeValueField.getText().trim();
+        String budgetType = expenseBudgetTypeCombo.getValue();
+        String scope = expenseScopeCombo.getValue();
+        String changeType = expenseChangeTypeCombo.getValue();
+        String categorySelection = expenseCategoryCombo.getValue();
+
+        if (changeValue.isEmpty()) {
+            showExpenseError("Παρακαλώ εισάγετε τιμή αλλαγής");
+            return;
+        }
+
+        try {
+            double percentage = 0;
+            long fixedAmount = 0;
+
+            String cleanValue = changeValue.replaceAll("[^0-9.\\-]", "");
+            double numericValue = Double.parseDouble(cleanValue);
+
+            if (changeType.equals("Ποσοστό (%)") || changeValue.contains("%")) {
+                percentage = numericValue / 100.0;
+            } else {
+                fixedAmount = (long) numericValue;
+            }
+
+            // Get category code if specific category selected
+            String categoryCode = null;
+            if (categorySelection != null && !categorySelection.equals("Όλες οι κατηγορίες")) {
+                categoryCode = categorySelection.split(" - ")[0];
+            }
+
+            // Capture before values and apply changes
+            Map<String, Long> beforeValues = captureExpenseValues(budgetType, scope, categoryCode);
+            applyExpenseChange(budgetType, scope, categoryCode, percentage, fixedAmount);
+            Map<String, Long> afterValues = captureExpenseValues(budgetType, scope, categoryCode);
+
+            // Display results
+            displayExpenseResults(budgetType, scope, categoryCode, beforeValues, afterValues);
+            showExpenseSuccess("Η αλλαγή εφαρμόστηκε επιτυχώς!");
+
+        } catch (NumberFormatException e) {
+            showExpenseError("Μη έγκυρη τιμή. Χρησιμοποιήστε αριθμό ή ποσοστό");
+        } catch (Exception e) {
+            showExpenseError("Σφάλμα: " + e.getMessage());
+        }
+    }
+
+    private Map<String, Long> captureExpenseValues(String budgetType, String scope, String categoryCode) {
+        Map<String, Long> values = new HashMap<>();
+        ArrayList<? extends BudgetExpense> expenses = getExpensesForScope(budgetType, scope, categoryCode);
+
+        for (BudgetExpense expense : expenses) {
+            String key = expense.getEntityCode() + "|" + expense.getServiceCode() + "|" + expense.getCode();
+            values.put(key, expense.getAmount());
+        }
+        return values;
+    }
+
+    private ArrayList<? extends BudgetExpense> getExpensesForScope(String budgetType, String scope, String categoryCode) {
+        ArrayList<BudgetExpense> result = new ArrayList<>();
+
+        if (scope.equals("Καθολική (Όλοι οι Φορείς)")) {
+            if (budgetType.equals("Τακτικός Προϋπολογισμός")) {
+                if (categoryCode != null) {
+                    result.addAll(RegularBudgetExpense.getRegularBudgetExpensesOfCategoryWithCode(categoryCode));
+                } else {
+                    result.addAll(RegularBudgetExpense.getAllRegularBudgetExpenses());
+                }
+            } else if (budgetType.equals("ΠΔΕ Εθνικό")) {
+                if (categoryCode != null) {
+                    result.addAll(PublicInvestmentBudgetNationalExpense.getPublicInvestmentBudgetNationalExpensesOfCategoryWithCode(categoryCode));
+                } else {
+                    result.addAll(PublicInvestmentBudgetNationalExpense.getAllPublicInvestmentBudgetNationalExpenses());
+                }
+            } else {
+                if (categoryCode != null) {
+                    result.addAll(PublicInvestmentBudgetCoFundedExpense.getPublicInvestmentBudgetCoFundedExpensesOfCategoryWithCode(categoryCode));
+                } else {
+                    result.addAll(PublicInvestmentBudgetCoFundedExpense.getAllPublicInvestmentBudgetCoFundedExpenses());
+                }
+            }
+        } else {
+            // Get selected entity
+            String entitySelection = expenseEntityCombo.getValue();
+            if (entitySelection == null) {
+                return result;
+            }
+            String entityCode = entitySelection.split(" - ")[0];
+            Entity entity = Entity.findEntityWithEntityCode(entityCode);
+            if (entity == null) {
+                return result;
+            }
+
+            if (scope.equals("Ανά Φορέα")) {
+                if (budgetType.equals("Τακτικός Προϋπολογισμός")) {
+                    if (categoryCode != null) {
+                        for (RegularBudgetExpense exp : entity.getRegularBudgetExpenses()) {
+                            if (exp.getCode().equals(categoryCode)) {
+                                result.add(exp);
+                            }
+                        }
+                    } else {
+                        result.addAll(entity.getRegularBudgetExpenses());
+                    }
+                } else if (budgetType.equals("ΠΔΕ Εθνικό")) {
+                    if (categoryCode != null) {
+                        for (PublicInvestmentBudgetNationalExpense exp : entity.getPublicInvestmentBudgetNationalExpenses()) {
+                            if (exp.getCode().equals(categoryCode)) {
+                                result.add(exp);
+                            }
+                        }
+                    } else {
+                        result.addAll(entity.getPublicInvestmentBudgetNationalExpenses());
+                    }
+                } else {
+                    if (categoryCode != null) {
+                        for (PublicInvestmentBudgetCoFundedExpense exp : entity.getPublicInvestmentBudgetCoFundedExpenses()) {
+                            if (exp.getCode().equals(categoryCode)) {
+                                result.add(exp);
+                            }
+                        }
+                    } else {
+                        result.addAll(entity.getPublicInvestmentBudgetCoFundedExpenses());
+                    }
+                }
+            } else if (scope.equals("Ανά Υπηρεσία")) {
+                String serviceSelection = expenseServiceCombo.getValue();
+                if (serviceSelection == null) {
+                    return result;
+                }
+                String serviceCode = serviceSelection.split(" - ")[0];
+
+                if (budgetType.equals("Τακτικός Προϋπολογισμός")) {
+                    for (RegularBudgetExpense exp : entity.getRegularBudgetExpenses()) {
+                        if (exp.getServiceCode().equals(serviceCode)) {
+                            if (categoryCode == null || exp.getCode().equals(categoryCode)) {
+                                result.add(exp);
+                            }
+                        }
+                    }
+                } else if (budgetType.equals("ΠΔΕ Εθνικό")) {
+                    for (PublicInvestmentBudgetNationalExpense exp : entity.getPublicInvestmentBudgetNationalExpenses()) {
+                        if (exp.getServiceCode().equals(serviceCode)) {
+                            if (categoryCode == null || exp.getCode().equals(categoryCode)) {
+                                result.add(exp);
+                            }
+                        }
+                    }
+                } else {
+                    for (PublicInvestmentBudgetCoFundedExpense exp : entity.getPublicInvestmentBudgetCoFundedExpenses()) {
+                        if (exp.getServiceCode().equals(serviceCode)) {
+                            if (categoryCode == null || exp.getCode().equals(categoryCode)) {
+                                result.add(exp);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    private void applyExpenseChange(String budgetType, String scope, String categoryCode, double percentage, long fixedAmount) {
+        BudgetType type = getBudgetTypeEnum(budgetType);
+
+        if (scope.equals("Καθολική (Όλοι οι Φορείς)")) {
+            // Global change
+            if (categoryCode != null) {
+                if (budgetType.equals("Τακτικός Προϋπολογισμός")) {
+                    RegularBudgetExpense.implementGlobalChangesInCertainRegularExpenseCategoryWithPercentageAllocation(categoryCode, percentage, fixedAmount);
+                } else if (budgetType.equals("ΠΔΕ Εθνικό")) {
+                    PublicInvestmentBudgetNationalExpense.implementGlobalChangesInCertainPublicInvestmentBudgetNationalCategory(categoryCode, percentage, fixedAmount);
+                } else {
+                    PublicInvestmentBudgetCoFundedExpense.implementGlobalChangesInCertainPublicInvestmentBudgetCoFundedCategory(categoryCode, percentage, fixedAmount);
+                }
+            } else {
+                if (budgetType.equals("Τακτικός Προϋπολογισμός")) {
+                    RegularBudgetExpense.implementGlobalChangesInAllExpenseCategoriesWithPercentageAllocation(percentage, fixedAmount);
+                } else if (budgetType.equals("ΠΔΕ Εθνικό")) {
+                    PublicInvestmentBudgetNationalExpense.implementGlobalChangesInAllPublicInvestmentBudgetNationalCategories(percentage, fixedAmount);
+                } else {
+                    PublicInvestmentBudgetCoFundedExpense.implementGlobalChangesInAllPublicInvestmentBudgetCoFundedCategories(percentage, fixedAmount);
+                }
+            }
+        } else {
+            // Entity or Service level change
+            String entitySelection = expenseEntityCombo.getValue();
+            if (entitySelection == null) {
+                return;
+            }
+            String entityCode = entitySelection.split(" - ")[0];
+            Entity entity = Entity.findEntityWithEntityCode(entityCode);
+            if (entity == null) {
+                return;
+            }
+
+            if (scope.equals("Ανά Φορέα")) {
+                if (categoryCode != null) {
+                    entity.implementChangesInSpecificExpenseCategoryOfAllServices(categoryCode, percentage, fixedAmount, type);
+                } else {
+                    entity.implementChangesInAllExpenseCategoriesOfAllServices(percentage, fixedAmount, type);
+                }
+            } else if (scope.equals("Ανά Υπηρεσία")) {
+                String serviceSelection = expenseServiceCombo.getValue();
+                if (serviceSelection == null) {
+                    return;
+                }
+                String serviceCode = serviceSelection.split(" - ")[0];
+                entity.implementChangesInAllExpenseCategoriesOfSpecificService(serviceCode, percentage, fixedAmount, type);
+            }
+        }
+    }
+
+    private BudgetType getBudgetTypeEnum(String budgetType) {
+        return switch (budgetType) {
+            case "Τακτικός Προϋπολογισμός" -> BudgetType.REGULAR_BUDGET;
+            case "ΠΔΕ Εθνικό" -> BudgetType.PUBLIC_INVESTMENT_BUDGET_NATIONAL;
+            case "ΠΔΕ Συγχρηματοδοτούμενο" -> BudgetType.PUBLIC_INVESTMENT_BUDGET_COFUNDED;
+            default -> BudgetType.REGULAR_BUDGET;
+        };
+    }
+
+    private void displayExpenseResults(String budgetType, String scope, String categoryCode,
+                                       Map<String, Long> before, Map<String, Long> after) {
+        expenseResultsData.clear();
+
+        ArrayList<? extends BudgetExpense> expenses = getExpensesForScope(budgetType, scope, categoryCode);
+
+        for (BudgetExpense expense : expenses) {
+            String key = expense.getEntityCode() + "|" + expense.getServiceCode() + "|" + expense.getCode();
+            Long beforeVal = before.get(key);
+            Long afterVal = after.get(key);
+
+            if (beforeVal == null) {
+                beforeVal = 0L;
+            }
+            if (afterVal == null) {
+                afterVal = expense.getAmount();
+            }
+
+            long change = afterVal - beforeVal;
+            if (change == 0) {
+                continue; // Skip unchanged
+            }
+
+            double percentChange = beforeVal != 0 ? ((double) change / beforeVal) * 100 : 0;
+
+            String changeStr;
+            if (change >= 0) {
+                changeStr = String.format("+%,d (%.1f%%)", change, percentChange);
+            } else {
+                changeStr = String.format("%,d (%.1f%%)", change, percentChange);
+            }
+
+            ExpenseChangeResult result = new ExpenseChangeResult(
+                expense.getEntityCode(),
+                truncateDescription(expense.getServiceName(), 25),
+                expense.getCode(),
+                truncateDescription(expense.getDescription(), 30),
+                Theme.formatAmount(beforeVal),
+                Theme.formatAmount(afterVal),
+                changeStr
+            );
+
+            expenseResultsData.add(result);
+        }
+
+        animateExpenseResults();
+    }
+
+    private void animateExpenseResults() {
+        expenseResultsTable.setOpacity(0);
+
+        FadeTransition fadeIn = new FadeTransition(Duration.millis(250), expenseResultsTable);
+        fadeIn.setFromValue(0);
+        fadeIn.setToValue(1);
+
+        ScaleTransition scale = new ScaleTransition(Duration.millis(250), expenseResultsTable);
+        scale.setFromX(0.98);
+        scale.setFromY(0.98);
+        scale.setToX(1);
+        scale.setToY(1);
+
+        ParallelTransition parallel = new ParallelTransition(fadeIn, scale);
+        parallel.play();
+    }
+
+    private void showExpenseError(String message) {
+        expenseStatusLabel.setText("! " + message);
+        expenseStatusLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + Theme.ERROR_LIGHT + "; -fx-font-weight: 500;");
+    }
+
+    private void showExpenseSuccess(String message) {
+        expenseStatusLabel.setText("+ " + message);
+        expenseStatusLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + Theme.SUCCESS_LIGHT + "; -fx-font-weight: 500;");
+    }
+
+    public static class ExpenseChangeResult {
+        public final String entityCode;
+        public final String serviceName;
+        public final String categoryCode;
+        public final String description;
+        public final String before;
+        public final String after;
+        public final String change;
+
+        public ExpenseChangeResult(String entityCode, String serviceName, String categoryCode,
+                                   String description, String before, String after, String change) {
+            this.entityCode = entityCode;
+            this.serviceName = serviceName;
+            this.categoryCode = categoryCode;
+            this.description = description;
+            this.before = before;
+            this.after = after;
+            this.change = change;
         }
     }
 }
