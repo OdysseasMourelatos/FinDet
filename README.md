@@ -1,5 +1,5 @@
-# FinDet 
 
+# FinDet
 
 ## 1. Build & Run Instructions
 
@@ -35,8 +35,6 @@ This is the safest execution method, as Maven ensures the correct loading of the
 ```bash
 mvn javafx:run
 ```
-
----
 
 #### B. Run via Executable JAR
 
@@ -184,3 +182,54 @@ It allows users to:
 
 ---
 
+## 3. Usage Instructions
+
+**FinDet** provides a graphical interface for managing the Greek State Budget:
+
+* **Data Import**: Automatically loads revenue and expense data from CSV files at startup.
+* **Navigation**: Use the left menu to switch between **Overview**, **Account Exploration**, and **Charts**.
+* **Apply Changes**: In the **Changes** section, select an entity or account and apply a percentage or fixed amount modification.
+* **Undo**: Every change is saved in a history stack for easy rollback.
+* **Export**: Export budget data to PDF.
+
+---
+
+## 4. Repository Structure
+
+```text
+src/main/java/com/financial/       # Application source code
+    entries/                       # Data models (BudgetEntry, Entity)
+    ui/views/                       # JavaFX UI implementation
+    services/                       # Business logic for calculations and updates
+    strategies/                     # Budget modification algorithms
+
+src/test/java/                     # Unit tests
+pom.xml                             # Maven configuration and dependencies
+docs/                               # UML diagrams, screenshots, reports
+target/                             # Build output
+README.md                            # This file
+LICENSE                              # Open-source license
+```
+
+---
+
+## 5. UML Design
+
+The design is based on a hierarchical object-oriented structure:
+
+* **Inheritance**: `BudgetEntry` (abstract) is the base class for `BudgetRevenue` and `BudgetExpense`.
+* **Interface Implementation**: The `Entity` class implements `EntityLogic` for managing expenses per entity.
+* **Aggregation**: The `Entity` class contains lists of different types of expenses (Regular, PIP National, PIP Co-financed).
+
+*A UML diagram illustrating these relationships is available at `docs/uml.png`.*
+
+---
+
+## 6. Data Structures & Algorithms
+
+* **Registries (Static Lists)**: `ArrayList` is used (e.g., `budgetRevenues`, `budgetExpenses`) to store and filter all CSV data.
+* **Strategy Pattern**: `PercentageOperation` and `FixedAmountOperation` provide flexible logic for budget modifications.
+* **Statistical Algorithms**: Logarithmic scale for frequency tables and outlier detection.
+* **History (Stack/List)**: `ExpensesHistory` and `RevenuesHistory` maintain change history for Undo functionality.
+
+---
