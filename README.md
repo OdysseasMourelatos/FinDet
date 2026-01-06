@@ -1,6 +1,66 @@
 # FinDet 
 
-## 1. Overview (What the Application Does)
+
+## 1. Build & Run Instructions
+
+The application uses **Maven** for dependency management and for building the executable artifact.
+
+### Prerequisites
+
+* **Java 17** or newer
+* **Apache Maven** installed on the system
+
+---
+
+### Build Steps
+
+From the project root directory (where the `pom.xml` is located), run:
+
+```bash
+mvn clean package
+```
+
+This command will generate the file
+`FinDet-1.0-SNAPSHOT.jar`
+inside the `target/` directory.
+
+---
+
+### Execution Methods
+
+#### A. Run via Maven (Recommended)
+
+This is the safest execution method, as Maven ensures the correct loading of the **JavaFX modules**:
+
+```bash
+mvn javafx:run
+```
+
+---
+
+#### B. Run via Executable JAR
+
+If the executable (**Fat JAR**) has been successfully created, the application can be run directly using:
+
+```bash
+java -jar target/FinDet-1.0-SNAPSHOT.jar
+```
+
+---
+
+### Note
+
+If the following error occurs:
+
+```text
+JavaFX runtime components are missing
+```
+
+please prefer running the application via **Maven** (Method A).
+
+---
+
+## 2. Overview (What the Application Does)
 
 **FinDet** is a specialized application for managing and analyzing the **Greek State Budget**.
 It allows users to:
@@ -12,7 +72,7 @@ It allows users to:
 
 ---
 
-## 2. Functional Features (What It Offers)
+## 2.1 Functional Features (What It Offers)
 
 ### Data Import & Processing
 
@@ -60,7 +120,7 @@ It allows users to:
 
 ---
 
-## 3. Technical Implementation (How It Is Implemented)
+## 2.2 Technical Implementation (How It Is Implemented)
 
 ### Object-Oriented Design (OOP)
 
