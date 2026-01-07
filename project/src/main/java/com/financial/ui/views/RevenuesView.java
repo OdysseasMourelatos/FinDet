@@ -165,7 +165,7 @@ public class RevenuesView {
 
         budgetTypeFilter = new ComboBox<>();
         budgetTypeFilter.getItems().addAll(
-            "Όλοι οι τύποι",
+            "Κρατικός",
             "Τακτικός",
             "ΠΔΕ",
             "ΠΔΕ Εθνικό",

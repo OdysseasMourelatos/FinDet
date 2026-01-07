@@ -1,6 +1,6 @@
 package com.financial.ui.views;
 
-import com.financial.entries.BudgetRevenue;
+import com.financial.entries.*;
 import com.financial.ui.Theme;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -19,6 +19,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
+import javafx.scene.control.ComboBox;
 
 import java.util.ArrayList;
 
@@ -37,6 +38,7 @@ public class AccountExplorerView {
     private TableView<BudgetRevenue> subCategoriesTable;
     private ObservableList<BudgetRevenue> superCategoriesData;
     private ObservableList<BudgetRevenue> subCategoriesData;
+    private ComboBox<String> budgetTypeFilter;
 
     public AccountExplorerView() {
         view = new VBox(0);
@@ -103,7 +105,7 @@ public class AccountExplorerView {
     }
 
     private HBox createSearchSection() {
-        HBox section = new HBox(12);
+        HBox section = new HBox(15);
         section.setPadding(new Insets(0, 24, 16, 24));
         section.setAlignment(Pos.CENTER_LEFT);
 
@@ -123,7 +125,18 @@ public class AccountExplorerView {
         searchButton.setOnAction(e -> performSearch());
         searchField.setOnAction(e -> performSearch());
 
-        section.getChildren().addAll(searchField, searchButton);
+        Label typeFilterLabel = new Label("Τύπος:");
+        typeFilterLabel.setStyle("-fx-font-weight: bold;");
+
+        budgetTypeFilter = new ComboBox<>();
+        budgetTypeFilter.getItems().addAll("Κρατικός", "Τακτικός", "ΠΔΕ", "ΠΔΕ Εθνικό", "ΠΔΕ Συγχρ/νο");
+        budgetTypeFilter.setValue("Κρατικός");
+        budgetTypeFilter.setStyle(Theme.comboBox());
+        budgetTypeFilter.setPrefWidth(140);
+
+        budgetTypeFilter.setOnAction(e -> performSearch());
+
+        section.getChildren().addAll(searchField, searchButton, typeFilterLabel, budgetTypeFilter);
         return section;
     }
 
@@ -261,56 +274,61 @@ public class AccountExplorerView {
 
     private void performSearch() {
         String code = searchField.getText().trim();
+        String type = budgetTypeFilter.getValue();
 
         if (code.isEmpty()) {
             showError("Παρακαλώ εισάγετε κωδικό");
             return;
         }
 
-        BudgetRevenue revenue = BudgetRevenue.findBudgetRevenueWithCode(code);
+        BudgetRevenue revenue = null;
+
+        switch (type) {
+            case "Κρατικός":
+                revenue = BudgetRevenue.findBudgetRevenueWithCode(code);
+                break;
+            case "Τακτικός":
+                revenue = RegularBudgetRevenue.findRegularBudgetRevenueWithCode(code);
+                break;
+            case "ΠΔΕ":
+                revenue = PublicInvestmentBudgetRevenue.findPublicInvestmentBudgetRevenueWithCode(code);
+                break;
+            case "ΠΔΕ Εθνικό":
+                revenue = PublicInvestmentBudgetNationalRevenue.findPublicInvestmentBudgetNationalRevenueWithCode(code);
+                break;
+            case "ΠΔΕ Συγχρ/νο":
+                revenue = PublicInvestmentBudgetCoFundedRevenue.findPublicInvestmentBudgetCoFundedRevenueWithCode(code);
+                break;
+        }
 
         if (revenue == null) {
-            showError("Δεν βρέθηκε λογαριασμός με κωδικό: " + code);
+            showError("Δεν βρέθηκε λογαριασμός [" + type + "] με κωδικό: " + code);
             superCategoriesData.clear();
             subCategoriesData.clear();
             return;
         }
 
-        // Show level indicator
+        updateUIWithData(revenue);
+    }
+
+    private void updateUIWithData(BudgetRevenue revenue) {
         levelIndicator.setText("Επίπεδο " + revenue.getLevelOfHierarchy());
         levelIndicator.setVisible(true);
 
-        // Update account info
         selectedAccountLabel.setText(revenue.getCode() + "  •  " + revenue.getDescription() + "  •  " + Theme.formatAmount(revenue.getAmount()));
-        selectedAccountLabel.setStyle(
-            "-fx-font-size: 15px;" +
-            "-fx-text-fill: " + Theme.TEXT_PRIMARY + ";"
-        );
+        selectedAccountLabel.setStyle("-fx-font-size: 15px; -fx-text-fill: " + Theme.TEXT_PRIMARY + ";");
 
-        // Get hierarchy
         ArrayList<BudgetRevenue> superCategories = revenue.getAllSuperCategories();
-        superCategoriesData.clear();
-        if (superCategories != null) {
-            superCategoriesData.addAll(superCategories);
-        }
+        superCategoriesData.setAll(superCategories != null ? superCategories : new ArrayList<>());
 
         ArrayList<BudgetRevenue> subCategories = revenue.getAllSubCategories();
-        subCategoriesData.clear();
-        if (subCategories != null) {
-            subCategoriesData.addAll(subCategories);
-        }
+        subCategoriesData.setAll(subCategories != null ? subCategories : new ArrayList<>());
 
         // Update status
         long subTotal = subCategoriesData.stream().mapToLong(BudgetRevenue::getAmount).sum();
-        statusLabel.setText(
-            "Ανώτερες: " + superCategoriesData.size() +
-            "  •  Υποκατηγορίες: " + subCategoriesData.size() +
-            "  •  Σύνολο υποκατηγοριών: " + Theme.formatAmount(subTotal)
-        );
-        statusLabel.setStyle(
-            "-fx-font-size: 12px;" +
-            "-fx-text-fill: " + Theme.TEXT_SECONDARY + ";"
-        );
+        statusLabel.setText("Ανώτερες: " + superCategoriesData.size() +
+                "  •  Υποκατηγορίες: " + subCategoriesData.size() +
+                "  •  Σύνολο: " + Theme.formatAmount(subTotal));
     }
 
     private void showError(String message) {
