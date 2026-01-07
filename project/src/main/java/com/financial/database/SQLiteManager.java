@@ -1,4 +1,4 @@
-package com.financial.services;
+package com.financial.database;
 
 import java.sql.*;
 import java.util.logging.Logger;
