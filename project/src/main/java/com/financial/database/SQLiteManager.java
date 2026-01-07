@@ -38,19 +38,17 @@ public class SQLiteManager {
 
             """
             CREATE TABLE IF NOT EXISTS Regular_Budget_Revenues (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                code VARCHAR NOT NULL,
+                code VARCHAR PRIMARY KEY NOT NULL,
                 description TEXT NOT NULL,
                 amount REAL NOT NULL,
                 category TEXT DEFAULT 'ΕΣΟΔΑ',
                 import_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                UNIQUE(code, description)
+                UNIQUE(description)
             ) """,
-
+                                                    
             """
             CREATE TABLE IF NOT EXISTS Public_Investment_Budget_Revenues (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                code VARCHAR NOT NULL,
+                code VARCHAR PRIMARY KEY NOT NULL,
                 description TEXT NOT NULL,
                 type TEXT NOT NULL CHECK(
                     type IN (
@@ -63,13 +61,12 @@ public class SQLiteManager {
                 amount REAL NOT NULL,
                 category TEXT DEFAULT 'ΕΣΟΔΑ',
                 import_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                UNIQUE(code, description, type)
+                UNIQUE(description, type)
             ) """,
 
             """
             CREATE TABLE IF NOT EXISTS Regular_Budget_Expenses (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                entity_code VARCHAR NOT NULL,
+                entity_code VARCHAR PRIMARY KEY NOT NULL,
                 entity_name TEXT NOT NULL,
                 service_code TEXT NOT NULL,
                 service_name TEXT NOT NULL,
@@ -78,13 +75,12 @@ public class SQLiteManager {
                 amount REAL NOT NULL,
                 category TEXT DEFAULT 'ΕΞΟΔΑ',
                 import_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                UNIQUE(entity_code, service_code, expense_code, description)
+                UNIQUE(service_code, expense_code, description)
             ) """,
 
             """
             CREATE TABLE IF NOT EXISTS Public_Investment_Budget_Expenses (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                entity_code VARCHAR NOT NULL,
+                entity_code VARCHAR PRIMARY KEY NOT NULL,
                 entity_name TEXT NOT NULL,
                 service_code TEXT NOT NULL,
                 service_name TEXT NOT NULL,
@@ -94,13 +90,12 @@ public class SQLiteManager {
                 amount REAL NOT NULL,
                 category TEXT DEFAULT 'ΕΞΟΔΑ',
                 import_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                UNIQUE(entity_code, service_code, expense_code, description, type)
+                UNIQUE(service_code, expense_code, description, type)
             ) """,
 
             """
             CREATE TABLE IF NOT EXISTS Entities (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                entity_code VARCHAR UNIQUE NOT NULL,
+                entity_code VARCHAR PRIMARY KEY NOT NULL,
                 entity_name TEXT NOT NULL,
                 created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             ) """
@@ -112,7 +107,12 @@ public class SQLiteManager {
             }
         }
     }
-    
+
+//   public void insertToRegularBudgetRevenues() {
+//        String insert = "Insert into Regular_Budget_Revenues(id,code,description,)"
+
+  //  }
+  
     public Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
             connection = DriverManager.getConnection(DB_URL);
