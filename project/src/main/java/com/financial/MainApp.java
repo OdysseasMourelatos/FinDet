@@ -5,6 +5,7 @@ import com.financial.entries.BudgetRevenue;
 import com.financial.entries.PublicInvestmentBudgetRevenue;
 import com.financial.services.data.DataInput;
 import com.financial.ui.MainWindow;
+import com.financial.database.SQLiteManager;
 import java.io.File;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -138,4 +139,5 @@ public class MainApp extends Application {
         launch(args);
     }
 }
+
 
