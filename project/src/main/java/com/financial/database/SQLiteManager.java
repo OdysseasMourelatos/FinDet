@@ -108,12 +108,38 @@ public class SQLiteManager {
         }
     }
 
-    public void insertToRegularBudgetRevenues(BudgetRevenue budgetRevenue) {
+    public void insertToRegularBudgetRevenues(RegularBudgetRevenue regularBR) {
         String insert = "Insert into Regular_Budget_Revenues(code,description,amount,category)
-        Values(" + budgetRevenue.code + budgetRevenue.description + budgetRevenue.amount + budgetRevenue.category + ")";
+        Values(" + regularBR.code + "," + regularBR.description + "," + regularBR.amount + "," + regularBR.category + ")";
     }
     
-  
+    public void insertToPublicInvestmentBudgetRevenues(PublicInvestmentBudgetRevenue investmentBR) {
+       String insert = "Insert into Public_Investment_Budget_Revenues(code,description,type,amount,category)
+       Values(" + investmentBR.code + "," + investmentBR.description + "," + investmentBR.type + "," + investmentBR.amount +
+       "," + investmentBR.category + ")";
+    }
+
+    public void insertToRegularBudgeteExpenses(RegularBudgetExpense regularBE) {
+       String insert = "Insert into Regular_Budget_Revenues(entity_code, entity_name, service_code, service_name,
+       expense_code,description,amount,category)
+       Values(" + regularBE.entity_code + "," + regularBE.entity_name + "," + regularBE.service_code + "," + regularBE.service_name + ","
+       + regularBE.expense_code + "," + regularBE.description + "," +  regularBE.amount + "," + regularBE.category ")";
+    }
+
+    public void insertToPublicInvestmentBudgeteExpenses(PublicInvestmentBudgetExpense investmentBE) {
+       String insert = "Insert into Regular_Budget_Revenues(entity_code, entity_name, service_code, service_name,
+       expense_code,description,type,amount,category) Values(" + investmentBE.entity_code + "," + investmentBE.entity_name + "," 
+       + investmentBE.service_code + "," + investmentBE.service_name + "," + investmentBE.expense_code + "," 
+       + investmentBE.description + "," + investmentBE.type + "," investmentBE.amount + "," 
+       + investmentBE.category ")";
+    }
+
+     public void insertToEntities(Entity e) {
+        String insert = "Insert into Entities(entity_code,entity_name)
+        Values(" + e.entity_code + "," + e.entity_name + ")";
+    }
+
+ 
     public Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
             connection = DriverManager.getConnection(DB_URL);
