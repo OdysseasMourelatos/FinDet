@@ -2,6 +2,8 @@ package com.financial.ui.views;
 
 import com.financial.entries.*;
 import com.financial.services.BudgetType;
+import com.financial.services.expenses.ExpensesHistory;
+import com.financial.services.revenues.RevenuesHistory;
 import com.financial.ui.Theme;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
@@ -43,6 +45,8 @@ public class BudgetChangesView {
     private ComboBox<String> distributionCombo;
     private Button executeButton;
     private Label statusLabel;
+    private Button revenueUndoButton;
+    private Button expenseUndoButton;
 
     // Revenue results area
     private VBox resultsContainer;
@@ -158,7 +162,7 @@ public class BudgetChangesView {
         formCard.setStyle(Theme.card());
 
         // Form title
-        Label formTitle = new Label("Παράμετροι Αλλαγής");
+        Label formTitle = new Label("Παράμετροι Αλλαγής Εσόδων");
         formTitle.setStyle(Theme.sectionHeader());
 
         // Row 1: Budget type and Account code
@@ -242,7 +246,12 @@ public class BudgetChangesView {
         statusLabel = new Label("");
         statusLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + Theme.TEXT_SECONDARY + ";");
 
-        buttonRow.getChildren().addAll(executeButton, statusLabel);
+        revenueUndoButton = new Button("Undo");
+        revenueUndoButton.setStyle("-fx-background-color: " + Theme.INFO + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-radius: 4;");
+        revenueUndoButton.setVisible(false);
+        revenueUndoButton.setOnAction(e -> handleRevenueUndo());
+
+        buttonRow.getChildren().addAll(executeButton, statusLabel, revenueUndoButton);
 
         formCard.getChildren().addAll(formTitle, row1, row2, buttonRow);
         section.getChildren().add(formCard);
@@ -357,13 +366,15 @@ public class BudgetChangesView {
             applyChange(targetRevenue, changeValue, changeType, distribution, budgetType);
             Map<String, Long> afterValues = captureValues(targetRevenue, budgetType);
 
-            for (Map.Entry<String, Long> beforeEntry : beforeValues.entrySet()) {
-                for (Map.Entry<String, Long> afterEntry : afterValues.entrySet()) {
-                    if (beforeEntry.getKey().equals(afterEntry.getKey()) && (beforeEntry.getValue() - afterEntry.getValue()) == 0) {
-                        throw new IllegalArgumentException();
-                    }
-                }
+            long valueBefore = beforeValues.get(targetRevenue.getCode());
+            long valueAfter = afterValues.get(targetRevenue.getCode());
+
+            if (valueBefore == valueAfter) {
+                throw new IllegalArgumentException();
             }
+
+            revenueUndoButton.setVisible(true);
+
             // Display results with animation
             displayResults(targetRevenue, beforeValues, afterValues, budgetType);
             showSuccess("Η αλλαγή εφαρμόστηκε επιτυχώς!");
@@ -513,6 +524,22 @@ public class BudgetChangesView {
         );
 
         resultsData.add(result);
+    }
+
+    private void handleRevenueUndo() {
+        if (RevenuesHistory.getHistoryDeque().isEmpty()) {
+            return;
+        }
+
+        try {
+            RevenuesHistory.returnToPreviousState();
+            resultsData.clear();
+            revenueUndoButton.setVisible(false);
+            showSuccess("Η αναίρεση ολοκληρώθηκε!");
+
+        } catch (Exception e) {
+            showError("Σφάλμα κατά την αναίρεση.");
+        }
     }
 
     private String truncateDescription(String desc, int maxLength) {
@@ -708,7 +735,12 @@ public class BudgetChangesView {
         expenseStatusLabel = new Label("");
         expenseStatusLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + Theme.TEXT_SECONDARY + ";");
 
-        buttonRow.getChildren().addAll(expenseExecuteButton, expenseStatusLabel);
+        expenseUndoButton = new Button("Undo");
+        expenseUndoButton.setStyle("-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-radius: 4;");
+        expenseUndoButton.setVisible(false);
+        expenseUndoButton.setOnAction(e -> handleExpenseUndo());
+
+        buttonRow.getChildren().addAll(expenseExecuteButton, expenseStatusLabel, expenseUndoButton);
 
         formCard.getChildren().addAll(formTitle, row1, row2, row3, buttonRow);
         section.getChildren().add(formCard);
@@ -1100,6 +1132,22 @@ public class BudgetChangesView {
         }
     }
 
+    private void handleExpenseUndo() {
+        if (ExpensesHistory.getHistoryDeque().isEmpty()) {
+            return;
+        }
+
+        try {
+            ExpensesHistory.returnToPreviousState();
+            expenseResultsData.clear();
+            expenseUndoButton.setVisible(false);
+            showExpenseSuccess("Η αναίρεση ολοκληρώθηκε!");
+
+        } catch (Exception e) {
+            showExpenseError("Σφάλμα κατά την αναίρεση.");
+        }
+    }
+
     private BudgetType getBudgetTypeEnum(String budgetType) {
         return switch (budgetType) {
             case "Τακτικός Προϋπολογισμός" -> BudgetType.REGULAR_BUDGET;
@@ -1153,6 +1201,8 @@ public class BudgetChangesView {
 
             expenseResultsData.add(result);
         }
+
+        expenseUndoButton.setVisible(true);
 
         animateExpenseResults();
     }

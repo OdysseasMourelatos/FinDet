@@ -171,7 +171,7 @@ public class RevenuesView {
             "ΠΔΕ Εθνικό",
             "ΠΔΕ Συγχρ/νο"
         );
-        budgetTypeFilter.setValue("Όλοι οι τύποι");
+        budgetTypeFilter.setValue("Κρατικός");
         budgetTypeFilter.setStyle(Theme.comboBox());
         budgetTypeFilter.setPrefWidth(140);
 
@@ -327,7 +327,7 @@ public class RevenuesView {
     }
 
     private void updateStats() {
-        long total = tableData.stream().mapToLong(BudgetRevenue::getAmount).sum();
+        long total = BudgetRevenue.calculateSum();
         countLabel.setText(tableData.size() + " εγγραφές");
         totalLabel.setText("Σύνολο: " + Theme.formatAmount(total));
     }
