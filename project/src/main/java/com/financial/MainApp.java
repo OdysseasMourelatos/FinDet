@@ -44,6 +44,10 @@ public class MainApp extends Application {
     }
 
     private void loadBudgetData() {
+
+        //Get DB connection
+        SQLiteManager dbManager = SQLiteManager.getInstance();
+        
         String basePath = findProjectBasePath();
         if (basePath == null) {
             System.out.println("Warning: Could not find CSV files directory");
@@ -134,3 +138,4 @@ public class MainApp extends Application {
         launch(args);
     }
 }
+
