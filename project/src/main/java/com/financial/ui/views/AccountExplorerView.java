@@ -134,6 +134,8 @@ public class AccountExplorerView {
         budgetTypeFilter.setStyle(Theme.comboBox());
         budgetTypeFilter.setPrefWidth(140);
 
+        budgetTypeFilter.setOnAction(e -> performSearch());
+
         section.getChildren().addAll(searchField, searchButton, typeFilterLabel, budgetTypeFilter);
         return section;
     }
