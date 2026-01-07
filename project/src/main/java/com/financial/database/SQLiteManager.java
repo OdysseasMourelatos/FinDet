@@ -108,10 +108,11 @@ public class SQLiteManager {
         }
     }
 
-//   public void insertToRegularBudgetRevenues() {
-//        String insert = "Insert into Regular_Budget_Revenues(id,code,description,)"
-
-  //  }
+    public void insertToRegularBudgetRevenues(BudgetRevenue budgetRevenue) {
+        String insert = "Insert into Regular_Budget_Revenues(code,description,amount,category)
+        Values(" + budgetRevenue.code + budgetRevenue.description + budgetRevenue.amount + budgetRevenue.category + ")";
+    }
+    
   
     public Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
