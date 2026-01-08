@@ -599,7 +599,8 @@ public class ChartsView {
     private VBox createChartContent(String title, String subtitle, List<ChartItem> items, long total) {
         VBox content = new VBox(0);
         content.setAlignment(Pos.TOP_CENTER);
-        content.setMaxWidth(950);
+        content.setMaxWidth(Double.MAX_VALUE);
+        VBox.setVgrow(content, Priority.ALWAYS);
 
         // Header section
         VBox headerSection = new VBox(2);
@@ -663,8 +664,9 @@ public class ChartsView {
         PieChart chart = new PieChart(pieData);
         chart.setLegendVisible(false);
         chart.setLabelsVisible(false);
-        chart.setPrefSize(450, 450);
-        chart.setMaxSize(450, 450);
+        chart.setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
+        chart.setMinSize(400, 400); // Ελάχιστο μέγεθος
+        VBox.setVgrow(chart, Priority.ALWAYS);
         chart.setStyle("-fx-background-color: transparent;");
 
         // Apply monochromatic colors and tooltips
@@ -702,7 +704,8 @@ public class ChartsView {
 
         BarChart<String, Number> chart = new BarChart<>(xAxis, yAxis);
         chart.setLegendVisible(false);
-        chart.setPrefHeight(450);
+        chart.setPrefHeight(Region.USE_COMPUTED_SIZE);
+        VBox.setVgrow(chart, Priority.ALWAYS);
         chart.setStyle("-fx-background-color: transparent;");
         chart.setHorizontalGridLinesVisible(false);
         chart.setVerticalGridLinesVisible(false);
@@ -763,7 +766,7 @@ public class ChartsView {
             // Name
             Label nameLabel = new Label(item.name);
             nameLabel.setWrapText(true);
-            nameLabel.setMaxWidth(450);
+            nameLabel.setMaxWidth(Double.MAX_VALUE);
             nameLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + TEXT_PRIMARY + "; -fx-line-spacing: 2px;");
             nameLabel.setPadding(new Insets(0, 15, 0, 12));
             HBox.setHgrow(nameLabel, Priority.ALWAYS);
