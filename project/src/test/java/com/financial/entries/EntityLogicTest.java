@@ -281,6 +281,27 @@ public class EntityLogicTest {
     }
 
     @Test
+    void getPublicInvestmentExpensesOfServiceWithCodeTest() {
+        // Φορέας 1004 (Προεδρία της Κυβέρνησης) - Υπηρεσία 201
+        Entity entity = Entity.findEntityWithEntityCode("1004");
+        ArrayList<BudgetExpense> expenses = entity.getPublicInvestmentExpensesOfServiceWithCode("1004-201-000000");
+
+        // Setup 201 National + CoFunded: 2 εγγραφές
+        assertEquals(2, expenses.size());
+    }
+
+    @Test
+    void getBudgetExpensesOfServiceWithCodeTest() {
+        // Φορέας 1003 (Βουλή των Ελλήνων) - Υπηρεσία 101
+        Entity entity = Entity.findEntityWithEntityCode("1003");
+        ArrayList<BudgetExpense> expenses = entity.getBudgetExpensesOfServiceWithCode("1003-101-000000");
+
+        // Setup 101 Total: 2 εγγραφές
+        assertEquals(2, expenses.size());
+
+    }
+
+    @Test
     void getRegularSumOfEveryServiceTest() {
         // Φορέας 1003 (Βουλή)
         Entity entity = Entity.findEntityWithEntityCode("1003");

@@ -72,6 +72,30 @@ public interface EntityLogic {
     ArrayList<BudgetExpense> getPublicInvestmentNationalExpensesOfServiceWithCode(String serviceCode);
     ArrayList<BudgetExpense> getPublicInvestmentCoFundedExpensesOfServiceWithCode(String serviceCode);
 
+    default ArrayList<BudgetExpense> getPublicInvestmentExpensesOfServiceWithCode(String serviceCode) {
+        ArrayList<BudgetExpense> expenses = new ArrayList<>();
+        if (getPublicInvestmentNationalExpensesOfServiceWithCode(serviceCode) != null) {
+            expenses.addAll(getPublicInvestmentNationalExpensesOfServiceWithCode(serviceCode));
+        }
+        if (getPublicInvestmentCoFundedExpensesOfServiceWithCode(serviceCode) != null) {
+            expenses.addAll(getPublicInvestmentCoFundedExpensesOfServiceWithCode(serviceCode));
+        }
+        expenses.sort(Comparator.comparing(BudgetExpense::getCode));
+        return expenses;
+    }
+
+    default ArrayList<BudgetExpense> getBudgetExpensesOfServiceWithCode(String serviceCode) {
+        ArrayList<BudgetExpense> expenses = new ArrayList<>();
+        if (getRegularExpensesOfServiceWithCode(serviceCode) != null) {
+            expenses.addAll(getRegularExpensesOfServiceWithCode(serviceCode));
+        }
+        if (getPublicInvestmentExpensesOfServiceWithCode(serviceCode) != null) {
+            expenses.addAll(getPublicInvestmentExpensesOfServiceWithCode(serviceCode));
+        }
+        expenses.sort(Comparator.comparing(BudgetExpense::getCode));
+        return expenses;
+    }
+
     //Get sum of expenses of every service
     Map<String, Long> getRegularSumOfEveryService();
     Map<String, Long> getPublicInvestmentNationalSumOfEveryService();
