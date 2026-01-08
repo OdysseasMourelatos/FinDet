@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.financial.statistical_analysis.StatisticalExpenses;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.TranslateTransition;
@@ -32,6 +33,8 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 /**
  * Charts view - displays budget visualizations.
@@ -58,8 +61,10 @@ public class ChartsView {
     private TextField searchField;
     private Button searchBtn;
     private Button activeButton;
+    private Button toggleOutliersBtn;
     private String currentChartType = "Pie Chart";
     private String currentChartView = "placeholder";
+    private boolean filterOutliers = false;
 
     public ChartsView() {
         view = new VBox(0);
@@ -167,7 +172,17 @@ public class ChartsView {
         VBox searchContainer = new VBox(4, customTitle, searchRow);
         searchContainer.setAlignment(Pos.BOTTOM_LEFT);
 
+        toggleOutliersBtn = new Button("Εξομάλυνση");
+        toggleOutliersBtn.setStyle(getOutlierButtonStyle(false));
+
+        toggleOutliersBtn.setOnAction(e -> {
+            filterOutliers = !filterOutliers;
+            toggleOutliersBtn.setStyle(getOutlierButtonStyle(filterOutliers));
+            refreshCurrentChart();
+        });
+
         controls.getChildren().addAll(chartTypeCombo, sep1, revenuesBtn, expensesBtn, comparisonBtn, ministryBtn, spacer, searchContainer);
+        controls.getChildren().add(6, toggleOutliersBtn);
 
         return controls;
     }
@@ -233,6 +248,8 @@ public class ChartsView {
     }
 
     private void setActiveButton(Button btn) {
+        filterOutliers = false;
+        toggleOutliersBtn.setStyle(getOutlierButtonStyle(false));
         if (activeButton != null) {
             activeButton.setStyle(getButtonStyle(false));
         }
@@ -596,10 +613,16 @@ public class ChartsView {
         return chip;
     }
 
-    private VBox createChartContent(String title, String subtitle, List<ChartItem> items, long total) {
+    private VBox createChartContent(String title, String subtitle, List<ChartItem> originalItems, long originalTotal) {
+        List<ChartItem> displayItems = getFilteredItems(originalItems);
+
+        long currentDisplayTotal = displayItems.stream().mapToLong(i -> i.amount).sum();
+        int removedCount = originalItems.size() - displayItems.size();
+
         VBox content = new VBox(0);
         content.setAlignment(Pos.TOP_CENTER);
-        content.setMaxWidth(950);
+        content.setMaxWidth(Double.MAX_VALUE);
+        VBox.setVgrow(content, Priority.ALWAYS);
 
         // Header section
         VBox headerSection = new VBox(2);
@@ -609,39 +632,64 @@ public class ChartsView {
         Label titleLabel = new Label(title);
         titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: 600; -fx-text-fill: " + TEXT_PRIMARY + ";");
 
-        Label subtitleLabel = new Label(subtitle);
-        subtitleLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + TEXT_MUTED + ";");
+        String dynamicSubtitle = subtitle;
+        if (filterOutliers && removedCount > 0) {
+            if (removedCount == 1) {
+                dynamicSubtitle += " (Εξαιρέθηκε 1 ακραία υψηλή τιμή)";
+            } else {
+                dynamicSubtitle += " (Εξαιρέθηκαν " + removedCount + " ακραία υψηλές τιμές)";
+            }
+        }
+        Label subtitleLabel = new Label(dynamicSubtitle);
+        subtitleLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + (removedCount > 0 && filterOutliers ? ACCENT : TEXT_MUTED) + ";");
 
         headerSection.getChildren().addAll(titleLabel, subtitleLabel);
 
-        // Chart section
         VBox chartSection = new VBox(16);
         chartSection.setAlignment(Pos.CENTER);
         chartSection.setPadding(new Insets(0, 20, 20, 20));
+        VBox.setVgrow(chartSection, Priority.ALWAYS);
 
         if (currentChartType.equals("Bar Chart")) {
-            BarChart<String, Number> chart = createBarChart(items);
-            chartSection.getChildren().add(chart);
+            chartSection.getChildren().add(createBarChart(displayItems));
         } else {
-            PieChart chart = createPieChart(items, total);
-            chartSection.getChildren().add(chart);
+            chartSection.getChildren().add(createPieChart(displayItems, currentDisplayTotal));
         }
 
-        // Total indicator
-        VBox totalBox = new VBox(0);
-        totalBox.setAlignment(Pos.CENTER);
+        HBox totalsContainer = new HBox(40);
+        totalsContainer.setAlignment(Pos.CENTER);
+        totalsContainer.setPadding(new Insets(10, 0, 20, 0));
 
-        Label totalTitle = new Label("ΣΥΝΟΛΟ");
+        VBox mainTotalBox = new VBox(2);
+        mainTotalBox.setAlignment(Pos.CENTER);
+
+        boolean hasActualChanges = filterOutliers && removedCount > 0;
+
+        Label totalTitle = new Label(hasActualChanges ? "ΠΡΟΣΑΡΜΟΣΜΕΝΟ ΣΥΝΟΛΟ" : "ΣΥΝΟΛΟ");
         totalTitle.setStyle("-fx-font-size: 10px; -fx-text-fill: " + TEXT_MUTED + "; -fx-letter-spacing: 1px;");
 
-        Label totalValue = new Label(formatAmount(total));
-        totalValue.setStyle("-fx-font-size: 16px; -fx-font-weight: 600; -fx-text-fill: " + TEXT_PRIMARY + ";");
+        Label totalValue = new Label(formatAmount(currentDisplayTotal));
+        totalValue.setStyle("-fx-font-size: 18px; -fx-font-weight: 700; -fx-text-fill: " +
+                (hasActualChanges ? "#ef4444" : TEXT_PRIMARY) + ";");
 
-        totalBox.getChildren().addAll(totalTitle, totalValue);
-        chartSection.getChildren().add(totalBox);
+        mainTotalBox.getChildren().addAll(totalTitle, totalValue);
+        totalsContainer.getChildren().add(mainTotalBox);
 
-        // Data rows section
-        VBox dataSection = createDataRows(items, total);
+        if (filterOutliers && removedCount > 0) {
+            VBox refTotalBox = new VBox(2);
+            refTotalBox.setAlignment(Pos.CENTER);
+            Label refTitle = new Label("ΠΡΑΓΜΑΤΙΚΟ ΣΥΝΟΛΟ");
+            refTitle.setStyle("-fx-font-size: 9px; -fx-text-fill: " + TEXT_MUTED + ";");
+            Label refValue = new Label(formatAmount(originalTotal));
+            refValue.setStyle("-fx-font-size: 14px; -fx-text-fill: " + TEXT_SECONDARY + "; -fx-strikethrough: false;");
+            refTotalBox.getChildren().addAll(refTitle, refValue);
+            totalsContainer.getChildren().add(refTotalBox);
+        }
+
+        chartSection.getChildren().add(totalsContainer);
+
+        // Data rows section (χρησιμοποιεί τα φιλτραρισμένα items)
+        VBox dataSection = createDataRows(displayItems, currentDisplayTotal);
 
         content.getChildren().addAll(headerSection, chartSection, dataSection);
         content.setStyle(
@@ -663,8 +711,9 @@ public class ChartsView {
         PieChart chart = new PieChart(pieData);
         chart.setLegendVisible(false);
         chart.setLabelsVisible(false);
-        chart.setPrefSize(450, 450);
-        chart.setMaxSize(450, 450);
+        chart.setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
+        chart.setMinSize(400, 400); // Ελάχιστο μέγεθος
+        VBox.setVgrow(chart, Priority.ALWAYS);
         chart.setStyle("-fx-background-color: transparent;");
 
         // Apply monochromatic colors and tooltips
@@ -702,7 +751,8 @@ public class ChartsView {
 
         BarChart<String, Number> chart = new BarChart<>(xAxis, yAxis);
         chart.setLegendVisible(false);
-        chart.setPrefHeight(450);
+        chart.setPrefHeight(Region.USE_COMPUTED_SIZE);
+        VBox.setVgrow(chart, Priority.ALWAYS);
         chart.setStyle("-fx-background-color: transparent;");
         chart.setHorizontalGridLinesVisible(false);
         chart.setVerticalGridLinesVisible(false);
@@ -763,7 +813,7 @@ public class ChartsView {
             // Name
             Label nameLabel = new Label(item.name);
             nameLabel.setWrapText(true);
-            nameLabel.setMaxWidth(450);
+            nameLabel.setMaxWidth(Double.MAX_VALUE);
             nameLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + TEXT_PRIMARY + "; -fx-line-spacing: 2px;");
             nameLabel.setPadding(new Insets(0, 15, 0, 12));
             HBox.setHgrow(nameLabel, Priority.ALWAYS);
@@ -856,6 +906,44 @@ public class ChartsView {
             return String.format("%.2f εκ.", amount / 1_000_000.0);
         }
         return String.format("%,d €", amount);
+    }
+
+    private List<ChartItem> getFilteredItems(List<ChartItem> items) {
+        if (!filterOutliers || items.size() < 4) {
+            return items;
+        }
+
+        Map<String, Long> dataMap = new HashMap<>();
+        DescriptiveStatistics stats = new DescriptiveStatistics();
+
+        for (ChartItem item : items) {
+            dataMap.put(item.name, item.amount);
+            stats.addValue(item.amount);
+        }
+
+        Map<String, Long> outliers = StatisticalExpenses.findOutliersIQR(dataMap, stats);
+
+        return items.stream().filter(item -> !outliers.containsKey(item.name)).collect(Collectors.toList());
+    }
+
+    private String getOutlierButtonStyle(boolean active) {
+        if (active) {
+            return "-fx-background-color: #ef4444;" +
+                    "-fx-text-fill: white;" +
+                    "-fx-background-radius: 6;" +
+                    "-fx-padding: 8 14;" +
+                    "-fx-font-size: 12px;" +
+                    "-fx-cursor: hand;" +
+                    "-fx-font-weight: bold;";
+        }
+        return "-fx-background-color: transparent;" +
+                "-fx-text-fill: #ef4444;" +
+                "-fx-background-radius: 6;" +
+                "-fx-border-color: #ef4444;" +
+                "-fx-border-radius: 6;" +
+                "-fx-padding: 8 14;" +
+                "-fx-font-size: 12px;" +
+                "-fx-cursor: hand;";
     }
 
     public Region getView() {

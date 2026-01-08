@@ -595,7 +595,8 @@ public class MultiYearAnalysisView {
     private VBox createChartContent(String title, String subtitle, List<ChartItem> items, long total) {
         VBox content = new VBox(0);
         content.setAlignment(Pos.TOP_CENTER);
-        content.setMaxWidth(950);
+        content.setMaxWidth(Double.MAX_VALUE);
+        VBox.setVgrow(content, Priority.ALWAYS);
 
         // Header section
         VBox headerSection = new VBox(2);
@@ -614,6 +615,7 @@ public class MultiYearAnalysisView {
         VBox chartSection = new VBox(16);
         chartSection.setAlignment(Pos.CENTER);
         chartSection.setPadding(new Insets(0, 20, 20, 20));
+        VBox.setVgrow(chartSection, Priority.ALWAYS);
 
         if (currentChartType.equals("Bar Chart")) {
             BarChart<String, Number> chart = createBarChart(items);
@@ -665,8 +667,9 @@ public class MultiYearAnalysisView {
         LineChart<String, Number> lineChart = new LineChart<>(xAxis, yAxis);
         lineChart.setLegendVisible(false);
         lineChart.setAnimated(true);
-        lineChart.setCreateSymbols(true); // Εμφανίζει κύκλους στα σημεία δεδομένων
-        lineChart.setPrefSize(800, 450);
+        lineChart.setCreateSymbols(true);
+        lineChart.setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
+        VBox.setVgrow(lineChart, Priority.ALWAYS);
         lineChart.setStyle("-fx-background-color: transparent;");
 
         // 3. Προετοιμασία δεδομένων (Series)
@@ -717,7 +720,8 @@ public class MultiYearAnalysisView {
 
         BarChart<String, Number> chart = new BarChart<>(xAxis, yAxis);
         chart.setLegendVisible(false);
-        chart.setPrefHeight(450);
+        chart.setPrefHeight(Region.USE_COMPUTED_SIZE);
+        VBox.setVgrow(chart, Priority.ALWAYS);
         chart.setStyle("-fx-background-color: transparent;");
         chart.setHorizontalGridLinesVisible(false);
         chart.setVerticalGridLinesVisible(false);
