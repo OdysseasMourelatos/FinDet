@@ -184,8 +184,8 @@ public class SQLiteManager {
             ps.setString(5,investmentBE.expense_code);
             ps.setString(6,investmentBE.description);
             ps.setString(7,investmentBE.type);
-            ps.setDouble(8,regularBE.amount);
-            ps.setString(9,regularBE.category);
+            ps.setDouble(8,investmentBE.amount);
+            ps.setString(9,investmentBE.category);
             ps.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Error inserting product: " + e.getMessage());
