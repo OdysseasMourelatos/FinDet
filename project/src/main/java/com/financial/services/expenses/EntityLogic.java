@@ -80,17 +80,19 @@ public interface EntityLogic {
         if (getPublicInvestmentCoFundedExpensesOfServiceWithCode(serviceCode) != null) {
             expenses.addAll(getPublicInvestmentCoFundedExpensesOfServiceWithCode(serviceCode));
         }
+        expenses.sort(Comparator.comparing(BudgetExpense::getCode));
         return expenses;
     }
 
     default ArrayList<BudgetExpense> getBudgetExpensesOfServiceWithCode(String serviceCode) {
         ArrayList<BudgetExpense> expenses = new ArrayList<>();
-        if (getPublicInvestmentExpensesOfServiceWithCode(serviceCode) != null) {
-            expenses.addAll(getPublicInvestmentExpensesOfServiceWithCode(serviceCode));
-        }
         if (getRegularExpensesOfServiceWithCode(serviceCode) != null) {
             expenses.addAll(getRegularExpensesOfServiceWithCode(serviceCode));
         }
+        if (getPublicInvestmentExpensesOfServiceWithCode(serviceCode) != null) {
+            expenses.addAll(getPublicInvestmentExpensesOfServiceWithCode(serviceCode));
+        }
+        expenses.sort(Comparator.comparing(BudgetExpense::getCode));
         return expenses;
     }
 

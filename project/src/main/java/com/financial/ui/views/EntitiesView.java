@@ -156,6 +156,18 @@ public class EntitiesView {
             }
         });
 
+        entitySelector.setButtonCell(new ListCell<Entity>() {
+            @Override
+            protected void updateItem(Entity item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(entitySelector.getPromptText());
+                } else {
+                    setText(item.getEntityCode() + " - " + item.getEntityName());
+                }
+            }
+        });
+
         Button resetButton = new Button("✖");
         resetButton.setStyle(Theme.buttonSecondary());
         resetButton.setOnAction(e -> {
@@ -326,16 +338,16 @@ public class EntitiesView {
 
         TableColumn<AnalysisResult, String> codeCol = new TableColumn<>("Κωδικός");
         codeCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getCode()));
-        codeCol.setMaxWidth(1500);
+        codeCol.prefWidthProperty().bind(analysisTable.widthProperty().multiply(0.15));
 
         TableColumn<AnalysisResult, String> descCol = new TableColumn<>("Ονομασία");
         descCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getDescription()));
-        descCol.setMaxWidth(6000);
+        descCol.prefWidthProperty().bind(analysisTable.widthProperty().multiply(0.65));
 
         TableColumn<AnalysisResult, String> amountCol = new TableColumn<>("Ποσό (€)");
         amountCol.setCellValueFactory(d -> new SimpleStringProperty(Theme.formatAmount(d.getValue().getAmount())));
         amountCol.setStyle("-fx-alignment: CENTER-RIGHT; -fx-font-weight: bold;");
-        amountCol.setMaxWidth(2500);
+        amountCol.prefWidthProperty().bind(analysisTable.widthProperty().multiply(0.20));
 
         analysisTable.getColumns().addAll(codeCol, descCol, amountCol);
 
@@ -411,6 +423,23 @@ public class EntitiesView {
         analysisTable.getColumns().get(1).setText("Ονομασία");
 
         switch (budgetType) {
+            case "Κρατικός" -> {
+                for (String sCode : entity.getAllServiceCodes()) {
+                    String sName = entity.getServiceNameWithCode(sCode);
+                    analysisData.add(new AnalysisResult(sCode, sName, entity.getTotalSumOfServiceWithCode(sCode)));
+
+                    ArrayList<BudgetExpense> expenses = entity.getBudgetExpensesOfServiceWithCode(sCode);
+                    for (BudgetExpense exp : expenses) {
+                        if (exp instanceof RegularBudgetExpense) {
+                            analysisData.add(new AnalysisResult(exp.getCode(), "   • " + exp.getDescription() + " (ΤΑΚΤΙΚΟΣ)", exp.getAmount()));
+                        } else if (exp instanceof PublicInvestmentBudgetNationalExpense) {
+                            analysisData.add(new AnalysisResult(exp.getCode(), "   • " + exp.getDescription() + " (ΠΔΕ ΕΘΝΙΚΟ)", exp.getAmount()));
+                        } else if (exp instanceof  PublicInvestmentBudgetCoFundedExpense) {
+                            analysisData.add(new AnalysisResult(exp.getCode(), "   • " + exp.getDescription() + " (ΠΔΕ ΣΥΓΧΡ)", exp.getAmount()));
+                        }
+                    }
+                }
+            }
             case "Τακτικός" -> {
                 for (String sCode : entity.getAllRegularServiceCodes()) {
                     String sName = entity.getRegularServiceNameWithCode(sCode);
@@ -419,6 +448,21 @@ public class EntitiesView {
                     ArrayList<BudgetExpense> expenses = entity.getRegularExpensesOfServiceWithCode(sCode);
                     for (BudgetExpense exp : expenses) {
                         analysisData.add(new AnalysisResult(exp.getCode(), "   • " + exp.getDescription(), exp.getAmount()));
+                    }
+                }
+            }
+            case "ΠΔΕ" -> {
+                for (String sCode : entity.getAllPublicInvestmentServiceCodes()) {
+                    String sName = entity.getPublicInvestmentServiceNameWithCode(sCode);
+                    analysisData.add(new AnalysisResult(sCode, sName, entity.getPublicInvestmentSumOfServiceWithCode(sCode)));
+
+                    ArrayList<BudgetExpense> expenses = entity.getPublicInvestmentExpensesOfServiceWithCode(sCode);
+                    for (BudgetExpense exp : expenses) {
+                        if (exp instanceof PublicInvestmentBudgetNationalExpense) {
+                            analysisData.add(new AnalysisResult(exp.getCode(), "   • " + exp.getDescription() + " (ΕΘΝΙΚΟ)", exp.getAmount()));
+                        } else if (exp instanceof  PublicInvestmentBudgetCoFundedExpense) {
+                            analysisData.add(new AnalysisResult(exp.getCode(), "   • " + exp.getDescription() + " (ΣΥΓΧΡ.)", exp.getAmount()));
+                        }
                     }
                 }
             }
