@@ -116,12 +116,13 @@ public class SQLiteManager {
         Insert into Regular_Budget_Revenues(code,description,amount,category)
         Values(?,?,?,?)
         """;
-
+        // using prepared statement instead of statement to prevent sql injection
         try(PreparedStatement ps = connection.prepareStatement(insert)) {
             ps.setString(1,regularBR.code);
             ps.setString(2,regularBR.description);
-            ps.setLong(3,regularBR.amount);
+            ps.setDouble(3,regularBR.amount);
             ps.setString(4,regularBR.category);
+            ps.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Error inserting product: " + e.getMessage());
         }
@@ -132,6 +133,18 @@ public class SQLiteManager {
        Insert into Public_Investment_Budget_Revenues(code,description,type,amount,category)
        Values(?,?,?,?,?)
        """;
+
+        try(PreparedStatement ps = connection.prepareStatement(insert)) {
+            ps.setString(1,investmentBR.code);
+            ps.setString(2, investmentBR.description);
+            ps.setString(3,investmentBR.type);
+            ps.setDouble(4,investmentBR.amount);
+            ps.setString(5,investmentBR.category);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error inserting product: " + e.getMessage());
+        }
+
     }
 
     public void insertToRegularBudgeteExpenses(RegularBudgetExpense regularBE) {
@@ -140,6 +153,20 @@ public class SQLiteManager {
        expense_code, description, amount, category)
        Values(?,?,?,?,?,?,?,?)
        """;
+        try(PreparedStatement ps = connection.prepareStatement(insert)) {
+            ps.setString(1, regularBE.entity_code);
+            ps.setString(2,regularBE.entity_name);
+            ps.setString(3,regularBE.service_code);
+            ps.setString(4,regularBE.service_name);
+            ps.setString(5,regularBE.expense_code);
+            ps.setString(6,regularBE.description);
+            ps.setDouble(7,regularBE.amount);
+            ps.setString(8,regularBE.category);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error inserting product: " + e.getMessage());
+        }
+
     }
 
     public void insertToPublicInvestmentBudgeteExpenses(PublicInvestmentBudgetExpense investmentBE) {
@@ -148,6 +175,21 @@ public class SQLiteManager {
        expense_code,description,type,amount,category) 
        Values(?,?,?,?,?,?,?,?,?)
        """;
+
+        try(PreparedStatement ps = connection.prepareStatement(insert)) {
+            ps.setString(1, investmentBE.entity_code);
+            ps.setString(2,investmentBE.entity_name);
+            ps.setString(3,investmentBE.service_code);
+            ps.setString(4,investmentBE.service_name);
+            ps.setString(5,investmentBE.expense_code);
+            ps.setString(6,investmentBE.description);
+            ps.setString(7,investmentBE.type);
+            ps.setDouble(8,regularBE.amount);
+            ps.setString(9,regularBE.category);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error inserting product: " + e.getMessage());
+        }
     }
 
      public void insertToEntities(Entity e) {
@@ -155,6 +197,14 @@ public class SQLiteManager {
         Insert into Entities(entity_code,entity_name)
         Values(?,?)
         """;
+
+         try(PreparedStatement ps = connection.prepareStatement(insert)) {
+            ps.setString(1,e.entity_code);
+            ps.setString(2,e.entity_name);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error inserting product: " + e.getMessage());
+        }
     }
 
  
