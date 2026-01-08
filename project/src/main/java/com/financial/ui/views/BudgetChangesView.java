@@ -47,11 +47,14 @@ public class BudgetChangesView {
     private Label statusLabel;
     private Button revenueUndoButton;
     private Button expenseUndoButton;
+    private ComboBox<String> revenueViewScopeCombo;
 
     // Revenue results area
     private VBox resultsContainer;
     private TableView<ChangeResult> resultsTable;
     private ObservableList<ChangeResult> resultsData;
+    private Map<String, Long> lastBeforeValues;
+    private String lastSelectedCode;
 
     // Expense form components
     private ComboBox<String> expenseBudgetTypeCombo;
@@ -63,6 +66,7 @@ public class BudgetChangesView {
     private ComboBox<String> expenseChangeTypeCombo;
     private Button expenseExecuteButton;
     private Label expenseStatusLabel;
+    private boolean isUpdatingScope = false;
 
     // Expense results area
     private VBox expenseResultsContainer;
@@ -276,16 +280,39 @@ public class BudgetChangesView {
         resultsCard.setStyle(Theme.card());
         VBox.setVgrow(resultsCard, Priority.ALWAYS);
 
+        HBox resultsHeader = new HBox(12);
+        resultsHeader.setAlignment(Pos.CENTER_LEFT);
+
         Label resultsTitle = new Label("Αποτελέσματα Αλλαγών");
         resultsTitle.setStyle(Theme.sectionHeader());
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        Label scopeLabel = new Label("Προβολή:");
+        scopeLabel.setStyle(Theme.mutedText());
+
+        revenueViewScopeCombo = new ComboBox<>();
+        revenueViewScopeCombo.setStyle(Theme.comboBox());
+        revenueViewScopeCombo.setPrefWidth(180);
+        revenueViewScopeCombo.setOnAction(this::handleScopeChange);
+
+
+        resultsHeader.getChildren().addAll(resultsTitle, spacer, scopeLabel, revenueViewScopeCombo);
 
         resultsData = FXCollections.observableArrayList();
         resultsTable = createResultsTable();
         VBox.setVgrow(resultsTable, Priority.ALWAYS);
 
-        resultsCard.getChildren().addAll(resultsTitle, resultsTable);
+        resultsCard.getChildren().addAll(resultsHeader, resultsTable);
         section.getChildren().add(resultsCard);
         return section;
+    }
+
+    private void handleScopeChange(javafx.event.ActionEvent event) {
+        if (!isUpdatingScope) {
+            refreshRevenueResults();
+        }
     }
 
     private TableView<ChangeResult> createResultsTable() {
@@ -362,28 +389,51 @@ public class BudgetChangesView {
         }
 
         try {
-            Map<String, Long> beforeValues = captureValues(targetRevenue, budgetType);
+            lastSelectedCode = code;
+
+            lastBeforeValues = new HashMap<>();
+            lastBeforeValues.putAll(captureAllLevels(code));
+
             applyChange(targetRevenue, changeValue, changeType, distribution, budgetType);
-            Map<String, Long> afterValues = captureValues(targetRevenue, budgetType);
 
-            long valueBefore = beforeValues.get(targetRevenue.getCode());
-            long valueAfter = afterValues.get(targetRevenue.getCode());
+            updateRevenueViewScopeOptions(budgetType);
+            refreshRevenueResults();
 
-            if (valueBefore == valueAfter) {
-                throw new IllegalArgumentException();
-            }
-
-            revenueUndoButton.setVisible(true);
-
-            // Display results with animation
-            displayResults(targetRevenue, beforeValues, afterValues, budgetType);
             showSuccess("Η αλλαγή εφαρμόστηκε επιτυχώς!");
+            revenueUndoButton.setVisible(true);
         } catch (NumberFormatException e) {
             showError("Μη έγκυρη τιμή. Χρησιμοποιήστε αριθμό ή ποσοστό (π.χ. 10000 ή 10%)");
         } catch (IllegalArgumentException e) {
             showError("Η αλλαγή απέτυχε, καθώς ένας ή παραπάνω λογαριασμοί θα είχαν αρνητικό υπόλοιπο");
         } catch (Exception e) {
             showError("Σφάλμα: " + e.getMessage());
+        }
+    }
+
+    private Map<String, Long> captureAllLevels(String code) {
+        Map<String, Long> allValues = new HashMap<>();
+
+        captureScopeToMap(allValues, "Τακτικός Προϋπολογισμός", RegularBudgetRevenue.findRegularBudgetRevenueWithCode(code));
+        captureScopeToMap(allValues, "ΠΔΕ Εθνικό", PublicInvestmentBudgetNationalRevenue.findPublicInvestmentBudgetNationalRevenueWithCode(code));
+        captureScopeToMap(allValues, "ΠΔΕ Συγχρηματοδοτούμενο", PublicInvestmentBudgetCoFundedRevenue.findPublicInvestmentBudgetCoFundedRevenueWithCode(code));
+        captureScopeToMap(allValues, "ΠΔΕ (Σύνολο)", PublicInvestmentBudgetRevenue.findPublicInvestmentBudgetRevenueWithCode(code));
+        captureScopeToMap(allValues, "Κρατικός Προϋπολογισμός", BudgetRevenue.findBudgetRevenueWithCode(code));
+
+        return allValues;
+    }
+
+    private void captureScopeToMap(Map<String, Long> map, String scope, BudgetRevenue revenue) {
+        if (revenue == null) {
+            return;
+        }
+
+        map.put(scope + "|" + revenue.getCode(), revenue.getAmount());
+
+        for (BudgetRevenue sup : revenue.getAllSuperCategories()) {
+            map.put(scope + "|" + sup.getCode(), sup.getAmount());
+        }
+        for (BudgetRevenue sub : revenue.getAllSubCategories()) {
+            map.put(scope + "|" + sub.getCode(), sub.getAmount());
         }
     }
 
@@ -469,61 +519,99 @@ public class BudgetChangesView {
         }
     }
 
-    private void displayResults(BudgetRevenue targetRevenue, Map<String, Long> before, Map<String, Long> after, String budgetType) {
+    private void displayResults(BudgetRevenue targetRevenue, Map<String, Long> before, Map<String, Long> after, String scope) {
         resultsData.clear();
 
         ArrayList<BudgetRevenue> superCats = targetRevenue.getAllSuperCategories();
         if (superCats != null) {
             for (int i = superCats.size() - 1; i >= 0; i--) {
                 BudgetRevenue sup = superCats.get(i);
-                addResultRow(sup, before, after, "Ανώτερη");
+                addResultRow(sup, before, after, "Ανώτερη", scope);
             }
         }
 
-        addResultRow(targetRevenue, before, after, "* Στόχος");
+        addResultRow(targetRevenue, before, after, "* Στόχος", scope);
 
         ArrayList<BudgetRevenue> subCats = targetRevenue.getAllSubCategories();
         if (subCats != null) {
             for (BudgetRevenue sub : subCats) {
-                addResultRow(sub, before, after, "Υποκατηγορία");
+                addResultRow(sub, before, after, "Υποκατηγορία", scope);
             }
         }
-
         animateResults();
     }
 
-    private void addResultRow(BudgetRevenue revenue, Map<String, Long> before, Map<String, Long> after, String role) {
-        Long beforeVal = before.get(revenue.getCode());
-        Long afterVal = after.get(revenue.getCode());
+    private void updateRevenueViewScopeOptions(String budgetType) {
+        isUpdatingScope = true;
 
-        if (beforeVal == null) {
-            beforeVal = 0L;
+        revenueViewScopeCombo.setOnAction(null);
+
+        String currentSelection = revenueViewScopeCombo.getValue();
+        revenueViewScopeCombo.getItems().clear();
+
+        if (budgetType.equals("Τακτικός Προϋπολογισμός")) {
+            revenueViewScopeCombo.getItems().addAll("Τακτικός Προϋπολογισμός", "Κρατικός Προϋπολογισμός");
+        } else {
+            revenueViewScopeCombo.getItems().addAll(budgetType, "ΠΔΕ (Σύνολο)", "Κρατικός Προϋπολογισμός");
         }
-        if (afterVal == null) {
-            afterVal = revenue.getAmount();
+
+        if (currentSelection != null && revenueViewScopeCombo.getItems().contains(currentSelection)) {
+            revenueViewScopeCombo.setValue(currentSelection);
+        } else {
+            revenueViewScopeCombo.setValue(budgetType);
         }
+
+        revenueViewScopeCombo.setOnAction(this::handleScopeChange);
+        isUpdatingScope = false;
+    }
+
+    private void refreshRevenueResults() {
+        if (isUpdatingScope) {
+            return;
+        }
+
+        String viewScope = revenueViewScopeCombo.getValue();
+        if (lastSelectedCode == null || viewScope == null) {
+            return;
+        }
+
+        BudgetRevenue currentTarget = switch (viewScope) {
+            case "Τακτικός Προϋπολογισμός" -> RegularBudgetRevenue.findRegularBudgetRevenueWithCode(lastSelectedCode);
+            case "ΠΔΕ Εθνικό" -> PublicInvestmentBudgetNationalRevenue.findPublicInvestmentBudgetNationalRevenueWithCode(lastSelectedCode);
+            case "ΠΔΕ Συγχρηματοδοτούμενο" -> PublicInvestmentBudgetCoFundedRevenue.findPublicInvestmentBudgetCoFundedRevenueWithCode(lastSelectedCode);
+            case "ΠΔΕ (Σύνολο)" -> PublicInvestmentBudgetRevenue.findPublicInvestmentBudgetRevenueWithCode(lastSelectedCode);
+            case "Κρατικός Προϋπολογισμός" -> BudgetRevenue.findBudgetRevenueWithCode(lastSelectedCode);
+            default -> null;
+        };
+
+        if (currentTarget != null) {
+            Map<String, Long> currentAfterValues = captureValues(currentTarget, viewScope);
+            displayResults(currentTarget, lastBeforeValues, currentAfterValues, viewScope);
+        }
+    }
+
+    private void addResultRow(BudgetRevenue revenue, Map<String, Long> before, Map<String, Long> after, String role, String scope) {
+        String code = revenue.getCode();
+        String key = scope + "|" + code;
+
+        long beforeVal = before.getOrDefault(key, revenue.getAmount());
+        long afterVal = revenue.getAmount();
 
         long change = afterVal - beforeVal;
-        double percentChange = beforeVal != 0 ? ((double) change / beforeVal) * 100 : 0;
+        double percentChange = (beforeVal != 0) ? ((double) change / beforeVal) * 100 : 0;
 
-        String changeStr;
-        if (change >= 0) {
-            changeStr = String.format("+%,d (%.1f%%)", change, percentChange);
-        } else {
-            changeStr = String.format("%,d (%.1f%%)", change, percentChange);
-        }
+        String changeStr = (change == 0) ? "0 (0.0%)" :
+                String.format("%s%,d (%.1f%%)", (change > 0 ? "+" : ""), change, percentChange);
 
-        ChangeResult result = new ChangeResult(
-            revenue.getCode(),
-            truncateDescription(revenue.getDescription(), 35),
-            String.valueOf(revenue.getLevelOfHierarchy()),
-            Theme.formatAmount(beforeVal),
-            Theme.formatAmount(afterVal),
-            changeStr,
-            role
-        );
-
-        resultsData.add(result);
+        resultsData.add(new ChangeResult(
+                code,
+                truncateDescription(revenue.getDescription(), 35),
+                String.valueOf(revenue.getLevelOfHierarchy()),
+                Theme.formatAmount(beforeVal),
+                Theme.formatAmount(afterVal),
+                changeStr,
+                role
+        ));
     }
 
     private void handleRevenueUndo() {
