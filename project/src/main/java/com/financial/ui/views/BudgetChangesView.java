@@ -67,6 +67,7 @@ public class BudgetChangesView {
     private Button expenseExecuteButton;
     private Label expenseStatusLabel;
     private boolean isUpdatingScope = false;
+    private ComboBox<String> expenseCalculationModeCombo;
 
     // Expense results area
     private VBox expenseResultsContainer;
@@ -807,7 +808,18 @@ public class BudgetChangesView {
         expenseChangeTypeCombo.setStyle(Theme.comboBox());
         changeTypeBox.getChildren().add(expenseChangeTypeCombo);
 
-        row3.getChildren().addAll(categoryBox, changeBox, changeTypeBox);
+        VBox calcModeBox = createFormField("Τρόπος Εφαρμογής");
+        expenseCalculationModeCombo = new ComboBox<>();
+        expenseCalculationModeCombo.getItems().addAll(
+                "Επηρεασμός κάθε λογαριασμού (Οριζόντια)",
+                "Επηρεασμός συνολικού αθροίσματος (Επιμερισμός)"
+        );
+        expenseCalculationModeCombo.setValue("Επηρεασμός κάθε λογαριασμού (Οριζόντια)");
+        expenseCalculationModeCombo.setPrefWidth(280);
+        expenseCalculationModeCombo.setStyle(Theme.comboBox());
+        calcModeBox.getChildren().add(expenseCalculationModeCombo);
+
+        row3.getChildren().addAll(categoryBox, changeBox, changeTypeBox, calcModeBox);
 
         // Button row
         HBox buttonRow = new HBox(16);
@@ -966,12 +978,12 @@ public class BudgetChangesView {
         table.setPlaceholder(placeholder);
 
         TableColumn<ExpenseChangeResult, String> entityCol = new TableColumn<>("Φορέας");
-        entityCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().entityCode));
-        entityCol.setPrefWidth(70);
+        entityCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().entityName));
+        entityCol.setPrefWidth(150);
 
         TableColumn<ExpenseChangeResult, String> serviceCol = new TableColumn<>("Υπηρεσία");
         serviceCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().serviceName));
-        serviceCol.setPrefWidth(150);
+        serviceCol.setPrefWidth(200);
 
         TableColumn<ExpenseChangeResult, String> categoryCol = new TableColumn<>("Κατηγορία");
         categoryCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().categoryCode));
@@ -993,7 +1005,7 @@ public class BudgetChangesView {
 
         TableColumn<ExpenseChangeResult, String> changeCol = new TableColumn<>("Μεταβολή");
         changeCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().change));
-        changeCol.setPrefWidth(120);
+        changeCol.setPrefWidth(180);
         changeCol.setStyle("-fx-alignment: CENTER-RIGHT;");
 
         table.getColumns().add(entityCol);
@@ -1043,6 +1055,10 @@ public class BudgetChangesView {
             applyExpenseChange(budgetType, scope, categoryCode, percentage, fixedAmount);
             Map<String, Long> afterValues = captureExpenseValues(budgetType, scope, categoryCode);
 
+            if (beforeValues.equals(afterValues)) {
+                showExpenseError("Η αλλαγή απέτυχε, καθώς ένας ή παραπάνω λογαριασμοί θα είχαν αρνητικό υπόλοιπο");
+                return;
+            }
             // Display results
             displayExpenseResults(budgetType, scope, categoryCode, beforeValues, afterValues);
             showExpenseSuccess("Η αλλαγή εφαρμόστηκε επιτυχώς!");
@@ -1171,9 +1187,20 @@ public class BudgetChangesView {
 
     private void applyExpenseChange(String budgetType, String scope, String categoryCode, double percentage, long fixedAmount) {
         BudgetType type = getBudgetTypeEnum(budgetType);
+        String mode = expenseCalculationModeCombo.getValue();
+        boolean isTotalSum = mode.equals("Επηρεασμός συνολικού αθροίσματος (Επιμερισμός)");
 
         if (scope.equals("Καθολική (Όλοι οι Φορείς)")) {
             // Global change
+            if (isTotalSum && fixedAmount != 0) {
+                int count = findTotalAccountsOfBudgetType(budgetType, categoryCode);
+                if (count > 0) {
+                    fixedAmount = fixedAmount / count;
+                } else {
+                    showExpenseError("Δεν βρέθηκαν λογαριασμοί για επιμερισμό.");
+                    return;
+                }
+            }
             if (categoryCode != null) {
                 if (budgetType.equals("Τακτικός Προϋπολογισμός")) {
                     RegularBudgetExpense.implementGlobalChangesInCertainRegularExpenseCategoryWithPercentageAllocation(categoryCode, percentage, fixedAmount);
@@ -1202,6 +1229,17 @@ public class BudgetChangesView {
             if (entity == null) {
                 return;
             }
+            String serviceSelection = expenseServiceCombo.getValue();
+            String serviceCodeOnly = (serviceSelection != null) ? serviceSelection.split(" - ")[0] : null;
+            if (isTotalSum && fixedAmount != 0) {
+                int count = findTotalAccountsOfEntity(budgetType, scope, categoryCode, serviceCodeOnly, entity);
+                if (count > 0) {
+                    fixedAmount = fixedAmount / count;
+                } else {
+                    showExpenseError("Δεν βρέθηκαν λογαριασμοί για επιμερισμό.");
+                    return;
+                }
+            }
 
             if (scope.equals("Ανά Φορέα")) {
                 if (categoryCode != null) {
@@ -1210,7 +1248,6 @@ public class BudgetChangesView {
                     entity.implementChangesInAllExpenseCategoriesOfAllServices(percentage, fixedAmount, type);
                 }
             } else if (scope.equals("Ανά Υπηρεσία")) {
-                String serviceSelection = expenseServiceCombo.getValue();
                 if (serviceSelection == null) {
                     return;
                 }
@@ -1218,6 +1255,44 @@ public class BudgetChangesView {
                 entity.implementChangesInAllExpenseCategoriesOfSpecificService(serviceCode, percentage, fixedAmount, type);
             }
         }
+    }
+
+    private int findTotalAccountsOfEntity(String budgetType, String scope, String categoryCode, String serviceCode, Entity entity) {
+        if (entity == null) {
+            return 0;
+        }
+
+        List<? extends BudgetExpense> expenses = switch (budgetType) {
+            case "Τακτικός Προϋπολογισμός" -> entity.getRegularBudgetExpenses();
+            case "ΠΔΕ Εθνικό" -> entity.getPublicInvestmentBudgetNationalExpenses();
+            default -> entity.getPublicInvestmentBudgetCoFundedExpenses();
+        };
+
+        if (scope.equals("Ανά Φορέα")) {
+            return (int) expenses.stream().filter(exp -> categoryCode == null || exp.getCode().equals(categoryCode)).count();
+        } else if (scope.equals("Ανά Υπηρεσία") && serviceCode != null) {
+            return (int) expenses.stream().filter(exp -> exp.getServiceCode().equals(serviceCode)).filter(exp -> categoryCode == null || exp.getCode().equals(categoryCode)).count();
+        }
+
+        return 0;
+    }
+
+    private int findTotalAccountsOfBudgetType(String budgetType, String categoryCode) {
+        List<? extends BudgetExpense> expenses;
+        if (categoryCode == null) {
+            expenses = switch (budgetType) {
+                case "Τακτικός Προϋπολογισμός" -> RegularBudgetExpense.getAllRegularBudgetExpenses();
+                case "ΠΔΕ Εθνικό" -> PublicInvestmentBudgetNationalExpense.getAllPublicInvestmentBudgetNationalExpenses();
+                default -> PublicInvestmentBudgetCoFundedExpense.getAllPublicInvestmentBudgetCoFundedExpenses();
+            };
+        } else {
+            expenses = switch (budgetType) {
+                case "Τακτικός Προϋπολογισμός" -> RegularBudgetExpense.getRegularBudgetExpensesOfCategoryWithCode(categoryCode);
+                case "ΠΔΕ Εθνικό" -> PublicInvestmentBudgetNationalExpense.getPublicInvestmentBudgetNationalExpensesOfCategoryWithCode(categoryCode);
+                default -> PublicInvestmentBudgetCoFundedExpense.getPublicInvestmentBudgetCoFundedExpensesOfCategoryWithCode(categoryCode);
+            };
+        }
+        return expenses.size();
     }
 
     private void handleExpenseUndo() {
@@ -1278,7 +1353,7 @@ public class BudgetChangesView {
             }
 
             ExpenseChangeResult result = new ExpenseChangeResult(
-                expense.getEntityCode(),
+                expense.getEntityName(),
                 truncateDescription(expense.getServiceName(), 25),
                 expense.getCode(),
                 truncateDescription(expense.getDescription(), 30),
@@ -1323,7 +1398,7 @@ public class BudgetChangesView {
     }
 
     public static class ExpenseChangeResult {
-        public final String entityCode;
+        public final String entityName;
         public final String serviceName;
         public final String categoryCode;
         public final String description;
@@ -1331,9 +1406,9 @@ public class BudgetChangesView {
         public final String after;
         public final String change;
 
-        public ExpenseChangeResult(String entityCode, String serviceName, String categoryCode,
+        public ExpenseChangeResult(String entityName, String serviceName, String categoryCode,
                                    String description, String before, String after, String change) {
-            this.entityCode = entityCode;
+            this.entityName = entityName;
             this.serviceName = serviceName;
             this.categoryCode = categoryCode;
             this.description = description;
