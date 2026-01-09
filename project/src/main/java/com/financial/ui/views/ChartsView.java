@@ -175,6 +175,17 @@ public class ChartsView {
         toggleOutliersBtn = new Button("Εξομάλυνση");
         toggleOutliersBtn.setStyle(getOutlierButtonStyle(false));
 
+        toggleOutliersBtn.setOnMouseEntered(e -> {
+            if (!filterOutliers) {
+                toggleOutliersBtn.setStyle(getOutlierButtonHoverStyle());
+            }
+        });
+        toggleOutliersBtn.setOnMouseExited(e -> {
+            if (!filterOutliers) {
+                toggleOutliersBtn.setStyle(getOutlierButtonStyle(false));
+            }
+        });
+
         toggleOutliersBtn.setOnAction(e -> {
             filterOutliers = !filterOutliers;
             toggleOutliersBtn.setStyle(getOutlierButtonStyle(filterOutliers));
@@ -928,18 +939,30 @@ public class ChartsView {
 
     private String getOutlierButtonStyle(boolean active) {
         if (active) {
-            return "-fx-background-color: #ef4444;" +
+            return "-fx-background-color: #a855f7;" +
                     "-fx-text-fill: white;" +
                     "-fx-background-radius: 6;" +
+                    "-fx-border-color: transparent;" +
+                    "-fx-border-radius: 6;" +
                     "-fx-padding: 8 14;" +
                     "-fx-font-size: 12px;" +
-                    "-fx-cursor: hand;" +
-                    "-fx-font-weight: bold;";
+                    "-fx-cursor: hand;";
         }
         return "-fx-background-color: transparent;" +
-                "-fx-text-fill: #ef4444;" +
+                "-fx-text-fill: #a855f7;" +
                 "-fx-background-radius: 6;" +
-                "-fx-border-color: #ef4444;" +
+                "-fx-border-color: " + BORDER_COLOR + ";" +
+                "-fx-border-radius: 6;" +
+                "-fx-padding: 8 14;" +
+                "-fx-font-size: 12px;" +
+                "-fx-cursor: hand;";
+    }
+
+    private String getOutlierButtonHoverStyle() {
+        return "-fx-background-color: " + BG_TERTIARY + ";" +
+                "-fx-text-fill: #c084fc;" +
+                "-fx-background-radius: 6;" +
+                "-fx-border-color: " + BORDER_COLOR + ";" +
                 "-fx-border-radius: 6;" +
                 "-fx-padding: 8 14;" +
                 "-fx-font-size: 12px;" +
