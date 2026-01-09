@@ -602,16 +602,12 @@ public class MultiYearAnalysisView {
         VBox headerSection = new VBox(2);
         headerSection.setAlignment(Pos.CENTER);
         headerSection.setPadding(new Insets(20, 20, 16, 20));
-
         Label titleLabel = new Label(title);
         titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: 600; -fx-text-fill: " + TEXT_PRIMARY + ";");
-
         Label subtitleLabel = new Label(subtitle);
         subtitleLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + TEXT_MUTED + ";");
-
         headerSection.getChildren().addAll(titleLabel, subtitleLabel);
 
-        // Chart section
         VBox chartSection = new VBox(16);
         chartSection.setAlignment(Pos.CENTER);
         chartSection.setPadding(new Insets(0, 20, 20, 20));
@@ -619,22 +615,24 @@ public class MultiYearAnalysisView {
 
         if (currentChartType.equals("Bar Chart")) {
             BarChart<String, Number> chart = createBarChart(items);
+            chart.setMinHeight(500);
+            VBox.setVgrow(chart, Priority.ALWAYS);
             chartSection.getChildren().add(chart);
         } else {
             LineChart chart = createLineChart(items);
+            chart.setMinHeight(500);
+            VBox.setVgrow(chart, Priority.ALWAYS);
             chartSection.getChildren().add(chart);
         }
 
         // Total indicator
         VBox totalBox = new VBox(0);
         totalBox.setAlignment(Pos.CENTER);
-
+        totalBox.setPadding(new Insets(10, 0, 15, 0));
         Label totalTitle = new Label("ΣΥΝΟΛΟ");
         totalTitle.setStyle("-fx-font-size: 10px; -fx-text-fill: " + TEXT_MUTED + "; -fx-letter-spacing: 1px;");
-
         Label totalValue = new Label(formatAmount(total));
-        totalValue.setStyle("-fx-font-size: 16px; -fx-font-weight: 600; -fx-text-fill: " + TEXT_PRIMARY + ";");
-
+        totalValue.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: " + TEXT_PRIMARY + ";");
         totalBox.getChildren().addAll(totalTitle, totalValue);
         chartSection.getChildren().add(totalBox);
 
@@ -642,12 +640,7 @@ public class MultiYearAnalysisView {
         VBox dataSection = createDataRows(items, total);
 
         content.getChildren().addAll(headerSection, chartSection, dataSection);
-        content.setStyle(
-                "-fx-background-color: " + BG_SECONDARY + ";" +
-                        "-fx-background-radius: 12;" +
-                        "-fx-border-color: " + BORDER_COLOR + ";" +
-                        "-fx-border-radius: 12;"
-        );
+        content.setStyle("-fx-background-color: " + BG_SECONDARY + "; -fx-background-radius: 12; -fx-border-color: " + BORDER_COLOR + "; -fx-border-radius: 12;");
 
         return content;
     }
@@ -765,62 +758,40 @@ public class MultiYearAnalysisView {
             double pct = (item.amount * 100.0) / total;
             final boolean isLastRow = (i == items.size() - 1);
 
-            HBox row = new HBox(0);
+            HBox row = new HBox(15);
             row.setAlignment(Pos.CENTER_LEFT);
-            row.setPadding(new Insets(14, 16, 14, 16));
-            row.setMinHeight(Region.USE_PREF_SIZE);
+            row.setPadding(new Insets(14, 24, 14, 24)); // Padding στις άκρες
 
             String baseStyle = isLastRow ? "" : "-fx-border-color: transparent transparent " + BORDER_COLOR + " transparent; -fx-border-width: 0 0 1 0;";
             row.setStyle(baseStyle);
 
-            // Color indicator
-            Region colorDot = new Region();
-            colorDot.setMinSize(6, 6);
-            colorDot.setMaxSize(6, 6);
-            colorDot.setStyle("-fx-background-color: " + color + "; -fx-background-radius: 3;");
-
-            // Name
             Label nameLabel = new Label(item.name);
-            nameLabel.setWrapText(true);
-            nameLabel.setMaxWidth(450);
-            nameLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + TEXT_PRIMARY + "; -fx-line-spacing: 2px;");
-            nameLabel.setPadding(new Insets(0, 15, 0, 12));
-            HBox.setHgrow(nameLabel, Priority.ALWAYS);
+            nameLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: " + TEXT_PRIMARY + "; -fx-font-weight: 600;");
 
-            // Percentage bar fill
             Region barFill = new Region();
             barFill.setPrefWidth(Math.max(2, pct * 0.8));
             barFill.setPrefHeight(4);
             barFill.setStyle("-fx-background-color: " + color + "; -fx-background-radius: 2;");
-
-            VBox barContainer = new VBox();
-            barContainer.getChildren().addAll(barFill);
+            VBox barContainer = new VBox(barFill);
+            barContainer.setAlignment(Pos.CENTER_LEFT);
             barContainer.setStyle("-fx-background-color: " + BORDER_COLOR + "; -fx-background-radius: 2;");
-            barContainer.setPrefWidth(80);
-            barContainer.setMaxWidth(80);
-            HBox.setMargin(barContainer, new Insets(0, 0, 4, 0));
+            barContainer.setPrefWidth(120);
 
-            // Amount
+            Region spacer = new Region();
+            HBox.setHgrow(spacer, Priority.ALWAYS);
+
             Label amtLabel = new Label(formatAmount(item.amount));
-            amtLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + TEXT_PRIMARY + "; -fx-font-weight: 500;");
-            amtLabel.setMinWidth(80);
-            amtLabel.setAlignment(Pos.CENTER_RIGHT);
+            amtLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: " + TEXT_PRIMARY + "; -fx-font-weight: 600;");
 
-            amtLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + TEXT_PRIMARY + "; -fx-font-weight: 500;");
-            amtLabel.setMinWidth(80);
-            amtLabel.setAlignment(Pos.CENTER_RIGHT);
+            Region colorDot = new Region();
+            colorDot.setMinSize(10, 10);
+            colorDot.setMaxSize(10, 10);
+            colorDot.setStyle("-fx-background-color: " + color + "; -fx-background-radius: 5;");
 
-            row.getChildren().addAll(colorDot, nameLabel, barContainer, amtLabel);
-
-            // Hover effect
-            final String rowBaseStyle = baseStyle;
-            row.setOnMouseEntered(e -> row.setStyle(rowBaseStyle + "-fx-background-color: rgba(255,255,255,0.02);"));
-            row.setOnMouseExited(e -> row.setStyle(rowBaseStyle));
-
+            row.getChildren().addAll(nameLabel, barContainer, spacer, amtLabel, colorDot);
             dataSection.getChildren().add(row);
             colorIndex++;
         }
-
         return dataSection;
     }
 
