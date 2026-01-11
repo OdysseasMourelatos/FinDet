@@ -2,11 +2,7 @@ package com.financial.database;
 
 import com.financial.entries.*;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.logging.Logger;
 
 /**
@@ -327,6 +323,110 @@ public class SQLiteManager {
         }
     }
 
+    public void loadAllRevenuesFromDb() {
+        try (Statement stmt = connection.createStatement()) {
+            // 1. Regular Revenues
+            ResultSet rs1 = stmt.executeQuery("SELECT * FROM Regular_Budget_Revenues");
+            while (rs1.next()) {
+                new RegularBudgetRevenue(
+                        rs1.getString("code"),
+                        rs1.getString("description"),
+                        rs1.getString("category"),
+                        rs1.getLong("amount")
+                );
+            }
+
+            // 2. PIB National Revenues
+            ResultSet rs2 = stmt.executeQuery("SELECT * FROM PIB_National_Revenues");
+            while (rs2.next()) {
+                new PublicInvestmentBudgetNationalRevenue(
+                        rs2.getString("code"),
+                        rs2.getString("description"),
+                        rs2.getString("category"),
+                        rs2.getString("type"),
+                        rs2.getLong("amount")
+
+                );
+            }
+
+            // 3. PIB CoFunded Revenues
+            ResultSet rs3 = stmt.executeQuery("SELECT * FROM PIB_CoFunded_Revenues");
+            while (rs3.next()) {
+                new PublicInvestmentBudgetCoFundedRevenue(
+                        rs3.getString("code"),
+                        rs3.getString("description"),
+                        rs3.getString("category"),
+                        rs3.getString("type"),
+                        rs3.getLong("amount")
+                );
+            }
+
+        } catch (SQLException e) {
+            LOGGER.severe("Error loading revenues from DB: " + e.getMessage());
+        }
+    }
+
+    public void loadAllExpensesFromDb() {
+        try (Statement stmt = connection.createStatement()) {
+            // 1. Regular Expenses
+            ResultSet rs1 = stmt.executeQuery("SELECT * FROM Regular_Budget_Expenses");
+            while (rs1.next()) {
+                new RegularBudgetExpense(
+                        rs1.getString("entity_code"),
+                        rs1.getString("entity_name"),
+                        rs1.getString("service_code"),
+                        rs1.getString("service_name"),
+                        rs1.getString("expense_code"),
+                        rs1.getString("description"),
+                        rs1.getString("category"),
+                        rs1.getLong("amount")
+                );
+            }
+
+            // 2. PIB National Expenses
+            ResultSet rs2 = stmt.executeQuery("SELECT * FROM PIB_National_Expenses");
+            while (rs2.next()) {
+                new PublicInvestmentBudgetNationalExpense(
+                        rs2.getString("entity_code"),
+                        rs2.getString("entity_name"),
+                        rs2.getString("service_code"),
+                        rs2.getString("service_name"),
+                        rs2.getString("expense_code"),
+                        rs2.getString("description"),
+                        rs2.getString("type"),
+                        rs2.getString("category"),
+                        rs2.getLong("amount")
+                );
+            }
+
+            // 3. PIB CoFunded Expenses
+            ResultSet rs3 = stmt.executeQuery("SELECT * FROM PIB_CoFunded_Expenses");
+            while (rs3.next()) {
+                new PublicInvestmentBudgetCoFundedExpense(
+                        rs3.getString("entity_code"),
+                        rs3.getString("entity_name"),
+                        rs3.getString("service_code"),
+                        rs3.getString("service_name"),
+                        rs3.getString("expense_code"),
+                        rs3.getString("description"),
+                        rs3.getString("type"),
+                        rs3.getString("category"),
+                        rs3.getLong("amount")
+                );
+            }
+            //BONUS: Entities
+            ResultSet rs4 = stmt.executeQuery("SELECT * FROM Entities");
+            while (rs4.next()) {
+                new Entity(
+                        rs4.getString("entity_code"),
+                        rs4.getString("entity_name")
+                );
+            }
+        } catch (SQLException e) {
+            LOGGER.severe("Error loading expenses from DB: " + e.getMessage());
+        }
+    }
+
     public Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
             connection = DriverManager.getConnection(DB_URL);
@@ -342,5 +442,18 @@ public class SQLiteManager {
         } catch (SQLException e) {
             LOGGER.warning("Error closing connection: " + e.getMessage());
         }
+    }
+
+    public boolean isDatabasePopulated() {
+        String query = "SELECT COUNT(*) FROM Regular_Budget_Revenues";
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            return false;
+        }
+        return false;
     }
 }
