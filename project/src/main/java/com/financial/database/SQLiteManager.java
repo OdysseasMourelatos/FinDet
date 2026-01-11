@@ -69,7 +69,7 @@ public class SQLiteManager {
                         'ΕΘΝΙΚΟ',
                         'ΕΘΝΙΚΟ ΣΚΕΛΟΣ',
                         'ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ',
-                        'ΣΥΓΧΡΗΜΑΤΟΔΟΥΤΟΜΕΝΟ ΣΚΕΛΟΣ',
+                        'ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ ΣΚΕΛΟΣ',
                         'Εθνικό',
                         'Εθνικό Σκέλος',
                         'Συγχρηματοδοτούμενο',
@@ -117,7 +117,7 @@ public class SQLiteManager {
                         'ΕΘΝΙΚΟ',
                         'ΕΘΝΙΚΟ ΣΚΕΛΟΣ',
                         'ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ',
-                        'ΣΥΓΧΡΗΜΑΤΟΔΟΥΤΟΜΕΝΟ ΣΚΕΛΟΣ',
+                        'ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ ΣΚΕΛΟΣ',
                         'Εθνικό',
                         'Εθνικό Σκέλος',
                         'Συγχρηματοδοτούμενο',
@@ -141,7 +141,7 @@ public class SQLiteManager {
 
     public void insertToRegularBudgetRevenues(RegularBudgetRevenue regularBR) {
         String insert = """
-            INSERT INTO Regular_Budget_Revenues(code, description, amount, category)
+            INSERT OR IGNORE INTO Regular_Budget_Revenues(code, description, amount, category)
             VALUES(?, ?, ?, ?)
             """;
 
@@ -158,7 +158,7 @@ public class SQLiteManager {
 
     public void insertToPublicInvestmentBudgetRevenues(PublicInvestmentBudgetRevenue invBR) {
         String insert = """
-            INSERT INTO Public_Investment_Budget_Revenues(code, description, type, amount, category)
+            INSERT OR IGNORE INTO Public_Investment_Budget_Revenues(code, description, type, amount, category)
             VALUES(?, ?, ?, ?, ?)
             """;
 
@@ -176,7 +176,7 @@ public class SQLiteManager {
 
     public void insertToRegularBudgetExpenses(RegularBudgetExpense regularBE) {
         String insert = """
-            INSERT INTO Regular_Budget_Expenses(entity_code, entity_name, service_code,
+            INSERT OR IGNORE INTO Regular_Budget_Expenses(entity_code, entity_name, service_code,
             service_name, expense_code, description, amount, category)
             VALUES(?, ?, ?, ?, ?, ?, ?, ?)
             """;
@@ -197,7 +197,7 @@ public class SQLiteManager {
 
     public void insertToPublicInvestmentBudgetExpenses(PublicInvestmentBudgetExpense invBE) {
         String insert = """
-            INSERT INTO Public_Investment_Budget_Expenses(entity_code, entity_name, service_code,
+            INSERT OR IGNORE INTO Public_Investment_Budget_Expenses(entity_code, entity_name, service_code,
             service_name, expense_code, description, type, amount, category)
             VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)
             """;
@@ -220,7 +220,7 @@ public class SQLiteManager {
 
     public void insertToEntities(Entity entity) {
         String insert = """
-            INSERT INTO Entities(entity_code, entity_name)
+            INSERT OR IGNORE INTO Entities(entity_code, entity_name)
             VALUES(?, ?)
             """;
 
@@ -230,6 +230,43 @@ public class SQLiteManager {
             ps.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Error inserting entity: " + e.getMessage());
+        }
+    }
+
+    public void insertIntoTables() {
+        try {
+            connection.setAutoCommit(false); // Απενεργοποίηση auto-commit για ταχύτητα
+
+            for (RegularBudgetRevenue revenue : RegularBudgetRevenue.getAllRegularBudgetRevenues()) {
+                insertToRegularBudgetRevenues(revenue);
+            }
+
+            for (PublicInvestmentBudgetRevenue revenue : PublicInvestmentBudgetRevenue.getAllPublicInvestmentBudgetRevenues()) {
+                insertToPublicInvestmentBudgetRevenues(revenue);
+            }
+
+            for (Entity entity : Entity.getEntities()) {
+                insertToEntities(entity);
+            }
+
+            for (RegularBudgetExpense expense : RegularBudgetExpense.getAllRegularBudgetExpenses()) {
+                insertToRegularBudgetExpenses(expense);
+            }
+
+            for (PublicInvestmentBudgetExpense expense : PublicInvestmentBudgetExpense.getAllPublicInvestmentBudgetExpenses()) {
+                insertToPublicInvestmentBudgetExpenses(expense);
+            }
+
+            connection.commit(); // Οριστική αποθήκευση όλων μαζί
+            connection.setAutoCommit(true);
+            LOGGER.info("Bulk insert completed successfully.");
+        } catch (SQLException e) {
+            try {
+                connection.rollback(); // Αν κάτι πάει λάθος, ακύρωση όλων για ασφάλεια
+                LOGGER.severe("Transaction rolled back due to error: " + e.getMessage());
+            } catch (SQLException rollbackEx) {
+                LOGGER.severe("Error during rollback: " + rollbackEx.getMessage());
+            }
         }
     }
 

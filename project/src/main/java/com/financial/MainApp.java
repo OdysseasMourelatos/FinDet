@@ -1,6 +1,7 @@
 package com.financial;
 
 import atlantafx.base.theme.PrimerDark;
+import com.financial.database.SQLiteManager;
 import com.financial.entries.BudgetRevenue;
 import com.financial.entries.PublicInvestmentBudgetRevenue;
 import com.financial.services.data.DataInput;
@@ -78,8 +79,14 @@ public class MainApp extends Application {
                 DataInput.advancedCSVReader(publicExpenses, null);
             }
 
-            // Create entities and process data
+            // Create entities
             DataInput.createEntityFromCSV();
+
+            //Get DB connection
+            SQLiteManager dbManager = SQLiteManager.getInstance();
+            dbManager.insertIntoTables();
+
+            //Process Data
             PublicInvestmentBudgetRevenue.sortPublicInvestmentBudgetRevenuesByCode();
             PublicInvestmentBudgetRevenue.filterPublicInvestmentBudgetRevenues();
             BudgetRevenue.sortBudgetRevenuesByCode();
