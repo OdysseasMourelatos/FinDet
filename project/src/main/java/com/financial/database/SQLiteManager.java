@@ -1,10 +1,6 @@
 package com.financial.database;
 
-import com.financial.entries.Entity;
-import com.financial.entries.PublicInvestmentBudgetExpense;
-import com.financial.entries.PublicInvestmentBudgetRevenue;
-import com.financial.entries.RegularBudgetExpense;
-import com.financial.entries.RegularBudgetRevenue;
+import com.financial.entries.*;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -51,6 +47,7 @@ public class SQLiteManager {
 
     private void createTables() throws SQLException {
         String[] createTableQueries = {
+
             """
             CREATE TABLE IF NOT EXISTS Regular_Budget_Revenues (
                 code TEXT PRIMARY KEY NOT NULL,
@@ -61,25 +58,39 @@ public class SQLiteManager {
             ) """,
 
             """
-            CREATE TABLE IF NOT EXISTS Public_Investment_Budget_Revenues (
+            CREATE TABLE IF NOT EXISTS PIB_National_Revenues (
                 code TEXT NOT NULL,
                 description TEXT NOT NULL,
                 type TEXT NOT NULL CHECK(
                     type IN (
                         'ΕΘΝΙΚΟ',
                         'ΕΘΝΙΚΟ ΣΚΕΛΟΣ',
-                        'ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ',
-                        'ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ ΣΚΕΛΟΣ',
                         'Εθνικό',
-                        'Εθνικό Σκέλος',
-                        'Συγχρηματοδοτούμενο',
+                        'Εθνικό Σκέλος'
+                    )
+                ),
+                amount INTEGER NOT NULL,
+                category TEXT DEFAULT 'ΕΣΟΔΑ',
+                import_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY(code)
+            ) """,
+
+            """
+            CREATE TABLE IF NOT EXISTS PIB_CoFunded_Revenues (
+                code TEXT NOT NULL,
+                description TEXT NOT NULL,
+                type TEXT NOT NULL CHECK(
+                    type IN (
+                        'ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ',
+                        'ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ ΣΚΕΛΟΣ', 
+                        'Συγχρηματοδοτούμενο', 
                         'Συγχρηματοδοτούμενο σκέλος'
                     )
                 ),
                 amount INTEGER NOT NULL,
                 category TEXT DEFAULT 'ΕΣΟΔΑ',
                 import_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                PRIMARY KEY(code, type)
+                PRIMARY KEY(code)
             ) """,
 
             """
@@ -105,7 +116,7 @@ public class SQLiteManager {
             ) """,
 
             """
-            CREATE TABLE IF NOT EXISTS Public_Investment_Budget_Expenses (
+            CREATE TABLE IF NOT EXISTS PIB_National_Expenses (
                 entity_code TEXT NOT NULL,
                 entity_name TEXT NOT NULL,
                 service_code TEXT NOT NULL,
@@ -113,23 +124,38 @@ public class SQLiteManager {
                 expense_code TEXT NOT NULL,
                 description TEXT NOT NULL,
                 type TEXT NOT NULL CHECK(
-                    type IN (
-                        'ΕΘΝΙΚΟ',
-                        'ΕΘΝΙΚΟ ΣΚΕΛΟΣ',
-                        'ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ',
-                        'ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ ΣΚΕΛΟΣ',
-                        'Εθνικό',
-                        'Εθνικό Σκέλος',
-                        'Συγχρηματοδοτούμενο',
-                        'Συγχρηματοδοτούμενο σκέλος'
-                    )
+                    type IN ('ΕΘΝΙΚΟ',
+                             'ΕΘΝΙΚΟ ΣΚΕΛΟΣ',
+                             'Εθνικό',
+                             'Εθνικό Σκέλος')
                 ),
                 amount INTEGER NOT NULL,
                 category TEXT DEFAULT 'ΕΞΟΔΑ',
                 import_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                PRIMARY KEY(entity_code, service_code, expense_code, type),
+                PRIMARY KEY(entity_code, service_code, expense_code),
                 FOREIGN KEY(entity_code) REFERENCES Entities(entity_code)
-            ) """
+            ) """,
+
+            """
+            CREATE TABLE IF NOT EXISTS PIB_CoFunded_Expenses (
+                entity_code TEXT NOT NULL,
+                entity_name TEXT NOT NULL,
+                service_code TEXT NOT NULL,
+                service_name TEXT NOT NULL,
+                expense_code TEXT NOT NULL,
+                description TEXT NOT NULL,
+                type TEXT NOT NULL CHECK(
+                    type IN ('ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ',
+                             'ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ ΣΚΕΛΟΣ',
+                             'Συγχρηματοδοτούμενο', 
+                             'Συγχρηματοδοτούμενο σκέλος')
+                ),
+                amount INTEGER NOT NULL,
+                category TEXT DEFAULT 'ΕΞΟΔΑ ΠΔΕ-ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ',
+                import_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY(entity_code, service_code, expense_code),
+                FOREIGN KEY(entity_code) REFERENCES Entities(entity_code)
+            ) """,
         };
 
         try (Statement stmt = connection.createStatement()) {
@@ -152,25 +178,35 @@ public class SQLiteManager {
             ps.setString(4, regularBR.getCategory());
             ps.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Error inserting revenue: " + e.getMessage() + regularBR);
+            System.err.println("Error inserting revenue: " + e.getMessage());
         }
     }
 
-    public void insertToPublicInvestmentBudgetRevenues(PublicInvestmentBudgetRevenue invBR) {
-        String insert = """
-            INSERT OR IGNORE INTO Public_Investment_Budget_Revenues(code, description, type, amount, category)
-            VALUES(?, ?, ?, ?, ?)
-            """;
-
-        try (PreparedStatement ps = connection.prepareStatement(insert)) {
-            ps.setString(1, invBR.getCode());
-            ps.setString(2, invBR.getDescription());
-            ps.setString(3, invBR.getType());
-            ps.setLong(4, invBR.getAmount());
-            ps.setString(5, invBR.getCategory());
+    public void insertToPublicInvestmentBudgetNationalRevenues(PublicInvestmentBudgetNationalRevenue r) {
+        String sql = "INSERT OR IGNORE INTO PIB_National_Revenues(code, description, type, amount, category) VALUES(?, ?, ?, ?, ?)";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, r.getCode());
+            ps.setString(2, r.getDescription());
+            ps.setString(3, r.getType());
+            ps.setLong(4, r.getAmount());
+            ps.setString(5, r.getCategory());
             ps.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Error inserting investment revenue: " + e.getMessage() + invBR);
+            LOGGER.severe("Error inserting National Revenue: " + e.getMessage());
+        }
+    }
+
+    public void insertToPublicInvestmentBudgetCoFundedRevenues(PublicInvestmentBudgetCoFundedRevenue r) {
+        String sql = "INSERT OR IGNORE INTO PIB_CoFunded_Revenues(code, description, type, amount, category) VALUES(?, ?, ?, ?, ?)";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, r.getCode());
+            ps.setString(2, r.getDescription());
+            ps.setString(3, r.getType());
+            ps.setLong(4, r.getAmount());
+            ps.setString(5, r.getCategory());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            LOGGER.severe("Error inserting CoFunded Revenue: " + e.getMessage());
         }
     }
 
@@ -195,26 +231,39 @@ public class SQLiteManager {
         }
     }
 
-    public void insertToPublicInvestmentBudgetExpenses(PublicInvestmentBudgetExpense invBE) {
-        String insert = """
-            INSERT OR IGNORE INTO Public_Investment_Budget_Expenses(entity_code, entity_name, service_code,
-            service_name, expense_code, description, type, amount, category)
-            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """;
-
-        try (PreparedStatement ps = connection.prepareStatement(insert)) {
-            ps.setString(1, invBE.getEntityCode());
-            ps.setString(2, invBE.getEntityName());
-            ps.setString(3, invBE.getServiceCode());
-            ps.setString(4, invBE.getServiceName());
-            ps.setString(5, invBE.getCode());
-            ps.setString(6, invBE.getDescription());
-            ps.setString(7, invBE.getType());
-            ps.setLong(8, invBE.getAmount());
-            ps.setString(9, invBE.getCategory());
+    public void insertToPublicInvestmentBudgetNationalExpenses(PublicInvestmentBudgetNationalExpense e) {
+        String sql = "INSERT OR IGNORE INTO PIB_National_Expenses(entity_code, entity_name, service_code, service_name, expense_code, description, type, amount, category) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, e.getEntityCode());
+            ps.setString(2, e.getEntityName());
+            ps.setString(3, e.getServiceCode());
+            ps.setString(4, e.getServiceName());
+            ps.setString(5, e.getCode());
+            ps.setString(6, e.getDescription());
+            ps.setString(7, e.getType());
+            ps.setLong(8, e.getAmount());
+            ps.setString(9, e.getCategory());
             ps.executeUpdate();
-        } catch (SQLException e) {
-            System.err.println("Error inserting investment expense: " + e.getMessage());
+        } catch (SQLException ex) {
+            LOGGER.severe("Error inserting National Expense: " + ex.getMessage());
+        }
+    }
+
+    public void insertToPublicInvestmentBudgetCoFundedExpenses(PublicInvestmentBudgetCoFundedExpense e) {
+        String sql = "INSERT OR IGNORE INTO PIB_CoFunded_Expenses(entity_code, entity_name, service_code, service_name, expense_code, description, type, amount, category) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, e.getEntityCode());
+            ps.setString(2, e.getEntityName());
+            ps.setString(3, e.getServiceCode());
+            ps.setString(4, e.getServiceName());
+            ps.setString(5, e.getCode());
+            ps.setString(6, e.getDescription());
+            ps.setString(7, e.getType());
+            ps.setLong(8, e.getAmount());
+            ps.setString(9, e.getCategory());
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            LOGGER.severe("Error inserting CoFunded Expense: " + ex.getMessage());
         }
     }
 
@@ -235,14 +284,18 @@ public class SQLiteManager {
 
     public void insertIntoTables() {
         try {
-            connection.setAutoCommit(false); // Απενεργοποίηση auto-commit για ταχύτητα
+            connection.setAutoCommit(false);
 
             for (RegularBudgetRevenue revenue : RegularBudgetRevenue.getAllRegularBudgetRevenues()) {
                 insertToRegularBudgetRevenues(revenue);
             }
 
-            for (PublicInvestmentBudgetRevenue revenue : PublicInvestmentBudgetRevenue.getAllPublicInvestmentBudgetRevenues()) {
-                insertToPublicInvestmentBudgetRevenues(revenue);
+            for (PublicInvestmentBudgetNationalRevenue revenue : PublicInvestmentBudgetNationalRevenue.getAllPublicInvestmentBudgetNationalRevenues()) {
+                insertToPublicInvestmentBudgetNationalRevenues(revenue);
+            }
+
+            for (PublicInvestmentBudgetCoFundedRevenue revenue : PublicInvestmentBudgetCoFundedRevenue.getAllPublicInvestmentBudgetCoFundedRevenues()) {
+                insertToPublicInvestmentBudgetCoFundedRevenues(revenue);
             }
 
             for (Entity entity : Entity.getEntities()) {
@@ -253,16 +306,20 @@ public class SQLiteManager {
                 insertToRegularBudgetExpenses(expense);
             }
 
-            for (PublicInvestmentBudgetExpense expense : PublicInvestmentBudgetExpense.getAllPublicInvestmentBudgetExpenses()) {
-                insertToPublicInvestmentBudgetExpenses(expense);
+            for (PublicInvestmentBudgetNationalExpense e : PublicInvestmentBudgetNationalExpense.getAllPublicInvestmentBudgetNationalExpenses()) {
+                insertToPublicInvestmentBudgetNationalExpenses(e);
             }
 
-            connection.commit(); // Οριστική αποθήκευση όλων μαζί
+            for (PublicInvestmentBudgetCoFundedExpense e : PublicInvestmentBudgetCoFundedExpense.getAllPublicInvestmentBudgetCoFundedExpenses()) {
+                insertToPublicInvestmentBudgetCoFundedExpenses(e);
+            }
+
+            connection.commit();
             connection.setAutoCommit(true);
             LOGGER.info("Bulk insert completed successfully.");
         } catch (SQLException e) {
             try {
-                connection.rollback(); // Αν κάτι πάει λάθος, ακύρωση όλων για ασφάλεια
+                connection.rollback();
                 LOGGER.severe("Transaction rolled back due to error: " + e.getMessage());
             } catch (SQLException rollbackEx) {
                 LOGGER.severe("Error during rollback: " + rollbackEx.getMessage());
