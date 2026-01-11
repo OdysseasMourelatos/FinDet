@@ -427,66 +427,62 @@ public class SQLiteManager {
         }
     }
 
-    public void updateRegularBudgetRevenues(RegularBudgetRevenue rbr) throws SQLException {
-        String update =
-        """ 
-        Update Regular_Budget_Revenues
-        Set amount = ?
-        Where code = ?
-        """;
+    public void updateRegularBudgetRevenues(RegularBudgetRevenue rbr) {
+        String update = """ 
+            Update Regular_Budget_Revenues
+            Set amount = ?
+            Where code = ?
+            """;
 
         //Protection from SQL injection
-        try(PreparedStatement ps = connection.prepareStatement(update)) {
+        try (PreparedStatement ps = connection.prepareStatement(update)) {
             ps.setLong(1, rbr.getAmount());
-            ps.setString(2,rbr.getCode());
+            ps.setString(2, rbr.getCode());
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        
     }
-    public void updatePublicInvestmentBudgetNationalRevenues(PublicInvestmentBudgetNationalRevenue pinbr) throws SQLException {
-        String update =
-        """ 
-        Update PIB_National_Revenues
-        Set amount = ?
-        Where code = ?
-        """;
 
-        try(PreparedStatement ps = connection.prepareStatement(update)) {
+    public void updatePublicInvestmentBudgetNationalRevenues(PublicInvestmentBudgetNationalRevenue pinbr) {
+        String update = """ 
+            Update PIB_National_Revenues
+            Set amount = ?
+            Where code = ?
+            """;
+
+        try (PreparedStatement ps = connection.prepareStatement(update)) {
             ps.setLong(1, pinbr.getAmount());
-            ps.setString(2,pinbr.getCode());
+            ps.setString(2, pinbr.getCode());
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public void updatePublicInvestmentBudgetCoFundedRevenues(PublicInvestmentBudgetCoFundedRevenue pibcfr) throws SQLException{
-        String update =
-        """ 
-        Update PIB_CoFunded_Revenue
-        Set amount = ?
-        Where code = ?
-        """;
+    public void updatePublicInvestmentBudgetCoFundedRevenues(PublicInvestmentBudgetCoFundedRevenue pibcfr) {
+        String update = """ 
+            Update PIB_CoFunded_Revenue
+            Set amount = ?
+            Where code = ?
+            """;
 
         try (PreparedStatement ps = connection.prepareStatement(update)) {
             ps.setLong(1, pibcfr.getAmount());
-            ps.setString(2,pibcfr.getCode());
+            ps.setString(2, pibcfr.getCode());
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public void updateRegularBudgetExpenses(RegularBudgetExpense rbe) throws SQLException{
-        String update =
-        """ 
-        Update Regular_Budget_Expenses
-        Set amount = ?
-        Where entity_code = ? and service_code = ? and expense_code = ?
-        """;
-        try(PreparedStatement ps = connection.prepareStatement(update)) {
+    public void updateRegularBudgetExpenses(RegularBudgetExpense rbe) {
+        String update = """ 
+            Update Regular_Budget_Expenses
+            Set amount = ?
+            Where entity_code = ? and service_code = ? and expense_code = ?
+            """;
+        try (PreparedStatement ps = connection.prepareStatement(update)) {
             ps.setLong(1, rbe.getAmount());
             ps.setString(2, rbe.getEntityCode());
             ps.setString(3, rbe.getServiceCode());
@@ -497,38 +493,36 @@ public class SQLiteManager {
         }
 
     }
-    public void updatePublicInvestmentBudgetNationalExpenses(PublicInvestmentBudgetNationalExpense pibne) throws SQLException {
-        String update =
-        """ 
-        Update PIB_National_Expenses
-        Set amount = ?
-        Where entity_code = ? and service_code = ? and expense_code = ?
-        """;
+    public void updatePublicInvestmentBudgetNationalExpenses(PublicInvestmentBudgetNationalExpense pibne) {
+        String update = """ 
+            Update PIB_National_Expenses
+            Set amount = ?
+            Where entity_code = ? and service_code = ? and expense_code = ?
+            """;
 
-        try (PreparedStatement ps = connection.prepareStatement(update)){
+        try (PreparedStatement ps = connection.prepareStatement(update)) {
             ps.setLong(1, pibne.getAmount());
-            ps.setString(2,pibne.getEntityCode());
-            ps.setString(3,pibne.getServiceCode());
-            ps.setString(4,pibne.getCode());
+            ps.setString(2, pibne.getEntityCode());
+            ps.setString(3, pibne.getServiceCode());
+            ps.setString(4, pibne.getCode());
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public void updatePublicInvestmentBudgetCoFundedExpenses(PublicInvestmentBudgetCoFundedExpense pibcfe) throws SQLException {
-        String update =
-        """ 
-        Update PIB_CoFunded_Expenses
-        Set amount = ?
-        Where entity_code = ? and service_code = ? and expense_code = ?
-        """;
+    public void updatePublicInvestmentBudgetCoFundedExpenses(PublicInvestmentBudgetCoFundedExpense pibcfe) {
+        String update = """ 
+            Update PIB_CoFunded_Expenses
+            Set amount = ?
+            Where entity_code = ? and service_code = ? and expense_code = ?
+            """;
 
-        try (PreparedStatement ps = connection.prepareStatement(update)){
+        try (PreparedStatement ps = connection.prepareStatement(update)) {
             ps.setLong(1, pibcfe.getAmount());
-            ps.setString(2,pibcfe.getEntityCode());
-            ps.setString(3,pibcfe.getServiceCode());
-            ps.setString(4,pibcfe.getCode());
+            ps.setString(2, pibcfe.getEntityCode());
+            ps.setString(3, pibcfe.getServiceCode());
+            ps.setString(4, pibcfe.getCode());
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
