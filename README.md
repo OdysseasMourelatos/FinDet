@@ -7,7 +7,7 @@ The application uses **Maven** for dependency management and for building the ex
 
 ### Prerequisites
 
-* **Java 17** or newer
+* **Java 21** or newer
 * **Apache Maven** installed on the system
 
 ---
