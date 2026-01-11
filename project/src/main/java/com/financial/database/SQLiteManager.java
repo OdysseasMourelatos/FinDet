@@ -427,6 +427,130 @@ public class SQLiteManager {
         }
     }
 
+    public void updateRegularBudgetRevenues(RegularBudgetRevenue rbr) throws SQLException {
+        String update =
+        """ 
+        Update Regular_Budget_Revenues
+        Set amount = ?
+        Where code = ?
+        """;
+        //Protection from SQL injection
+        try(PreparedStatement ps = connection.prepareStatement(update)) {
+        ps.setInt(1,rbr.getAmount());
+        ps.setString(2,rbr.getCode());
+        ps.executeUpdate();
+        } 
+        
+    }
+    public void updatePublicInvestmentBudgetNationalRevenues(PublicInvestmentBudgetNationalRevenue pinbr) throws SQLException {
+        String update =
+        """ 
+        Update PIB_National_Revenues
+        Set amount = ?
+        Where code = ?
+        """;
+
+        try(PreparedStatement ps = connection.prepareStatement(update)) {
+        ps.setInt(1,pinbr.getAmount());
+        ps.setString(2,pinbr.getCode());
+        ps.executeUpdate();
+        } 
+    }
+
+    public void updatePublicInvestmentBudgetCoFundedRevenues(PublicInvestmentBudgetCoFundedRevenue pibcfr) throws SQLException{
+        String update =
+        """ 
+        Update PIB_CoFunded_Revenue
+        Set amount = ?
+        Where code = ?
+        """;
+
+        try(PreparedStatement ps = connection.prepareStatement(update)) {
+        ps.setInt(1,pibcfr.getAmount());
+        ps.setString(2,pibcfr.getCode());
+        ps.executeUpdate();
+        }
+    }
+    public void updateRegularBudgetExpenses(RegularBudgetExpense rbe) throws SQLException{
+        String update =
+        """ 
+        Update Regular_Budget_Expenses
+        Set amount = ?
+        Where entity_code = ? and service_code = ? and expense_code = ?
+        """;
+        try(PreparedStatement ps = connection.prepareStatement(update)) {
+        ps.setInt(1,rbe.getAmount());
+        ps.setString(2,rbe.getEntityCode());
+        ps.setString(3,rbe.getServiceCode());
+        ps.setString(4,rbe.getExpenseCode());
+        ps.executeUpdate();
+        }
+
+    }
+    public void updatePublicInvestmentBudgetNationalExpenses(PublicInvestmentBudgetNationalExpense pibne) throws SQLException {
+        String update =
+        """ 
+        Update PIB_National_Expenses
+        Set amount = ?
+        Where entity_code = ? and  service_code = ? and expense_code = ?
+        """;
+
+        try(PreparedStatement ps = connection.prepareStatement(update)){
+        ps.setInt(1,pibne.getAmount());
+        ps.setString(2,pibne.getEntityCode());
+        ps.setString(3,pibne.getServiceCode());
+        ps.setString(4,pibne.getExpenseCode());
+        ps.executeUpdate();
+        }
+    }
+
+    public void updatePublicInvestmentBudgetCoFundedExpenses(PublicInvestmentBudgetCoFundedExpense pibcfe) throws SQLException {
+        String update =
+        """ 
+        Update PIB_CoFunded_Expenses
+        Set amount = ?
+        Where entity_code = ? and  service_code = ? and expense_code = ?
+        """;
+
+        try(PreparedStatement ps = connection.prepareStatement(update)){
+        ps.setInt(1,pibcfe.getAmount());
+        ps.setString(2,pibcfe.getEntityCode());
+        ps.setString(3,pibcfe.getServiceCode());
+        ps.setString(4,pibcfe.getExpenseCode());
+        ps.executeUpdate();
+        }
+    }
+
+    public void updateTables(BudgetEntry be){
+        try{
+            connection.setAutoCommit(false);
+            switch (be) {
+                case RegularBudgetRevenue rbr -> updateRegularBudgetRevenues(rbr);
+                case PublicInvestmentBudgetNationalRevenue pibnr -> updatePublicInvestmentBudgetNationalRevenues(pibnr);
+                case PublicInvestmentBudgetCoFundedRevenue picfr -> updatePublicInvestmentBudgetCoFundedRevenues(picfr);
+                case RegularBudgetExpense rbe -> updateRegularBudgetExpenses(rbe);
+                case PublicInvestmentBudgetNationalExpense pibne -> updatePublicInvestmentBudgetNationalExpenses(pibne);
+                case PublicInvestmentBudgetCoFundedExpense pibcfe -> updatePublicInvestmentBudgetCoFundedExpenses(pibcfe);
+                default -> throw new IllegalArgumentException("Unknown budget type: " + be);
+            }
+        
+        connection.commit();
+        } catch (SQLException e) {
+        try {
+            connection.rollback(); // undo everything if any update fails
+            LOGGER.severe("Transaction rolled back due to error: " + e.getMessage());
+        } catch (SQLException rollbackEx) {
+            LOGGER.severe("Rollback failed: " + rollbackEx.getMessage());
+        }
+    } finally {
+        try {
+            connection.setAutoCommit(true); // restore default
+        } catch (SQLException ex) {
+            LOGGER.severe("Could not reset autoCommit: " + ex.getMessage());
+        }
+    }
+    }
+
     public Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
             connection = DriverManager.getConnection(DB_URL);
