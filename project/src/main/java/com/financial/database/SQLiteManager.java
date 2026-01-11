@@ -434,12 +434,15 @@ public class SQLiteManager {
         Set amount = ?
         Where code = ?
         """;
+
         //Protection from SQL injection
         try(PreparedStatement ps = connection.prepareStatement(update)) {
-        ps.setInt(1,rbr.getAmount());
-        ps.setString(2,rbr.getCode());
-        ps.executeUpdate();
-        } 
+            ps.setLong(1, rbr.getAmount());
+            ps.setString(2,rbr.getCode());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
         
     }
     public void updatePublicInvestmentBudgetNationalRevenues(PublicInvestmentBudgetNationalRevenue pinbr) throws SQLException {
@@ -451,10 +454,12 @@ public class SQLiteManager {
         """;
 
         try(PreparedStatement ps = connection.prepareStatement(update)) {
-        ps.setInt(1,pinbr.getAmount());
-        ps.setString(2,pinbr.getCode());
-        ps.executeUpdate();
-        } 
+            ps.setLong(1, pinbr.getAmount());
+            ps.setString(2,pinbr.getCode());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public void updatePublicInvestmentBudgetCoFundedRevenues(PublicInvestmentBudgetCoFundedRevenue pibcfr) throws SQLException{
@@ -465,12 +470,15 @@ public class SQLiteManager {
         Where code = ?
         """;
 
-        try(PreparedStatement ps = connection.prepareStatement(update)) {
-        ps.setInt(1,pibcfr.getAmount());
-        ps.setString(2,pibcfr.getCode());
-        ps.executeUpdate();
+        try (PreparedStatement ps = connection.prepareStatement(update)) {
+            ps.setLong(1, pibcfr.getAmount());
+            ps.setString(2,pibcfr.getCode());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
     }
+
     public void updateRegularBudgetExpenses(RegularBudgetExpense rbe) throws SQLException{
         String update =
         """ 
@@ -479,11 +487,13 @@ public class SQLiteManager {
         Where entity_code = ? and service_code = ? and expense_code = ?
         """;
         try(PreparedStatement ps = connection.prepareStatement(update)) {
-        ps.setInt(1,rbe.getAmount());
-        ps.setString(2,rbe.getEntityCode());
-        ps.setString(3,rbe.getServiceCode());
-        ps.setString(4,rbe.getExpenseCode());
-        ps.executeUpdate();
+            ps.setLong(1, rbe.getAmount());
+            ps.setString(2, rbe.getEntityCode());
+            ps.setString(3, rbe.getServiceCode());
+            ps.setString(4, rbe.getCode());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
 
     }
@@ -492,15 +502,17 @@ public class SQLiteManager {
         """ 
         Update PIB_National_Expenses
         Set amount = ?
-        Where entity_code = ? and  service_code = ? and expense_code = ?
+        Where entity_code = ? and service_code = ? and expense_code = ?
         """;
 
-        try(PreparedStatement ps = connection.prepareStatement(update)){
-        ps.setInt(1,pibne.getAmount());
-        ps.setString(2,pibne.getEntityCode());
-        ps.setString(3,pibne.getServiceCode());
-        ps.setString(4,pibne.getExpenseCode());
-        ps.executeUpdate();
+        try (PreparedStatement ps = connection.prepareStatement(update)){
+            ps.setLong(1, pibne.getAmount());
+            ps.setString(2,pibne.getEntityCode());
+            ps.setString(3,pibne.getServiceCode());
+            ps.setString(4,pibne.getCode());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -509,20 +521,22 @@ public class SQLiteManager {
         """ 
         Update PIB_CoFunded_Expenses
         Set amount = ?
-        Where entity_code = ? and  service_code = ? and expense_code = ?
+        Where entity_code = ? and service_code = ? and expense_code = ?
         """;
 
-        try(PreparedStatement ps = connection.prepareStatement(update)){
-        ps.setInt(1,pibcfe.getAmount());
-        ps.setString(2,pibcfe.getEntityCode());
-        ps.setString(3,pibcfe.getServiceCode());
-        ps.setString(4,pibcfe.getExpenseCode());
-        ps.executeUpdate();
+        try (PreparedStatement ps = connection.prepareStatement(update)){
+            ps.setLong(1, pibcfe.getAmount());
+            ps.setString(2,pibcfe.getEntityCode());
+            ps.setString(3,pibcfe.getServiceCode());
+            ps.setString(4,pibcfe.getCode());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
     }
 
-    public void updateTables(BudgetEntry be){
-        try{
+    public void updateTables(BudgetEntry be) {
+        try {
             connection.setAutoCommit(false);
             switch (be) {
                 case RegularBudgetRevenue rbr -> updateRegularBudgetRevenues(rbr);
@@ -533,22 +547,22 @@ public class SQLiteManager {
                 case PublicInvestmentBudgetCoFundedExpense pibcfe -> updatePublicInvestmentBudgetCoFundedExpenses(pibcfe);
                 default -> throw new IllegalArgumentException("Unknown budget type: " + be);
             }
-        
-        connection.commit();
+
+            connection.commit();
         } catch (SQLException e) {
-        try {
-            connection.rollback(); // undo everything if any update fails
-            LOGGER.severe("Transaction rolled back due to error: " + e.getMessage());
-        } catch (SQLException rollbackEx) {
-            LOGGER.severe("Rollback failed: " + rollbackEx.getMessage());
+            try {
+                connection.rollback(); // undo everything if any update fails
+                LOGGER.severe("Transaction rolled back due to error: " + e.getMessage());
+            } catch (SQLException rollbackEx) {
+                LOGGER.severe("Rollback failed: " + rollbackEx.getMessage());
+            }
+        } finally {
+            try {
+                connection.setAutoCommit(true); // restore default
+            } catch (SQLException ex) {
+                LOGGER.severe("Could not reset autoCommit: " + ex.getMessage());
+            }
         }
-    } finally {
-        try {
-            connection.setAutoCommit(true); // restore default
-        } catch (SQLException ex) {
-            LOGGER.severe("Could not reset autoCommit: " + ex.getMessage());
-        }
-    }
     }
 
     public Connection getConnection() throws SQLException {
