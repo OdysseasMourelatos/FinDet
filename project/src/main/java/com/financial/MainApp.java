@@ -5,7 +5,6 @@ import com.financial.entries.BudgetRevenue;
 import com.financial.entries.PublicInvestmentBudgetRevenue;
 import com.financial.services.data.DataInput;
 import com.financial.ui.MainWindow;
-import com.financial.database.SQLiteManager;
 import java.io.File;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -46,9 +45,6 @@ public class MainApp extends Application {
 
     private void loadBudgetData() {
 
-        //Get DB connection
-        SQLiteManager dbManager = SQLiteManager.getInstance();
-        
         String basePath = findProjectBasePath();
         if (basePath == null) {
             System.out.println("Warning: Could not find CSV files directory");

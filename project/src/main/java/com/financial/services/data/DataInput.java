@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.financial.database.SQLiteManager;
 import com.financial.entries.*;
 import com.financial.multi_year_analysis.entries.MultiYearBudgetExpense;
 import com.financial.multi_year_analysis.entries.MultiYearBudgetRevenue;
@@ -13,6 +14,9 @@ import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 
 public class DataInput {
+
+    //Get DB connection
+    static SQLiteManager dbManager = SQLiteManager.getInstance();
 
     public static void advancedCSVReader(String filePath, String forcedType) {
         CSVReader reader = null;
@@ -86,7 +90,8 @@ public class DataInput {
         String description = values[1];
         String category = "ΕΣΟΔΑ";
         long amount = Long.parseLong(values[2]);
-        BudgetRevenue regularBudgetRevenue = new RegularBudgetRevenue(code, description, category, amount);
+        RegularBudgetRevenue regularBudgetRevenue = new RegularBudgetRevenue(code, description, category, amount);
+        dbManager.insertToRegularBudgetRevenues(regularBudgetRevenue);
     }
 
     //Activated when all PublicInvestmentBudgetRevenues are filtered
@@ -104,8 +109,10 @@ public class DataInput {
         long amount = Long.parseLong(values[3]);
         if (type.equals("ΕΘΝΙΚΟ") || type.equals("ΕΘΝΙΚΟ ΣΚΕΛΟΣ")) {
             PublicInvestmentBudgetRevenue publicInvestmentBudgetRevenue = new PublicInvestmentBudgetNationalRevenue(code, description, category, type, amount);
+            dbManager.insertToPublicInvestmentBudgetRevenues(publicInvestmentBudgetRevenue);
         } else if (type.equals("ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ") || type.equals("ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ ΣΚΕΛΟΣ") ) {
             PublicInvestmentBudgetRevenue publicInvestmentBudgetRevenue = new PublicInvestmentBudgetCoFundedRevenue(code, description, category, type, amount);
+            dbManager.insertToPublicInvestmentBudgetRevenues(publicInvestmentBudgetRevenue);
         }
     }
 
@@ -118,7 +125,7 @@ public class DataInput {
         String description = values[5];
         String category = "ΕΞΟΔΑ";
         long amount = Long.parseLong(values[6]);
-        BudgetExpense regularBudgetExpense = new RegularBudgetExpense(entityCode, entityName, serviceCode, serviceName, expenseCode, description, category, amount);
+        RegularBudgetExpense regularBudgetExpense = new RegularBudgetExpense(entityCode, entityName, serviceCode, serviceName, expenseCode, description, category, amount);
     }
 
     private static void createPublicInvestmentBudgetExpenseFromCSV(String [] values) {
@@ -132,15 +139,26 @@ public class DataInput {
         long amount = Long.parseLong(values[7]);
         String category = "ΕΞΟΔΑ";
         if (type.equals("ΕΘΝΙΚΟ") || type.equals("ΕΘΝΙΚΟ ΣΚΕΛΟΣ")) {
-            BudgetExpense publicInvestmentBudgetExpense = new PublicInvestmentBudgetNationalExpense(entityCode, entityName, serviceCode, serviceName, expenseCode, description, type, category, amount);
+            PublicInvestmentBudgetExpense publicInvestmentBudgetExpense = new PublicInvestmentBudgetNationalExpense(entityCode, entityName, serviceCode, serviceName, expenseCode, description, type, category, amount);
         } else if (type.equals("ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ") || type.equals("ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ ΣΚΕΛΟΣ") ) {
-            BudgetExpense publicInvestmentBudgetExpense = new PublicInvestmentBudgetCoFundedExpense(entityCode, entityName, serviceCode, serviceName, expenseCode, description, type, category, amount);
+            PublicInvestmentBudgetExpense publicInvestmentBudgetExpense = new PublicInvestmentBudgetCoFundedExpense(entityCode, entityName, serviceCode, serviceName, expenseCode, description, type, category, amount);
         }
     }
 
     public static void createEntityFromCSV() {
         Map<String, String> entityMap = BudgetExpense.getBudgetExpenses().stream().collect(Collectors.toMap(BudgetExpense::getEntityCode, BudgetExpense::getEntityName, (existing, replacement) -> existing));
         entityMap.keySet().stream().sorted().forEach(entityCode -> new Entity(entityCode, entityMap.get(entityCode)));
+        for (Entity entity : Entity.getEntities()) {
+            dbManager.insertToEntities(entity);
+        }
+
+        //Εφόσον δημιουργήθηκαν οι οντότητες στη βάση, δημιουργώ και τα έξοδα
+        for (RegularBudgetExpense regularBudgetExpense : RegularBudgetExpense.getAllRegularBudgetExpenses()) {
+            dbManager.insertToRegularBudgetExpenses(regularBudgetExpense);
+        }
+        for (PublicInvestmentBudgetExpense publicInvestmentBudgetExpense : PublicInvestmentBudgetExpense.getAllPublicInvestmentBudgetExpenses()) {
+            dbManager.insertToPublicInvestmentBudgetExpenses(publicInvestmentBudgetExpense);
+        }
     }
 
     public static void createMultiYearEntityFromCSV() {

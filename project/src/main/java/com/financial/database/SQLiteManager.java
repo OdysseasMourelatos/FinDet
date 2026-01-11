@@ -1,32 +1,46 @@
 package com.financial.database;
 
-import java.util.logging.Logger;
+import com.financial.entries.Entity;
+import com.financial.entries.PublicInvestmentBudgetExpense;
+import com.financial.entries.PublicInvestmentBudgetRevenue;
+import com.financial.entries.RegularBudgetExpense;
+import com.financial.entries.RegularBudgetRevenue;
+
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Logger;
 
+/**
+ * Manages the SQLite database operations for the budget application.
+ */
 public class SQLiteManager {
     private static final Logger LOGGER = Logger.getLogger(SQLiteManager.class.getName());
     private static final String DB_URL = "jdbc:sqlite:budget_database.db";
-    
+
     private static SQLiteManager instance;
     private Connection connection;
-    
+
     private SQLiteManager() {
         initializeDatabase();
     }
-    
+
     public static synchronized SQLiteManager getInstance() {
         if (instance == null) {
             instance = new SQLiteManager();
         }
         return instance;
     }
-    
+
     private void initializeDatabase() {
         try {
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection(DB_URL);
+            try (Statement stmt = connection.createStatement()) {
+                stmt.execute("PRAGMA foreign_keys = ON;");
+            }
             createTables();
             LOGGER.info("Database initialized successfully");
         } catch (ClassNotFoundException | SQLException e) {
@@ -37,69 +51,84 @@ public class SQLiteManager {
 
     private void createTables() throws SQLException {
         String[] createTableQueries = {
-
             """
             CREATE TABLE IF NOT EXISTS Regular_Budget_Revenues (
-                code VARCHAR PRIMARY KEY NOT NULL,
+                code TEXT PRIMARY KEY NOT NULL,
                 description TEXT NOT NULL,
-                amount REAL NOT NULL,
+                amount INTEGER NOT NULL,
                 category TEXT DEFAULT 'ΕΣΟΔΑ',
-                import_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                UNIQUE(description)
+                import_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             ) """,
-                                                    
+
             """
             CREATE TABLE IF NOT EXISTS Public_Investment_Budget_Revenues (
-                code VARCHAR PRIMARY KEY NOT NULL,
+                code TEXT NOT NULL,
                 description TEXT NOT NULL,
                 type TEXT NOT NULL CHECK(
                     type IN (
                         'ΕΘΝΙΚΟ',
                         'ΕΘΝΙΚΟ ΣΚΕΛΟΣ',
                         'ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ',
-                        'ΣΥΓΧΡΗΜΑΤΟΔΟΥΤΟΜΕΝΟ ΣΚΕΛΟΣ'
+                        'ΣΥΓΧΡΗΜΑΤΟΔΟΥΤΟΜΕΝΟ ΣΚΕΛΟΣ',
+                        'Εθνικό',
+                        'Εθνικό Σκέλος',
+                        'Συγχρηματοδοτούμενο',
+                        'Συγχρηματοδοτούμενο σκέλος'
                     )
                 ),
-                amount REAL NOT NULL,
+                amount INTEGER NOT NULL,
                 category TEXT DEFAULT 'ΕΣΟΔΑ',
                 import_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                UNIQUE(description, type)
-            ) """,
-
-            """
-            CREATE TABLE IF NOT EXISTS Regular_Budget_Expenses (
-                entity_code VARCHAR PRIMARY KEY NOT NULL,
-                entity_name TEXT NOT NULL,
-                service_code TEXT NOT NULL,
-                service_name TEXT NOT NULL,
-                expense_code TEXT NOT NULL,
-                description TEXT NOT NULL,
-                amount REAL NOT NULL,
-                category TEXT DEFAULT 'ΕΞΟΔΑ',
-                import_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                UNIQUE(service_code, expense_code, description)
-            ) """,
-
-            """
-            CREATE TABLE IF NOT EXISTS Public_Investment_Budget_Expenses (
-                entity_code VARCHAR PRIMARY KEY NOT NULL,
-                entity_name TEXT NOT NULL,
-                service_code TEXT NOT NULL,
-                service_name TEXT NOT NULL,
-                expense_code TEXT NOT NULL,
-                description TEXT NOT NULL,
-                type TEXT NOT NULL,
-                amount REAL NOT NULL,
-                category TEXT DEFAULT 'ΕΞΟΔΑ',
-                import_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                UNIQUE(service_code, expense_code, description, type)
+                PRIMARY KEY(code, type)
             ) """,
 
             """
             CREATE TABLE IF NOT EXISTS Entities (
-                entity_code VARCHAR PRIMARY KEY NOT NULL,
+                entity_code TEXT PRIMARY KEY NOT NULL,
                 entity_name TEXT NOT NULL,
                 created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            ) """,
+
+            """
+            CREATE TABLE IF NOT EXISTS Regular_Budget_Expenses (
+                entity_code TEXT NOT NULL,
+                entity_name TEXT NOT NULL,
+                service_code TEXT NOT NULL,
+                service_name TEXT NOT NULL,
+                expense_code TEXT NOT NULL,
+                description TEXT NOT NULL,
+                amount INTEGER NOT NULL,
+                category TEXT DEFAULT 'ΕΞΟΔΑ',
+                import_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY(entity_code, service_code, expense_code),
+                FOREIGN KEY(entity_code) REFERENCES Entities(entity_code)
+            ) """,
+
+            """
+            CREATE TABLE IF NOT EXISTS Public_Investment_Budget_Expenses (
+                entity_code TEXT NOT NULL,
+                entity_name TEXT NOT NULL,
+                service_code TEXT NOT NULL,
+                service_name TEXT NOT NULL,
+                expense_code TEXT NOT NULL,
+                description TEXT NOT NULL,
+                type TEXT NOT NULL CHECK(
+                    type IN (
+                        'ΕΘΝΙΚΟ',
+                        'ΕΘΝΙΚΟ ΣΚΕΛΟΣ',
+                        'ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ',
+                        'ΣΥΓΧΡΗΜΑΤΟΔΟΥΤΟΜΕΝΟ ΣΚΕΛΟΣ',
+                        'Εθνικό',
+                        'Εθνικό Σκέλος',
+                        'Συγχρηματοδοτούμενο',
+                        'Συγχρηματοδοτούμενο σκέλος'
+                    )
+                ),
+                amount INTEGER NOT NULL,
+                category TEXT DEFAULT 'ΕΞΟΔΑ',
+                import_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY(entity_code, service_code, expense_code, type),
+                FOREIGN KEY(entity_code) REFERENCES Entities(entity_code)
             ) """
         };
 
@@ -109,112 +138,108 @@ public class SQLiteManager {
             }
         }
     }
-    //each insert method will be called on the object's class respectively
 
     public void insertToRegularBudgetRevenues(RegularBudgetRevenue regularBR) {
         String insert = """
-        Insert into Regular_Budget_Revenues(code,description,amount,category)
-        Values(?,?,?,?)
-        """;
-        // using prepared statement instead of statement to prevent sql injection
-        try(PreparedStatement ps = connection.prepareStatement(insert)) {
-            ps.setString(1,regularBR.code);
-            ps.setString(2,regularBR.description);
-            ps.setDouble(3,regularBR.amount);
-            ps.setString(4,regularBR.category);
+            INSERT INTO Regular_Budget_Revenues(code, description, amount, category)
+            VALUES(?, ?, ?, ?)
+            """;
+
+        try (PreparedStatement ps = connection.prepareStatement(insert)) {
+            ps.setString(1, regularBR.getCode());
+            ps.setString(2, regularBR.getDescription());
+            ps.setLong(3, regularBR.getAmount());
+            ps.setString(4, regularBR.getCategory());
             ps.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Error inserting product: " + e.getMessage());
-        }
-    }
-    
-    public void insertToPublicInvestmentBudgetRevenues(PublicInvestmentBudgetRevenue investmentBR) {
-       String insert = """
-       Insert into Public_Investment_Budget_Revenues(code,description,type,amount,category)
-       Values(?,?,?,?,?)
-       """;
-
-        try(PreparedStatement ps = connection.prepareStatement(insert)) {
-            ps.setString(1,investmentBR.code);
-            ps.setString(2, investmentBR.description);
-            ps.setString(3,investmentBR.type);
-            ps.setDouble(4,investmentBR.amount);
-            ps.setString(5,investmentBR.category);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            System.err.println("Error inserting product: " + e.getMessage());
-        }
-
-    }
-
-    public void insertToRegularBudgeteExpenses(RegularBudgetExpense regularBE) {
-       String insert = """
-       Insert into Regular_Budget_Expenses(entity_code, entity_name, service_code, service_name,
-       expense_code, description, amount, category)
-       Values(?,?,?,?,?,?,?,?)
-       """;
-        try(PreparedStatement ps = connection.prepareStatement(insert)) {
-            ps.setString(1, regularBE.entity_code);
-            ps.setString(2,regularBE.entity_name);
-            ps.setString(3,regularBE.service_code);
-            ps.setString(4,regularBE.service_name);
-            ps.setString(5,regularBE.expense_code);
-            ps.setString(6,regularBE.description);
-            ps.setDouble(7,regularBE.amount);
-            ps.setString(8,regularBE.category);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            System.err.println("Error inserting product: " + e.getMessage());
-        }
-
-    }
-
-    public void insertToPublicInvestmentBudgeteExpenses(PublicInvestmentBudgetExpense investmentBE) {
-       String insert = """
-       Insert into Public_Investment_Budget_Expenses(entity_code, entity_name, service_code, service_name,
-       expense_code,description,type,amount,category) 
-       Values(?,?,?,?,?,?,?,?,?)
-       """;
-
-        try(PreparedStatement ps = connection.prepareStatement(insert)) {
-            ps.setString(1, investmentBE.entity_code);
-            ps.setString(2,investmentBE.entity_name);
-            ps.setString(3,investmentBE.service_code);
-            ps.setString(4,investmentBE.service_name);
-            ps.setString(5,investmentBE.expense_code);
-            ps.setString(6,investmentBE.description);
-            ps.setString(7,investmentBE.type);
-            ps.setDouble(8,investmentBE.amount);
-            ps.setString(9,investmentBE.category);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            System.err.println("Error inserting product: " + e.getMessage());
+            System.err.println("Error inserting revenue: " + e.getMessage() + regularBR);
         }
     }
 
-     public void insertToEntities(Entity e) {
+    public void insertToPublicInvestmentBudgetRevenues(PublicInvestmentBudgetRevenue invBR) {
         String insert = """
-        Insert into Entities(entity_code,entity_name)
-        Values(?,?)
-        """;
+            INSERT INTO Public_Investment_Budget_Revenues(code, description, type, amount, category)
+            VALUES(?, ?, ?, ?, ?)
+            """;
 
-         try(PreparedStatement ps = connection.prepareStatement(insert)) {
-            ps.setString(1,e.entity_code);
-            ps.setString(2,e.entity_name);
+        try (PreparedStatement ps = connection.prepareStatement(insert)) {
+            ps.setString(1, invBR.getCode());
+            ps.setString(2, invBR.getDescription());
+            ps.setString(3, invBR.getType());
+            ps.setLong(4, invBR.getAmount());
+            ps.setString(5, invBR.getCategory());
             ps.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Error inserting product: " + e.getMessage());
+            System.err.println("Error inserting investment revenue: " + e.getMessage() + invBR);
         }
     }
 
- 
+    public void insertToRegularBudgetExpenses(RegularBudgetExpense regularBE) {
+        String insert = """
+            INSERT INTO Regular_Budget_Expenses(entity_code, entity_name, service_code,
+            service_name, expense_code, description, amount, category)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?)
+            """;
+        try (PreparedStatement ps = connection.prepareStatement(insert)) {
+            ps.setString(1, regularBE.getEntityCode());
+            ps.setString(2, regularBE.getEntityName());
+            ps.setString(3, regularBE.getServiceCode());
+            ps.setString(4, regularBE.getServiceName());
+            ps.setString(5, regularBE.getCode());
+            ps.setString(6, regularBE.getDescription());
+            ps.setLong(7, regularBE.getAmount());
+            ps.setString(8, regularBE.getCategory());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error inserting expense: " + e.getMessage());
+        }
+    }
+
+    public void insertToPublicInvestmentBudgetExpenses(PublicInvestmentBudgetExpense invBE) {
+        String insert = """
+            INSERT INTO Public_Investment_Budget_Expenses(entity_code, entity_name, service_code,
+            service_name, expense_code, description, type, amount, category)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """;
+
+        try (PreparedStatement ps = connection.prepareStatement(insert)) {
+            ps.setString(1, invBE.getEntityCode());
+            ps.setString(2, invBE.getEntityName());
+            ps.setString(3, invBE.getServiceCode());
+            ps.setString(4, invBE.getServiceName());
+            ps.setString(5, invBE.getCode());
+            ps.setString(6, invBE.getDescription());
+            ps.setString(7, invBE.getType());
+            ps.setLong(8, invBE.getAmount());
+            ps.setString(9, invBE.getCategory());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error inserting investment expense: " + e.getMessage());
+        }
+    }
+
+    public void insertToEntities(Entity entity) {
+        String insert = """
+            INSERT INTO Entities(entity_code, entity_name)
+            VALUES(?, ?)
+            """;
+
+        try (PreparedStatement ps = connection.prepareStatement(insert)) {
+            ps.setString(1, entity.getEntityCode());
+            ps.setString(2, entity.getEntityName());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error inserting entity: " + e.getMessage());
+        }
+    }
+
     public Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
             connection = DriverManager.getConnection(DB_URL);
         }
         return connection;
     }
-    
+
     public void closeConnection() {
         try {
             if (connection != null && !connection.isClosed()) {
