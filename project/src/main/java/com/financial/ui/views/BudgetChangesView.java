@@ -1103,6 +1103,13 @@ public class BudgetChangesView {
                 categoryCode = categorySelection.split(" - ")[0];
             }
 
+            ArrayList<? extends BudgetExpense> affectedExpenses = getExpensesForScope(budgetType, scope, categoryCode);
+
+            if (affectedExpenses.isEmpty()) {
+                showExpenseError("Δεν βρέθηκαν λογαριασμοί για τις παραμέτρους που ορίσατε.");
+                return;
+            }
+
             // Capture before values and apply changes
             Map<String, Long> beforeValues = captureExpenseValues(budgetType, scope, categoryCode);
             lastExpenseBeforeValues = captureExpenseValues(budgetType, scope, categoryCode);
@@ -1119,7 +1126,6 @@ public class BudgetChangesView {
 
             showExpenseSuccess("Η αλλαγή εφαρμόστηκε επιτυχώς!");
 
-            ArrayList<? extends BudgetExpense> affectedExpenses = getExpensesForScope(budgetType, scope, categoryCode);
             pendingChanges.addAll(affectedExpenses);
             updateSaveButtonState();
 
@@ -1312,7 +1318,11 @@ public class BudgetChangesView {
                     return;
                 }
                 String serviceCode = serviceSelection.split(" - ")[0];
-                entity.implementChangesInAllExpenseCategoriesOfSpecificService(serviceCode, percentage, fixedAmount, type);
+                if (categoryCode != null) {
+                    entity.implementChangesInSpecificExpenseCategoryOfSpecificService(serviceCode, categoryCode, percentage, fixedAmount, type);
+                } else {
+                    entity.implementChangesInAllExpenseCategoriesOfSpecificService(serviceCode, percentage, fixedAmount, type);
+                }
             }
         }
     }
