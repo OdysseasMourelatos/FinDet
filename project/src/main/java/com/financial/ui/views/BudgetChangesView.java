@@ -68,11 +68,14 @@ public class BudgetChangesView {
     private Label expenseStatusLabel;
     private boolean isUpdatingScope = false;
     private ComboBox<String> expenseCalculationModeCombo;
+    private Map<String, Long> lastExpenseBeforeValues;
 
     // Expense results area
     private VBox expenseResultsContainer;
     private TableView<ExpenseChangeResult> expenseResultsTable;
     private ObservableList<ExpenseChangeResult> expenseResultsData;
+    private ComboBox<String> expenseDisplayModeCombo;
+    private ComboBox<String> expenseViewLevelCombo;
 
     public BudgetChangesView() {
         view = new VBox(0);
@@ -960,11 +963,35 @@ public class BudgetChangesView {
         Label resultsTitle = new Label("Αποτελέσματα Αλλαγών Δαπανών");
         resultsTitle.setStyle(Theme.sectionHeader());
 
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
         expenseResultsData = FXCollections.observableArrayList();
         expenseResultsTable = createExpenseResultsTable();
         VBox.setVgrow(expenseResultsTable, Priority.ALWAYS);
 
-        resultsCard.getChildren().addAll(resultsTitle, expenseResultsTable);
+        expenseDisplayModeCombo = new ComboBox<>();
+        expenseDisplayModeCombo.getItems().addAll("Αναλυτική Προβολή", "Συγκεντρωτική Προβολή");
+        expenseDisplayModeCombo.setValue("Αναλυτική Προβολή");
+        expenseDisplayModeCombo.setStyle(Theme.comboBox());
+        expenseDisplayModeCombo.setPrefWidth(180);
+        expenseDisplayModeCombo.setOnAction(e -> refreshExpenseResultsView());
+
+        expenseViewLevelCombo = new ComboBox<>();
+        expenseViewLevelCombo.setStyle(Theme.comboBox());
+        expenseViewLevelCombo.setPrefWidth(180);
+        expenseViewLevelCombo.setDisable(true);
+        expenseViewLevelCombo.setOnAction(e -> refreshExpenseResultsView());
+
+        HBox resultsHeader = new HBox(12);
+        resultsHeader.setAlignment(Pos.CENTER_LEFT);
+        resultsHeader.getChildren().addAll(resultsTitle, spacer, new Label("Τύπος:"), expenseDisplayModeCombo, new Label("Επίπεδο:"), expenseViewLevelCombo);
+
+        expenseResultsData = FXCollections.observableArrayList();
+        expenseResultsTable = createExpenseResultsTable();
+        VBox.setVgrow(expenseResultsTable, Priority.ALWAYS);
+
+        resultsCard.getChildren().addAll(resultsHeader, expenseResultsTable);
         section.getChildren().add(resultsCard);
         return section;
     }
@@ -1052,6 +1079,7 @@ public class BudgetChangesView {
 
             // Capture before values and apply changes
             Map<String, Long> beforeValues = captureExpenseValues(budgetType, scope, categoryCode);
+            lastExpenseBeforeValues = captureExpenseValues(budgetType, scope, categoryCode);
             applyExpenseChange(budgetType, scope, categoryCode, percentage, fixedAmount);
             Map<String, Long> afterValues = captureExpenseValues(budgetType, scope, categoryCode);
 
@@ -1061,6 +1089,8 @@ public class BudgetChangesView {
             }
             // Display results
             displayExpenseResults(budgetType, scope, categoryCode, beforeValues, afterValues);
+            updateConsolidationOptions(budgetType);
+            expenseUndoButton.setVisible(!ExpensesHistory.getHistoryDeque().isEmpty());
             showExpenseSuccess("Η αλλαγή εφαρμόστηκε επιτυχώς!");
 
         } catch (NumberFormatException e) {
@@ -1320,55 +1350,212 @@ public class BudgetChangesView {
         };
     }
 
-    private void displayExpenseResults(String budgetType, String scope, String categoryCode,
-                                       Map<String, Long> before, Map<String, Long> after) {
+    private void displayExpenseResults(String budgetType, String scope, String categoryCode, Map<String, Long> before, Map<String, Long> after) {
         expenseResultsData.clear();
 
-        ArrayList<? extends BudgetExpense> expenses = getExpensesForScope(budgetType, scope, categoryCode);
+        if (expenseDisplayModeCombo.getValue().equals("Αναλυτική Προβολή")) {
+            ArrayList<? extends BudgetExpense> expenses = getExpensesForScope(budgetType, scope, categoryCode);
+            for (BudgetExpense expense : expenses) {
+                String key = expense.getEntityCode() + "|" + expense.getServiceCode() + "|" + expense.getCode();
+                Long beforeVal = before.getOrDefault(key, 0L);
+                Long afterVal = after.getOrDefault(key, expense.getAmount());
 
-        for (BudgetExpense expense : expenses) {
-            String key = expense.getEntityCode() + "|" + expense.getServiceCode() + "|" + expense.getCode();
-            Long beforeVal = before.get(key);
-            Long afterVal = after.get(key);
+                long change = afterVal - beforeVal;
+                if (change == 0) {
+                    continue;
+                }
 
-            if (beforeVal == null) {
-                beforeVal = 0L;
+                expenseResultsData.add(createResultRow(expense.getEntityName(), expense.getServiceName(),
+                        expense.getCode(), expense.getDescription(), beforeVal, afterVal));
             }
-            if (afterVal == null) {
-                afterVal = expense.getAmount();
-            }
+        } else {
+            String viewLevel = expenseViewLevelCombo.getValue(); // "Κρατικός Προϋπολογισμός", κτλ.
+            String levelPrefix = (viewLevel == null || viewLevel.equals(budgetType)) ? budgetType : viewLevel;
 
-            long change = afterVal - beforeVal;
-            if (change == 0) {
-                continue; // Skip unchanged
-            }
+            String entitySelection = expenseEntityCombo.getValue();
+            String entityCode = (entitySelection != null) ? entitySelection.split(" - ")[0] : null;
+            String entityName = (entitySelection != null) ? entitySelection.split(" - ")[1] : "ΕΠΙΚΡΑΤΕΙΑ";
 
-            double percentChange = beforeVal != 0 ? ((double) change / beforeVal) * 100 : 0;
+            String serviceSelection = expenseServiceCombo.getValue();
+            String serviceCode = (serviceSelection != null) ? serviceSelection.split(" - ")[0] : null;
+            String serviceName = (serviceSelection != null) ? serviceSelection.split(" - ")[1] : "";
 
-            String changeStr;
-            if (change >= 0) {
-                changeStr = String.format("+%,d (%.1f%%)", change, percentChange);
+            long bSum = before.values().stream().mapToLong(Long::longValue).sum();
+            long aSum = after.values().stream().mapToLong(Long::longValue).sum();
+            long delta = aSum - bSum;
+
+            if (scope.equals("Ανά Υπηρεσία") && serviceCode != null) {
+
+                long aServ = getConsolidatedSum(viewLevel, budgetType, scope, entityCode, serviceCode, null);
+                long bServ = aServ - delta;
+                addSummaryRow("ΥΠΗΡΕΣΙΑ", entityName, serviceName, "ΟΛΕΣ", "Σύνολο Υπηρεσίας", bServ, aServ);
+
+
+                if (categoryCode != null && !categoryCode.equals("Όλες οι κατηγορίες")) {
+                    long aCat = getConsolidatedSum(viewLevel, budgetType, "Ανά Φορέα", entityCode, null, categoryCode);
+                    long bCat = aCat - delta;
+                    addSummaryRow("ΚΑΤΗΓΟΡΙΑ", entityName, "", categoryCode, BudgetExpense.getDescriptionWithCode(categoryCode), bCat, aCat);
+                }
+
+                long aEnt = getConsolidatedSum(viewLevel, budgetType, "Ανά Φορέα", entityCode, null, null);
+                long bEnt = aEnt - delta;
+                addSummaryRow("ΦΟΡΕΑΣ", entityName, "", "ΟΛΕΣ", "Σύνολο Φορέα", bEnt, aEnt);
+
+            } else if (scope.equals("Ανά Φορέα") && entityCode != null) {
+                if (categoryCode != null && !categoryCode.equals("Όλες οι κατηγορίες")) {
+                    long aCat = getConsolidatedSum(viewLevel, budgetType, "Ανά Φορέα", entityCode, null, categoryCode);
+                    long bCat = aCat - delta;
+                    addSummaryRow("ΚΑΤΗΓΟΡΙΑ", entityName, "", categoryCode, BudgetExpense.getDescriptionWithCode(categoryCode), bCat, aCat);
+                }
+                long aEnt = getConsolidatedSum(viewLevel, budgetType, "Ανά Φορέα", entityCode, null, null);
+                long bEnt = aEnt - delta;
+                addSummaryRow("ΦΟΡΕΑΣ", entityName, "", "ΟΛΕΣ", "Σύνολο Φορέα", bEnt, aEnt);
+
             } else {
-                changeStr = String.format("%,d (%.1f%%)", change, percentChange);
+                if (categoryCode != null && !categoryCode.equals("Όλες οι κατηγορίες")) {
+                    long aCatGlobal = getConsolidatedSum(viewLevel, budgetType, "Καθολική (Όλοι οι Φορείς)", null, null, categoryCode);
+                    long bCatGlobal = aCatGlobal - delta;
+                    addSummaryRow("ΚΑΤΗΓΟΡΙΑ", "ΕΠΙΚΡΑΤΕΙΑ", "", categoryCode, BudgetExpense.getDescriptionWithCode(categoryCode), bCatGlobal, aCatGlobal);
+                }
+                long aTypeGlobal = getConsolidatedSum(viewLevel, budgetType, "Καθολική (Όλοι οι Φορείς)", null, null, null);
+                long bTypeGlobal = aTypeGlobal - delta;
+                addSummaryRow("ΣΥΝΟΛΟ", "ΕΠΙΚΡΑΤΕΙΑ", "", "ΟΛΕΣ", "Γενικό Σύνολο Εξόδων", bTypeGlobal, aTypeGlobal);
+
+            }
+        }
+    }
+
+    private void updateConsolidationOptions(String budgetType) {
+        expenseViewLevelCombo.getItems().clear();
+        expenseViewLevelCombo.setDisable(false);
+
+        if (budgetType.equals("Τακτικός Προϋπολογισμός")) {
+            expenseViewLevelCombo.getItems().addAll("Τακτικός Προϋπολογισμός", "Κρατικός Προϋπολογισμός");
+        } else if (budgetType.equals("ΠΔΕ Εθνικό")) {
+            expenseViewLevelCombo.getItems().addAll("ΠΔΕ Εθνικό", "ΠΔΕ (Σύνολο)", "Κρατικός Προϋπολογισμός");
+        } else {
+            expenseViewLevelCombo.getItems().addAll("ΠΔΕ Συγχρηματοδοτούμενο", "ΠΔΕ (Σύνολο)", "Κρατικός Προϋπολογισμός");
+        }
+        expenseViewLevelCombo.setValue(budgetType);
+    }
+
+    private ExpenseChangeResult createResultRow(String ent, String ser, String cat, String desc, long b, long a) {
+        long change = a - b;
+        double pct = (b != 0) ? ((double) change / b) * 100 : 0;
+
+        String changeStr = String.format("%s%s (%.1f%%)", (change > 0 ? "+" : ""), Theme.formatAmount(change), pct);
+
+        return new ExpenseChangeResult(ent, truncateDescription(ser, 25), cat, truncateDescription(desc, 30),
+                Theme.formatAmount(b), Theme.formatAmount(a), changeStr);
+    }
+
+    private void addSummaryRow(String levelTag, String entityName, String serviceName, String catCode, String desc, long b, long a) {
+        long change = a - b;
+        double pct = (b != 0) ? ((double) change / b) * 100 : 0;
+
+        String changeStr = String.format("%s%s (%.1f%%)",
+                (change > 0 ? "+" : ""),
+                Theme.formatAmount(change),
+                pct);
+
+        expenseResultsData.add(new ExpenseChangeResult(
+                entityName,
+                serviceName,
+                catCode,
+                "[" + levelTag + "] " + desc,
+                Theme.formatAmount(b),
+                Theme.formatAmount(a),
+                changeStr
+        ));
+    }
+
+    private ArrayList<? extends BudgetExpense> getExpensesForCustomScope(String bType, String scope, String entityCode, String serviceCode, String categoryCode) {
+        ArrayList<BudgetExpense> result = new ArrayList<>();
+
+        if (scope.equals("Καθολική (Όλοι οι Φορείς)")) {
+            if (bType.equals("Τακτικός Προϋπολογισμός")) {
+                if (categoryCode != null) {
+                    result.addAll(RegularBudgetExpense.getRegularBudgetExpensesOfCategoryWithCode(categoryCode));
+                } else {
+                    result.addAll(RegularBudgetExpense.getAllRegularBudgetExpenses());
+                }
+            } else if (bType.equals("ΠΔΕ Εθνικό")) {
+                var list = (categoryCode != null) ?
+                        PublicInvestmentBudgetNationalExpense.getPublicInvestmentBudgetNationalExpensesOfCategoryWithCode(categoryCode) :
+                        PublicInvestmentBudgetNationalExpense.getAllPublicInvestmentBudgetNationalExpenses();
+                if (list != null) {
+                    result.addAll(list);
+                }
+            } else {
+                var list = (categoryCode != null) ?
+                        PublicInvestmentBudgetCoFundedExpense.getPublicInvestmentBudgetCoFundedExpensesOfCategoryWithCode(categoryCode) :
+                        PublicInvestmentBudgetCoFundedExpense.getAllPublicInvestmentBudgetCoFundedExpenses();
+                if (list != null) {
+                    result.addAll(list);
+                }
+            }
+        } else {
+            Entity entity = Entity.findEntityWithEntityCode(entityCode);
+            if (entity == null) {
+                return result;
             }
 
-            ExpenseChangeResult result = new ExpenseChangeResult(
-                expense.getEntityName(),
-                truncateDescription(expense.getServiceName(), 25),
-                expense.getCode(),
-                truncateDescription(expense.getDescription(), 30),
-                Theme.formatAmount(beforeVal),
-                Theme.formatAmount(afterVal),
-                changeStr
-            );
+            List<? extends BudgetExpense> allEntityExpenses = switch (bType) {
+                case "Τακτικός Προϋπολογισμός" -> entity.getRegularBudgetExpenses();
+                case "ΠΔΕ Εθνικό" -> entity.getPublicInvestmentBudgetNationalExpenses();
+                default -> entity.getPublicInvestmentBudgetCoFundedExpenses();
+            };
 
-            expenseResultsData.add(result);
+            if (allEntityExpenses != null) {
+                for (BudgetExpense exp : allEntityExpenses) {
+                    boolean matchesService = (serviceCode == null) || exp.getServiceCode().equals(serviceCode);
+                    boolean matchesCategory = (categoryCode == null) || exp.getCode().equals(categoryCode);
+
+                    if (matchesService && matchesCategory) {
+                        result.add(exp);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    private long getConsolidatedSum(String viewLevel, String currentBudgetType, String scope, String entityCode, String serviceCode, String categoryCode) {
+        if ("Κρατικός Προϋπολογισμός".equals(viewLevel)) {
+            return calculateSum("Τακτικός Προϋπολογισμός", scope, entityCode, serviceCode, categoryCode) +
+                    calculateSum("ΠΔΕ Εθνικό", scope, entityCode, serviceCode, categoryCode) +
+                    calculateSum("ΠΔΕ Συγχρηματοδοτούμενο", scope, entityCode, serviceCode, categoryCode);
+        } else if ("ΠΔΕ (Σύνολο)".equals(viewLevel)) {
+            return calculateSum("ΠΔΕ Εθνικό", scope, entityCode, serviceCode, categoryCode) +
+                    calculateSum("ΠΔΕ Συγχρηματοδοτούμενο", scope, entityCode, serviceCode, categoryCode);
+        } else {
+            return calculateSum(currentBudgetType, scope, entityCode, serviceCode, categoryCode);
+        }
+    }
+
+    private long calculateSum(String bType, String scope, String entityCode, String serviceCode, String categoryCode) {
+        return getExpensesForCustomScope(bType, scope, entityCode, serviceCode, categoryCode).stream().mapToLong(BudgetExpense::getAmount).sum();
+    }
+
+    private void refreshExpenseResultsView() {
+        if (lastExpenseBeforeValues == null) {
+            return;
         }
 
-        expenseUndoButton.setVisible(true);
+        boolean isSummary = "Συγκεντρωτική Προβολή".equals(expenseDisplayModeCombo.getValue());
+        expenseViewLevelCombo.setDisable(!isSummary);
 
-        animateExpenseResults();
+        String budgetType = expenseBudgetTypeCombo.getValue();
+        String scope = expenseScopeCombo.getValue();
+        String categorySelection = expenseCategoryCombo.getValue();
+        String categoryCode = (categorySelection != null && !categorySelection.equals("Όλες οι κατηγορίες")) ? categorySelection.split(" - ")[0] : null;
+
+        Map<String, Long> currentAfterValues = captureExpenseValues(budgetType, scope, categoryCode);
+
+        displayExpenseResults(budgetType, scope, categoryCode, lastExpenseBeforeValues, currentAfterValues);
     }
+
+
 
     private void animateExpenseResults() {
         expenseResultsTable.setOpacity(0);
