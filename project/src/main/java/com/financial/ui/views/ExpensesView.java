@@ -163,8 +163,8 @@ public class ExpensesView {
         levelLabel.setStyle(Theme.mutedText());
 
         regularLevelFilter = new ComboBox<>();
-        regularLevelFilter.getItems().addAll("Όλες οι πιστώσεις", "Πιστώσεις κατά κατηγορία δαπάνης");
-        regularLevelFilter.setValue("Πιστώσεις κατά κατηγορία δαπάνης");
+        regularLevelFilter.getItems().addAll("Όλα τα επίπεδα", "Επίπεδο 1", "Επίπεδο 2", "Επίπεδο 3", "Επίπεδο 4", "Επίπεδο 5");
+        regularLevelFilter.setValue("Όλα τα επίπεδα");
         regularLevelFilter.setStyle(Theme.comboBox());
         regularLevelFilter.setPrefWidth(140);
 

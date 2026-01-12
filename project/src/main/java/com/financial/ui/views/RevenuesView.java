@@ -1,10 +1,6 @@
 package com.financial.ui.views;
 
-import com.financial.entries.BudgetRevenue;
-import com.financial.entries.RegularBudgetRevenue;
-import com.financial.entries.PublicInvestmentBudgetRevenue;
-import com.financial.entries.PublicInvestmentBudgetNationalRevenue;
-import com.financial.entries.PublicInvestmentBudgetCoFundedRevenue;
+import com.financial.entries.*;
 import com.financial.ui.Theme;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -243,7 +239,7 @@ public class RevenuesView {
         TableColumn<BudgetRevenue, String> investmentCol = new TableColumn<>("ΠΔΕ");
         investmentCol.setCellValueFactory(data -> {
             BudgetRevenue r = data.getValue();
-            if (r instanceof PublicInvestmentBudgetNationalRevenue || r instanceof PublicInvestmentBudgetCoFundedRevenue) {
+            if (r instanceof PublicInvestmentBudgetRevenue || r instanceof PublicInvestmentBudgetNationalRevenue || r instanceof PublicInvestmentBudgetCoFundedRevenue) {
                 return new SimpleStringProperty(formatAmount(r.getAmount()));
             }
             return new SimpleStringProperty(formatAmount(r.getPublicInvestmentAmount()));
@@ -327,6 +323,7 @@ public class RevenuesView {
     }
 
     private void updateStats() {
+        String type = budgetTypeFilter.getValue();
         long total = BudgetRevenue.calculateSum();
         countLabel.setText(tableData.size() + " εγγραφές");
         totalLabel.setText("Σύνολο: " + Theme.formatAmount(total));
