@@ -211,6 +211,33 @@ public class Entity implements EntityLogic {
         applyChangesAndKeepHistory(strategy, percentage, fixedAmount, budgetType);
     }
 
+    public void implementChangesInSpecificExpenseCategoryOfSpecificService(String serviceCode, String categoryCode, double percentage, long fixedAmount, BudgetType budgetType) {
+        try {
+            BudgetExpense expense = null;
+            if (budgetType == BudgetType.REGULAR_BUDGET) {
+                expense = RegularBudgetExpense.findRegularBudgetExpenseWithCodes(entityCode, serviceCode, categoryCode);
+            } else if (budgetType == BudgetType.PUBLIC_INVESTMENT_BUDGET_NATIONAL) {
+                expense = PublicInvestmentBudgetNationalExpense.findPublicInvestmentBudgetNationalExpenseWithCodes(entityCode, serviceCode, categoryCode);
+            } else if (budgetType == BudgetType.PUBLIC_INVESTMENT_BUDGET_COFUNDED) {
+                expense = PublicInvestmentBudgetCoFundedExpense.findPublicInvestmentBudgetCoFundedExpenseWithCodes(entityCode, serviceCode, categoryCode);
+            }
+
+            ArrayList<BudgetExpense> expenses = new ArrayList<>();
+            expenses.add(expense);
+            ExpensesHistory.keepHistory(expenses, budgetType);
+
+            if (fixedAmount != 0) {
+                expense.setAmount(expense.getAmount() + fixedAmount);
+            } else {
+                expense.setAmount( (long) (expense.getAmount() * (1 + percentage)));
+            }
+
+        } catch (IllegalArgumentException | NullPointerException e) {
+            ExpensesHistory.returnToPreviousState();
+            return;
+        }
+    }
+
     private void applyChangesAndKeepHistory(ExpenseAdjustmentStrategy strategy, double percentage, long fixedAmount, BudgetType budgetType) {
         if (budgetType == BudgetType.REGULAR_BUDGET) {
             ExpensesHistory.keepHistory(regularBudgetExpenses, budgetType);
