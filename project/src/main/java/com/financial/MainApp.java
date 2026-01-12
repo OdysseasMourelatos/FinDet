@@ -7,7 +7,13 @@ import com.financial.entries.PublicInvestmentBudgetRevenue;
 import com.financial.services.data.DataInput;
 import com.financial.ui.MainWindow;
 import java.io.File;
-import java.sql.SQLException;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ButtonBar.ButtonData;
+import java.util.Optional;
+import java.util.Set;
+import com.financial.entries.BudgetEntry;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -23,64 +29,95 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        // Load CSV data on startup
-        loadBudgetData();
 
-        // Apply modern dark theme
         Application.setUserAgentStylesheet(new PrimerDark().getUserAgentStylesheet());
 
-        // Create main window
-        MainWindow mainWindow = new MainWindow();
+        boolean loadFromCsv = showStartupDialog();
 
-        // Setup scene
+        loadBudgetData(loadFromCsv);
+
+        MainWindow mainWindow = new MainWindow();
         Scene scene = new Scene(mainWindow.getRoot(), WINDOW_WIDTH, WINDOW_HEIGHT);
 
-        // Configure stage
         primaryStage.setTitle("FinDet - Διαχείριση Κρατικού Προϋπολογισμού");
         primaryStage.setScene(scene);
-
         primaryStage.setResizable(true);
-
         primaryStage.setMinWidth(900);
         primaryStage.setMinHeight(600);
+
+        primaryStage.centerOnScreen();
+
+        primaryStage.setOnCloseRequest(event -> {
+
+            Set<BudgetEntry> changes = mainWindow.getBudgetChangesView().getPendingChanges();
+
+            if (changes != null && !changes.isEmpty()) {
+                Alert alert = new Alert(AlertType.CONFIRMATION);
+                alert.setTitle("Μη αποθηκευμένες αλλαγές");
+                alert.setHeaderText("Προσοχή! Εκκρεμούν " + changes.size() + " αλλαγές στη βάση.");
+                alert.setContentText("Θέλετε να τις αποθηκεύσετε πριν την έξοδο;");
+
+                ButtonType buttonSave = new ButtonType("Αποθήκευση");
+                ButtonType buttonDiscard = new ButtonType("Απόρριψη");
+                ButtonType buttonCancel = new ButtonType("Άκυρο", ButtonData.CANCEL_CLOSE);
+
+                alert.getButtonTypes().setAll(buttonSave, buttonDiscard, buttonCancel);
+
+                Optional<ButtonType> result = alert.showAndWait();
+
+                if (result.isPresent()) {
+                    if (result.get() == buttonSave) {
+                        SQLiteManager.getInstance().saveChangesBatch(changes);
+                    } else if (result.get() == buttonCancel) {
+                        event.consume();
+                    }
+                }
+            }
+        });
+
         primaryStage.show();
     }
 
-    private void loadBudgetData() {
+    private boolean showStartupDialog() {
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Εκκίνηση Εφαρμογής");
+        alert.setHeaderText("Επιλογή Πηγής Δεδομένων");
+        alert.setContentText("Θέλετε να ξεκινήσετε με τα δεδομένα από τη Βάση (τελευταία κατάσταση) ή να κάνετε νέα εισαγωγή από τα CSV (αρχική κατάσταση);");
+
+        ButtonType btnDb = new ButtonType("Από Βάση (SQLite)");
+        ButtonType btnCsv = new ButtonType("Από Αρχή (CSV)");
+
+        alert.getButtonTypes().setAll(btnDb, btnCsv);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        return result.isPresent() && result.get() == btnCsv;
+    }
+
+    private void loadBudgetData(boolean forceCsv) {
         SQLiteManager dbManager = SQLiteManager.getInstance();
         String basePath = findProjectBasePath();
-        if (basePath == null) {
-            System.out.println("Warning: Could not find CSV files directory");
-            return;
-        }
 
         try {
-            // --- 1. ΦΟΡΤΩΣΗ ΚΥΡΙΩΝ ΔΕΔΟΜΕΝΩΝ ---
-            if (dbManager.isDatabasePopulated()) {
-                System.out.println("Loading data from SQLite database...");
-                dbManager.loadAllRevenuesFromDb();
-                dbManager.loadAllExpensesFromDb();
-            } else {
-                System.out.println("Database empty. Loading from CSV files...");
+            if (forceCsv) {
+                System.out.println("Επιλέχθηκε αρχικοποίηση από CSV...");
+                dbManager.resetDatabase();
                 loadPrimaryCSVFiles(basePath);
-
-                // Αποθήκευση στη βάση για πρώτη φορά
                 DataInput.createEntityFromCSV();
                 dbManager.insertIntoTables();
+            } else {
+                if (dbManager.isDatabasePopulated()) {
+                    System.out.println("Φόρτωση από τη βάση δεδομένων...");
+                    dbManager.loadAllRevenuesFromDb();
+                    dbManager.loadAllExpensesFromDb();
+                } else {
+                    loadPrimaryCSVFiles(basePath);
+                    DataInput.createEntityFromCSV();
+                    dbManager.insertIntoTables();
+                }
             }
-
-            // --- 2. ΕΠΕΞΕΡΓΑΣΙΑ (Sorting/Filtering) ---
             processInitialData();
-
-            // --- 3. ΙΣΤΟΡΙΚΑ ΔΕΔΟΜΕΝΑ ---
             loadHistoricalData(basePath);
-
-            System.out.println("Budget data loaded successfully!");
-
-        } catch (SQLException se) {
-            System.err.println("Database Error: " + se.getMessage());
         } catch (Exception e) {
-            System.out.println("Error loading budget data: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -137,12 +174,9 @@ public class MainApp extends Application {
 
     private String findProjectBasePath() {
         // Try current directory first
-        String[] possiblePaths = {
-            ".",
-            "./project",
-            "../project",
-            System.getProperty("user.dir"),
-            System.getProperty("user.dir") + "/project"
+        String[] possiblePaths = {".", "./project", "../project",
+                System.getProperty("user.dir"),
+                System.getProperty("user.dir") + "/project"
         };
 
         for (String path : possiblePaths) {
@@ -158,5 +192,3 @@ public class MainApp extends Application {
         launch(args);
     }
 }
-
-

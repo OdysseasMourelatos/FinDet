@@ -7,6 +7,7 @@ import com.financial.services.revenues.BudgetRevenueLogic;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Objects;
 
 /**
  * Intermediate class representing revenues from the Public Investment Budget (ΠΔΕ).
@@ -225,6 +226,26 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements Budg
                 updateAmountOfSuperClassFilteredObjects(amount);
             }
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        PublicInvestmentBudgetRevenue that = (PublicInvestmentBudgetRevenue) o;
+
+        return Objects.equals(getCode(), that.getCode()) &&
+                Objects.equals(type, that.type); // Διάκριση ΕΘΝΙΚΟ vs ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getClass(), getCode(), type);
     }
 
     @Override

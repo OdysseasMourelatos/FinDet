@@ -1,5 +1,6 @@
 package com.financial.ui.views;
 
+import com.financial.database.SQLiteManager;
 import com.financial.entries.*;
 import com.financial.services.BudgetType;
 import com.financial.services.expenses.ExpensesHistory;
@@ -22,10 +23,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Budget Changes view - allows users to make changes to revenue and expense accounts
@@ -76,6 +74,10 @@ public class BudgetChangesView {
     private ObservableList<ExpenseChangeResult> expenseResultsData;
     private ComboBox<String> expenseDisplayModeCombo;
     private ComboBox<String> expenseViewLevelCombo;
+
+    //Saving Changes
+    private final Set<BudgetEntry> pendingChanges = new HashSet<>();
+    private Button saveToDbButton;
 
     public BudgetChangesView() {
         view = new VBox(0);
@@ -152,7 +154,15 @@ public class BudgetChangesView {
         Label title = new Label("Αλλαγές Προϋπολογισμού");
         title.setStyle(Theme.pageTitle());
 
-        titleRow.getChildren().addAll(iconContainer, title);
+        saveToDbButton = new Button("Αποθήκευση Αλλαγών(0)");
+        saveToDbButton.setStyle(Theme.buttonPrimary() + "-fx-background-color: " + Theme.SUCCESS + ";");
+        saveToDbButton.setDisable(true);
+        saveToDbButton.setOnAction(e -> saveAllToDatabase());
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        titleRow.getChildren().addAll(iconContainer, title, spacer, saveToDbButton);
 
         Label subtitle = new Label("Εφαρμογή αλλαγών σε λογαριασμούς με αυτόματη ενημέρωση ιεραρχίας");
         subtitle.setStyle(Theme.subtitle());
@@ -404,6 +414,11 @@ public class BudgetChangesView {
             refreshRevenueResults();
 
             showSuccess("Η αλλαγή εφαρμόστηκε επιτυχώς!");
+
+            pendingChanges.add(targetRevenue);
+            pendingChanges.addAll(targetRevenue.getAllSuperCategories());
+            pendingChanges.addAll(targetRevenue.getAllSubCategories());
+            updateSaveButtonState();
             revenueUndoButton.setVisible(true);
         } catch (NumberFormatException e) {
             showError("Μη έγκυρη τιμή. Χρησιμοποιήστε αριθμό ή ποσοστό (π.χ. 10000 ή 10%)");
@@ -1090,8 +1105,13 @@ public class BudgetChangesView {
             // Display results
             displayExpenseResults(budgetType, scope, categoryCode, beforeValues, afterValues);
             updateConsolidationOptions(budgetType);
-            expenseUndoButton.setVisible(!ExpensesHistory.getHistoryDeque().isEmpty());
+
             showExpenseSuccess("Η αλλαγή εφαρμόστηκε επιτυχώς!");
+
+            ArrayList<? extends BudgetExpense> affectedExpenses = getExpensesForScope(budgetType, scope, categoryCode);
+            pendingChanges.addAll(affectedExpenses);
+            updateSaveButtonState();
+            expenseUndoButton.setVisible(!ExpensesHistory.getHistoryDeque().isEmpty());
 
         } catch (NumberFormatException e) {
             showExpenseError("Μη έγκυρη τιμή. Χρησιμοποιήστε αριθμό ή ποσοστό");
@@ -1422,6 +1442,7 @@ public class BudgetChangesView {
                 addSummaryRow("ΣΥΝΟΛΟ", "ΕΠΙΚΡΑΤΕΙΑ", "", "ΟΛΕΣ", "Γενικό Σύνολο Εξόδων", bTypeGlobal, aTypeGlobal);
 
             }
+            animateExpenseResults();
         }
     }
 
@@ -1555,7 +1576,25 @@ public class BudgetChangesView {
         displayExpenseResults(budgetType, scope, categoryCode, lastExpenseBeforeValues, currentAfterValues);
     }
 
+    private void saveAllToDatabase() {
+        if (pendingChanges.isEmpty()) {
+            return;
+        }
 
+        SQLiteManager sqLiteManager = SQLiteManager.getInstance();
+        sqLiteManager.saveChangesBatch(pendingChanges);
+
+        pendingChanges.clear();
+        updateSaveButtonState();
+        showSuccess("Όλες οι αλλαγές αποθηκεύτηκαν στη βάση δεδομένων!");
+    }
+
+    private void updateSaveButtonState() {
+        if (saveToDbButton != null) {
+            saveToDbButton.setDisable(pendingChanges.isEmpty());
+            saveToDbButton.setText("Αποθήκευση Αλλαγών (" + pendingChanges.size() + ")");
+        }
+    }
 
     private void animateExpenseResults() {
         expenseResultsTable.setOpacity(0);
@@ -1582,6 +1621,10 @@ public class BudgetChangesView {
     private void showExpenseSuccess(String message) {
         expenseStatusLabel.setText("+ " + message);
         expenseStatusLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + Theme.SUCCESS_LIGHT + "; -fx-font-weight: 500;");
+    }
+
+    public Set<BudgetEntry> getPendingChanges() {
+        return pendingChanges;
     }
 
     public static class ExpenseChangeResult {

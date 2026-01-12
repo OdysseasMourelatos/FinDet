@@ -3,6 +3,7 @@ package com.financial.database;
 import com.financial.entries.*;
 
 import java.sql.*;
+import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -530,31 +531,49 @@ public class SQLiteManager {
     }
 
     public void updateTables(BudgetEntry be) {
+        switch (be) {
+            case RegularBudgetRevenue rbr -> updateRegularBudgetRevenues(rbr);
+            case PublicInvestmentBudgetNationalRevenue pibnr -> updatePublicInvestmentBudgetNationalRevenues(pibnr);
+            case PublicInvestmentBudgetCoFundedRevenue picfr -> updatePublicInvestmentBudgetCoFundedRevenues(picfr);
+            case RegularBudgetExpense rbe -> updateRegularBudgetExpenses(rbe);
+            case PublicInvestmentBudgetNationalExpense pibne -> updatePublicInvestmentBudgetNationalExpenses(pibne);
+            case PublicInvestmentBudgetCoFundedExpense pibcfe -> updatePublicInvestmentBudgetCoFundedExpenses(pibcfe);
+            default -> throw new IllegalArgumentException("Unknown budget type: " + be);
+        }
+    }
+
+    public void saveChangesBatch(Set<BudgetEntry> changes) {
+        if (changes == null || changes.isEmpty()) {
+            return;
+        }
+
         try {
             connection.setAutoCommit(false);
-            switch (be) {
-                case RegularBudgetRevenue rbr -> updateRegularBudgetRevenues(rbr);
-                case PublicInvestmentBudgetNationalRevenue pibnr -> updatePublicInvestmentBudgetNationalRevenues(pibnr);
-                case PublicInvestmentBudgetCoFundedRevenue picfr -> updatePublicInvestmentBudgetCoFundedRevenues(picfr);
-                case RegularBudgetExpense rbe -> updateRegularBudgetExpenses(rbe);
-                case PublicInvestmentBudgetNationalExpense pibne -> updatePublicInvestmentBudgetNationalExpenses(pibne);
-                case PublicInvestmentBudgetCoFundedExpense pibcfe -> updatePublicInvestmentBudgetCoFundedExpenses(pibcfe);
-                default -> throw new IllegalArgumentException("Unknown budget type: " + be);
+
+            for (BudgetEntry entry : changes) {
+                updateTables(entry);
             }
 
             connection.commit();
+            LOGGER.info("Batch update successful: " + changes.size() + " entries.");
+
         } catch (SQLException e) {
             try {
-                connection.rollback(); // undo everything if any update fails
-                LOGGER.severe("Transaction rolled back due to error: " + e.getMessage());
-            } catch (SQLException rollbackEx) {
-                LOGGER.severe("Rollback failed: " + rollbackEx.getMessage());
+                if (connection != null) {
+                    connection.rollback();
+                }
+                LOGGER.severe("Batch update failed, transaction rolled back: " + e.getMessage());
+            } catch (SQLException ex) {
+                LOGGER.severe("Rollback failed: " + ex.getMessage());
             }
+            throw new RuntimeException("Database error during batch save", e);
         } finally {
             try {
-                connection.setAutoCommit(true); // restore default
-            } catch (SQLException ex) {
-                LOGGER.severe("Could not reset autoCommit: " + ex.getMessage());
+                if (connection != null) {
+                    connection.setAutoCommit(true);
+                }
+            } catch (SQLException e) {
+                LOGGER.severe("Could not reset autoCommit: " + e.getMessage());
             }
         }
     }
@@ -587,5 +606,21 @@ public class SQLiteManager {
             return false;
         }
         return false;
+    }
+
+    public void resetDatabase() {
+        String[] tables = { "Regular_Budget_Revenues", "PIB_National_Revenues", "PIB_CoFunded_Revenues", "Regular_Budget_Expenses", "PIB_National_Expenses", "PIB_CoFunded_Expenses", "Entities"};
+
+        try (Statement stmt = connection.createStatement()) {
+            connection.setAutoCommit(false);
+            for (String table : tables) {
+                stmt.execute("DELETE FROM " + table);
+            }
+            connection.commit();
+            connection.setAutoCommit(true);
+            LOGGER.info("Database wiped for fresh CSV import.");
+        } catch (SQLException e) {
+            LOGGER.severe("Error resetting database: " + e.getMessage());
+        }
     }
 }
