@@ -5,6 +5,7 @@ import com.financial.services.expenses.BudgetExpenseLogicService;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class BudgetExpense extends BudgetEntry {
 
@@ -64,6 +65,26 @@ public class BudgetExpense extends BudgetEntry {
 
     public static ArrayList <BudgetExpense> getBudgetExpenses() {
         return budgetExpenses;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        BudgetExpense that = (BudgetExpense) o;
+        // Μοναδικότητα βάσει του σύνθετου κλειδιού
+        return Objects.equals(getEntityCode(), that.getEntityCode()) &&
+                Objects.equals(getServiceCode(), that.getServiceCode()) &&
+                Objects.equals(getCode(), that.getCode());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getClass(), getEntityCode(), getServiceCode(), getCode());
     }
 
     @Override

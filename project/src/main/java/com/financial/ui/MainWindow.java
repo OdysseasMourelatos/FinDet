@@ -95,11 +95,11 @@ public class MainWindow {
         return accountExplorerView.getView();
     }
 
-    private Region getBudgetChangesView() {
+    public BudgetChangesView getBudgetChangesView() {
         if (budgetChangesView == null) {
             budgetChangesView = new BudgetChangesView();
         }
-        return budgetChangesView.getView();
+        return budgetChangesView;
     }
 
     private Region getChartsView() {
@@ -240,7 +240,7 @@ public class MainWindow {
         expensesBtn.setOnAction(() -> navigateTo(expensesBtn, getExpensesView()));
         entitiesBtn.setOnAction(() -> navigateTo(entitiesBtn, getEntitiesView()));
         explorerBtn.setOnAction(() -> navigateTo(explorerBtn, getAccountExplorerView()));
-        changesBtn.setOnAction(() -> navigateTo(changesBtn, getBudgetChangesView()));
+        changesBtn.setOnAction(() -> navigateTo(changesBtn, getBudgetChangesView().getView()));
         chartsBtn.setOnAction(() -> navigateTo(chartsBtn, getChartsView()));
         multiYearBtn.setOnAction(() -> navigateTo(multiYearBtn, getMultiYearAnalysisView()));
         statisticalBtn.setOnAction(() -> navigateTo(statisticalBtn, getStatisticsView()));
@@ -486,4 +486,5 @@ public class MainWindow {
             }
         }
     }
+
 }

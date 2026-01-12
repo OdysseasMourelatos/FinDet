@@ -223,6 +223,26 @@ public class BudgetRevenue extends BudgetEntry implements BudgetRevenueLogic {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        BudgetRevenue that = (BudgetRevenue) o;
+        return Objects.equals(getCode(), that.getCode()) &&
+                this.regularAmount == that.regularAmount &&
+                this.publicInvestmentAmount == that.publicInvestmentAmount;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getClass(), getCode());
+    }
+
+    @Override
     public String toString () {
         return super.toString();
     }

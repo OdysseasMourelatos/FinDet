@@ -1,5 +1,6 @@
 package com.financial.ui.views;
 
+import com.financial.database.SQLiteManager;
 import com.financial.entries.*;
 import com.financial.services.BudgetType;
 import com.financial.services.expenses.ExpensesHistory;
@@ -21,11 +22,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
+import javafx.animation.PauseTransition;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Budget Changes view - allows users to make changes to revenue and expense accounts
@@ -45,8 +44,6 @@ public class BudgetChangesView {
     private ComboBox<String> distributionCombo;
     private Button executeButton;
     private Label statusLabel;
-    private Button revenueUndoButton;
-    private Button expenseUndoButton;
     private ComboBox<String> revenueViewScopeCombo;
 
     // Revenue results area
@@ -68,11 +65,23 @@ public class BudgetChangesView {
     private Label expenseStatusLabel;
     private boolean isUpdatingScope = false;
     private ComboBox<String> expenseCalculationModeCombo;
+    private Map<String, Long> lastExpenseBeforeValues;
 
     // Expense results area
     private VBox expenseResultsContainer;
     private TableView<ExpenseChangeResult> expenseResultsTable;
     private ObservableList<ExpenseChangeResult> expenseResultsData;
+    private ComboBox<String> expenseDisplayModeCombo;
+    private ComboBox<String> expenseViewLevelCombo;
+
+    //Saving Changes
+    private final Set<BudgetEntry> pendingChanges = new HashSet<>();
+    private Button saveToDbButton;
+    private Label statsLabel;
+
+    private Button globalUndoButton;
+    private Spinner<Integer> undoStepsSpinner;
+    private Label globalStatusLabel;
 
     public BudgetChangesView() {
         view = new VBox(0);
@@ -149,12 +158,54 @@ public class BudgetChangesView {
         Label title = new Label("Αλλαγές Προϋπολογισμού");
         title.setStyle(Theme.pageTitle());
 
-        titleRow.getChildren().addAll(iconContainer, title);
+        globalStatusLabel = new Label("");
+        globalStatusLabel.setPadding(new Insets(5, 0, 0, 0));
+        globalStatusLabel.setVisible(false);
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        // --- Stats Section ---
+        statsLabel = new Label("Εκκρεμούν: 0 εγγραφές | 0 αλλαγές");
+        statsLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: " + Theme.TEXT_MUTED + "; -fx-padding: 0 15 0 0;");
+
+        saveToDbButton = new Button("Αποθήκευση Αλλαγών");
+        saveToDbButton.setStyle(Theme.buttonPrimary() + "-fx-background-color: " + Theme.SUCCESS + ";");
+        saveToDbButton.setDisable(true);
+        saveToDbButton.setOnAction(e -> saveAllToDatabase());
+
+        undoStepsSpinner = new Spinner<>(1, 100, 1);
+        undoStepsSpinner.setEditable(true);
+        undoStepsSpinner.setPrefWidth(80);
+        undoStepsSpinner.getEditor().focusedProperty().addListener((s, ov, nv) -> {
+            if (!nv) {
+                undoStepsSpinner.increment(0);
+            }
+        });
+
+        undoStepsSpinner.getEditor().setOnAction(e -> {
+            try {
+                undoStepsSpinner.increment(0); // commit edit
+            } catch (Exception ex) { /* ignore */ }
+        });
+
+        globalUndoButton = new Button("Ακύρωση");
+        globalUndoButton.setStyle("-fx-background-color: " + Theme.ERROR + "; -fx-text-fill: white; -fx-font-weight: bold;");
+        globalUndoButton.setDisable(true);
+        globalUndoButton.setOnAction(e -> handleGlobalUndo());
+
+        // Grouping: Stats | Save | Steps | Undo
+        HBox buttonGroup = new HBox(12, statsLabel, saveToDbButton, new Label("Βήματα:"), undoStepsSpinner, globalUndoButton);
+        buttonGroup.setAlignment(Pos.CENTER_RIGHT);
+
+        titleRow.getChildren().addAll(iconContainer, title, spacer, buttonGroup);
 
         Label subtitle = new Label("Εφαρμογή αλλαγών σε λογαριασμούς με αυτόματη ενημέρωση ιεραρχίας");
         subtitle.setStyle(Theme.subtitle());
 
         header.getChildren().addAll(titleRow, subtitle);
+
+        header.getChildren().add(globalStatusLabel);
         return header;
     }
 
@@ -251,12 +302,7 @@ public class BudgetChangesView {
         statusLabel = new Label("");
         statusLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + Theme.TEXT_SECONDARY + ";");
 
-        revenueUndoButton = new Button("Undo");
-        revenueUndoButton.setStyle("-fx-background-color: " + Theme.INFO + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-radius: 4;");
-        revenueUndoButton.setVisible(false);
-        revenueUndoButton.setOnAction(e -> handleRevenueUndo());
-
-        buttonRow.getChildren().addAll(executeButton, statusLabel, revenueUndoButton);
+        buttonRow.getChildren().addAll(executeButton, statusLabel);
 
         formCard.getChildren().addAll(formTitle, row1, row2, buttonRow);
         section.getChildren().add(formCard);
@@ -375,17 +421,17 @@ public class BudgetChangesView {
         String distribution = distributionCombo.getValue();
 
         if (code.isEmpty()) {
-            showError("Παρακαλώ εισάγετε κωδικό λογαριασμού");
+            showRevenueError("Παρακαλώ εισάγετε κωδικό λογαριασμού");
             return;
         }
         if (changeValue.isEmpty()) {
-            showError("Παρακαλώ εισάγετε τιμή αλλαγής");
+            showRevenueError("Παρακαλώ εισάγετε τιμή αλλαγής");
             return;
         }
 
         BudgetRevenue targetRevenue = findRevenue(code, budgetType);
         if (targetRevenue == null) {
-            showError("Δεν βρέθηκε λογαριασμός με κωδικό: " + code);
+            showRevenueError("Δεν βρέθηκε λογαριασμός με κωδικό: " + code);
             return;
         }
 
@@ -400,14 +446,18 @@ public class BudgetChangesView {
             updateRevenueViewScopeOptions(budgetType);
             refreshRevenueResults();
 
-            showSuccess("Η αλλαγή εφαρμόστηκε επιτυχώς!");
-            revenueUndoButton.setVisible(true);
+            showRevenueSuccess("Η αλλαγή εφαρμόστηκε επιτυχώς!");
+
+            pendingChanges.add(targetRevenue);
+            pendingChanges.addAll(targetRevenue.getAllSuperCategories());
+            pendingChanges.addAll(targetRevenue.getAllSubCategories());
+            updateSaveButtonState();
         } catch (NumberFormatException e) {
-            showError("Μη έγκυρη τιμή. Χρησιμοποιήστε αριθμό ή ποσοστό (π.χ. 10000 ή 10%)");
+            showRevenueError("Μη έγκυρη τιμή. Χρησιμοποιήστε αριθμό ή ποσοστό (π.χ. 10000 ή 10%)");
         } catch (IllegalArgumentException e) {
-            showError("Η αλλαγή απέτυχε, καθώς ένας ή παραπάνω λογαριασμοί θα είχαν αρνητικό υπόλοιπο");
+            showRevenueError("Η αλλαγή απέτυχε, καθώς ένας ή παραπάνω λογαριασμοί θα είχαν αρνητικό υπόλοιπο");
         } catch (Exception e) {
-            showError("Σφάλμα: " + e.getMessage());
+            showRevenueError("Σφάλμα: " + e.getMessage());
         }
     }
 
@@ -615,22 +665,6 @@ public class BudgetChangesView {
         ));
     }
 
-    private void handleRevenueUndo() {
-        if (RevenuesHistory.getHistoryDeque().isEmpty()) {
-            return;
-        }
-
-        try {
-            RevenuesHistory.returnToPreviousState();
-            resultsData.clear();
-            revenueUndoButton.setVisible(false);
-            showSuccess("Η αναίρεση ολοκληρώθηκε!");
-
-        } catch (Exception e) {
-            showError("Σφάλμα κατά την αναίρεση.");
-        }
-    }
-
     private String truncateDescription(String desc, int maxLength) {
         if (desc == null) {
             return "";
@@ -658,12 +692,12 @@ public class BudgetChangesView {
         parallel.play();
     }
 
-    private void showError(String message) {
+    private void showRevenueError(String message) {
         statusLabel.setText("! " + message);
         statusLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + Theme.ERROR_LIGHT + "; -fx-font-weight: 500;");
     }
 
-    private void showSuccess(String message) {
+    private void showRevenueSuccess(String message) {
         statusLabel.setText("+ " + message);
         statusLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + Theme.SUCCESS_LIGHT + "; -fx-font-weight: 500;");
     }
@@ -835,12 +869,7 @@ public class BudgetChangesView {
         expenseStatusLabel = new Label("");
         expenseStatusLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + Theme.TEXT_SECONDARY + ";");
 
-        expenseUndoButton = new Button("Undo");
-        expenseUndoButton.setStyle("-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-radius: 4;");
-        expenseUndoButton.setVisible(false);
-        expenseUndoButton.setOnAction(e -> handleExpenseUndo());
-
-        buttonRow.getChildren().addAll(expenseExecuteButton, expenseStatusLabel, expenseUndoButton);
+        buttonRow.getChildren().addAll(expenseExecuteButton, expenseStatusLabel);
 
         formCard.getChildren().addAll(formTitle, row1, row2, row3, buttonRow);
         section.getChildren().add(formCard);
@@ -960,11 +989,35 @@ public class BudgetChangesView {
         Label resultsTitle = new Label("Αποτελέσματα Αλλαγών Δαπανών");
         resultsTitle.setStyle(Theme.sectionHeader());
 
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
         expenseResultsData = FXCollections.observableArrayList();
         expenseResultsTable = createExpenseResultsTable();
         VBox.setVgrow(expenseResultsTable, Priority.ALWAYS);
 
-        resultsCard.getChildren().addAll(resultsTitle, expenseResultsTable);
+        expenseDisplayModeCombo = new ComboBox<>();
+        expenseDisplayModeCombo.getItems().addAll("Αναλυτική Προβολή", "Συγκεντρωτική Προβολή");
+        expenseDisplayModeCombo.setValue("Αναλυτική Προβολή");
+        expenseDisplayModeCombo.setStyle(Theme.comboBox());
+        expenseDisplayModeCombo.setPrefWidth(180);
+        expenseDisplayModeCombo.setOnAction(e -> refreshExpenseResultsView());
+
+        expenseViewLevelCombo = new ComboBox<>();
+        expenseViewLevelCombo.setStyle(Theme.comboBox());
+        expenseViewLevelCombo.setPrefWidth(180);
+        expenseViewLevelCombo.setDisable(true);
+        expenseViewLevelCombo.setOnAction(e -> refreshExpenseResultsView());
+
+        HBox resultsHeader = new HBox(12);
+        resultsHeader.setAlignment(Pos.CENTER_LEFT);
+        resultsHeader.getChildren().addAll(resultsTitle, spacer, new Label("Τύπος:"), expenseDisplayModeCombo, new Label("Επίπεδο:"), expenseViewLevelCombo);
+
+        expenseResultsData = FXCollections.observableArrayList();
+        expenseResultsTable = createExpenseResultsTable();
+        VBox.setVgrow(expenseResultsTable, Priority.ALWAYS);
+
+        resultsCard.getChildren().addAll(resultsHeader, expenseResultsTable);
         section.getChildren().add(resultsCard);
         return section;
     }
@@ -1052,6 +1105,7 @@ public class BudgetChangesView {
 
             // Capture before values and apply changes
             Map<String, Long> beforeValues = captureExpenseValues(budgetType, scope, categoryCode);
+            lastExpenseBeforeValues = captureExpenseValues(budgetType, scope, categoryCode);
             applyExpenseChange(budgetType, scope, categoryCode, percentage, fixedAmount);
             Map<String, Long> afterValues = captureExpenseValues(budgetType, scope, categoryCode);
 
@@ -1061,7 +1115,13 @@ public class BudgetChangesView {
             }
             // Display results
             displayExpenseResults(budgetType, scope, categoryCode, beforeValues, afterValues);
+            updateConsolidationOptions(budgetType);
+
             showExpenseSuccess("Η αλλαγή εφαρμόστηκε επιτυχώς!");
+
+            ArrayList<? extends BudgetExpense> affectedExpenses = getExpensesForScope(budgetType, scope, categoryCode);
+            pendingChanges.addAll(affectedExpenses);
+            updateSaveButtonState();
 
         } catch (NumberFormatException e) {
             showExpenseError("Μη έγκυρη τιμή. Χρησιμοποιήστε αριθμό ή ποσοστό");
@@ -1295,22 +1355,6 @@ public class BudgetChangesView {
         return expenses.size();
     }
 
-    private void handleExpenseUndo() {
-        if (ExpensesHistory.getHistoryDeque().isEmpty()) {
-            return;
-        }
-
-        try {
-            ExpensesHistory.returnToPreviousState();
-            expenseResultsData.clear();
-            expenseUndoButton.setVisible(false);
-            showExpenseSuccess("Η αναίρεση ολοκληρώθηκε!");
-
-        } catch (Exception e) {
-            showExpenseError("Σφάλμα κατά την αναίρεση.");
-        }
-    }
-
     private BudgetType getBudgetTypeEnum(String budgetType) {
         return switch (budgetType) {
             case "Τακτικός Προϋπολογισμός" -> BudgetType.REGULAR_BUDGET;
@@ -1320,54 +1364,309 @@ public class BudgetChangesView {
         };
     }
 
-    private void displayExpenseResults(String budgetType, String scope, String categoryCode,
-                                       Map<String, Long> before, Map<String, Long> after) {
+    private void displayExpenseResults(String budgetType, String scope, String categoryCode, Map<String, Long> before, Map<String, Long> after) {
         expenseResultsData.clear();
 
-        ArrayList<? extends BudgetExpense> expenses = getExpensesForScope(budgetType, scope, categoryCode);
+        if (expenseDisplayModeCombo.getValue().equals("Αναλυτική Προβολή")) {
+            ArrayList<? extends BudgetExpense> expenses = getExpensesForScope(budgetType, scope, categoryCode);
+            for (BudgetExpense expense : expenses) {
+                String key = expense.getEntityCode() + "|" + expense.getServiceCode() + "|" + expense.getCode();
+                Long beforeVal = before.getOrDefault(key, 0L);
+                Long afterVal = after.getOrDefault(key, expense.getAmount());
 
-        for (BudgetExpense expense : expenses) {
-            String key = expense.getEntityCode() + "|" + expense.getServiceCode() + "|" + expense.getCode();
-            Long beforeVal = before.get(key);
-            Long afterVal = after.get(key);
+                long change = afterVal - beforeVal;
+                if (change == 0) {
+                    continue;
+                }
 
-            if (beforeVal == null) {
-                beforeVal = 0L;
+                expenseResultsData.add(createResultRow(expense.getEntityName(), expense.getServiceName(),
+                        expense.getCode(), expense.getDescription(), beforeVal, afterVal));
             }
-            if (afterVal == null) {
-                afterVal = expense.getAmount();
-            }
+        } else {
+            String viewLevel = expenseViewLevelCombo.getValue(); // "Κρατικός Προϋπολογισμός", κτλ.
+            String levelPrefix = (viewLevel == null || viewLevel.equals(budgetType)) ? budgetType : viewLevel;
 
-            long change = afterVal - beforeVal;
-            if (change == 0) {
-                continue; // Skip unchanged
-            }
+            String entitySelection = expenseEntityCombo.getValue();
+            String entityCode = (entitySelection != null) ? entitySelection.split(" - ")[0] : null;
+            String entityName = (entitySelection != null) ? entitySelection.split(" - ")[1] : "ΕΠΙΚΡΑΤΕΙΑ";
 
-            double percentChange = beforeVal != 0 ? ((double) change / beforeVal) * 100 : 0;
+            String serviceSelection = expenseServiceCombo.getValue();
+            String serviceCode = (serviceSelection != null) ? serviceSelection.split(" - ")[0] : null;
+            String serviceName = (serviceSelection != null) ? serviceSelection.split(" - ")[1] : "";
 
-            String changeStr;
-            if (change >= 0) {
-                changeStr = String.format("+%,d (%.1f%%)", change, percentChange);
+            long bSum = before.values().stream().mapToLong(Long::longValue).sum();
+            long aSum = after.values().stream().mapToLong(Long::longValue).sum();
+            long delta = aSum - bSum;
+
+            if (scope.equals("Ανά Υπηρεσία") && serviceCode != null) {
+
+                long aServ = getConsolidatedSum(viewLevel, budgetType, scope, entityCode, serviceCode, null);
+                long bServ = aServ - delta;
+                addSummaryRow("ΥΠΗΡΕΣΙΑ", entityName, serviceName, "ΟΛΕΣ", "Σύνολο Υπηρεσίας", bServ, aServ);
+
+
+                if (categoryCode != null && !categoryCode.equals("Όλες οι κατηγορίες")) {
+                    long aCat = getConsolidatedSum(viewLevel, budgetType, "Ανά Φορέα", entityCode, null, categoryCode);
+                    long bCat = aCat - delta;
+                    addSummaryRow("ΚΑΤΗΓΟΡΙΑ", entityName, "", categoryCode, BudgetExpense.getDescriptionWithCode(categoryCode), bCat, aCat);
+                }
+
+                long aEnt = getConsolidatedSum(viewLevel, budgetType, "Ανά Φορέα", entityCode, null, null);
+                long bEnt = aEnt - delta;
+                addSummaryRow("ΦΟΡΕΑΣ", entityName, "", "ΟΛΕΣ", "Σύνολο Φορέα", bEnt, aEnt);
+
+            } else if (scope.equals("Ανά Φορέα") && entityCode != null) {
+                if (categoryCode != null && !categoryCode.equals("Όλες οι κατηγορίες")) {
+                    long aCat = getConsolidatedSum(viewLevel, budgetType, "Ανά Φορέα", entityCode, null, categoryCode);
+                    long bCat = aCat - delta;
+                    addSummaryRow("ΚΑΤΗΓΟΡΙΑ", entityName, "", categoryCode, BudgetExpense.getDescriptionWithCode(categoryCode), bCat, aCat);
+                }
+                long aEnt = getConsolidatedSum(viewLevel, budgetType, "Ανά Φορέα", entityCode, null, null);
+                long bEnt = aEnt - delta;
+                addSummaryRow("ΦΟΡΕΑΣ", entityName, "", "ΟΛΕΣ", "Σύνολο Φορέα", bEnt, aEnt);
+
             } else {
-                changeStr = String.format("%,d (%.1f%%)", change, percentChange);
+                if (categoryCode != null && !categoryCode.equals("Όλες οι κατηγορίες")) {
+                    long aCatGlobal = getConsolidatedSum(viewLevel, budgetType, "Καθολική (Όλοι οι Φορείς)", null, null, categoryCode);
+                    long bCatGlobal = aCatGlobal - delta;
+                    addSummaryRow("ΚΑΤΗΓΟΡΙΑ", "ΕΠΙΚΡΑΤΕΙΑ", "", categoryCode, BudgetExpense.getDescriptionWithCode(categoryCode), bCatGlobal, aCatGlobal);
+                }
+                long aTypeGlobal = getConsolidatedSum(viewLevel, budgetType, "Καθολική (Όλοι οι Φορείς)", null, null, null);
+                long bTypeGlobal = aTypeGlobal - delta;
+                addSummaryRow("ΣΥΝΟΛΟ", "ΕΠΙΚΡΑΤΕΙΑ", "", "ΟΛΕΣ", "Γενικό Σύνολο Εξόδων", bTypeGlobal, aTypeGlobal);
+
+            }
+            animateExpenseResults();
+        }
+    }
+
+    private void updateConsolidationOptions(String budgetType) {
+        expenseViewLevelCombo.getItems().clear();
+        expenseViewLevelCombo.setDisable(false);
+
+        if (budgetType.equals("Τακτικός Προϋπολογισμός")) {
+            expenseViewLevelCombo.getItems().addAll("Τακτικός Προϋπολογισμός", "Κρατικός Προϋπολογισμός");
+        } else if (budgetType.equals("ΠΔΕ Εθνικό")) {
+            expenseViewLevelCombo.getItems().addAll("ΠΔΕ Εθνικό", "ΠΔΕ (Σύνολο)", "Κρατικός Προϋπολογισμός");
+        } else {
+            expenseViewLevelCombo.getItems().addAll("ΠΔΕ Συγχρηματοδοτούμενο", "ΠΔΕ (Σύνολο)", "Κρατικός Προϋπολογισμός");
+        }
+        expenseViewLevelCombo.setValue(budgetType);
+    }
+
+    private ExpenseChangeResult createResultRow(String ent, String ser, String cat, String desc, long b, long a) {
+        long change = a - b;
+        double pct = (b != 0) ? ((double) change / b) * 100 : 0;
+
+        String changeStr = String.format("%s%s (%.1f%%)", (change > 0 ? "+" : ""), Theme.formatAmount(change), pct);
+
+        return new ExpenseChangeResult(ent, truncateDescription(ser, 25), cat, truncateDescription(desc, 30),
+                Theme.formatAmount(b), Theme.formatAmount(a), changeStr);
+    }
+
+    private void addSummaryRow(String levelTag, String entityName, String serviceName, String catCode, String desc, long b, long a) {
+        long change = a - b;
+        double pct = (b != 0) ? ((double) change / b) * 100 : 0;
+
+        String changeStr = String.format("%s%s (%.1f%%)",
+                (change > 0 ? "+" : ""),
+                Theme.formatAmount(change),
+                pct);
+
+        expenseResultsData.add(new ExpenseChangeResult(
+                entityName,
+                serviceName,
+                catCode,
+                "[" + levelTag + "] " + desc,
+                Theme.formatAmount(b),
+                Theme.formatAmount(a),
+                changeStr
+        ));
+    }
+
+    private ArrayList<? extends BudgetExpense> getExpensesForCustomScope(String bType, String scope, String entityCode, String serviceCode, String categoryCode) {
+        ArrayList<BudgetExpense> result = new ArrayList<>();
+
+        if (scope.equals("Καθολική (Όλοι οι Φορείς)")) {
+            if (bType.equals("Τακτικός Προϋπολογισμός")) {
+                if (categoryCode != null) {
+                    result.addAll(RegularBudgetExpense.getRegularBudgetExpensesOfCategoryWithCode(categoryCode));
+                } else {
+                    result.addAll(RegularBudgetExpense.getAllRegularBudgetExpenses());
+                }
+            } else if (bType.equals("ΠΔΕ Εθνικό")) {
+                var list = (categoryCode != null) ?
+                        PublicInvestmentBudgetNationalExpense.getPublicInvestmentBudgetNationalExpensesOfCategoryWithCode(categoryCode) :
+                        PublicInvestmentBudgetNationalExpense.getAllPublicInvestmentBudgetNationalExpenses();
+                if (list != null) {
+                    result.addAll(list);
+                }
+            } else {
+                var list = (categoryCode != null) ?
+                        PublicInvestmentBudgetCoFundedExpense.getPublicInvestmentBudgetCoFundedExpensesOfCategoryWithCode(categoryCode) :
+                        PublicInvestmentBudgetCoFundedExpense.getAllPublicInvestmentBudgetCoFundedExpenses();
+                if (list != null) {
+                    result.addAll(list);
+                }
+            }
+        } else {
+            Entity entity = Entity.findEntityWithEntityCode(entityCode);
+            if (entity == null) {
+                return result;
             }
 
-            ExpenseChangeResult result = new ExpenseChangeResult(
-                expense.getEntityName(),
-                truncateDescription(expense.getServiceName(), 25),
-                expense.getCode(),
-                truncateDescription(expense.getDescription(), 30),
-                Theme.formatAmount(beforeVal),
-                Theme.formatAmount(afterVal),
-                changeStr
-            );
+            List<? extends BudgetExpense> allEntityExpenses = switch (bType) {
+                case "Τακτικός Προϋπολογισμός" -> entity.getRegularBudgetExpenses();
+                case "ΠΔΕ Εθνικό" -> entity.getPublicInvestmentBudgetNationalExpenses();
+                default -> entity.getPublicInvestmentBudgetCoFundedExpenses();
+            };
 
-            expenseResultsData.add(result);
+            if (allEntityExpenses != null) {
+                for (BudgetExpense exp : allEntityExpenses) {
+                    boolean matchesService = (serviceCode == null) || exp.getServiceCode().equals(serviceCode);
+                    boolean matchesCategory = (categoryCode == null) || exp.getCode().equals(categoryCode);
+
+                    if (matchesService && matchesCategory) {
+                        result.add(exp);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    private long getConsolidatedSum(String viewLevel, String currentBudgetType, String scope, String entityCode, String serviceCode, String categoryCode) {
+        if ("Κρατικός Προϋπολογισμός".equals(viewLevel)) {
+            return calculateSum("Τακτικός Προϋπολογισμός", scope, entityCode, serviceCode, categoryCode) +
+                    calculateSum("ΠΔΕ Εθνικό", scope, entityCode, serviceCode, categoryCode) +
+                    calculateSum("ΠΔΕ Συγχρηματοδοτούμενο", scope, entityCode, serviceCode, categoryCode);
+        } else if ("ΠΔΕ (Σύνολο)".equals(viewLevel)) {
+            return calculateSum("ΠΔΕ Εθνικό", scope, entityCode, serviceCode, categoryCode) +
+                    calculateSum("ΠΔΕ Συγχρηματοδοτούμενο", scope, entityCode, serviceCode, categoryCode);
+        } else {
+            return calculateSum(currentBudgetType, scope, entityCode, serviceCode, categoryCode);
+        }
+    }
+
+    private long calculateSum(String bType, String scope, String entityCode, String serviceCode, String categoryCode) {
+        return getExpensesForCustomScope(bType, scope, entityCode, serviceCode, categoryCode).stream().mapToLong(BudgetExpense::getAmount).sum();
+    }
+
+    private void refreshExpenseResultsView() {
+        if (lastExpenseBeforeValues == null) {
+            return;
         }
 
-        expenseUndoButton.setVisible(true);
+        boolean isSummary = "Συγκεντρωτική Προβολή".equals(expenseDisplayModeCombo.getValue());
+        expenseViewLevelCombo.setDisable(!isSummary);
 
-        animateExpenseResults();
+        String budgetType = expenseBudgetTypeCombo.getValue();
+        String scope = expenseScopeCombo.getValue();
+        String categorySelection = expenseCategoryCombo.getValue();
+        String categoryCode = (categorySelection != null && !categorySelection.equals("Όλες οι κατηγορίες")) ? categorySelection.split(" - ")[0] : null;
+
+        Map<String, Long> currentAfterValues = captureExpenseValues(budgetType, scope, categoryCode);
+
+        displayExpenseResults(budgetType, scope, categoryCode, lastExpenseBeforeValues, currentAfterValues);
+    }
+
+    private void saveAllToDatabase() {
+        if (pendingChanges.isEmpty()) {
+            return;
+        }
+
+        int totalSaved = pendingChanges.size();
+
+        try {
+            SQLiteManager sqLiteManager = SQLiteManager.getInstance();
+            sqLiteManager.saveChangesBatch(pendingChanges);
+
+            ExpensesHistory.getHistoryDeque().clear();
+            RevenuesHistory.getHistoryDeque().clear();
+
+            pendingChanges.clear();
+
+            updateSaveButtonState();
+
+            showGlobalNotification("Επιτυχής αποθήκευση " + totalSaved + " εγγραφών στη βάση δεδομένων!", false);
+
+        } catch (Exception e) {
+            showGlobalNotification("Σφάλμα κατά την αποθήκευση: " + e.getMessage(), true);
+        }
+    }
+
+    private void updateSaveButtonState() {
+        if (saveToDbButton == null || globalUndoButton == null) {
+            return;
+        }
+
+        int records = pendingChanges.size();
+        int batchExp = ExpensesHistory.getHistoryDeque().size();
+        int batchRev = RevenuesHistory.getHistoryDeque().size();
+        int totalBatches = batchExp + batchRev;
+
+        saveToDbButton.setDisable(records == 0);
+        saveToDbButton.setText("Αποθήκευση (" + records + ")");
+
+        // Ενεργοποίηση/Απενεργοποίηση
+        globalUndoButton.setDisable(totalBatches == 0);
+        undoStepsSpinner.setDisable(totalBatches == 0);
+
+        // Ενημέρωση του Max μόνο αν υπάρχουν αλλαγές
+        if (totalBatches > 0) {
+            SpinnerValueFactory.IntegerSpinnerValueFactory factory =
+                    (SpinnerValueFactory.IntegerSpinnerValueFactory) undoStepsSpinner.getValueFactory();
+            factory.setMax(totalBatches);
+        }
+
+        statsLabel.setText(String.format("Εκκρεμούν: %d εγγραφές | %d αλλαγές", records, totalBatches));
+    }
+
+    private void handleGlobalUndo() {
+        undoStepsSpinner.increment(0);
+
+        int steps = undoStepsSpinner.getValue();
+        int batchExpenses = ExpensesHistory.getHistoryDeque().size();
+        int batchRevenues = RevenuesHistory.getHistoryDeque().size();
+        int available = batchExpenses + batchRevenues;
+
+        if (available == 0) {
+            return;
+        }
+        int actualSteps = Math.min(steps, available);
+
+        int selectedTabIndex = tabPane.getSelectionModel().getSelectedIndex();
+
+        for (int i = 0; i < actualSteps; i++) {
+            if (selectedTabIndex == 1 && !ExpensesHistory.getHistoryDeque().isEmpty()) {
+                ExpensesHistory.returnToPreviousState();
+            } else if (selectedTabIndex == 0 && !RevenuesHistory.getHistoryDeque().isEmpty()) {
+                RevenuesHistory.returnToPreviousState();
+            } else {
+                if (!ExpensesHistory.getHistoryDeque().isEmpty()) {
+                    ExpensesHistory.returnToPreviousState();
+                } else if (!RevenuesHistory.getHistoryDeque().isEmpty()) {
+                    RevenuesHistory.returnToPreviousState();
+                }
+            }
+        }
+
+        resultsData.clear();
+        expenseResultsData.clear();
+        statusLabel.setText("");
+        expenseStatusLabel.setText("");
+        lastSelectedCode = null;
+        lastExpenseBeforeValues = null;
+        lastBeforeValues = null;
+
+        if (ExpensesHistory.getHistoryDeque().isEmpty() && RevenuesHistory.getHistoryDeque().isEmpty()) {
+            pendingChanges.clear();
+        }
+
+        undoStepsSpinner.getValueFactory().setValue(1);
+        updateSaveButtonState();
+
+        showGlobalNotification("Αναιρέθηκαν " + actualSteps + " αλλαγές. Οι πίνακες καθαρίστηκαν.", false);
     }
 
     private void animateExpenseResults() {
@@ -1395,6 +1694,32 @@ public class BudgetChangesView {
     private void showExpenseSuccess(String message) {
         expenseStatusLabel.setText("+ " + message);
         expenseStatusLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + Theme.SUCCESS_LIGHT + "; -fx-font-weight: 500;");
+    }
+
+    private void showGlobalNotification(String message, boolean isError) {
+        globalStatusLabel.setText(message);
+        globalStatusLabel.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: " +
+                (isError ? Theme.ERROR_LIGHT : Theme.SUCCESS_LIGHT) + ";");
+        globalStatusLabel.setVisible(true);
+
+        FadeTransition fadeIn = new FadeTransition(Duration.millis(300), globalStatusLabel);
+        fadeIn.setFromValue(0);
+        fadeIn.setToValue(1);
+        fadeIn.play();
+
+        PauseTransition delay = new PauseTransition(Duration.seconds(4));
+        delay.setOnFinished(e -> {
+            FadeTransition fadeOut = new FadeTransition(Duration.millis(500), globalStatusLabel);
+            fadeOut.setFromValue(1);
+            fadeOut.setToValue(0);
+            fadeOut.setOnFinished(event -> globalStatusLabel.setVisible(false));
+            fadeOut.play();
+        });
+        delay.play();
+    }
+
+    public Set<BudgetEntry> getPendingChanges() {
+        return pendingChanges;
     }
 
     public static class ExpenseChangeResult {
