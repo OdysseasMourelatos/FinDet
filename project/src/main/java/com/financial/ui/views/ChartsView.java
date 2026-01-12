@@ -203,10 +203,22 @@ public class ChartsView {
         if (code.isEmpty()) {
             return;
         }
+
         switch (currentChartView) {
-            case "revenues" -> showRevenueHierarchyChart();
-            case "expenses" -> showMinistryExpenseCategoryHierarchyChart();
-            case "ministry" -> showMinistryServiceHierarchyChart();
+            case "revenues":
+            case "revenue_hierarchy":
+                showRevenueHierarchyChart();
+                break;
+
+            case "expenses":
+            case "ministry_category_hierarchy":
+                showMinistryExpenseCategoryHierarchyChart();
+                break;
+
+            case "ministry":
+            case "ministry_service_hierarchy":
+                showMinistryServiceHierarchyChart();
+                break;
         }
     }
 
@@ -261,6 +273,11 @@ public class ChartsView {
     private void setActiveButton(Button btn) {
         filterOutliers = false;
         toggleOutliersBtn.setStyle(getOutlierButtonStyle(false));
+
+        if (searchField != null) {
+            searchField.clear();
+        }
+
         if (activeButton != null) {
             activeButton.setStyle(getButtonStyle(false));
         }
@@ -298,7 +315,9 @@ public class ChartsView {
             case "expenses" -> showExpenseBreakdown();
             case "comparison" -> showComparison();
             case "ministry" -> showMinistryExpenses();
-            case "hierarchy" -> showRevenueHierarchyChart();
+            case "revenue_hierarchy" -> showRevenueHierarchyChart();
+            case "ministry_category_hierarchy" -> showMinistryExpenseCategoryHierarchyChart();
+            case "ministry_service_hierarchy" -> showMinistryServiceHierarchyChart();
             default -> showPlaceholder();
         }
     }
@@ -335,7 +354,7 @@ public class ChartsView {
         }
 
         long total = BudgetRevenue.calculateSum();
-        List<ChartItem> items = revenues.stream().map(r -> new ChartItem(r.getDescription() + " (" + r.getCode() + ")", r.getAmount())).collect(Collectors.toList());
+        List<ChartItem> items = revenues.stream().map(r -> new ChartItem(r.getDescription(), r.getAmount())).collect(Collectors.toList());
 
         VBox content = createChartContent("Κατανομή Εσόδων", "Ανάλυση κατηγοριών εσόδων", items, total);
         animateIn(content);
@@ -457,6 +476,7 @@ public class ChartsView {
     }
 
     private void showRevenueHierarchyChart() {
+        currentChartView = "revenue_hierarchy";
         String code = searchField.getText().trim();
         if (code.isEmpty()) {
             return;
@@ -525,6 +545,7 @@ public class ChartsView {
     }
 
     private void showMinistryExpenseCategoryHierarchyChart() {
+        currentChartView = "ministry_category_hierarchy";
         String code = searchField.getText().trim();
         if (code.isEmpty()) {
             return;
@@ -569,6 +590,7 @@ public class ChartsView {
     }
 
     private void showMinistryServiceHierarchyChart() {
+        currentChartView = "ministry_service_hierarchy";
         String code = searchField.getText().trim();
         if (code.isEmpty()) {
             return;
@@ -722,8 +744,8 @@ public class ChartsView {
         PieChart chart = new PieChart(pieData);
         chart.setLegendVisible(false);
         chart.setLabelsVisible(false);
-        chart.setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
-        chart.setMinSize(400, 400); // Ελάχιστο μέγεθος
+        chart.setMinHeight(550);
+        chart.setPrefHeight(550);
         VBox.setVgrow(chart, Priority.ALWAYS);
         chart.setStyle("-fx-background-color: transparent;");
 
@@ -757,40 +779,51 @@ public class ChartsView {
     private BarChart<String, Number> createBarChart(List<ChartItem> items) {
         CategoryAxis xAxis = new CategoryAxis();
         NumberAxis yAxis = new NumberAxis();
-        xAxis.setTickLabelFill(javafx.scene.paint.Color.web(TEXT_MUTED));
+
+        int maxLabelLen = (items.size() <= 5) ? 30 : (items.size() <= 10) ? 20 : 15;
+
+        xAxis.setTickLabelRotation(0);
+        xAxis.setTickLabelFont(javafx.scene.text.Font.font("System", 10));
+        xAxis.setTickLabelGap(5);
+        xAxis.setAnimated(false);
+
+        yAxis.setForceZeroInRange(true);
         yAxis.setTickLabelFill(javafx.scene.paint.Color.web(TEXT_MUTED));
+        xAxis.setTickLabelFill(javafx.scene.paint.Color.web(TEXT_MUTED));
 
         BarChart<String, Number> chart = new BarChart<>(xAxis, yAxis);
         chart.setLegendVisible(false);
-        chart.setPrefHeight(Region.USE_COMPUTED_SIZE);
-        VBox.setVgrow(chart, Priority.ALWAYS);
-        chart.setStyle("-fx-background-color: transparent;");
-        chart.setHorizontalGridLinesVisible(false);
+        chart.setAnimated(false);
         chart.setVerticalGridLinesVisible(false);
+        chart.setHorizontalGridLinesVisible(false);
+        chart.setMinHeight(500);
+        chart.setStyle("-fx-background-color: transparent;");
 
         XYChart.Series<String, Number> series = new XYChart.Series<>();
-        for (ChartItem item : items) {
-            String shortName = truncate(item.name, 20);
+
+        for (int i = 0; i < items.size(); i++) {
+            ChartItem item = items.get(i);
+
+            String shortName = truncate(item.name, maxLabelLen) + "\u200B".repeat(i);
+
             series.getData().add(new XYChart.Data<>(shortName, item.amount));
         }
 
         chart.getData().add(series);
 
-        // Apply colors
         chart.applyCss();
         chart.layout();
 
-        int colorIndex = 0;
-        for (XYChart.Data<String, Number> data : series.getData()) {
+        for (int i = 0; i < series.getData().size(); i++) {
+            XYChart.Data<String, Number> data = series.getData().get(i);
             if (data.getNode() != null) {
-                String color = CHART_COLORS[colorIndex % CHART_COLORS.length];
-                data.getNode().setStyle("-fx-bar-fill: " + color + ";");
+                String color = CHART_COLORS[i % CHART_COLORS.length];
+                data.getNode().setStyle("-fx-bar-fill: " + color + "; -fx-background-radius: 4 4 0 0;");
 
-                Tooltip tooltip = new Tooltip(items.get(colorIndex).name + "\n" + formatAmount(items.get(colorIndex).amount));
-                tooltip.setStyle("-fx-font-size: 11px; -fx-background-color: " + BG_PRIMARY + "; -fx-text-fill: " + TEXT_PRIMARY + ";");
+                Tooltip tooltip = new Tooltip(items.get(i).name + "\n" + formatAmount(items.get(i).amount));
+                tooltip.setShowDelay(Duration.millis(100));
                 Tooltip.install(data.getNode(), tooltip);
             }
-            colorIndex++;
         }
 
         return chart;
