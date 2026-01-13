@@ -65,6 +65,11 @@ public class EntitiesView {
         tableContainer.getChildren().add(table);
         VBox.setVgrow(tableContainer, Priority.ALWAYS);
 
+        tableContainer.setMaxWidth(Double.MAX_VALUE);
+        VBox.setVgrow(tableContainer, Priority.ALWAYS);
+
+        table.setMaxWidth(Double.MAX_VALUE);
+        VBox.setVgrow(table, Priority.ALWAYS);
 
         loadData();
         updateStats();
@@ -250,6 +255,9 @@ public class EntitiesView {
         });
         totalCol.setPrefWidth(140);
         totalCol.setStyle("-fx-alignment: CENTER-RIGHT;");
+        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        tableView.setMaxWidth(Double.MAX_VALUE);
 
         tableView.getColumns().addAll(codeCol, nameCol, regularExpenseCol, investmentExpenseCol, totalCol);
         tableView.setItems(tableData);

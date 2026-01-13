@@ -174,10 +174,22 @@ public class MultiYearAnalysisView {
         if (code.isEmpty()) {
             return;
         }
+
         switch (currentChartView) {
-            case "revenues" -> showRevenueAnalysisChart();
-            case "expenses" -> showExpenseAnalysisChart();
-            case "ministry" -> showMinistryAnalysisChart();
+            case "revenues":
+            case "revenue_analysis":
+                showRevenueAnalysisChart();
+                break;
+
+            case "expenses":
+            case "expense_analysis":
+                showExpenseAnalysisChart();
+                break;
+
+            case "ministry":
+            case "ministry_analysis":
+                showMinistryAnalysisChart();
+                break;
         }
     }
 
@@ -230,6 +242,10 @@ public class MultiYearAnalysisView {
     }
 
     private void setActiveButton(Button btn) {
+        if (searchField != null) {
+            searchField.clear();
+        }
+
         if (activeButton != null) {
             activeButton.setStyle(getButtonStyle(false));
         }
@@ -267,11 +283,12 @@ public class MultiYearAnalysisView {
             case "expenses" -> showExpenseBreakdown();
             case "comparison" -> showComparison();
             case "ministry" -> showMinistryBreakdown();
-            case "hierarchy" -> showRevenueAnalysisChart();
+            case "revenue_analysis" -> showRevenueAnalysisChart();
+            case "expense_analysis" -> showExpenseAnalysisChart();
+            case "ministry_analysis" -> showMinistryAnalysisChart();
             default -> showPlaceholder();
         }
     }
-
     private void showPlaceholder() {
         currentChartView = "placeholder";
         chartContainer.getChildren().clear();
@@ -443,6 +460,7 @@ public class MultiYearAnalysisView {
     }
 
     private void showRevenueAnalysisChart() {
+        currentChartView = "revenue_analysis";
         String code = searchField.getText().trim();
         if (code.isEmpty()) {
             return;
@@ -490,6 +508,7 @@ public class MultiYearAnalysisView {
     }
 
     private void showExpenseAnalysisChart() {
+        currentChartView = "expense_analysis";
         String code = searchField.getText().trim();
         if (code.isEmpty()) {
             return;
@@ -537,6 +556,7 @@ public class MultiYearAnalysisView {
     }
 
     private void showMinistryAnalysisChart() {
+        currentChartView = "ministry_analysis";
         String code = searchField.getText().trim();
         if (code.isEmpty()) {
             return;

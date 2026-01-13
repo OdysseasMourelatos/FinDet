@@ -211,7 +211,7 @@ public class BudgetChangesView {
 
     private VBox createFormSection() {
         VBox section = new VBox(16);
-        section.setPadding(new Insets(0, 24, 24, 24));
+        section.setPadding(new Insets(16, 24, 24, 24));
 
         VBox formCard = new VBox(20);
         formCard.setPadding(new Insets(20));
