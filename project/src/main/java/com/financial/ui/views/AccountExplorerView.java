@@ -92,7 +92,7 @@ public class AccountExplorerView {
 
         StackPane iconContainer = new StackPane(icon, iconText);
 
-        Label title = new Label("Εξερεύνηση Λογαριασμών");
+        Label title = new Label("Εξερεύνηση Λογαριασμών Εσόδων");
         title.setStyle(Theme.pageTitle());
 
         titleRow.getChildren().addAll(iconContainer, title);

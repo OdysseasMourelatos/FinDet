@@ -28,6 +28,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -42,30 +43,33 @@ public class ExpensesView {
     // Regular budget components
     private TextField regularSearchField;
     private ComboBox<String> regularEntityFilter;
-    private ComboBox<String> regularLevelFilter;
     private TableView<RegularBudgetExpense> regularTable;
     private ObservableList<RegularBudgetExpense> regularData;
     private Label regularCountLabel;
     private Label regularTotalLabel;
+    private ComboBox<String> regularViewCombo;
+
+    private TableView<EntitiesView.AnalysisResult> regularSummaryTable;
+    private ObservableList<EntitiesView.AnalysisResult> regularSummaryData;
 
     // Public Investment components
     private TextField pibSearchField;
     private ComboBox<String> pibEntityFilter;
     private ComboBox<String> pibTypeFilter;
-    private ComboBox<String> pibLevelFilter;
     private TableView<BudgetExpense> pibTable;
     private ObservableList<BudgetExpense> pibData;
     private Label pibCountLabel;
     private Label pibTotalLabel;
+    private ComboBox<String> pibViewCombo;
+    private TableView<EntitiesView.AnalysisResult> pibSummaryTable;
+    private ObservableList<EntitiesView.AnalysisResult> pibSummaryData;
 
     public ExpensesView() {
         view = new VBox(0);
         view.setStyle("-fx-background-color: " + Theme.BG_BASE + ";");
 
-        // Header
         VBox header = createHeader();
 
-        // Tab pane
         tabPane = new TabPane();
         tabPane.setStyle("-fx-background-color: " + Theme.BG_BASE + ";");
         VBox.setVgrow(tabPane, Priority.ALWAYS);
@@ -79,136 +83,107 @@ public class ExpensesView {
         investmentTab.setContent(createPublicInvestmentExpensesContent());
 
         tabPane.getTabs().addAll(regularTab, investmentTab);
-
         view.getChildren().addAll(header, tabPane);
 
-        // Wrap in scroll pane
         scrollPane = new ScrollPane(view);
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
-        scrollPane.setStyle(
-            "-fx-background: " + Theme.BG_BASE + ";" +
-            "-fx-background-color: " + Theme.BG_BASE + ";" +
-            "-fx-border-color: transparent;"
-        );
+        scrollPane.setStyle("-fx-background: " + Theme.BG_BASE + "; -fx-border-color: transparent;");
     }
 
     private VBox createHeader() {
         VBox header = new VBox(6);
         header.setPadding(new Insets(32, 24, 20, 24));
-
         HBox titleRow = new HBox(12);
         titleRow.setAlignment(Pos.CENTER_LEFT);
 
-        // Expense icon
         Circle icon = new Circle(16);
         icon.setFill(javafx.scene.paint.Color.web(Theme.ERROR, 0.15));
-
         Label iconText = new Label("-");
-        iconText.setStyle(
-            "-fx-font-size: 18px;" +
-            "-fx-font-weight: bold;" +
-            "-fx-text-fill: " + Theme.ERROR_LIGHT + ";"
-        );
-
+        iconText.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: " + Theme.ERROR_LIGHT + ";");
         StackPane iconContainer = new StackPane(icon, iconText);
 
         Label title = new Label("Έξοδα Προϋπολογισμού");
         title.setStyle(Theme.pageTitle());
-
         titleRow.getChildren().addAll(iconContainer, title);
 
         Label subtitle = new Label("Διαχείριση και προβολή εξόδων κρατικού προϋπολογισμού");
         subtitle.setStyle(Theme.subtitle());
-
         header.getChildren().addAll(titleRow, subtitle);
         return header;
     }
 
     private VBox createRegularExpensesContent() {
         VBox container = new VBox(0);
-        container.setStyle("-fx-background-color: " + Theme.BG_BASE + ";");
 
-        // Filter section
         HBox filterRow = new HBox(12);
         filterRow.setPadding(new Insets(16, 24, 16, 24));
         filterRow.setAlignment(Pos.CENTER_LEFT);
 
         regularSearchField = new TextField();
         regularSearchField.setPromptText("Αναζήτηση...");
-        regularSearchField.setPrefWidth(220);
         regularSearchField.setStyle(Theme.textField());
-
-        regularSearchField.focusedProperty().addListener((obs, wasFocused, isFocused) -> {
-            regularSearchField.setStyle(isFocused ? Theme.textFieldFocused() : Theme.textField());
-        });
+        regularSearchField.setPrefWidth(220);
 
         VBox entityBox = new VBox(4);
         Label entityLabel = new Label("Φορέας");
         entityLabel.setStyle(Theme.mutedText());
-
         regularEntityFilter = new ComboBox<>();
         regularEntityFilter.getItems().add("Όλοι οι φορείς");
-        for (Entity entity : Entity.getEntities()) {
-            regularEntityFilter.getItems().add(entity.getEntityCode() + " - " + entity.getEntityName());
-        }
+        Entity.getEntities().forEach(e -> regularEntityFilter.getItems().add(e.getEntityCode() + " - " + e.getEntityName()));
         regularEntityFilter.setValue("Όλοι οι φορείς");
         regularEntityFilter.setStyle(Theme.comboBox());
-        regularEntityFilter.setPrefWidth(240);
-
+        regularEntityFilter.setPrefWidth(160);
         entityBox.getChildren().addAll(entityLabel, regularEntityFilter);
 
-        VBox levelBox = new VBox(4);
-        Label levelLabel = new Label("Επίπεδο");
-        levelLabel.setStyle(Theme.mutedText());
+        VBox viewBox = new VBox(4);
+        Label viewLabel = new Label("Τύπος Προβολής");
+        viewLabel.setStyle(Theme.mutedText());
+        regularViewCombo = new ComboBox<>();
+        regularViewCombo.getItems().addAll("Αναλυτική Προβολή", "Συγκεντρωτική Προβολή");
+        regularViewCombo.setValue("Αναλυτική Προβολή");
+        regularViewCombo.setStyle(Theme.comboBox());
+        viewBox.getChildren().addAll(viewLabel, regularViewCombo);
 
-        regularLevelFilter = new ComboBox<>();
-        regularLevelFilter.getItems().addAll("Όλα τα επίπεδα", "Επίπεδο 1", "Επίπεδο 2", "Επίπεδο 3", "Επίπεδο 4", "Επίπεδο 5");
-        regularLevelFilter.setValue("Όλα τα επίπεδα");
-        regularLevelFilter.setStyle(Theme.comboBox());
-        regularLevelFilter.setPrefWidth(140);
+        filterRow.getChildren().addAll(regularSearchField, entityBox, viewBox);
 
-        levelBox.getChildren().addAll(levelLabel, regularLevelFilter);
+        HBox statsBar = createStatsBar(true);
 
-        filterRow.getChildren().addAll(regularSearchField, entityBox, levelBox);
-
-        // Stats bar
-        HBox statsBar = new HBox(24);
-        statsBar.setPadding(new Insets(12, 24, 12, 24));
-        statsBar.setAlignment(Pos.CENTER_LEFT);
-        statsBar.setStyle(
-            "-fx-background-color: " + Theme.BG_SURFACE + ";" +
-            "-fx-border-color: " + Theme.BORDER_MUTED + ";" +
-            "-fx-border-width: 1 0;"
-        );
-
-        regularCountLabel = new Label();
-        regularCountLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: " + Theme.TEXT_SECONDARY + ";");
-
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-
-        regularTotalLabel = new Label();
-        regularTotalLabel.setStyle("-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: " + Theme.ERROR_LIGHT + ";");
-
-        statsBar.getChildren().addAll(regularCountLabel, spacer, regularTotalLabel);
-
-        // Table
         regularData = FXCollections.observableArrayList(RegularBudgetExpense.getAllRegularBudgetExpenses());
         regularTable = createRegularTable();
 
+        regularSummaryData = FXCollections.observableArrayList();
+        regularSummaryTable = createRegularSummaryTable();
+        regularSummaryTable.setVisible(false);
+
+        StackPane tableStack = new StackPane(regularTable, regularSummaryTable);
+        VBox.setVgrow(tableStack, Priority.ALWAYS);
+
         VBox tableContainer = new VBox(0);
         tableContainer.setPadding(new Insets(0, 24, 24, 24));
-        tableContainer.getChildren().add(regularTable);
+        tableContainer.getChildren().add(tableStack);
         VBox.setVgrow(tableContainer, Priority.ALWAYS);
-        VBox.setVgrow(regularTable, Priority.ALWAYS);
-
-        updateRegularStats();
 
         // Listeners
-        regularSearchField.textProperty().addListener((obs, oldVal, newVal) -> applyRegularFilters());
+        regularViewCombo.setOnAction(e -> {
+            boolean isSummary = regularViewCombo.getValue().equals("Συγκεντρωτική Προβολή");
+
+            regularTable.setVisible(!isSummary);
+            regularSummaryTable.setVisible(isSummary);
+
+            regularSearchField.setDisable(isSummary);
+            regularEntityFilter.setDisable(isSummary);
+
+            if (isSummary) {
+                regularSearchField.clear();
+                regularEntityFilter.setValue("Όλοι οι φορείς");
+                loadRegularSummaryData();
+            } else {
+                applyRegularFilters();
+            }
+        });
+        regularSearchField.textProperty().addListener((obs, old, val) -> applyRegularFilters());
         regularEntityFilter.setOnAction(e -> applyRegularFilters());
-        regularLevelFilter.setOnAction(e -> applyRegularFilters());
 
         container.getChildren().addAll(filterRow, statsBar, tableContainer);
         VBox.setVgrow(container, Priority.ALWAYS);
@@ -218,289 +193,289 @@ public class ExpensesView {
     private TableView<RegularBudgetExpense> createRegularTable() {
         TableView<RegularBudgetExpense> table = new TableView<>(regularData);
         table.setStyle(Theme.table());
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        TableColumn<RegularBudgetExpense, String> entityCodeCol = new TableColumn<>("Φορέας");
-        entityCodeCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getEntityCode()));
-        entityCodeCol.setPrefWidth(80);
-
-        TableColumn<RegularBudgetExpense, String> serviceCol = new TableColumn<>("Υπηρεσία");
-        serviceCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getServiceName()));
-        serviceCol.setPrefWidth(180);
-
+        TableColumn<RegularBudgetExpense, String> entCodeCol = new TableColumn<>("Κωδ. Φορ.");
+        TableColumn<RegularBudgetExpense, String> entNameCol = new TableColumn<>("Φορέας");
+        TableColumn<RegularBudgetExpense, String> serCodeCol = new TableColumn<>("Κωδ. Υπηρ.");
+        TableColumn<RegularBudgetExpense, String> serNameCol = new TableColumn<>("Υπηρεσία");
         TableColumn<RegularBudgetExpense, String> codeCol = new TableColumn<>("Κωδικός");
-        codeCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getCode()));
-        codeCol.setPrefWidth(90);
-
         TableColumn<RegularBudgetExpense, String> descCol = new TableColumn<>("Περιγραφή");
-        descCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getDescription()));
-        descCol.setPrefWidth(300);
-
         TableColumn<RegularBudgetExpense, String> amountCol = new TableColumn<>("Ποσό");
+
+        entCodeCol.prefWidthProperty().bind(table.widthProperty().multiply(0.07));
+        entNameCol.prefWidthProperty().bind(table.widthProperty().multiply(0.15));
+        serCodeCol.prefWidthProperty().bind(table.widthProperty().multiply(0.08));
+        serNameCol.prefWidthProperty().bind(table.widthProperty().multiply(0.28));
+        codeCol.prefWidthProperty().bind(table.widthProperty().multiply(0.09));
+        descCol.prefWidthProperty().bind(table.widthProperty().multiply(0.18));
+        amountCol.prefWidthProperty().bind(table.widthProperty().multiply(0.15));
+
+        entCodeCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getEntityCode()));
+        entNameCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getEntityName()));
+        serCodeCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getServiceCode()));
+        serNameCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getServiceName()));
+        codeCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getCode()));
+        descCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getDescription()));
         amountCol.setCellValueFactory(d -> new SimpleStringProperty(Theme.formatAmount(d.getValue().getAmount())));
-        amountCol.setPrefWidth(120);
-        amountCol.setStyle("-fx-alignment: CENTER-RIGHT;");
+        amountCol.setStyle("-fx-alignment: CENTER-RIGHT; -fx-font-weight: bold;");
 
-        table.getColumns().addAll(entityCodeCol, serviceCol, codeCol, descCol, amountCol);
-
-        Label placeholder = new Label("Δεν βρέθηκαν εγγραφές");
-        placeholder.setStyle("-fx-text-fill: " + Theme.TEXT_MUTED + "; -fx-font-size: 14px;");
-        table.setPlaceholder(placeholder);
-
+        table.getColumns().addAll(entCodeCol, entNameCol, serCodeCol, serNameCol, codeCol, descCol, amountCol);
         return table;
     }
+    private TableView<EntitiesView.AnalysisResult> createRegularSummaryTable() {
+        TableView<EntitiesView.AnalysisResult> table = new TableView<>(regularSummaryData);
+        table.setStyle(Theme.table());
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-    private void applyRegularFilters() {
-        String searchText = regularSearchField.getText();
-        String selectedEntity = regularEntityFilter.getValue();
-        String selectedLevel = regularLevelFilter.getValue();
+        TableColumn<EntitiesView.AnalysisResult, String> codeCol = new TableColumn<>("Κωδικός");
+        codeCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getCode()));
 
-        List<RegularBudgetExpense> filtered = RegularBudgetExpense.getAllRegularBudgetExpenses().stream().
-                filter(e -> matchesSearch(e, searchText)).
-                filter(e -> matchesEntity(e, selectedEntity)).
-                filter(e -> matchesLevel(e, selectedLevel)).
-                collect(Collectors.toList());
+        TableColumn<EntitiesView.AnalysisResult, String> descCol = new TableColumn<>("Περιγραφή");
+        descCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getDescription()));
 
-        regularData.setAll(filtered);
-        updateRegularStats();
-    }
+        TableColumn<EntitiesView.AnalysisResult, String> amountCol = new TableColumn<>("Ποσό");
+        amountCol.setCellValueFactory(d -> new SimpleStringProperty(Theme.formatAmount(d.getValue().getAmount())));
+        amountCol.setStyle("-fx-alignment: CENTER-RIGHT; -fx-font-weight: bold;");
 
-    private void updateRegularStats() {
-        long total = regularData.stream().mapToLong(RegularBudgetExpense::getAmount).sum();
-        regularCountLabel.setText(regularData.size() + " εγγραφές");
-        regularTotalLabel.setText("Σύνολο: " + Theme.formatAmount(total));
+        table.getColumns().addAll(codeCol, descCol, amountCol);
+        return table;
     }
 
     private VBox createPublicInvestmentExpensesContent() {
         VBox container = new VBox(0);
-        container.setStyle("-fx-background-color: " + Theme.BG_BASE + ";");
 
-        // Filter section
         HBox filterRow = new HBox(12);
         filterRow.setPadding(new Insets(16, 24, 16, 24));
         filterRow.setAlignment(Pos.CENTER_LEFT);
 
         pibSearchField = new TextField();
         pibSearchField.setPromptText("Αναζήτηση...");
-        pibSearchField.setPrefWidth(200);
         pibSearchField.setStyle(Theme.textField());
 
-        pibSearchField.focusedProperty().addListener((obs, wasFocused, isFocused) -> {
-            pibSearchField.setStyle(isFocused ? Theme.textFieldFocused() : Theme.textField());
-        });
-
         VBox entityBox = new VBox(4);
-        Label entityLabel = new Label("Φορέας");
-        entityLabel.setStyle(Theme.mutedText());
-
         pibEntityFilter = new ComboBox<>();
         pibEntityFilter.getItems().add("Όλοι οι φορείς");
-        for (Entity entity : Entity.getEntities()) {
-            pibEntityFilter.getItems().add(entity.getEntityCode() + " - " + entity.getEntityName());
-        }
+        Entity.getEntities().forEach(e -> pibEntityFilter.getItems().add(e.getEntityCode() + " - " + e.getEntityName()));
         pibEntityFilter.setValue("Όλοι οι φορείς");
         pibEntityFilter.setStyle(Theme.comboBox());
-        pibEntityFilter.setPrefWidth(220);
-
-        entityBox.getChildren().addAll(entityLabel, pibEntityFilter);
+        pibEntityFilter.setPrefWidth(160);
+        entityBox.getChildren().addAll(new Label("Φορέας"), pibEntityFilter);
 
         VBox typeBox = new VBox(4);
-        Label typeLabel = new Label("Τύπος");
-        typeLabel.setStyle(Theme.mutedText());
-
         pibTypeFilter = new ComboBox<>();
-        pibTypeFilter.getItems().addAll("Όλοι οι τύποι", "Εθνικό", "Συγχρηματοδοτούμενο");
-        pibTypeFilter.setValue("Όλοι οι τύποι");
+        pibTypeFilter.getItems().addAll("ΠΔΕ (Εθνικό + Συγχρ.)", "Εθνικό", "Συγχρηματοδοτούμενο");
+        pibTypeFilter.setValue("ΠΔΕ (Εθνικό + Συγχρ.)");
         pibTypeFilter.setStyle(Theme.comboBox());
-        pibTypeFilter.setPrefWidth(160);
+        typeBox.getChildren().addAll(new Label("Τύπος"), pibTypeFilter);
 
-        typeBox.getChildren().addAll(typeLabel, pibTypeFilter);
+        VBox viewBox = new VBox(4);
+        pibViewCombo = new ComboBox<>();
+        pibViewCombo.getItems().addAll("Αναλυτική Προβολή", "Συγκεντρωτική Προβολή");
+        pibViewCombo.setValue("Αναλυτική Προβολή");
+        pibViewCombo.setStyle(Theme.comboBox());
+        viewBox.getChildren().addAll(new Label("Προβολή"), pibViewCombo);
 
-        VBox levelBox = new VBox(4);
-        Label levelLabel = new Label("Επίπεδο");
-        levelLabel.setStyle(Theme.mutedText());
+        filterRow.getChildren().addAll(pibSearchField, entityBox, typeBox, viewBox);
 
-        pibLevelFilter = new ComboBox<>();
-        pibLevelFilter.getItems().addAll("Όλα τα επίπεδα", "Επίπεδο 1", "Επίπεδο 2", "Επίπεδο 3", "Επίπεδο 4", "Επίπεδο 5");
-        pibLevelFilter.setValue("Όλα τα επίπεδα");
-        pibLevelFilter.setStyle(Theme.comboBox());
-        pibLevelFilter.setPrefWidth(140);
+        HBox statsBar = createStatsBar(false);
 
-        levelBox.getChildren().addAll(levelLabel, pibLevelFilter);
-
-        filterRow.getChildren().addAll(pibSearchField, entityBox, typeBox, levelBox);
-
-        // Stats bar
-        HBox statsBar = new HBox(24);
-        statsBar.setPadding(new Insets(12, 24, 12, 24));
-        statsBar.setAlignment(Pos.CENTER_LEFT);
-        statsBar.setStyle(
-            "-fx-background-color: " + Theme.BG_SURFACE + ";" +
-            "-fx-border-color: " + Theme.BORDER_MUTED + ";" +
-            "-fx-border-width: 1 0;"
-        );
-
-        pibCountLabel = new Label();
-        pibCountLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: " + Theme.TEXT_SECONDARY + ";");
-
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-
-        pibTotalLabel = new Label();
-        pibTotalLabel.setStyle("-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: " + Theme.ERROR_LIGHT + ";");
-
-        statsBar.getChildren().addAll(pibCountLabel, spacer, pibTotalLabel);
-
-        // Table
         pibData = FXCollections.observableArrayList();
-        loadPibData();
         pibTable = createPibTable();
+        loadPibData();
+
+        pibSummaryData = FXCollections.observableArrayList();
+        pibSummaryTable = createPibSummaryTable();
+        pibSummaryTable.setVisible(false);
+
+        StackPane tableStack = new StackPane(pibTable, pibSummaryTable);
+        VBox.setVgrow(tableStack, Priority.ALWAYS);
 
         VBox tableContainer = new VBox(0);
         tableContainer.setPadding(new Insets(0, 24, 24, 24));
-        tableContainer.getChildren().add(pibTable);
+        tableContainer.getChildren().add(tableStack);
         VBox.setVgrow(tableContainer, Priority.ALWAYS);
-        VBox.setVgrow(pibTable, Priority.ALWAYS);
-
-        updatePibStats();
 
         // Listeners
-        pibSearchField.textProperty().addListener((obs, oldVal, newVal) -> applyPibFilters());
+        pibViewCombo.setOnAction(e -> {
+            boolean isSummary = pibViewCombo.getValue().equals("Συγκεντρωτική Προβολή");
+
+            pibTable.setVisible(!isSummary);
+            pibSummaryTable.setVisible(isSummary);
+
+            pibSearchField.setDisable(isSummary);
+            pibEntityFilter.setDisable(isSummary);
+
+            if (isSummary) {
+                pibSearchField.clear();
+                pibEntityFilter.setValue("Όλοι οι φορείς");
+                loadPibSummaryData();
+            } else {
+                applyPibFilters();
+            }
+        });
+        pibSearchField.textProperty().addListener((obs, old, val) -> applyPibFilters());
         pibEntityFilter.setOnAction(e -> applyPibFilters());
-        pibTypeFilter.setOnAction(e -> applyPibFilters());
-        pibLevelFilter.setOnAction(e -> applyPibFilters());
+        pibTypeFilter.setOnAction(e -> {
+            if (pibViewCombo.getValue().equals("Συγκεντρωτική Προβολή")) {
+                loadPibSummaryData();
+            } else {
+                applyPibFilters();
+            }
+        });
 
         container.getChildren().addAll(filterRow, statsBar, tableContainer);
-        VBox.setVgrow(container, Priority.ALWAYS);
         return container;
-    }
-
-    private void loadPibData() {
-        pibData.clear();
-        pibData.addAll(PublicInvestmentBudgetExpense.getAllPublicInvestmentBudgetExpenses());
     }
 
     private TableView<BudgetExpense> createPibTable() {
         TableView<BudgetExpense> table = new TableView<>(pibData);
         table.setStyle(Theme.table());
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        TableColumn<BudgetExpense, String> typeCol = new TableColumn<>("Τύπος");
-        typeCol.setCellValueFactory(d -> {
-            if (d.getValue() instanceof PublicInvestmentBudgetExpense pib) {
-                return new SimpleStringProperty(pib.getType());
-            }
-            return new SimpleStringProperty("-");
-        });
-        typeCol.setPrefWidth(90);
-
-        TableColumn<BudgetExpense, String> entityCodeCol = new TableColumn<>("Φορέας");
-        entityCodeCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getEntityCode()));
-        entityCodeCol.setPrefWidth(80);
-
-        TableColumn<BudgetExpense, String> serviceCol = new TableColumn<>("Υπηρεσία");
-        serviceCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getServiceName()));
-        serviceCol.setPrefWidth(160);
-
+        TableColumn<BudgetExpense, String> entCodeCol = new TableColumn<>("Κωδ. Φορ.");
+        TableColumn<BudgetExpense, String> entNameCol = new TableColumn<>("Φορέας");
+        TableColumn<BudgetExpense, String> serCodeCol = new TableColumn<>("Κωδ. Υπηρ.");
+        TableColumn<BudgetExpense, String> serNameCol = new TableColumn<>("Υπηρεσία");
         TableColumn<BudgetExpense, String> codeCol = new TableColumn<>("Κωδικός");
-        codeCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getCode()));
-        codeCol.setPrefWidth(90);
-
         TableColumn<BudgetExpense, String> descCol = new TableColumn<>("Περιγραφή");
-        descCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getDescription()));
-        descCol.setPrefWidth(260);
-
+        TableColumn<BudgetExpense, String> typeCol = new TableColumn<>("Τύπος");
         TableColumn<BudgetExpense, String> amountCol = new TableColumn<>("Ποσό");
+
+        entCodeCol.prefWidthProperty().bind(table.widthProperty().multiply(0.06));
+        entNameCol.prefWidthProperty().bind(table.widthProperty().multiply(0.14));
+        serCodeCol.prefWidthProperty().bind(table.widthProperty().multiply(0.07));
+        serNameCol.prefWidthProperty().bind(table.widthProperty().multiply(0.25));
+        codeCol.prefWidthProperty().bind(table.widthProperty().multiply(0.09));
+        descCol.prefWidthProperty().bind(table.widthProperty().multiply(0.16));
+        typeCol.prefWidthProperty().bind(table.widthProperty().multiply(0.08));
+        amountCol.prefWidthProperty().bind(table.widthProperty().multiply(0.15));
+
+        entCodeCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getEntityCode()));
+        entNameCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getEntityName()));
+        serCodeCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getServiceCode()));
+        serNameCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getServiceName()));
+        codeCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getCode()));
+        descCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getDescription()));
+        typeCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue() instanceof PublicInvestmentBudgetExpense pib ? pib.getType() : "-"));
         amountCol.setCellValueFactory(d -> new SimpleStringProperty(Theme.formatAmount(d.getValue().getAmount())));
-        amountCol.setPrefWidth(120);
-        amountCol.setStyle("-fx-alignment: CENTER-RIGHT;");
+        amountCol.setStyle("-fx-alignment: CENTER-RIGHT; -fx-font-weight: bold;");
 
-        table.getColumns().addAll(typeCol, entityCodeCol, serviceCol, codeCol, descCol, amountCol);
-
-        Label placeholder = new Label("Δεν βρέθηκαν εγγραφές");
-        placeholder.setStyle("-fx-text-fill: " + Theme.TEXT_MUTED + "; -fx-font-size: 14px;");
-        table.setPlaceholder(placeholder);
-
+        table.getColumns().addAll(entCodeCol, entNameCol, serCodeCol, serNameCol, codeCol, descCol, typeCol, amountCol);
         return table;
     }
 
+    private TableView<EntitiesView.AnalysisResult> createPibSummaryTable() {
+        TableView<EntitiesView.AnalysisResult> table = new TableView<>(pibSummaryData);
+        table.setStyle(Theme.table());
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        TableColumn<EntitiesView.AnalysisResult, String> codeCol = new TableColumn<>("Κωδικός");
+        codeCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getCode()));
+
+        TableColumn<EntitiesView.AnalysisResult, String> descCol = new TableColumn<>("Περιγραφή");
+        descCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getDescription()));
+
+        TableColumn<EntitiesView.AnalysisResult, String> amountCol = new TableColumn<>("Ποσό");
+        amountCol.setCellValueFactory(d -> new SimpleStringProperty(Theme.formatAmount(d.getValue().getAmount())));
+        amountCol.setStyle("-fx-alignment: CENTER-RIGHT; -fx-font-weight: bold;");
+
+        table.getColumns().addAll(codeCol, descCol, amountCol);
+        return table;
+    }
+
+    private HBox createStatsBar(boolean regular) {
+        HBox statsBar = new HBox(24);
+        statsBar.setPadding(new Insets(12, 24, 12, 24));
+        statsBar.setAlignment(Pos.CENTER_LEFT);
+        statsBar.setStyle("-fx-background-color: " + Theme.BG_SURFACE + "; -fx-border-color: " + Theme.BORDER_MUTED + "; -fx-border-width: 1 0;");
+
+        Label countLbl = new Label();
+        Label totalLbl = new Label();
+        totalLbl.setStyle("-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: " + Theme.ERROR_LIGHT + ";");
+
+        if (regular) {
+            regularCountLabel = countLbl;
+            regularTotalLabel = totalLbl;
+        } else {
+            pibCountLabel = countLbl;
+            pibTotalLabel = totalLbl;
+        }
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        statsBar.getChildren().addAll(countLbl, spacer, totalLbl);
+        return statsBar;
+    }
+
+    private void loadPibData() {
+        pibData.setAll(PublicInvestmentBudgetExpense.getAllPublicInvestmentBudgetExpenses());
+    }
+
+    private void loadRegularSummaryData() {
+        regularSummaryData.clear();
+        Map<String, Long> summary = RegularBudgetExpense.getSumOfEveryRegularExpenseCategory();
+        summary.forEach((code, amount) -> {
+            String desc = RegularBudgetExpense.getDescriptionWithCode(code);
+            regularSummaryData.add(new EntitiesView.AnalysisResult(code, desc, amount));
+        });
+        updateRegularStats();
+    }
+
+    private void loadPibSummaryData() {
+        pibSummaryData.clear();
+        String type = pibTypeFilter.getValue();
+        Map<String, Long> summary = switch (type) {
+            case "Εθνικό" -> PublicInvestmentBudgetNationalExpense.getSumOfEveryPublicInvestmentNationalExpenseCategory();
+            case "Συγχρηματοδοτούμενο" -> PublicInvestmentBudgetCoFundedExpense.getSumOfEveryPublicInvestmentCoFundedExpenseCategory();
+            default -> PublicInvestmentBudgetExpense.getSumOfEveryPublicInvestmentExpenseCategory();
+        };
+        summary.forEach((code, amount) -> {
+            String desc = switch (type) {
+                case "Εθνικό" -> PublicInvestmentBudgetNationalExpense.getDescriptionWithCode(code);
+                case "Συγχρηματοδοτούμενο" -> PublicInvestmentBudgetCoFundedExpense.getDescriptionWithCode(code);
+                default -> PublicInvestmentBudgetExpense.getDescriptionWithCode(code);
+            };
+            pibSummaryData.add(new EntitiesView.AnalysisResult(code, desc, amount));
+        });
+        updatePibStats();
+    }
+
+    private void applyRegularFilters() {
+        String text = regularSearchField.getText().toLowerCase();
+        String entity = regularEntityFilter.getValue();
+        List<RegularBudgetExpense> filtered = RegularBudgetExpense.getAllRegularBudgetExpenses().stream().filter(e -> e.getCode().toLowerCase().contains(text) || e.getDescription().toLowerCase().contains(text)).filter(e -> entity.equals("Όλοι οι φορείς") || e.getEntityCode().equals(entity.split(" - ")[0])).collect(Collectors.toList());
+        regularData.setAll(filtered);
+        updateRegularStats();
+    }
+
     private void applyPibFilters() {
-        String searchText = pibSearchField.getText();
-        String selectedEntity = pibEntityFilter.getValue();
-        String selectedType = pibTypeFilter.getValue();
-        String selectedLevel = pibLevelFilter.getValue();
-
-        List<BudgetExpense> baseList = getBasePibList(selectedType);
-
-        List<BudgetExpense> filtered = baseList.stream().
-                filter(e -> matchesSearch(e, searchText)).
-                filter(e -> matchesEntity(e, selectedEntity)).
-                filter(e -> matchesLevel(e, selectedLevel)).
-                collect(Collectors.toList());
-
+        String text = pibSearchField.getText().toLowerCase();
+        String entity = pibEntityFilter.getValue();
+        List<BudgetExpense> base = getBasePibList(pibTypeFilter.getValue());
+        List<BudgetExpense> filtered = base.stream().filter(e -> e.getCode().toLowerCase().contains(text) || e.getDescription().toLowerCase().contains(text)).filter(e -> entity.equals("Όλοι οι φορείς") || e.getEntityCode().equals(entity.split(" - ")[0])).collect(Collectors.toList());
         pibData.setAll(filtered);
         updatePibStats();
     }
 
     private List<BudgetExpense> getBasePibList(String type) {
         return switch (type) {
-            case "Εθνικό" -> PublicInvestmentBudgetNationalExpense.getAllPublicInvestmentBudgetNationalExpenses().
-                    stream().map(e -> (BudgetExpense) e).collect(Collectors.toList());
-            case "Συγχρηματοδοτούμενο" -> PublicInvestmentBudgetCoFundedExpense.
-                    getAllPublicInvestmentBudgetCoFundedExpenses().
-                    stream().map(e -> (BudgetExpense) e).collect(Collectors.toList());
-            default -> PublicInvestmentBudgetExpense.getAllPublicInvestmentBudgetExpenses().
-                    stream().map(e -> (BudgetExpense) e).collect(Collectors.toList());
+            case "Εθνικό" -> PublicInvestmentBudgetNationalExpense.getAllPublicInvestmentBudgetNationalExpenses().stream().map(e -> (BudgetExpense)e).toList();
+            case "Συγχρηματοδοτούμενο" -> PublicInvestmentBudgetCoFundedExpense.getAllPublicInvestmentBudgetCoFundedExpenses().stream().map(e -> (BudgetExpense)e).toList();
+            default -> PublicInvestmentBudgetExpense.getAllPublicInvestmentBudgetExpenses().stream().map(e -> (BudgetExpense)e).toList();
         };
+    }
+
+    private void updateRegularStats() {
+        long total = (regularViewCombo.getValue().equals("Συγκεντρωτική Προβολή") ? regularSummaryData.stream().mapToLong(EntitiesView.AnalysisResult::getAmount) : regularData.stream().mapToLong(RegularBudgetExpense::getAmount)).sum();
+        regularCountLabel.setText((regularViewCombo.getValue().equals("Συγκεντρωτική Προβολή") ? regularSummaryData.size() : regularData.size()) + " εγγραφές");
+        regularTotalLabel.setText("Σύνολο: " + Theme.formatAmount(total));
     }
 
     private void updatePibStats() {
-        long total = pibData.stream().mapToLong(BudgetExpense::getAmount).sum();
-        pibCountLabel.setText(pibData.size() + " εγγραφές");
+        long total = (pibViewCombo.getValue().equals("Συγκεντρωτική Προβολή") ? pibSummaryData.stream().mapToLong(EntitiesView.AnalysisResult::getAmount) : pibData.stream().mapToLong(BudgetExpense::getAmount)).sum();
+        pibCountLabel.setText((pibViewCombo.getValue().equals("Συγκεντρωτική Προβολή") ? pibSummaryData.size() : pibData.size()) + " εγγραφές");
         pibTotalLabel.setText("Σύνολο: " + Theme.formatAmount(total));
-    }
-
-    private boolean matchesSearch(BudgetExpense e, String searchText) {
-        if (searchText == null || searchText.isEmpty()) {
-            return true;
-        }
-        String lower = searchText.toLowerCase();
-        return e.getCode().toLowerCase().contains(lower) ||
-               e.getDescription().toLowerCase().contains(lower) ||
-               e.getEntityName().toLowerCase().contains(lower) ||
-               e.getServiceName().toLowerCase().contains(lower);
-    }
-
-    private boolean matchesEntity(BudgetExpense e, String selectedEntity) {
-        if (selectedEntity == null || selectedEntity.equals("Όλοι οι φορείς")) {
-            return true;
-        }
-        String entityCode = selectedEntity.split(" - ")[0];
-        return e.getEntityCode().equals(entityCode);
-    }
-
-    private boolean matchesLevel(BudgetExpense e, String selectedLevel) {
-        if (selectedLevel == null || selectedLevel.equals("Όλα τα επίπεδα")) {
-            return true;
-        }
-        int level = getLevelFromCode(e.getCode());
-        return switch (selectedLevel) {
-            case "Επίπεδο 1" -> level == 1;
-            case "Επίπεδο 2" -> level == 2;
-            case "Επίπεδο 3" -> level == 3;
-            case "Επίπεδο 4" -> level == 4;
-            case "Επίπεδο 5" -> level == 5;
-            default -> true;
-        };
-    }
-
-    private int getLevelFromCode(String code) {
-        return switch (code.length()) {
-            case 2 -> 1;
-            case 3 -> 2;
-            case 5 -> 3;
-            case 7 -> 4;
-            case 10 -> 5;
-            default -> 0;
-        };
     }
 
     public Region getView() {
