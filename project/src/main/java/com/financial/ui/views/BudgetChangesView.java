@@ -210,6 +210,7 @@ public class BudgetChangesView {
     }
 
     private VBox createFormSection() {
+        // Διάταξη από το 2ο snippet (πιο συμπαγές spacing)
         VBox section = new VBox(10);
         section.setPadding(new Insets(15, 24, 10, 24));
 
@@ -217,68 +218,78 @@ public class BudgetChangesView {
         formCard.setPadding(new Insets(15));
         formCard.setStyle(Theme.card());
 
-        // Form title
+        // Τίτλος
         Label formTitle = new Label("Παράμετροι Αλλαγής Εσόδων");
         formTitle.setStyle(Theme.sectionHeader());
 
+        // Η κύρια σειρά των φίλτρων (One-row layout)
         HBox filtersRow = new HBox(12);
         filtersRow.setAlignment(Pos.BOTTOM_LEFT);
 
-        // 1. Τύπος Προϋπολογισμού
-        VBox budgetTypeBox = createFormField("Τύπος");
+        // 1. Τύπος Προϋπολογισμού (Label από 1ο snippet)
+        VBox budgetTypeBox = createFormField("Τύπος Προϋπολογισμού");
         budgetTypeCombo = new ComboBox<>();
-        budgetTypeCombo.getItems().addAll("Τακτικός Προϋπολογισμός", "ΠΔΕ Εθνικό", "ΠΔΕ Συγχρηματοδοτούμενο");
+        budgetTypeCombo.getItems().addAll(
+                "Τακτικός Προϋπολογισμός",
+                "ΠΔΕ Εθνικό",
+                "ΠΔΕ Συγχρηματοδοτούμενο"
+        );
         budgetTypeCombo.setValue("Τακτικός Προϋπολογισμός");
-        budgetTypeCombo.setPrefWidth(180);
+        budgetTypeCombo.setPrefWidth(200);
         budgetTypeCombo.setStyle(Theme.comboBox());
         budgetTypeBox.getChildren().add(budgetTypeCombo);
 
-        // 2. Κωδικός Λογαριασμού
-        VBox codeBox = createFormField("Κωδικός");
+        // 2. Κωδικός Λογαριασμού (Label & Prompt από 1ο snippet)
+        VBox codeBox = createFormField("Κωδικός Λογαριασμού");
         accountCodeField = new TextField();
-        accountCodeField.setPromptText("π.χ. 11");
-        accountCodeField.setPrefWidth(100);
+        accountCodeField.setPromptText("π.χ. 11, 111, 11101");
+        accountCodeField.setPrefWidth(160);
         accountCodeField.setStyle(Theme.textField());
         accountCodeField.focusedProperty().addListener((obs, old, nv) ->
                 accountCodeField.setStyle(nv ? Theme.textFieldFocused() : Theme.textField()));
         codeBox.getChildren().add(accountCodeField);
 
-        // 3. Τιμή Αλλαγής
-        VBox changeBox = createFormField("Τιμή");
+        // 3. Τιμή Αλλαγής (Label & Prompt από 1ο snippet)
+        VBox changeBox = createFormField("Τιμή Αλλαγής");
         changeValueField = new TextField();
-        changeValueField.setPromptText("Ποσό ή %");
-        changeValueField.setPrefWidth(100);
+        changeValueField.setPromptText("π.χ. 10000, 10%");
+        changeValueField.setPrefWidth(140);
         changeValueField.setStyle(Theme.textField());
         changeValueField.focusedProperty().addListener((obs, old, nv) ->
                 changeValueField.setStyle(nv ? Theme.textFieldFocused() : Theme.textField()));
         changeBox.getChildren().add(changeValueField);
 
-        // 4. Τύπος Αλλαγής
-        VBox changeTypeBox = createFormField("Είδος");
+        // 4. Τύπος Αλλαγής (Label από 1ο snippet)
+        VBox changeTypeBox = createFormField("Τύπος Αλλαγής");
         changeTypeCombo = new ComboBox<>();
-        changeTypeCombo.getItems().addAll("Μεταβολή (+/-)", "Ποσοστό (%)", "Τελικό Υπόλοιπο");
+        changeTypeCombo.getItems().addAll(
+                "Μεταβολή (+/-)",
+                "Ποσοστό (%)",
+                "Τελικό Υπόλοιπο"
+        );
         changeTypeCombo.setValue("Μεταβολή (+/-)");
-        changeTypeCombo.setPrefWidth(140);
+        changeTypeCombo.setPrefWidth(150);
         changeTypeCombo.setStyle(Theme.comboBox());
         changeTypeBox.getChildren().add(changeTypeCombo);
 
-        // 5. Κατανομή
-        VBox distBox = createFormField("Κατανομή");
+        // 5. Κατανομή (Label από 1ο snippet)
+        VBox distBox = createFormField("Κατανομή σε Υποκατηγορίες");
         distributionCombo = new ComboBox<>();
         distributionCombo.getItems().addAll("Ισόποσα", "Ποσοστιαία");
         distributionCombo.setValue("Ποσοστιαία");
-        distributionCombo.setPrefWidth(120);
+        distributionCombo.setPrefWidth(160);
         distributionCombo.setStyle(Theme.comboBox());
         distBox.getChildren().add(distributionCombo);
 
-        // 6. Το Κουμπί
-        executeButton = new Button("Εκτέλεση");
+        // 6. Το Κουμπί (Κείμενο από 1ο snippet)
+        executeButton = new Button("Εκτέλεση Αλλαγής");
         executeButton.setStyle(Theme.buttonPrimary());
         executeButton.setPrefHeight(35);
         executeButton.setOnAction(e -> executeChange());
         executeButton.setOnMouseEntered(e -> executeButton.setStyle(Theme.buttonPrimaryHover()));
         executeButton.setOnMouseExited(e -> executeButton.setStyle(Theme.buttonPrimary()));
 
+        // Προσθήκη όλων στη σειρά
         filtersRow.getChildren().addAll(
                 budgetTypeBox,
                 codeBox,
@@ -754,27 +765,35 @@ public class BudgetChangesView {
         HBox row1 = new HBox(12);
         row1.setAlignment(Pos.BOTTOM_LEFT);
 
-        VBox budgetTypeBox = createFormField("Προϋπολογισμός");
+        VBox budgetTypeBox = createFormField("Τύπος Προϋπολογισμού");
         expenseBudgetTypeCombo = new ComboBox<>();
-        expenseBudgetTypeCombo.getItems().addAll("Τακτικός Προϋπολογισμός", "ΠΔΕ Εθνικό", "ΠΔΕ Συγχρηματοδοτούμενο");
+        expenseBudgetTypeCombo.getItems().addAll(
+                "Τακτικός Προϋπολογισμός",
+                "ΠΔΕ Εθνικό",
+                "ΠΔΕ Συγχρηματοδοτούμενο"
+        );
         expenseBudgetTypeCombo.setValue("Τακτικός Προϋπολογισμός");
-        expenseBudgetTypeCombo.setPrefWidth(170);
+        expenseBudgetTypeCombo.setPrefWidth(220); // Προσαρμοσμένο πλάτος για το κείμενο
         expenseBudgetTypeCombo.setStyle(Theme.comboBox());
         expenseBudgetTypeCombo.setOnAction(e -> updateExpenseEntityCombo());
         budgetTypeBox.getChildren().add(expenseBudgetTypeCombo);
 
-        VBox scopeBox = createFormField("Εύρος");
+        VBox scopeBox = createFormField("Εύρος Αλλαγής");
         expenseScopeCombo = new ComboBox<>();
-        expenseScopeCombo.getItems().addAll("Καθολική (Όλοι οι Φορείς)", "Ανά Φορέα", "Ανά Υπηρεσία");
+        expenseScopeCombo.getItems().addAll(
+                "Καθολική (Όλοι οι Φορείς)",
+                "Ανά Φορέα",
+                "Ανά Υπηρεσία"
+        );
         expenseScopeCombo.setValue("Καθολική (Όλοι οι Φορείς)");
-        expenseScopeCombo.setPrefWidth(160);
+        expenseScopeCombo.setPrefWidth(200);
         expenseScopeCombo.setStyle(Theme.comboBox());
         expenseScopeCombo.setOnAction(e -> updateScopeVisibility());
         scopeBox.getChildren().add(expenseScopeCombo);
 
         VBox entityBox = createFormField("Φορέας");
         expenseEntityCombo = new ComboBox<>();
-        expenseEntityCombo.setPrefWidth(220);
+        expenseEntityCombo.setPrefWidth(250);
         expenseEntityCombo.setStyle(Theme.comboBox());
         expenseEntityCombo.setDisable(true);
         expenseEntityCombo.setOnAction(e -> updateExpenseServiceCombo());
@@ -782,7 +801,7 @@ public class BudgetChangesView {
 
         VBox serviceBox = createFormField("Υπηρεσία");
         expenseServiceCombo = new ComboBox<>();
-        expenseServiceCombo.setPrefWidth(220);
+        expenseServiceCombo.setPrefWidth(250);
         expenseServiceCombo.setStyle(Theme.comboBox());
         expenseServiceCombo.setDisable(true);
         serviceBox.getChildren().add(expenseServiceCombo);
@@ -792,41 +811,44 @@ public class BudgetChangesView {
         HBox row2 = new HBox(12);
         row2.setAlignment(Pos.BOTTOM_LEFT);
 
-        VBox categoryBox = createFormField("Κατηγορία (προαιρετικό)");
+        VBox categoryBox = createFormField("Κατηγορία Δαπάνης (προαιρετικό)");
         expenseCategoryCombo = new ComboBox<>();
         expenseCategoryCombo.getItems().add("Όλες οι κατηγορίες");
         expenseCategoryCombo.getItems().addAll(getExpenseCategoryOptions());
         expenseCategoryCombo.setValue("Όλες οι κατηγορίες");
-        expenseCategoryCombo.setPrefWidth(200);
+        expenseCategoryCombo.setPrefWidth(250);
         expenseCategoryCombo.setStyle(Theme.comboBox());
         categoryBox.getChildren().add(expenseCategoryCombo);
 
-        VBox valueBox = createFormField("Τιμή");
+        VBox valueBox = createFormField("Τιμή Αλλαγής");
         expenseChangeValueField = new TextField();
-        expenseChangeValueField.setPromptText("Ποσό/%");
-        expenseChangeValueField.setPrefWidth(90);
+        expenseChangeValueField.setPromptText("π.χ. 10000, 10%"); // Prompt από 2ο snippet
+        expenseChangeValueField.setPrefWidth(140);
         expenseChangeValueField.setStyle(Theme.textField());
         expenseChangeValueField.focusedProperty().addListener((obs, old, nv) ->
                 expenseChangeValueField.setStyle(nv ? Theme.textFieldFocused() : Theme.textField()));
         valueBox.getChildren().add(expenseChangeValueField);
 
-        VBox changeTypeBox = createFormField("Τύπος");
+        VBox changeTypeBox = createFormField("Τύπος Αλλαγής");
         expenseChangeTypeCombo = new ComboBox<>();
         expenseChangeTypeCombo.getItems().addAll("Ποσοστό (%)", "Σταθερό Ποσό");
         expenseChangeTypeCombo.setValue("Ποσοστό (%)");
-        expenseChangeTypeCombo.setPrefWidth(120);
+        expenseChangeTypeCombo.setPrefWidth(140);
         expenseChangeTypeCombo.setStyle(Theme.comboBox());
         changeTypeBox.getChildren().add(expenseChangeTypeCombo);
 
         VBox calcModeBox = createFormField("Τρόπος Εφαρμογής");
         expenseCalculationModeCombo = new ComboBox<>();
-        expenseCalculationModeCombo.getItems().addAll("Οριζόντια", "Επιμερισμός");
-        expenseCalculationModeCombo.setValue("Οριζόντια");
-        expenseCalculationModeCombo.setPrefWidth(140);
+        expenseCalculationModeCombo.getItems().addAll(
+                "Επηρεασμός κάθε λογαριασμού (Οριζόντια)",
+                "Επηρεασμός συνολικού αθροίσματος (Επιμερισμός)"
+        );
+        expenseCalculationModeCombo.setValue("Επηρεασμός κάθε λογαριασμού (Οριζόντια)");
+        expenseCalculationModeCombo.setPrefWidth(280);
         expenseCalculationModeCombo.setStyle(Theme.comboBox());
         calcModeBox.getChildren().add(expenseCalculationModeCombo);
 
-        expenseExecuteButton = new Button("Εκτέλεση");
+        expenseExecuteButton = new Button("Εκτέλεση Αλλαγής");
         expenseExecuteButton.setStyle(Theme.buttonPrimary());
         expenseExecuteButton.setPrefHeight(35);
         expenseExecuteButton.setOnAction(e -> executeExpenseChange());
