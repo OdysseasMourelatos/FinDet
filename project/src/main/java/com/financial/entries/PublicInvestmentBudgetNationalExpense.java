@@ -8,6 +8,7 @@ import java.util.*;
 
 public class PublicInvestmentBudgetNationalExpense extends PublicInvestmentBudgetExpense {
 
+    // Static collection maintains all national expense instances
     protected static ArrayList<PublicInvestmentBudgetNationalExpense> pibNationalExpenses = new ArrayList<>();
 
     public PublicInvestmentBudgetNationalExpense(String entityCode, String entityName, String serviceCode, String serviceName, String code, String description, String type, String category, long amount) {
@@ -43,11 +44,13 @@ public class PublicInvestmentBudgetNationalExpense extends PublicInvestmentBudge
         return BudgetExpenseLogicService.getDescriptionWithCode(code, pibNationalExpenses);
     }
 
+    // Stores history before applying percentage and fixed amount changes to a specific category
     public static void implementGlobalChangesInCertainPublicInvestmentBudgetNationalCategory(String code, double percentage, long fixedAmount) {
         ExpensesHistory.keepHistory(getPublicInvestmentBudgetNationalExpensesOfCategoryWithCode(code), BudgetType.PUBLIC_INVESTMENT_BUDGET_NATIONAL);
         BudgetExpenseChangesService.implementGlobalChangesInCertainExpenseCategoryWithPercentageAllocation(code, percentage, fixedAmount, pibNationalExpenses);
     }
-
+    
+    // Stores history before applying percentage and fixed amount changes to all categories
     public static void implementGlobalChangesInAllPublicInvestmentBudgetNationalCategories(double percentage, long fixedAmount) {
         ExpensesHistory.keepHistory(pibNationalExpenses, BudgetType.PUBLIC_INVESTMENT_BUDGET_NATIONAL);
         BudgetExpenseChangesService.implementGlobalChangesInAllExpenseCategoriesWithPercentageAllocation(percentage, fixedAmount, pibNationalExpenses);

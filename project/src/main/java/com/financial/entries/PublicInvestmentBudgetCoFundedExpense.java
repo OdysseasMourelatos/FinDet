@@ -8,6 +8,7 @@ import java.util.*;
 
 public class PublicInvestmentBudgetCoFundedExpense extends PublicInvestmentBudgetExpense {
 
+    // Static collection maintains all co-funded expense instances
     protected static ArrayList<PublicInvestmentBudgetCoFundedExpense> pibCoFundedExpenses = new ArrayList<>();
 
     public PublicInvestmentBudgetCoFundedExpense(String entityCode, String entityName, String serviceCode, String serviceName, String code, String description, String type, String category, long amount) {
@@ -43,11 +44,13 @@ public class PublicInvestmentBudgetCoFundedExpense extends PublicInvestmentBudge
         return BudgetExpenseLogicService.getDescriptionWithCode(code, pibCoFundedExpenses);
     }
 
+    // Stores history before applying percentage and fixed amount changes to a specific category
     public static void implementGlobalChangesInCertainPublicInvestmentBudgetCoFundedCategory(String code, double percentage, long fixedAmount) {
         ExpensesHistory.keepHistory(getPublicInvestmentBudgetCoFundedExpensesOfCategoryWithCode(code), BudgetType.PUBLIC_INVESTMENT_BUDGET_COFUNDED);
         BudgetExpenseChangesService.implementGlobalChangesInCertainExpenseCategoryWithPercentageAllocation(code, percentage, fixedAmount, pibCoFundedExpenses);
     }
 
+    // Stores history before applying percentage and fixed amount changes to all categories
     public static void implementGlobalChangesInAllPublicInvestmentBudgetCoFundedCategories(double percentage, long fixedAmount) {
         ExpensesHistory.keepHistory(pibCoFundedExpenses, BudgetType.PUBLIC_INVESTMENT_BUDGET_COFUNDED);
         BudgetExpenseChangesService.implementGlobalChangesInAllExpenseCategoriesWithPercentageAllocation(percentage, fixedAmount, pibCoFundedExpenses);

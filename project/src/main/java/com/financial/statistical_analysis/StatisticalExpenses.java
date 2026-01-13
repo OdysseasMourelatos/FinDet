@@ -36,6 +36,7 @@ public class StatisticalExpenses {
         return stats;
     }
 
+    // Identifies outliers using Z-score method (values beyond 2 standard deviations from mean)
     public static Map<String, Long> findOutliersZscore(Map<String, Long> sum, DescriptiveStatistics stats) {
         double mean = stats.getMean();
         double std = stats.getStandardDeviation();
@@ -52,7 +53,8 @@ public class StatisticalExpenses {
             return outliersz;
         }
     }
-
+    
+    // Identifies outliers using IQR method (values beyond 1.5 * IQR from quartiles)
     public static Map<String, Long> findOutliersIQR(Map<String, Long> sum, DescriptiveStatistics stats) {
         Map<String, Long> outliersiq = new HashMap<>();
         double q1 = stats.getPercentile(25);
