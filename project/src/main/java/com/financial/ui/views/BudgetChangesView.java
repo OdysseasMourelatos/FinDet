@@ -115,9 +115,9 @@ public class BudgetChangesView {
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
         scrollPane.setStyle(
-            "-fx-background: " + Theme.BG_BASE + ";" +
-            "-fx-background-color: " + Theme.BG_BASE + ";" +
-            "-fx-border-color: transparent;"
+                "-fx-background: " + Theme.BG_BASE + ";" +
+                        "-fx-background-color: " + Theme.BG_BASE + ";" +
+                        "-fx-border-color: transparent;"
         );
     }
 
@@ -148,9 +148,9 @@ public class BudgetChangesView {
 
         Label iconText = new Label("~");
         iconText.setStyle(
-            "-fx-font-size: 16px;" +
-            "-fx-font-weight: bold;" +
-            "-fx-text-fill: " + Theme.WARNING_LIGHT + ";"
+                "-fx-font-size: 16px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: " + Theme.WARNING_LIGHT + ";"
         );
 
         StackPane iconContainer = new StackPane(icon, iconText);
@@ -210,102 +210,90 @@ public class BudgetChangesView {
     }
 
     private VBox createFormSection() {
-        VBox section = new VBox(16);
-        section.setPadding(new Insets(16, 24, 24, 24));
+        VBox section = new VBox(10);
+        section.setPadding(new Insets(15, 24, 10, 24));
 
-        VBox formCard = new VBox(20);
-        formCard.setPadding(new Insets(20));
+        VBox formCard = new VBox(12);
+        formCard.setPadding(new Insets(15));
         formCard.setStyle(Theme.card());
 
         // Form title
         Label formTitle = new Label("Παράμετροι Αλλαγής Εσόδων");
         formTitle.setStyle(Theme.sectionHeader());
 
-        // Row 1: Budget type and Account code
-        HBox row1 = new HBox(16);
-        row1.setAlignment(Pos.CENTER_LEFT);
+        HBox filtersRow = new HBox(12);
+        filtersRow.setAlignment(Pos.BOTTOM_LEFT);
 
-        VBox budgetTypeBox = createFormField("Τύπος Προϋπολογισμού");
+        // 1. Τύπος Προϋπολογισμού
+        VBox budgetTypeBox = createFormField("Τύπος");
         budgetTypeCombo = new ComboBox<>();
-        budgetTypeCombo.getItems().addAll(
-            "Τακτικός Προϋπολογισμός",
-            "ΠΔΕ Εθνικό",
-            "ΠΔΕ Συγχρηματοδοτούμενο"
-        );
+        budgetTypeCombo.getItems().addAll("Τακτικός Προϋπολογισμός", "ΠΔΕ Εθνικό", "ΠΔΕ Συγχρηματοδοτούμενο");
         budgetTypeCombo.setValue("Τακτικός Προϋπολογισμός");
-        budgetTypeCombo.setPrefWidth(220);
+        budgetTypeCombo.setPrefWidth(180);
         budgetTypeCombo.setStyle(Theme.comboBox());
         budgetTypeBox.getChildren().add(budgetTypeCombo);
 
-        VBox codeBox = createFormField("Κωδικός Λογαριασμού");
+        // 2. Κωδικός Λογαριασμού
+        VBox codeBox = createFormField("Κωδικός");
         accountCodeField = new TextField();
-        accountCodeField.setPromptText("π.χ. 11, 111, 11101");
-        accountCodeField.setPrefWidth(180);
+        accountCodeField.setPromptText("π.χ. 11");
+        accountCodeField.setPrefWidth(100);
         accountCodeField.setStyle(Theme.textField());
-        accountCodeField.focusedProperty().addListener((obs, wasFocused, isFocused) -> {
-            accountCodeField.setStyle(isFocused ? Theme.textFieldFocused() : Theme.textField());
-        });
+        accountCodeField.focusedProperty().addListener((obs, old, nv) ->
+                accountCodeField.setStyle(nv ? Theme.textFieldFocused() : Theme.textField()));
         codeBox.getChildren().add(accountCodeField);
 
-        row1.getChildren().addAll(budgetTypeBox, codeBox);
-
-        // Row 2: Change value, type, and distribution
-        HBox row2 = new HBox(16);
-        row2.setAlignment(Pos.CENTER_LEFT);
-
-        VBox changeBox = createFormField("Τιμή Αλλαγής");
+        // 3. Τιμή Αλλαγής
+        VBox changeBox = createFormField("Τιμή");
         changeValueField = new TextField();
-        changeValueField.setPromptText("π.χ. 10000, 10%");
-        changeValueField.setPrefWidth(140);
+        changeValueField.setPromptText("Ποσό ή %");
+        changeValueField.setPrefWidth(100);
         changeValueField.setStyle(Theme.textField());
-        changeValueField.focusedProperty().addListener((obs, wasFocused, isFocused) -> {
-            changeValueField.setStyle(isFocused ? Theme.textFieldFocused() : Theme.textField());
-        });
+        changeValueField.focusedProperty().addListener((obs, old, nv) ->
+                changeValueField.setStyle(nv ? Theme.textFieldFocused() : Theme.textField()));
         changeBox.getChildren().add(changeValueField);
 
-        VBox changeTypeBox = createFormField("Τύπος Αλλαγής");
+        // 4. Τύπος Αλλαγής
+        VBox changeTypeBox = createFormField("Είδος");
         changeTypeCombo = new ComboBox<>();
-        changeTypeCombo.getItems().addAll(
-            "Μεταβολή (+/-)",
-            "Ποσοστό (%)",
-            "Τελικό Υπόλοιπο"
-        );
+        changeTypeCombo.getItems().addAll("Μεταβολή (+/-)", "Ποσοστό (%)", "Τελικό Υπόλοιπο");
         changeTypeCombo.setValue("Μεταβολή (+/-)");
-        changeTypeCombo.setPrefWidth(160);
+        changeTypeCombo.setPrefWidth(140);
         changeTypeCombo.setStyle(Theme.comboBox());
         changeTypeBox.getChildren().add(changeTypeCombo);
 
-        VBox distBox = createFormField("Κατανομή σε Υποκατηγορίες");
+        // 5. Κατανομή
+        VBox distBox = createFormField("Κατανομή");
         distributionCombo = new ComboBox<>();
-        distributionCombo.getItems().addAll(
-            "Ισόποσα",
-            "Ποσοστιαία"
-        );
+        distributionCombo.getItems().addAll("Ισόποσα", "Ποσοστιαία");
         distributionCombo.setValue("Ποσοστιαία");
-        distributionCombo.setPrefWidth(140);
+        distributionCombo.setPrefWidth(120);
         distributionCombo.setStyle(Theme.comboBox());
         distBox.getChildren().add(distributionCombo);
 
-        row2.getChildren().addAll(changeBox, changeTypeBox, distBox);
-
-        // Button row
-        HBox buttonRow = new HBox(16);
-        buttonRow.setAlignment(Pos.CENTER_LEFT);
-        buttonRow.setPadding(new Insets(8, 0, 0, 0));
-
-        executeButton = new Button("Εκτέλεση Αλλαγής");
+        // 6. Το Κουμπί
+        executeButton = new Button("Εκτέλεση");
         executeButton.setStyle(Theme.buttonPrimary());
+        executeButton.setPrefHeight(35);
+        executeButton.setOnAction(e -> executeChange());
         executeButton.setOnMouseEntered(e -> executeButton.setStyle(Theme.buttonPrimaryHover()));
         executeButton.setOnMouseExited(e -> executeButton.setStyle(Theme.buttonPrimary()));
-        executeButton.setOnAction(e -> executeChange());
+
+        filtersRow.getChildren().addAll(
+                budgetTypeBox,
+                codeBox,
+                changeBox,
+                changeTypeBox,
+                distBox,
+                executeButton
+        );
 
         statusLabel = new Label("");
         statusLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + Theme.TEXT_SECONDARY + ";");
 
-        buttonRow.getChildren().addAll(executeButton, statusLabel);
-
-        formCard.getChildren().addAll(formTitle, row1, row2, buttonRow);
+        formCard.getChildren().addAll(formTitle, filtersRow, statusLabel);
         section.getChildren().add(formCard);
+
         return section;
     }
 
@@ -330,7 +318,7 @@ public class BudgetChangesView {
         HBox resultsHeader = new HBox(12);
         resultsHeader.setAlignment(Pos.CENTER_LEFT);
 
-        Label resultsTitle = new Label("Αποτελέσματα Αλλαγών");
+        Label resultsTitle = new Label("Αποτελέσματα Αλλαγών Εσόδων");
         resultsTitle.setStyle(Theme.sectionHeader());
 
         Region spacer = new Region();
@@ -365,6 +353,7 @@ public class BudgetChangesView {
     private TableView<ChangeResult> createResultsTable() {
         TableView<ChangeResult> table = new TableView<>(resultsData);
         table.setStyle(Theme.table());
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         Label placeholder = new Label("Εκτελέστε μια αλλαγή για να δείτε αποτελέσματα");
         placeholder.setStyle("-fx-text-fill: " + Theme.TEXT_MUTED + ";");
@@ -401,6 +390,14 @@ public class BudgetChangesView {
         TableColumn<ChangeResult, String> roleCol = new TableColumn<>("Ρόλος");
         roleCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().role));
         roleCol.setPrefWidth(110);
+
+        codeCol.setMaxWidth(1f * Integer.MAX_VALUE * 7);
+        descCol.setMaxWidth(1f * Integer.MAX_VALUE * 38);
+        levelCol.setMaxWidth(1f * Integer.MAX_VALUE * 5);
+        beforeCol.setMaxWidth(1f * Integer.MAX_VALUE * 10);
+        afterCol.setMaxWidth(1f * Integer.MAX_VALUE * 10);
+        changeCol.setMaxWidth(1f * Integer.MAX_VALUE * 20);
+        roleCol.setMaxWidth(1f * Integer.MAX_VALUE * 10);
 
         table.getColumns().add(codeCol);
         table.getColumns().add(descCol);
@@ -656,7 +653,7 @@ public class BudgetChangesView {
 
         resultsData.add(new ChangeResult(
                 code,
-                truncateDescription(revenue.getDescription(), 35),
+                truncateDescription(revenue.getDescription(), 50),
                 String.valueOf(revenue.getLevelOfHierarchy()),
                 Theme.formatAmount(beforeVal),
                 Theme.formatAmount(afterVal),
@@ -762,9 +759,9 @@ public class BudgetChangesView {
         VBox budgetTypeBox = createFormField("Τύπος Προϋπολογισμού");
         expenseBudgetTypeCombo = new ComboBox<>();
         expenseBudgetTypeCombo.getItems().addAll(
-            "Τακτικός Προϋπολογισμός",
-            "ΠΔΕ Εθνικό",
-            "ΠΔΕ Συγχρηματοδοτούμενο"
+                "Τακτικός Προϋπολογισμός",
+                "ΠΔΕ Εθνικό",
+                "ΠΔΕ Συγχρηματοδοτούμενο"
         );
         expenseBudgetTypeCombo.setValue("Τακτικός Προϋπολογισμός");
         expenseBudgetTypeCombo.setPrefWidth(220);
@@ -775,9 +772,9 @@ public class BudgetChangesView {
         VBox scopeBox = createFormField("Εύρος Αλλαγής");
         expenseScopeCombo = new ComboBox<>();
         expenseScopeCombo.getItems().addAll(
-            "Καθολική (Όλοι οι Φορείς)",
-            "Ανά Φορέα",
-            "Ανά Υπηρεσία"
+                "Καθολική (Όλοι οι Φορείς)",
+                "Ανά Φορέα",
+                "Ανά Υπηρεσία"
         );
         expenseScopeCombo.setValue("Καθολική (Όλοι οι Φορείς)");
         expenseScopeCombo.setPrefWidth(200);
@@ -834,8 +831,8 @@ public class BudgetChangesView {
         VBox changeTypeBox = createFormField("Τύπος Αλλαγής");
         expenseChangeTypeCombo = new ComboBox<>();
         expenseChangeTypeCombo.getItems().addAll(
-            "Ποσοστό (%)",
-            "Σταθερό Ποσό"
+                "Ποσοστό (%)",
+                "Σταθερό Ποσό"
         );
         expenseChangeTypeCombo.setValue("Ποσοστό (%)");
         expenseChangeTypeCombo.setPrefWidth(140);
@@ -958,7 +955,7 @@ public class BudgetChangesView {
 
         for (String serviceCode : serviceCodes) {
             String serviceName = getServiceName(entity, serviceCode, budgetType);
-            expenseServiceCombo.getItems().add(serviceCode + " - " + truncateDescription(serviceName, 40));
+            expenseServiceCombo.getItems().add(serviceCode + " - " + truncateDescription(serviceName, 70));
         }
 
         if (!expenseServiceCombo.getItems().isEmpty()) {
@@ -1025,6 +1022,7 @@ public class BudgetChangesView {
     private TableView<ExpenseChangeResult> createExpenseResultsTable() {
         TableView<ExpenseChangeResult> table = new TableView<>(expenseResultsData);
         table.setStyle(Theme.table());
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         Label placeholder = new Label("Εκτελέστε μια αλλαγή για να δείτε αποτελέσματα");
         placeholder.setStyle("-fx-text-fill: " + Theme.TEXT_MUTED + ";");
@@ -1061,6 +1059,13 @@ public class BudgetChangesView {
         changeCol.setPrefWidth(180);
         changeCol.setStyle("-fx-alignment: CENTER-RIGHT;");
 
+        entityCol.setMaxWidth(1f * Integer.MAX_VALUE * 6);
+        serviceCol.setMaxWidth(1f * Integer.MAX_VALUE * 40);
+        categoryCol.setMaxWidth(1f * Integer.MAX_VALUE * 5);
+        descCol.setMaxWidth(1f * Integer.MAX_VALUE * 15);
+        beforeCol.setMaxWidth(1f * Integer.MAX_VALUE * 8);
+        afterCol.setMaxWidth(1f * Integer.MAX_VALUE * 8);
+        changeCol.setMaxWidth(1f * Integer.MAX_VALUE * 18);
         table.getColumns().add(entityCol);
         table.getColumns().add(serviceCol);
         table.getColumns().add(categoryCol);
@@ -1446,8 +1451,8 @@ public class BudgetChangesView {
                 addSummaryRow("ΣΥΝΟΛΟ", "ΕΠΙΚΡΑΤΕΙΑ", "", "ΟΛΕΣ", "Γενικό Σύνολο Εξόδων", bTypeGlobal, aTypeGlobal);
 
             }
-            animateExpenseResults();
         }
+        animateExpenseResults();
     }
 
     private void updateConsolidationOptions(String budgetType) {
