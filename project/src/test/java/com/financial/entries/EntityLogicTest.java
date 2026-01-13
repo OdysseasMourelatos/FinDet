@@ -136,6 +136,33 @@ public class EntityLogicTest {
     }
 
     @Test
+    void getPublicInvestmentServiceNameWithCodeTest() {
+        Entity entity = Entity.findEntityWithEntityCode("1004");
+
+        // Case 1: Υπάρχει στο Co-Funded (Branch A - True)
+        String coFundedName = entity.getPublicInvestmentServiceNameWithCode("1004-201-000000");
+        assertEquals("Γενική Γραμματεία του Πρωθυπουργού", coFundedName);
+
+        // Case 2: ΔΕΝ υπάρχει στο Co-Funded, αλλά υπάρχει στο National (Branch B - False)
+        String nationalName = entity.getPublicInvestmentServiceNameWithCode("1004-202-000000");
+        assertEquals("Γενική Γραμματεία Νομικών και Κοινοβουλευτικών Θεμάτων", nationalName);
+    }
+
+    @Test
+    void getServiceNameWithCodeTest() {
+        Entity entity1003 = Entity.findEntityWithEntityCode("1003");
+        Entity entity1001 = Entity.findEntityWithEntityCode("1001");
+
+        // Case 1: Υπάρχει στο ΠΔΕ (Branch C - True)
+        String pibName = entity1003.getServiceNameWithCode("1003-501-000000");
+        assertEquals("Λοιπές αυτοτελείς Υπηρεσίες και μονάδες", pibName);
+
+        // Case 2: ΔΕΝ υπάρχει στο ΠΔΕ, αλλά υπάρχει στον Τακτικό (Branch D - False)
+        String regularName = entity1001.getServiceNameWithCode("1001-101-000000");
+        assertEquals("Προεδρία της Δημοκρατίας", regularName);
+    }
+
+    @Test
     void getAllRegularServiceCodesTest() {
         // Φορέας 1003 (Βουλή των Ελλήνων)
         Entity entity = Entity.findEntityWithEntityCode("1003");
@@ -282,23 +309,38 @@ public class EntityLogicTest {
 
     @Test
     void getPublicInvestmentExpensesOfServiceWithCodeTest() {
-        // Φορέας 1004 (Προεδρία της Κυβέρνησης) - Υπηρεσία 201
-        Entity entity = Entity.findEntityWithEntityCode("1004");
-        ArrayList<BudgetExpense> expenses = entity.getPublicInvestmentExpensesOfServiceWithCode("1004-201-000000");
+        Entity entity1004 = Entity.findEntityWithEntityCode("1004");
+        Entity entity1003 = Entity.findEntityWithEntityCode("1003");
+        Entity entity1001 = Entity.findEntityWithEntityCode("1001");
 
-        // Setup 201 National + CoFunded: 2 εγγραφές
-        assertEquals(2, expenses.size());
+        // Case 1: National (Yes) & CoFunded (Yes) -> 1004-201-000000
+        ArrayList<BudgetExpense> tt = entity1004.getPublicInvestmentExpensesOfServiceWithCode("1004-201-000000");
+        assertEquals(2, tt.size());
+
+        // Case 2: National (Yes) & CoFunded (No/Null) -> 1004-202-000000
+        ArrayList<BudgetExpense> tf = entity1004.getPublicInvestmentExpensesOfServiceWithCode("1004-202-000000");
+        assertEquals(1, tf.size());
+
+        // Case 3: National (No/Null) & CoFunded (Yes) -> 1003-501-000000
+        ArrayList<BudgetExpense> ft = entity1003.getPublicInvestmentExpensesOfServiceWithCode("1003-501-000000");
+        assertEquals(1, ft.size());
+
+        // Case 4: Both Null -> 1001 (Δεν έχει ΠΔΕ)
+        ArrayList<BudgetExpense> ff = entity1001.getPublicInvestmentExpensesOfServiceWithCode("1001-101-000000");
+        assertTrue(ff.isEmpty());
     }
 
     @Test
     void getBudgetExpensesOfServiceWithCodeTest() {
-        // Φορέας 1003 (Βουλή των Ελλήνων) - Υπηρεσία 101
-        Entity entity = Entity.findEntityWithEntityCode("1003");
-        ArrayList<BudgetExpense> expenses = entity.getBudgetExpensesOfServiceWithCode("1003-101-000000");
+        Entity entity1003 = Entity.findEntityWithEntityCode("1003");
 
-        // Setup 101 Total: 2 εγγραφές
-        assertEquals(2, expenses.size());
+        // Case: Regular (Yes) & PIB (No) -> 1003-101-000000
+        ArrayList<BudgetExpense> regularOnly = entity1003.getBudgetExpensesOfServiceWithCode("1003-101-000000");
+        assertEquals(2, regularOnly.size());
 
+        // Case: Regular (No) & PIB (Yes) -> 1003-501-000000
+        ArrayList<BudgetExpense> pibOnly = entity1003.getBudgetExpensesOfServiceWithCode("1003-501-000000");
+        assertEquals(1, pibOnly.size());
     }
 
     @Test
