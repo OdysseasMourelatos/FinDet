@@ -83,6 +83,11 @@ public class BudgetChangesView {
     private Spinner<Integer> undoStepsSpinner;
     private Label globalStatusLabel;
 
+    private TableView<BudgetRevenue> pendingRevenuesTable;
+    private TableView<BudgetExpense> pendingExpensesTable;
+    private ObservableList<BudgetRevenue> pendingRevenuesData = FXCollections.observableArrayList();
+    private ObservableList<BudgetExpense> pendingExpensesData = FXCollections.observableArrayList();
+
     public BudgetChangesView() {
         view = new VBox(0);
         view.setStyle("-fx-background-color: " + Theme.BG_BASE + ";");
@@ -108,7 +113,15 @@ public class BudgetChangesView {
 
         tabPane.getTabs().addAll(revenueTab, expenseTab);
 
-        view.getChildren().addAll(header, tabPane);
+        TitledPane pendingSection = createPendingChangesSection();
+
+        SplitPane splitPane = new SplitPane();
+        splitPane.setOrientation(javafx.geometry.Orientation.VERTICAL);
+        splitPane.getItems().addAll(tabPane, pendingSection);
+        splitPane.setDividerPositions(0.8);
+
+        VBox.setVgrow(splitPane, Priority.ALWAYS);
+        view.getChildren().addAll(header, tabPane, splitPane);
 
         // Wrap in scroll pane
         scrollPane = new ScrollPane(view);
@@ -210,7 +223,6 @@ public class BudgetChangesView {
     }
 
     private VBox createFormSection() {
-        // Διάταξη από το 2ο snippet (πιο συμπαγές spacing)
         VBox section = new VBox(10);
         section.setPadding(new Insets(15, 24, 10, 24));
 
@@ -946,7 +958,7 @@ public class BudgetChangesView {
 
         for (String serviceCode : serviceCodes) {
             String serviceName = getServiceName(entity, serviceCode, budgetType);
-            expenseServiceCombo.getItems().add(serviceCode + " - " + truncateDescription(serviceName, 70));
+            expenseServiceCombo.getItems().add(serviceCode + " - " + truncateDescription(serviceName, 100));
         }
 
         if (!expenseServiceCombo.getItems().isEmpty()) {
@@ -1057,6 +1069,7 @@ public class BudgetChangesView {
         beforeCol.setMaxWidth(1f * Integer.MAX_VALUE * 8);
         afterCol.setMaxWidth(1f * Integer.MAX_VALUE * 8);
         changeCol.setMaxWidth(1f * Integer.MAX_VALUE * 18);
+
         table.getColumns().add(entityCol);
         table.getColumns().add(serviceCol);
         table.getColumns().add(categoryCol);
@@ -1466,7 +1479,7 @@ public class BudgetChangesView {
 
         String changeStr = String.format("%s%s (%.1f%%)", (change > 0 ? "+" : ""), Theme.formatAmount(change), pct);
 
-        return new ExpenseChangeResult(ent, truncateDescription(ser, 25), cat, truncateDescription(desc, 30),
+        return new ExpenseChangeResult(ent, truncateDescription(ser, 70), cat, truncateDescription(desc, 40),
                 Theme.formatAmount(b), Theme.formatAmount(a), changeStr);
     }
 
@@ -1602,9 +1615,26 @@ public class BudgetChangesView {
     }
 
     private void updateSaveButtonState() {
-        if (saveToDbButton == null || globalUndoButton == null) {
+        if (saveToDbButton == null || globalUndoButton == null || undoStepsSpinner == null ||
+                pendingRevenuesTable == null || pendingExpensesTable == null) {
             return;
         }
+
+        pendingRevenuesData.clear();
+        pendingExpensesData.clear();
+
+        for (BudgetEntry entry : pendingChanges) {
+            if (entry instanceof BudgetRevenue) {
+                pendingRevenuesData.add((BudgetRevenue) entry);
+            } else if (entry instanceof BudgetExpense) {
+                pendingExpensesData.add((BudgetExpense) entry);
+            }
+        }
+
+        pendingRevenuesData.sort(Comparator.comparing(BudgetRevenue::getCode));
+        pendingExpensesData.sort(Comparator.comparing(BudgetExpense::getEntityCode));
+        pendingRevenuesTable.refresh();
+        pendingExpensesTable.refresh();
 
         int records = pendingChanges.size();
         int batchExp = ExpensesHistory.getHistoryDeque().size();
@@ -1614,11 +1644,9 @@ public class BudgetChangesView {
         saveToDbButton.setDisable(records == 0);
         saveToDbButton.setText("Αποθήκευση (" + records + ")");
 
-        // Ενεργοποίηση/Απενεργοποίηση
         globalUndoButton.setDisable(totalBatches == 0);
         undoStepsSpinner.setDisable(totalBatches == 0);
 
-        // Ενημέρωση του Max μόνο αν υπάρχουν αλλαγές
         if (totalBatches > 0) {
             SpinnerValueFactory.IntegerSpinnerValueFactory factory =
                     (SpinnerValueFactory.IntegerSpinnerValueFactory) undoStepsSpinner.getValueFactory();
@@ -1722,6 +1750,83 @@ public class BudgetChangesView {
             fadeOut.play();
         });
         delay.play();
+    }
+
+    private TitledPane createPendingChangesSection() {
+        // --- Πίνακας Εσόδων ---
+        pendingRevenuesTable = new TableView<>(pendingRevenuesData);
+        pendingRevenuesTable.setPrefHeight(200);
+        pendingRevenuesTable.setStyle(Theme.table());
+
+        pendingRevenuesTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        TableColumn<BudgetRevenue, String> revCode = new TableColumn<>("Κωδικός");
+        revCode.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getCode()));
+        revCode.prefWidthProperty().bind(pendingRevenuesTable.widthProperty().multiply(0.10));
+
+        TableColumn<BudgetRevenue, String> revDesc = new TableColumn<>("Περιγραφή");
+        revDesc.setCellValueFactory(d -> new SimpleStringProperty(truncateDescription(d.getValue().getDescription(), 100)));
+        revDesc.prefWidthProperty().bind(pendingRevenuesTable.widthProperty().multiply(0.60));
+
+        TableColumn<BudgetRevenue, String> revType = new TableColumn<>("Τύπος");
+        revType.setCellValueFactory(d -> new SimpleStringProperty(getBudgetTypeName(d.getValue())));
+        revType.prefWidthProperty().bind(pendingRevenuesTable.widthProperty().multiply(0.10));
+
+        TableColumn<BudgetRevenue, String> revAmount = new TableColumn<>("Ποσό στη Μνήμη");
+        revAmount.setCellValueFactory(d -> new SimpleStringProperty(Theme.formatAmount(d.getValue().getAmount())));
+        revAmount.setStyle("-fx-alignment: CENTER-RIGHT; -fx-font-weight: bold; -fx-text-fill: " + Theme.ACCENT_BRIGHT + ";");
+        revAmount.prefWidthProperty().bind(pendingRevenuesTable.widthProperty().multiply(0.20));
+
+        pendingRevenuesTable.getColumns().addAll(revCode, revDesc, revType, revAmount);
+
+        // --- Πίνακας Εξόδων ---
+        pendingExpensesTable = new TableView<>(pendingExpensesData);
+        pendingExpensesTable.setPrefHeight(200);
+        pendingExpensesTable.setStyle(Theme.table());
+        pendingExpensesTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        TableColumn<BudgetExpense, String> expEntity = new TableColumn<>("Φορέας");
+        expEntity.setCellValueFactory(d -> new SimpleStringProperty(truncateDescription(d.getValue().getEntityName(), 120)));
+        expEntity.prefWidthProperty().bind(pendingExpensesTable.widthProperty().multiply(0.30));
+
+        TableColumn<BudgetExpense, String> expService = new TableColumn<>("Υπηρεσία");
+        expService.setCellValueFactory(d -> new SimpleStringProperty(truncateDescription(d.getValue().getServiceName(), 120)));
+        expService.prefWidthProperty().bind(pendingExpensesTable.widthProperty().multiply(0.50));
+
+        TableColumn<BudgetExpense, String> expCode = new TableColumn<>("Κωδικός");
+        expCode.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getCode()));
+        expCode.prefWidthProperty().bind(pendingExpensesTable.widthProperty().multiply(0.05));
+
+        TableColumn<BudgetExpense, String> expType = new TableColumn<>("Τύπος");
+        expType.setCellValueFactory(d -> new SimpleStringProperty(getBudgetTypeName(d.getValue())));
+        expType.prefWidthProperty().bind(pendingExpensesTable.widthProperty().multiply(0.05));
+
+        TableColumn<BudgetExpense, String> expAmount = new TableColumn<>("Ποσό στη Μνήμη");
+        expAmount.setCellValueFactory(d -> new SimpleStringProperty(Theme.formatAmount(d.getValue().getAmount())));
+        expAmount.setStyle("-fx-alignment: CENTER-RIGHT; -fx-font-weight: bold; -fx-text-fill: " + Theme.ACCENT_BRIGHT + ";");
+        expAmount.prefWidthProperty().bind(pendingExpensesTable.widthProperty().multiply(0.10));
+
+        pendingExpensesTable.getColumns().addAll(expEntity, expService, expCode, expType, expAmount);
+
+        TabPane pendingTabs = new TabPane(new Tab("Εκκρεμή Έσοδα", pendingRevenuesTable), new Tab("Εκκρεμή Έξοδα", pendingExpensesTable));
+        pendingTabs.getTabs().forEach(t -> t.setClosable(false));
+
+        TitledPane mainPane = new TitledPane("Σύνοψη Αλλαγών προς Αποθήκευση", pendingTabs);
+        mainPane.setExpanded(true);
+        return mainPane;
+    }
+
+    private String getBudgetTypeName(BudgetEntry entry) {
+        if (entry instanceof RegularBudgetRevenue || entry instanceof RegularBudgetExpense) {
+            return "Τακτικός";
+        }
+        if (entry instanceof PublicInvestmentBudgetNationalRevenue || entry instanceof PublicInvestmentBudgetNationalExpense) {
+            return "ΠΔΕ Εθνικό";
+        }
+        if (entry instanceof PublicInvestmentBudgetCoFundedRevenue || entry instanceof PublicInvestmentBudgetCoFundedExpense) {
+            return "ΠΔΕ Συγχρ.";
+        }
+        return "Άλλο";
     }
 
     public Set<BudgetEntry> getPendingChanges() {
