@@ -220,6 +220,8 @@ public class Entity implements EntityLogic {
                 expense = PublicInvestmentBudgetNationalExpense.findPublicInvestmentBudgetNationalExpenseWithCodes(entityCode, serviceCode, categoryCode);
             } else if (budgetType == BudgetType.PUBLIC_INVESTMENT_BUDGET_COFUNDED) {
                 expense = PublicInvestmentBudgetCoFundedExpense.findPublicInvestmentBudgetCoFundedExpenseWithCodes(entityCode, serviceCode, categoryCode);
+            } else {
+                return;
             }
 
             ArrayList<BudgetExpense> expenses = new ArrayList<>();
@@ -232,8 +234,10 @@ public class Entity implements EntityLogic {
                 expense.setAmount( (long) (expense.getAmount() * (1 + percentage)));
             }
 
-        } catch (IllegalArgumentException | NullPointerException e) {
+        } catch (IllegalArgumentException e) {
             ExpensesHistory.returnToPreviousState();
+            return;
+        } catch (NullPointerException e) {
             return;
         }
     }

@@ -1,8 +1,7 @@
 package com.financial.services.expenses;
 
-import com.financial.entries.BudgetExpense;
+import com.financial.entries.*;
 import com.financial.services.BudgetType;
-import com.financial.entries.RegularBudgetExpense;
 
 import java.util.*;
 
@@ -62,14 +61,16 @@ public class ExpensesHistory {
                     RegularBudgetExpense expense = RegularBudgetExpense.findRegularBudgetExpenseWithCodes(primaryKey[0], primaryKey[1], primaryKey[2]);
                     expense.setAmount(entry.getValue());
                 } else if (type.equals(BudgetType.PUBLIC_INVESTMENT_BUDGET_NATIONAL)) {
-                    return;
+                    PublicInvestmentBudgetNationalExpense expense = PublicInvestmentBudgetNationalExpense.findPublicInvestmentBudgetNationalExpenseWithCodes(primaryKey[0], primaryKey[1], primaryKey[2]);
+                    expense.setAmount(entry.getValue());
                 } else if (type.equals(BudgetType.PUBLIC_INVESTMENT_BUDGET_COFUNDED)) {
-                    return;
+                    PublicInvestmentBudgetCoFundedExpense expense = PublicInvestmentBudgetCoFundedExpense.findPublicInvestmentBudgetCoFundedExpenseWithCodes(primaryKey[0], primaryKey[1], primaryKey[2]);
+                    expense.setAmount(entry.getValue());
                 }
             }
             historyDeque.pop();
             typeDeque.pop();
-        } catch (NoSuchElementException e) {
+        } catch (NoSuchElementException | NullPointerException e) {
             System.out.println("NO HISTORY FOUND");
         }
     }

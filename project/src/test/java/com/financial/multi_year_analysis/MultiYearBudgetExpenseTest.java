@@ -116,6 +116,14 @@ public class MultiYearBudgetExpenseTest {
     }
 
     @Test
+    void getEntityCodeAndNameBranchCoverageTest() {
+        MultiYearBudgetExpense multiYearBudgetExpense = new MultiYearBudgetExpense("9999", "ΤΕΣΤ ΦΟΡΕΑΣ", 0, 0L, 2025);
+        assertEquals(multiYearBudgetExpense.getEntityCode(), "9999");
+        assertEquals(multiYearBudgetExpense.getEntityName(), "ΤΕΣΤ ΦΟΡΕΑΣ");
+
+    }
+
+    @Test
     void toStringTest() {
         // Επιλέγουμε ένα αντικείμενο από τη λίστα
         MultiYearBudgetExpense expense = MultiYearBudgetExpense.getMultiYearBudgetExpenses().get(0);

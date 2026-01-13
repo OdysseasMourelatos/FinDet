@@ -205,6 +205,58 @@ public class BudgetRevenueTest {
     }
 
     @Test
+    void equalsAndHashCodeFullTest() {
+
+        // 1. Δημιουργία αντικειμένων αναφοράς
+        BudgetRevenue base = new BudgetRevenue("13", "Μεταβιβάσεις", "ΕΣΟΔΑ", 1000L, 500L, 1500L);
+
+        // Ίδιο αντικείμενο με το base (ίδια code, regAmount, pibAmount)
+        BudgetRevenue identical = new BudgetRevenue("13", "Άλλη Περιγραφή", "ΚΑΤ", 1000L, 500L, 1500L);
+
+        // Διαφορετικό Code
+        BudgetRevenue diffCode = new BudgetRevenue("14", "Μεταβιβάσεις", "ΕΣΟΔΑ", 1000L, 500L, 1500L);
+
+        // Διαφορετικό Regular Amount
+        BudgetRevenue diffRegular = new BudgetRevenue("13", "Μεταβιβάσεις", "ΕΣΟΔΑ", 2000L, 500L, 2500L);
+
+        // Διαφορετικό PIB Amount
+        BudgetRevenue diffPIB = new BudgetRevenue("13", "Μεταβιβάσεις", "ΕΣΟΔΑ", 1000L, 900L, 1900L);
+
+        // --- ΕΛΕΓΧΟΣ EQUALS ---
+
+        // O εαυτός του
+        assertTrue(base.equals(base));
+
+        // Null check
+        assertFalse(base.equals(null));
+
+        // Type check: Διαφορετική κλάση
+        assertFalse(base.equals("A String"));
+
+        // Equality: Ταύτιση των 3 βασικών πεδίων
+        assertTrue(base.equals(identical));
+
+        assertTrue(identical.equals(base));
+
+        // Inequality: Διαφορά στο Code
+        assertFalse(base.equals(diffCode));
+
+        // Inequality: Διαφορά στο Regular Amount
+        assertFalse(base.equals(diffRegular));
+
+        // Inequality: Διαφορά στο PIB Amount
+        assertFalse(base.equals(diffPIB));
+
+        // --- ΕΛΕΓΧΟΣ HASHCODE ---
+
+        // Αν δύο αντικείμενα είναι ίσα, ΠΡΕΠΕΙ να έχουν το ίδιο hashCode
+        assertEquals(base.hashCode(), identical.hashCode());
+
+        //Αλλιώς όχι
+        assertNotEquals(base.hashCode(), diffCode.hashCode());
+    }
+
+    @Test
     void toStringFormattingTest() {
         BudgetRevenue br13 = BudgetRevenue.findBudgetRevenueWithCode("13");
         String output = br13.toString();

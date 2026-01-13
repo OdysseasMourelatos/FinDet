@@ -1,7 +1,7 @@
-package com.financial;
+package com.financial.services;
 
+import com.financial.entries.PublicInvestmentBudgetCoFundedExpense;
 import com.financial.entries.RegularBudgetExpense;
-import com.financial.services.BudgetType;
 import com.financial.services.expenses.ExpensesHistory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -108,5 +108,45 @@ public class ExpensesHistoryTest {
         assertEquals(3000L, e3.getAmount());
 
         assertTrue(ExpensesHistory.getHistoryDeque().isEmpty());
+    }
+
+    @Test
+    void returnToPreviousStateTriggerCatchTest() {
+        ExpensesHistory.getHistoryDeque().clear();
+        ExpensesHistory.getTypeDeque().clear();
+
+        assertDoesNotThrow(() -> {
+            ExpensesHistory.returnToPreviousState();
+        });
+    }
+
+    @Test
+    void returnToPreviousStateCoFundedTest() {
+
+        PublicInvestmentBudgetCoFundedExpense coFundedExpense = new PublicInvestmentBudgetCoFundedExpense("1001", "NAME", "S1", "SNAME", "E1", "DESC", "COFUNDED", "ΕΞΟΔΑ", 2000L);
+        ArrayList<PublicInvestmentBudgetCoFundedExpense> list = new ArrayList<>();
+        list.add(coFundedExpense);
+
+        ExpensesHistory.keepHistory(list, BudgetType.PUBLIC_INVESTMENT_BUDGET_COFUNDED);
+
+        coFundedExpense.setAmount(9999L);
+
+        ExpensesHistory.returnToPreviousState();
+
+        assertEquals(2000L, coFundedExpense.getAmount());
+    }
+
+    @Test
+    void returnToPreviousStateNullCaseTest() {
+        ExpensesHistory.getHistoryDeque().clear();
+        ExpensesHistory.getTypeDeque().clear();
+
+        assertDoesNotThrow(() -> {
+            ExpensesHistory.returnToPreviousState();
+        });
+
+        // 3. Επιβεβαιώνουμε ότι οι στοίβες παρέμειναν άδειες
+        assertTrue(ExpensesHistory.getHistoryDeque().isEmpty());
+        assertTrue(ExpensesHistory.getTypeDeque().isEmpty());
     }
 }

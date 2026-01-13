@@ -6,6 +6,10 @@ import java.util.*;
 
 public class EntityLogicService {
 
+    private EntityLogicService() {
+        // utility class – no instances
+    }
+
     public static String getServiceNameWithCode(String serviceCode, ArrayList<? extends BudgetExpense> expenses) {
         for (BudgetExpense expense : expenses) {
             if (expense.getServiceCode().equals(serviceCode)) {

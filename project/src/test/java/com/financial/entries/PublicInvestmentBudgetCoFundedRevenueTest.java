@@ -390,6 +390,32 @@ public class PublicInvestmentBudgetCoFundedRevenueTest {
     }
 
     @Test
+    void implementChangesOfEqualDistributionLeadingToNegativeFailureTest() {
+        // ΣΕΝΑΡΙΟ: Προσπάθεια αφαίρεσης 2 δις € από την κατηγορία 13501.
+        // Η 13501 έχει 4,19 δις €, αλλά το παιδί της (1350101) έχει μόνο 1,308 δις €.
+        // Η μείωση μεταφέρεται αυτούσια στο παιδί (λόγω 1 παιδιού ανά επίπεδο),
+        // οδηγώντας το σε αρνητικό υπόλοιπο.
+
+        long original13 = revenue13.getAmount();
+        long original135 = revenue135.getAmount();
+        long original13501 = revenue13501.getAmount();
+        long original1350101 = revenue1350101.getAmount();
+
+        long dangerousReduction = -2000000000L; // -2.000.000.000€
+
+        // Εκτέλεση της αλλαγής
+        revenue13501.implementChangesOfEqualDistribution(dangerousReduction);
+
+        // ΕΛΕΓΧΟΣ: Όλο το δέντρο πρέπει να έχει επιστρέψει στις αρχικές τιμές
+        assertAll("Rollback Verification",
+                () -> assertEquals(original13, revenue13.getAmount()),
+                () -> assertEquals(original135, revenue135.getAmount()),
+                () -> assertEquals(original13501, revenue13501.getAmount()),
+                () -> assertEquals(original1350101, revenue1350101.getAmount())
+        );
+    }
+
+    @Test
     void testToStringFormatCoFunded() {
         String output = revenue13.toString();
         // Έλεγχος αν η toString περιέχει τα βασικά στοιχεία της CoFunded

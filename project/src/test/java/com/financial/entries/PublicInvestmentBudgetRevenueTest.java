@@ -249,6 +249,50 @@ public class PublicInvestmentBudgetRevenueTest {
     }
 
     @Test
+    void equalsAndHashCodeFullTest() {
+        // 1. Δημιουργία αντικειμένων αναφοράς
+        PublicInvestmentBudgetRevenue base = new PublicInvestmentBudgetNationalRevenue("13", "Desc", "Cat", "ΕΘΝΙΚΟ", 1000L);
+
+        // Ίδιο αντικείμενο (ίδιος κωδικός και τύπος)
+        PublicInvestmentBudgetRevenue identical = new PublicInvestmentBudgetNationalRevenue("13", "Other Desc", "Other Cat", "ΕΘΝΙΚΟ", 5000L);
+
+        // Διαφορετικός κωδικός
+        PublicInvestmentBudgetRevenue diffCode = new PublicInvestmentBudgetNationalRevenue("15", "Desc", "Cat", "ΕΘΝΙΚΟ", 1000L);
+
+        // Διαφορετικός τύπος (π.χ. CoFunded)
+        PublicInvestmentBudgetRevenue diffType = new PublicInvestmentBudgetCoFundedRevenue("13", "Desc", "Cat", "ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ", 1000L);
+
+        // --- ΕΛΕΓΧΟΣ EQUALS ---
+
+        // 1. Reflexive (this == o)
+        assertTrue(base.equals(base));
+
+        // 2. Null check (o == null)
+        assertFalse(base.equals(null));
+
+        // 3. Class check (getClass() != o.getClass())
+        assertFalse(base.equals("A String Object"));
+
+        // 4. Equality (Same code and same type)
+        assertTrue(base.equals(identical));
+
+        // 5. Inequality (Different code)
+        assertFalse(base.equals(diffCode));
+
+        // 6. Inequality (Different type)
+        assertFalse(base.equals(diffType));
+
+        // --- ΕΛΕΓΧΟΣ HASHCODE ---
+
+        // Δύο ίσα αντικείμενα ΠΡΕΠΕΙ να έχουν το ίδιο hashCode
+        assertEquals(base.hashCode(), identical.hashCode());
+
+        // Διαφορετικά αντικείμενα πρέπει (ιδανικά) να έχουν διαφορετικά hashCode
+        assertNotEquals(base.hashCode(), diffCode.hashCode());
+        assertNotEquals(base.hashCode(), diffType.hashCode());
+    }
+
+    @Test
     void toStringFormatTest() {
         PublicInvestmentBudgetRevenue rev15 = PublicInvestmentBudgetRevenue.findPublicInvestmentBudgetRevenueWithCode("15");
         String output = rev15.toString();

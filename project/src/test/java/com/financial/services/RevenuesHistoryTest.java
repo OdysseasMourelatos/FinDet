@@ -1,7 +1,7 @@
-package com.financial.services.revenues;
+package com.financial.services;
 
 import com.financial.entries.*;
-import com.financial.services.BudgetType;
+import com.financial.services.revenues.RevenuesHistory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
