@@ -172,6 +172,8 @@ public class AccountExplorerView {
         HBox section = new HBox(16);
         section.setPadding(new Insets(0, 24, 16, 24));
 
+        VBox.setVgrow(section, Priority.ALWAYS);
+
         superCategoriesData = FXCollections.observableArrayList();
         subCategoriesData = FXCollections.observableArrayList();
 
@@ -224,6 +226,8 @@ public class AccountExplorerView {
         TableView<BudgetRevenue> table = new TableView<>();
         table.setStyle(Theme.table());
 
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
         Label placeholder = new Label("");
         placeholder.setStyle("-fx-text-fill: " + Theme.TEXT_MUTED + ";");
         table.setPlaceholder(placeholder);
@@ -245,6 +249,11 @@ public class AccountExplorerView {
         amountCol.setCellValueFactory(d -> new SimpleStringProperty(Theme.formatAmount(d.getValue().getAmount())));
         amountCol.setPrefWidth(100);
         amountCol.setStyle("-fx-alignment: CENTER-RIGHT;");
+
+        codeCol.setMaxWidth(1f * Integer.MAX_VALUE * 15);
+        levelCol.setMaxWidth(1f * Integer.MAX_VALUE * 5);
+        descCol.setMaxWidth(1f * Integer.MAX_VALUE * 60);
+        amountCol.setMaxWidth(1f * Integer.MAX_VALUE * 20);
 
         table.getColumns().addAll(codeCol, levelCol, descCol, amountCol);
         table.setItems(data);
