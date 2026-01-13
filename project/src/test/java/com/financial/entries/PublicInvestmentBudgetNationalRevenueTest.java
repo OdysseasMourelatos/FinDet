@@ -395,6 +395,34 @@ public class PublicInvestmentBudgetNationalRevenueTest {
     }
 
     @Test
+    void implementChangesOfEqualDistributionLeadingToNegativeFailureNationalTest() {
+        // ΣΕΝΑΡΙΟ: Προσπάθεια αφαίρεσης 2.000.000€ από την κατηγορία 15.
+        // Η 15 (Root) έχει 265.000.000€
+        // ΟΜΩΣ, η 156 έχει μόνο 1.000.000€.
+        // Επειδή υπάρχει μόνο 1 παιδί (156), όλο το ποσό (-2Μ) μεταφέρεται σε αυτό.
+        // 1.000.000 - 2.000.000 = -1.000.000€ -> Rollback!
+
+        long initial15 = revenue15.getAmount();
+        long initial156 = revenue156.getAmount();
+        long initial15609 = revenue15609.getAmount();
+
+        long dangerousReduction = -2000000L; // -2.000.000€
+
+        // Εκτέλεση της αλλαγής στη ρίζα 15
+        revenue15.implementChangesOfEqualDistribution(dangerousReduction);
+
+        // ΕΠΑΛΗΘΕΥΣΗ: Όλο το δέντρο 15 πρέπει να έχει επιστρέψει στις αρχικές τιμές
+        assertAll("National Rollback Verification",
+                () -> assertEquals(initial15, revenue15.getAmount()),
+                () -> assertEquals(initial156, revenue156.getAmount()),
+                () -> assertEquals(initial15609, revenue15609.getAmount())
+        );
+
+        // Έλεγχος ότι το δέντρο 13 παρέμεινε ούτως ή άλλως ανεπηρέαστο (Isolation)
+        assertEquals(35000000L, revenue13.getAmount());
+    }
+
+    @Test
     void toStringFormatTest() {
         String output = revenue15.toString();
         // Έλεγχος αν η toString περιέχει τα βασικά στοιχεία

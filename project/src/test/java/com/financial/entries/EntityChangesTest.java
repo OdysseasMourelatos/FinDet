@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 public class EntityChangesTest {
 
@@ -286,5 +287,47 @@ public class EntityChangesTest {
         IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
             entity.implementChangesInAllExpenseCategoriesOfAllServices(0.10, 0, BudgetType.PUBLIC_INVESTMENT_BUDGET);
         });
+    }
+
+    @Test
+    void implementChangesInSpecificExpenseCategoryOfSpecificServiceTest() {
+
+        // 1. Έλεγχος REGULAR_BUDGET (Φορέας 1001)
+        Entity entity1001 = Entity.findEntityWithEntityCode("1001");
+        String regService = "1001-101-000000";
+        long initialRegular = RegularBudgetExpense.findRegularBudgetExpenseWithCodes("1001", regService, "21").getAmount();
+
+        entity1001.implementChangesInSpecificExpenseCategoryOfSpecificService(regService, "21", 0.0, 1000L, BudgetType.REGULAR_BUDGET);
+        assertEquals(initialRegular + 1000L, RegularBudgetExpense.findRegularBudgetExpenseWithCodes("1001", regService, "21").getAmount());
+
+        // 2. Έλεγχος NATIONAL_PIB (Φορέας 1004)
+        Entity entity1004 = Entity.findEntityWithEntityCode("1004");
+        String natService = "1004-201-000000";
+        long initialNational = PublicInvestmentBudgetNationalExpense.findPublicInvestmentBudgetNationalExpenseWithCodes("1004", natService, "29").getAmount();
+
+        entity1004.implementChangesInSpecificExpenseCategoryOfSpecificService(natService, "29", 0.10, 0L, BudgetType.PUBLIC_INVESTMENT_BUDGET_NATIONAL);
+        assertEquals((long)(initialNational * 1.10), PublicInvestmentBudgetNationalExpense.findPublicInvestmentBudgetNationalExpenseWithCodes("1004", natService, "29").getAmount());
+
+        // 3. Έλεγχος COFUNDED_PIB (Φορέας 1004)
+        long initialCoFunded = PublicInvestmentBudgetCoFundedExpense.findPublicInvestmentBudgetCoFundedExpenseWithCodes("1004", natService, "29").getAmount();
+
+        entity1004.implementChangesInSpecificExpenseCategoryOfSpecificService(natService, "29", 0.0, 500L, BudgetType.PUBLIC_INVESTMENT_BUDGET_COFUNDED);
+        assertEquals(initialCoFunded + 500L, PublicInvestmentBudgetCoFundedExpense.findPublicInvestmentBudgetCoFundedExpenseWithCodes("1004", natService, "29").getAmount());
+
+        // 4. Branch Coverage: NullPointerException (Λάθος κωδικός)
+        assertDoesNotThrow(() -> entity1001.implementChangesInSpecificExpenseCategoryOfSpecificService("INVALID", "99", 0.1, 0, BudgetType.REGULAR_BUDGET));
+
+        // 5. Branch Coverage: IllegalArgumentException & Rollback
+        long amountBeforeError = RegularBudgetExpense.findRegularBudgetExpenseWithCodes("1001", regService, "21").getAmount();
+        entity1001.implementChangesInSpecificExpenseCategoryOfSpecificService(regService, "21", -2.0, 0L, BudgetType.REGULAR_BUDGET);
+        assertEquals(amountBeforeError, RegularBudgetExpense.findRegularBudgetExpenseWithCodes("1001", regService, "21").getAmount());
+
+        // 6. Branch Coverage: Unsupported BudgetType
+        long amountBefore = RegularBudgetExpense.findRegularBudgetExpenseWithCodes("1001", regService, "21").getAmount();
+
+        entity1001.implementChangesInSpecificExpenseCategoryOfSpecificService(regService, "21", 0.50, 0L, BudgetType.PUBLIC_INVESTMENT_BUDGET);
+
+        assertEquals(amountBefore, RegularBudgetExpense.findRegularBudgetExpenseWithCodes("1001", regService, "21").getAmount());
+
     }
 }

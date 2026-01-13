@@ -89,8 +89,9 @@ public class BudgetExpenseTest {
         assertFalse(e1.equals(new BudgetExpense("1001", "ORG", "S1", "NAME", "CODE2", "DESC", "CAT", 100L)));
     }
 
+    @Test
     void getEntityNameTest() {
-        BudgetExpense expense = BudgetExpense.getBudgetExpenses().get(0);
+        RegularBudgetExpense expense = RegularBudgetExpense.getAllRegularBudgetExpenses().get(0);
         assertEquals("ΠΡΟΕΔΡΙΑ ΤΗΣ ΔΗΜΟΚΡΑΤΙΑΣ", expense.getEntityName());
     }
 
