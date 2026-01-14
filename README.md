@@ -167,4 +167,18 @@ Support related to frontend development, which would have required an additional
 - https://gemini.google.com/share/f3a21fad8008  
 - https://gemini.google.com/share/cef5d43694d7  
 - https://gemini.google.com/share/89324454c7fa  
-- https://gemini.google.com/share/c21124405c00  
+- https://gemini.google.com/share/c21124405c00
+
+---
+
+## 10. License & Credits
+
+### 10.1 Software License
+This application is specialized open-source software and is licensed under the **MIT License**. See the `LICENSE` file for more details.
+
+### 10.2 Media & Documentation License
+The promotional video is licensed under the **Creative Commons Attribution 4.0 International (CC BY 4.0)**. 
+* **Video:** https://www.youtube.com/watch?v=eKCA86cAaaY&t=4s
+
+---
+*Developed as part of the Semester Project for Programming II (2025-2026).*
