@@ -69,13 +69,6 @@ output/
 .env.local
 .env.*.local
 
-# Test & Coverage
-coverage/
-*.lcov
-jacoco.exec
-jacoco/
-TEST-*.xml
-
 # SQLite Database
 budget_database.db
 *.db-journal
