@@ -186,4 +186,10 @@ The promotional video is licensed under the **Creative Commons Attribution 4.0 I
 * **Video:** https://www.youtube.com/watch?v=eKCA86cAaaY&t=4s
 
 ---
+
+## 11. Project Documentation & Quality Reports
+
+* 📖 [**Javadoc API Documentation**](https://OdysseasMourelatos.github.io/FinDet/apidocs/index.html) – Detailed technical description of classes and methods.
+* 🧪 [**JaCoCo Coverage Report**](https://OdysseasMourelatos.github.io/FinDet/coverage/index.html) – Comprehensive test coverage analysis (99% Backend Coverage).
+
 *Developed as part of the Semester Project for Programming II (2025-2026).*
