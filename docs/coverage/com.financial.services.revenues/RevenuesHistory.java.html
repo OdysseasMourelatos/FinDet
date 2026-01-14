@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RevenuesHistory.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">FinDet</a> &gt; <a href="index.source.html" class="el_package">com.financial.services.revenues</a> &gt; <span class="el_source">RevenuesHistory.java</span></div><h1>RevenuesHistory.java</h1><pre class="source lang-java linenums">package com.financial.services.revenues;
+
+import com.financial.entries.*;
+import com.financial.services.BudgetType;
+
+import java.util.*;
+
+/**
+ * Utility service class responsible for maintaining a history of budget revenue states.
+ * &lt;p&gt;
+ * This class implements an &quot;Undo&quot; mechanism using {@link Deque} structures to store
+ * snapshots of revenue amounts and their corresponding budget types.
+ */
+public class RevenuesHistory {
+
+    /**
+     * Stack-like structure to store snapshots of revenue codes and their amounts.
+     */
+<span class="fc" id="L19">    public static Deque&lt;Map&lt;String, Long&gt;&gt; historyDeque = new ArrayDeque&lt;&gt;();</span>
+
+    /**
+     * Stack-like structure to store the {@link BudgetType} associated with each history snapshot.
+     */
+<span class="fc" id="L24">    public static Deque&lt;BudgetType&gt; typeDeque = new ArrayDeque&lt;&gt;();</span>
+
+    /**
+     * Private constructor to prevent instantiation of this utility class.
+     */
+    private RevenuesHistory() {
+        // utility class – no instances
+    }
+
+    /**
+     * Returns the full history of revenue snapshots.
+     * * @return a Deque containing maps of revenue codes and amounts
+     */
+    public static Deque&lt;Map&lt;String, Long&gt;&gt; getHistoryDeque() {
+<span class="fc" id="L38">        return historyDeque;</span>
+    }
+
+    /**
+     * Returns the full history of budget types processed.
+     * * @return a Deque containing the history of BudgetTypes
+     */
+    public static Deque&lt;BudgetType&gt; getTypeDeque() {
+<span class="fc" id="L46">        return typeDeque;</span>
+    }
+
+    /**
+     * Captures a snapshot of the current state of a list of revenues and adds it to the history.
+     *
+     * @param revenues the list of revenue objects to record
+     * @param type     the type of budget associated with these revenues
+     */
+    public static void keepHistory(ArrayList&lt;? extends BudgetRevenue&gt; revenues, BudgetType type) {
+<span class="fc" id="L56">        Map&lt;String, Long&gt; modifiedElement = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        for (BudgetRevenue revenue : revenues) {</span>
+<span class="fc" id="L58">            modifiedElement.put(revenue.getCode(), revenue.getAmount());</span>
+<span class="fc" id="L59">        }</span>
+<span class="fc" id="L60">        historyDeque.addFirst(modifiedElement);</span>
+<span class="fc" id="L61">        typeDeque.addFirst(type);</span>
+<span class="fc" id="L62">    }</span>
+
+    /**
+     * Retrieves the {@link BudgetType} of the most recent history entry.
+     *
+     * @return the most recent BudgetType, or {@code null} if history is empty
+     */
+    public static BudgetType getMostRecentBudgetType() {
+        try {
+<span class="fc" id="L71">            return typeDeque.getFirst();</span>
+<span class="fc" id="L72">        } catch (NoSuchElementException e) {</span>
+<span class="fc" id="L73">            System.out.println(&quot;NO HISTORY FOUND&quot;);</span>
+<span class="fc" id="L74">            return null;</span>
+        }
+    }
+
+    /**
+     * Retrieves the revenue amount mapping from the most recent history entry.
+     *
+     * @return a Map of codes and amounts, or {@code null} if history is empty
+     */
+    public static Map&lt;String, Long&gt; getMostRecentRevenuesHistory() {
+        try {
+<span class="fc" id="L85">            return historyDeque.getFirst();</span>
+<span class="fc" id="L86">        } catch (NoSuchElementException e) {</span>
+<span class="fc" id="L87">            System.out.println(&quot;NO HISTORY FOUND&quot;);</span>
+<span class="fc" id="L88">            return null;</span>
+        }
+    }
+
+    /**
+     * Reverts the application state to the most recent snapshot stored in history.
+     * &lt;p&gt;
+     * This method restores amounts for Regular, National, or Co-funded revenues
+     * and removes the restored state from the history stacks.
+     */
+    public static void returnToPreviousState() {
+        try {
+<span class="fc" id="L100">            BudgetType type = getMostRecentBudgetType();</span>
+<span class="fc" id="L101">            Map&lt;String, Long&gt; recentHistory = getMostRecentRevenuesHistory();</span>
+
+<span class="pc bpc" id="L103" title="1 of 4 branches missed.">            if (recentHistory != null &amp;&amp; type != null) {</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">                for (Map.Entry&lt;String, Long&gt; entry : recentHistory.entrySet()) {</span>
+<span class="fc bfc" id="L105" title="All 2 branches covered.">                    if (type.equals(BudgetType.REGULAR_BUDGET)) {</span>
+<span class="fc" id="L106">                        RegularBudgetRevenue revenue = RegularBudgetRevenue.findRegularBudgetRevenueWithCode(entry.getKey());</span>
+<span class="pc bpc" id="L107" title="1 of 2 branches missed.">                        if (revenue != null) {</span>
+<span class="fc" id="L108">                            revenue.setAmount(entry.getValue());</span>
+                        }
+<span class="fc bfc" id="L110" title="All 2 branches covered.">                    } else if (type.equals(BudgetType.PUBLIC_INVESTMENT_BUDGET_NATIONAL)) {</span>
+<span class="fc" id="L111">                        PublicInvestmentBudgetNationalRevenue revenue = PublicInvestmentBudgetNationalRevenue.findPublicInvestmentBudgetNationalRevenueWithCode(entry.getKey());</span>
+<span class="pc bpc" id="L112" title="1 of 2 branches missed.">                        if (revenue != null) {</span>
+<span class="fc" id="L113">                            revenue.setAmount(entry.getValue());</span>
+                        }
+<span class="pc bpc" id="L115" title="1 of 2 branches missed.">                    } else if (type.equals(BudgetType.PUBLIC_INVESTMENT_BUDGET_COFUNDED)) {</span>
+<span class="fc" id="L116">                        PublicInvestmentBudgetCoFundedRevenue revenue = PublicInvestmentBudgetCoFundedRevenue.findPublicInvestmentBudgetCoFundedRevenueWithCode(entry.getKey());</span>
+<span class="pc bpc" id="L117" title="1 of 2 branches missed.">                        if (revenue != null) {</span>
+<span class="fc" id="L118">                            revenue.setAmount(entry.getValue());</span>
+                        }
+                    }
+<span class="fc" id="L121">                }</span>
+<span class="fc" id="L122">                historyDeque.pop();</span>
+<span class="fc" id="L123">                typeDeque.pop();</span>
+            }
+<span class="nc" id="L125">        } catch (NoSuchElementException e) {</span>
+<span class="nc" id="L126">            System.out.println(&quot;NO HISTORY FOUND&quot;);</span>
+<span class="fc" id="L127">        }</span>
+<span class="fc" id="L128">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

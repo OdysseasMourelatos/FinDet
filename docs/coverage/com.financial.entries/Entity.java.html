@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Entity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">FinDet</a> &gt; <a href="index.source.html" class="el_package">com.financial.entries</a> &gt; <span class="el_source">Entity.java</span></div><h1>Entity.java</h1><pre class="source lang-java linenums">package com.financial.entries;
+
+import com.financial.services.BudgetType;
+import com.financial.services.expenses.BudgetExpenseLogicService;
+import com.financial.services.expenses.EntityLogic;
+import com.financial.services.expenses.EntityLogicService;
+import com.financial.services.expenses.ExpensesHistory;
+import com.financial.strategies.ExpenseAdjustmentStrategy;
+import com.financial.strategies.FilteredExpenseAdjustmentStrategy;
+import com.financial.strategies.filters.AccountFilter;
+import com.financial.strategies.filters.MatchAllFilter;
+import com.financial.strategies.filters.ServiceFilter;
+import com.financial.strategies.operations.FixedAmountOperation;
+import com.financial.strategies.operations.PercentageOperation;
+
+import java.util.*;
+
+/**
+ * **Represents** a high-level government Entity (such as a Ministry or Agency).
+ * &lt;p&gt;
+ * This class serves as the primary data container for an organization's financial records.
+ * It implements {@link EntityLogic} and manages three distinct budget streams:
+ * Regular Budget, National PIB, and Co-funded PIB. It provides extensive methods for
+ * financial querying, aggregation, and strategic budget adjustments.
+ */
+public class Entity implements EntityLogic {
+    private final String entityCode;
+    private final String entityName;
+    protected ArrayList&lt;RegularBudgetExpense&gt; regularBudgetExpenses;
+    protected ArrayList&lt;PublicInvestmentBudgetNationalExpense&gt; publicInvestmentBudgetNationalExpenses;
+    protected ArrayList&lt;PublicInvestmentBudgetCoFundedExpense&gt; publicInvestmentBudgetCoFundedExpenses;
+
+<span class="fc" id="L33">    protected static ArrayList&lt;Entity&gt; entities = new ArrayList&lt;&gt;();</span>
+
+    /**
+     * **Initializes** a new Entity and **links** it to its respective expenditure records.
+     * &lt;p&gt;
+     * Upon instantiation, the Entity automatically fetches all relevant expenses from the
+     * static registries of {@link RegularBudgetExpense}, {@link PublicInvestmentBudgetNationalExpense},
+     * and {@link PublicInvestmentBudgetCoFundedExpense} based on its unique entity code.
+     *
+     * @param entityCode **Unique identifier** for the Ministry/Agency.
+     * @param entityName **Official name** of the Entity.
+     */
+<span class="fc" id="L45">    public Entity(String entityCode, String entityName) {</span>
+<span class="fc" id="L46">        this.entityCode = entityCode;</span>
+<span class="fc" id="L47">        this.entityName = entityName;</span>
+<span class="fc" id="L48">        regularBudgetExpenses = RegularBudgetExpense.getRegularBudgetExpensesOfEntityWithCode(entityCode);</span>
+<span class="fc" id="L49">        publicInvestmentBudgetNationalExpenses = PublicInvestmentBudgetNationalExpense.getPublicInvestmentBudgetNationalExpensesOfEntityWithCode(entityCode);</span>
+<span class="fc" id="L50">        publicInvestmentBudgetCoFundedExpenses = PublicInvestmentBudgetCoFundedExpense.getPublicInvestmentBudgetCoFundedExpensesOfEntityWithCode(entityCode);</span>
+<span class="fc" id="L51">        entities.add(this);</span>
+<span class="fc" id="L52">    }</span>
+
+    /**
+     * **Performs** a global search to locate a specific Entity instance by its code.
+     * @param entityCode The code to search for.
+     * @return The matching {@link Entity} object or null if not found.
+     */
+    public static Entity findEntityWithEntityCode(String entityCode) {
+<span class="fc bfc" id="L60" title="All 2 branches covered.">        for (Entity entity : entities) {</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">            if (entity.getEntityCode().equals(entityCode)) {</span>
+<span class="fc" id="L62">                return entity;</span>
+            }
+<span class="fc" id="L64">        }</span>
+<span class="fc" id="L65">        return null;</span>
+    }
+
+    /**
+     * **Calculates** the total sum of all **Regular Budget** expenditures for this entity.
+     * @return Total regular budget sum as a long.
+     */
+    @Override
+    public long calculateRegularSum() {
+<span class="fc" id="L74">        return BudgetExpenseLogicService.calculateSum(regularBudgetExpenses);</span>
+    }
+
+    /**
+     * **Calculates** the total sum of all **National PIB** expenditures for this entity.
+     * @return Total national investment sum.
+     */
+    @Override
+    public long calculatePublicInvestmentNationalSum() {
+<span class="fc" id="L83">        return BudgetExpenseLogicService.calculateSum(publicInvestmentBudgetNationalExpenses);</span>
+    }
+
+    /**
+     * **Calculates** the total sum of all **Co-funded PIB** expenditures for this entity.
+     * @return Total co-funded investment sum.
+     */
+    @Override
+    public long calculatePublicInvestmentCoFundedSum() {
+<span class="fc" id="L92">        return BudgetExpenseLogicService.calculateSum(publicInvestmentBudgetCoFundedExpenses);</span>
+    }
+
+    /**
+     * **Retrieves** the name of a specific **Regular Budget Service** using its code.
+     * @param serviceCode The **code** of the service.
+     * @return The **display name** of the service.
+     */
+    @Override
+    public String getRegularServiceNameWithCode(String serviceCode) {
+<span class="fc" id="L102">        return EntityLogicService.getServiceNameWithCode(serviceCode, regularBudgetExpenses);</span>
+    }
+
+    /**
+     * **Retrieves** the name of a specific **Public Investment National Budget Service** using its code.
+     * @param serviceCode The **code** of the service.
+     * @return The **display name** of the service.
+     */
+    @Override
+    public String getPublicInvestmentNationalServiceNameWithCode(String serviceCode) {
+<span class="fc" id="L112">        return EntityLogicService.getServiceNameWithCode(serviceCode, publicInvestmentBudgetNationalExpenses);</span>
+    }
+
+    /**
+     * **Retrieves** the name of a specific **Public Investment CoFundedBudget Service** using its code.
+     * @param serviceCode The **code** of the service.
+     * @return The **display name** of the service.
+     */
+    @Override
+    public String getPublicInvestmentCoFundedServiceNameWithCode(String serviceCode) {
+<span class="fc" id="L122">        return EntityLogicService.getServiceNameWithCode(serviceCode, publicInvestmentBudgetCoFundedExpenses);</span>
+    }
+
+    /**
+     * **Retrieves** a list of all unique **Service Codes** present in the Regular Budget.
+     * @return A {@link List} of **unique codes**.
+     */
+    @Override
+    public List&lt;String&gt; getAllRegularServiceCodes() {
+<span class="fc" id="L131">        return EntityLogicService.getAllServiceCodes(regularBudgetExpenses);</span>
+    }
+
+    /**
+     * **Retrieves** a list of all unique **Service Codes** present in the PIB National Budget.
+     * @return A {@link List} of **unique codes**.
+     */
+    @Override
+    public List&lt;String&gt; getAllPublicInvestmentNationalServiceCodes() {
+<span class="fc" id="L140">        return EntityLogicService.getAllServiceCodes(publicInvestmentBudgetNationalExpenses);</span>
+    }
+
+    /**
+     * **Retrieves** a list of all unique **Service Codes** present in the PIB CoFunded Budget.
+     * @return A {@link List} of **unique codes**.
+     */
+    @Override
+    public List&lt;String&gt; getAllPublicInvestmentCoFundedServiceCodes() {
+<span class="fc" id="L149">        return EntityLogicService.getAllServiceCodes(publicInvestmentBudgetCoFundedExpenses);</span>
+    }
+
+    /**
+     * **Computes** the financial sum for a **target service** in the Regular Budget.
+     * @param serviceCode The service to aggregate.
+     * @return The **total sum** for that specific service.
+     */
+    @Override
+    public long getRegularSumOfServiceWithCode(String serviceCode) {
+<span class="fc" id="L159">        return EntityLogicService.getSumOfServiceWithCode(serviceCode, regularBudgetExpenses);</span>
+    }
+
+    /**
+     * **Computes** the financial sum for a **target service** in the PIB National Budget.
+     * @param serviceCode The service to aggregate.
+     * @return The **total sum** for that specific service.
+     */
+    @Override
+    public long getPublicInvestmentNationalSumOfServiceWithCode(String serviceCode) {
+<span class="fc" id="L169">        return EntityLogicService.getSumOfServiceWithCode(serviceCode, publicInvestmentBudgetNationalExpenses);</span>
+    }
+
+    /**
+     * **Computes** the financial sum for a **target service** in the PIB CoFunded Budget.
+     * @param serviceCode The service to aggregate.
+     * @return The **total sum** for that specific service.
+     */
+    @Override
+    public long getPublicInvestmentCoFundedSumOfServiceWithCode(String serviceCode) {
+<span class="fc" id="L179">        return EntityLogicService.getSumOfServiceWithCode(serviceCode, publicInvestmentBudgetCoFundedExpenses);</span>
+    }
+
+    /**
+     * **Fetches** the full list of **Regular Budget Expense Objects** for a specific service.
+     * @param serviceCode The target service code.
+     * @return An {@link ArrayList} of **BudgetExpense** objects.
+     */
+    @Override
+    public ArrayList&lt;BudgetExpense&gt; getRegularExpensesOfServiceWithCode(String serviceCode) {
+<span class="fc" id="L189">        return EntityLogicService.getExpensesOfServiceWithCode(serviceCode, regularBudgetExpenses);</span>
+    }
+
+    /**
+     * **Fetches** the full list of **Public Investment National Expense Objects** for a specific service.
+     * @param serviceCode The target service code.
+     * @return An {@link ArrayList} of **BudgetExpense** objects.
+     */
+    @Override
+    public ArrayList&lt;BudgetExpense&gt; getPublicInvestmentNationalExpensesOfServiceWithCode(String serviceCode) {
+<span class="fc" id="L199">        return EntityLogicService.getExpensesOfServiceWithCode(serviceCode, publicInvestmentBudgetNationalExpenses);</span>
+    }
+
+    /**
+     * **Fetches** the full list of **Public Investment Co Funded Expense Objects** for a specific service.
+     * @param serviceCode The target service code.
+     * @return An {@link ArrayList} of **BudgetExpense** objects.
+     */
+    @Override
+    public ArrayList&lt;BudgetExpense&gt; getPublicInvestmentCoFundedExpensesOfServiceWithCode(String serviceCode) {
+<span class="fc" id="L209">        return EntityLogicService.getExpensesOfServiceWithCode(serviceCode, publicInvestmentBudgetCoFundedExpenses);</span>
+    }
+
+    /**
+     * **Generates** a map of **every Regular service** and its corresponding total sum.
+     * @return A {@link Map} where keys are **service codes** and values are **sums**.
+     */
+    @Override
+    public Map&lt;String, Long&gt; getRegularSumOfEveryService() {
+<span class="fc" id="L218">        return EntityLogicService.getSumOfEveryService(regularBudgetExpenses);</span>
+    }
+
+    /**
+     * **Generates** a map of **every PIB National service** and its corresponding total sum.
+     * @return A {@link Map} where keys are **service codes** and values are **sums**.
+     */
+    @Override
+    public Map&lt;String, Long&gt; getPublicInvestmentNationalSumOfEveryService() {
+<span class="fc" id="L227">        return EntityLogicService.getSumOfEveryService(publicInvestmentBudgetNationalExpenses);</span>
+    }
+
+    /**
+     * **Generates** a map of **every PIB CoFunded service** and its corresponding total sum.
+     * @return A {@link Map} where keys are **service codes** and values are **sums**.
+     */
+    @Override
+    public Map&lt;String, Long&gt; getPublicInvestmentCoFundedSumOfEveryService() {
+<span class="fc" id="L236">        return EntityLogicService.getSumOfEveryService(publicInvestmentBudgetCoFundedExpenses);</span>
+    }
+
+    /**
+     * **Calculates** the sum of a **specific regular expense category** (e.g., Salaries) across the entity.
+     * @param code The **classification code** of the category.
+     * @return The **total amount** for that category.
+     */
+    @Override
+    public long getRegularSumOfExpenseCategoryWithCode(String code) {
+<span class="fc" id="L246">        return EntityLogicService.getSumOfExpenseCategoryWithCode(code, regularBudgetExpenses);</span>
+    }
+
+    /**
+     * **Calculates** the sum of a **specific PIB National expense category** across the entity.
+     * @param code The **classification code** of the category.
+     * @return The **total amount** for that category.
+     */
+    @Override
+    public long getPublicInvestmentNationalSumOfExpenseCategoryWithCode(String code) {
+<span class="fc" id="L256">        return EntityLogicService.getSumOfExpenseCategoryWithCode(code, publicInvestmentBudgetNationalExpenses);</span>
+    }
+
+    /**
+     * **Calculates** the sum of a **specific PIB CoFunded expense category** across the entity.
+     * @param code The **classification code** of the category.
+     * @return The **total amount** for that category.
+     */
+    @Override
+    public long getPublicInvestmentCoFundedSumOfExpenseCategoryWithCode(String code) {
+<span class="fc" id="L266">        return EntityLogicService.getSumOfExpenseCategoryWithCode(code, publicInvestmentBudgetCoFundedExpenses);</span>
+    }
+
+    /**
+     * **Provides** a complete breakdown of **all Regular expense categories** and their total sums.
+     * @return A {@link Map} of **category codes** to **total expenditures**.
+     */
+    @Override
+    public Map&lt;String, Long&gt; getRegularSumOfEveryExpenseCategory() {
+<span class="fc" id="L275">        return EntityLogicService.getSumOfEveryExpenseCategory(regularBudgetExpenses);</span>
+    }
+
+    /**
+     * **Provides** a complete breakdown of **all PIB National expense categories** and their total sums.
+     * @return A {@link Map} of **category codes** to **total expenditures**.
+     */
+    @Override
+    public Map&lt;String, Long&gt; getPublicInvestmentNationalSumOfEveryExpenseCategory() {
+<span class="fc" id="L284">        return EntityLogicService.getSumOfEveryExpenseCategory(publicInvestmentBudgetNationalExpenses);</span>
+    }
+
+    /**
+     * **Provides** a complete breakdown of **all PIB CoFunded expense categories** and their total sums.
+     * @return A {@link Map} of **category codes** to **total expenditures**.
+     */
+    @Override
+    public Map&lt;String, Long&gt; getPublicInvestmentCoFundedSumOfEveryExpenseCategory() {
+<span class="fc" id="L293">        return EntityLogicService.getSumOfEveryExpenseCategory(publicInvestmentBudgetCoFundedExpenses);</span>
+    }
+
+    /**
+     * **Implements** financial changes across **all categories and services** for a specific budget type.
+     * @param percentage The **percentage shift** (e.g., 0.05 for 5%).
+     * @param fixedAmount The **fixed amount** to add/subtract.
+     * @param budgetType The **target budget stream** (Regular, National, Co-funded).
+     */
+    public void implementChangesInAllExpenseCategoriesOfAllServices(double percentage, long fixedAmount, BudgetType budgetType) {
+        ExpenseAdjustmentStrategy strategy;
+<span class="fc bfc" id="L304" title="All 2 branches covered.">        if (fixedAmount == 0) {</span>
+<span class="fc" id="L305">            strategy = new FilteredExpenseAdjustmentStrategy(new MatchAllFilter(), new PercentageOperation());</span>
+        } else {
+<span class="fc" id="L307">            strategy = new FilteredExpenseAdjustmentStrategy(new MatchAllFilter(), new FixedAmountOperation());</span>
+        }
+<span class="fc" id="L309">        applyChangesAndKeepHistory(strategy, percentage, fixedAmount, budgetType);</span>
+<span class="fc" id="L310">    }</span>
+
+    /**
+     * **Implements** changes targeting a **specific expense category** across all services.
+     * @param expenseCode The **category** to filter by.
+     */
+    public void implementChangesInSpecificExpenseCategoryOfAllServices(String expenseCode, double percentage, long fixedAmount, BudgetType budgetType) {
+        ExpenseAdjustmentStrategy strategy;
+<span class="fc bfc" id="L318" title="All 2 branches covered.">        if (fixedAmount == 0) {</span>
+<span class="fc" id="L319">            strategy = new FilteredExpenseAdjustmentStrategy(new AccountFilter(expenseCode), new PercentageOperation());</span>
+        } else {
+<span class="fc" id="L321">            strategy = new FilteredExpenseAdjustmentStrategy(new AccountFilter(expenseCode), new FixedAmountOperation());</span>
+        }
+<span class="fc" id="L323">        applyChangesAndKeepHistory(strategy, percentage, fixedAmount, budgetType);</span>
+<span class="fc" id="L324">    }</span>
+
+    /**
+     * **Targeted** update for a **specific service**, affecting all categories within that service.
+     */
+    public void implementChangesInAllExpenseCategoriesOfSpecificService(String serviceCode, double percentage, long fixedAmount, BudgetType budgetType) {
+        ExpenseAdjustmentStrategy strategy;
+<span class="fc bfc" id="L331" title="All 2 branches covered.">        if (fixedAmount == 0) {</span>
+<span class="fc" id="L332">            strategy = new FilteredExpenseAdjustmentStrategy(new ServiceFilter(serviceCode), new PercentageOperation());</span>
+        } else {
+<span class="fc" id="L334">            strategy = new FilteredExpenseAdjustmentStrategy(new ServiceFilter(serviceCode), new FixedAmountOperation());</span>
+        }
+<span class="fc" id="L336">        applyChangesAndKeepHistory(strategy, percentage, fixedAmount, budgetType);</span>
+<span class="fc" id="L337">    }</span>
+
+    /**
+     * **Granular update** for one **specific category within one specific service**.
+     * &lt;p&gt;
+     * Includes **error handling** to revert to previous states via {@link ExpensesHistory}
+     * if the update fails.
+     */
+    public void implementChangesInSpecificExpenseCategoryOfSpecificService(String serviceCode, String categoryCode, double percentage, long fixedAmount, BudgetType budgetType) {
+        try {
+            BudgetExpense expense;
+<span class="fc bfc" id="L348" title="All 2 branches covered.">            if (budgetType == BudgetType.REGULAR_BUDGET) {</span>
+<span class="fc" id="L349">                expense = RegularBudgetExpense.findRegularBudgetExpenseWithCodes(entityCode, serviceCode, categoryCode);</span>
+<span class="fc bfc" id="L350" title="All 2 branches covered.">            } else if (budgetType == BudgetType.PUBLIC_INVESTMENT_BUDGET_NATIONAL) {</span>
+<span class="fc" id="L351">                expense = PublicInvestmentBudgetNationalExpense.findPublicInvestmentBudgetNationalExpenseWithCodes(entityCode, serviceCode, categoryCode);</span>
+<span class="fc bfc" id="L352" title="All 2 branches covered.">            } else if (budgetType == BudgetType.PUBLIC_INVESTMENT_BUDGET_COFUNDED) {</span>
+<span class="fc" id="L353">                expense = PublicInvestmentBudgetCoFundedExpense.findPublicInvestmentBudgetCoFundedExpenseWithCodes(entityCode, serviceCode, categoryCode);</span>
+            } else {
+<span class="fc" id="L355">                return;</span>
+            }
+
+<span class="fc" id="L358">            ArrayList&lt;BudgetExpense&gt; expenses = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L359">            expenses.add(expense);</span>
+<span class="fc" id="L360">            ExpensesHistory.keepHistory(expenses, budgetType);</span>
+
+<span class="fc bfc" id="L362" title="All 2 branches covered.">            if (fixedAmount != 0) {</span>
+<span class="fc" id="L363">                expense.setAmount(expense.getAmount() + fixedAmount);</span>
+            } else {
+<span class="fc" id="L365">                expense.setAmount( (long) (expense.getAmount() * (1 + percentage)));</span>
+            }
+
+<span class="fc" id="L368">        } catch (IllegalArgumentException e) {</span>
+<span class="fc" id="L369">            ExpensesHistory.returnToPreviousState();</span>
+<span class="fc" id="L370">        } catch (NullPointerException e) {</span>
+<span class="fc" id="L371">            System.out.println(e.getMessage());</span>
+<span class="fc" id="L372">        }</span>
+<span class="fc" id="L373">    }</span>
+
+    /**
+     * **Internal helper** to apply strategies while **preserving data history**.
+     * @throws IllegalStateException If an **unsupported budget type** is provided.
+     */
+    private void applyChangesAndKeepHistory(ExpenseAdjustmentStrategy strategy, double percentage, long fixedAmount, BudgetType budgetType) {
+<span class="fc bfc" id="L380" title="All 2 branches covered.">        if (budgetType == BudgetType.REGULAR_BUDGET) {</span>
+<span class="fc" id="L381">            ExpensesHistory.keepHistory(regularBudgetExpenses, budgetType);</span>
+<span class="fc" id="L382">            strategy.applyAdjustment(regularBudgetExpenses, percentage, fixedAmount);</span>
+<span class="fc bfc" id="L383" title="All 2 branches covered.">        } else if (budgetType == BudgetType.PUBLIC_INVESTMENT_BUDGET_NATIONAL) {</span>
+<span class="fc" id="L384">            ExpensesHistory.keepHistory(publicInvestmentBudgetNationalExpenses, budgetType);</span>
+<span class="fc" id="L385">            strategy.applyAdjustment(publicInvestmentBudgetNationalExpenses, percentage, fixedAmount);</span>
+<span class="fc bfc" id="L386" title="All 2 branches covered.">        } else if (budgetType == BudgetType.PUBLIC_INVESTMENT_BUDGET_COFUNDED) {</span>
+<span class="fc" id="L387">            ExpensesHistory.keepHistory(publicInvestmentBudgetCoFundedExpenses, budgetType);</span>
+<span class="fc" id="L388">            strategy.applyAdjustment(publicInvestmentBudgetCoFundedExpenses, percentage, fixedAmount);</span>
+        } else {
+<span class="fc" id="L390">            throw new IllegalStateException(&quot;BUDGET_TYPE NOT SUPPORTED&quot;);</span>
+        }
+<span class="fc" id="L392">    }</span>
+
+    /** @return The **unique entity code**. */
+    public String getEntityCode() {
+<span class="fc" id="L396">        return entityCode;</span>
+    }
+
+    /** @return The **official entity name**. */
+    public String getEntityName() {
+<span class="fc" id="L401">        return entityName;</span>
+    }
+
+    /** @return The list of **Regular Budget** expenses. */
+    public ArrayList&lt;RegularBudgetExpense&gt; getRegularBudgetExpenses() {
+<span class="fc" id="L406">        return regularBudgetExpenses;</span>
+    }
+
+    /** @return The list of **Public Investment Budget National** expenses. */
+    public ArrayList&lt;PublicInvestmentBudgetNationalExpense&gt; getPublicInvestmentBudgetNationalExpenses() {
+<span class="fc" id="L411">        return publicInvestmentBudgetNationalExpenses;</span>
+    }
+
+    /** @return The list of **Public Investment Budget Co Funded** expenses. */
+    public ArrayList&lt;PublicInvestmentBudgetCoFundedExpense&gt; getPublicInvestmentBudgetCoFundedExpenses() {
+<span class="fc" id="L416">        return publicInvestmentBudgetCoFundedExpenses;</span>
+    }
+
+    /** @return The global registry of **all Entity instances**. */
+    public static ArrayList&lt;Entity&gt; getEntities() {
+<span class="fc" id="L421">        return entities;</span>
+    }
+
+    /**
+     * **Returns** a string representation of the Entity.
+     * @return A formatted string with **Code and Name**.
+     */
+    @Override
+    public String toString() {
+<span class="fc" id="L430">        return &quot;Entity Code: &quot; + entityCode + &quot;, Name: &quot; + entityName;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

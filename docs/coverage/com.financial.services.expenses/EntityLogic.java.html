@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EntityLogic.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">FinDet</a> &gt; <a href="index.source.html" class="el_package">com.financial.services.expenses</a> &gt; <span class="el_source">EntityLogic.java</span></div><h1>EntityLogic.java</h1><pre class="source lang-java linenums">package com.financial.services.expenses;
+
+import com.financial.entries.BudgetExpense;
+
+import java.util.*;
+import java.util.stream.Stream;
+
+/**
+ * Defines the comprehensive financial logic contract for an organizational entity.
+ * &lt;p&gt;
+ * This interface provides a blueprint for aggregating, filtering, and calculating expenses
+ * across different budget types (Regular, National PIB, and Co-funded PIB). It includes
+ * extensive default methods to automatically compute composite totals and merged lists
+ * from the individual budget segments.
+ * &lt;/p&gt;
+ */
+public interface EntityLogic {
+
+    /* --- Total Sum Calculations --- */
+
+    /** Calculates the total sum of expenses from the Regular Budget. */
+    long calculateRegularSum();
+
+    /** Calculates the total sum of expenses from the National part of the Public Investment Budget. */
+    long calculatePublicInvestmentNationalSum();
+
+    /** Calculates the total sum of expenses from the Co-funded part of the Public Investment Budget. */
+    long calculatePublicInvestmentCoFundedSum();
+
+    /** Calculates the combined sum of all Public Investment Budget (PIB) resources. */
+    default long calculatePublicInvestmentSum() {
+<span class="fc" id="L32">        return calculatePublicInvestmentCoFundedSum() + calculatePublicInvestmentNationalSum();</span>
+    }
+
+    /** Calculates the grand total of all expenses from all budget sources. */
+    default long calculateTotalSum() {
+<span class="fc" id="L37">        return calculateRegularSum() + calculatePublicInvestmentSum();</span>
+    }
+
+    /* --- Service Name Retrieval --- */
+
+    /** Retrieves the name of a regular service by its code. */
+    String getRegularServiceNameWithCode(String serviceCode);
+
+    /** Retrieves the name of a national PIB service by its code. */
+    String getPublicInvestmentNationalServiceNameWithCode(String serviceCode);
+
+    /** Retrieves the name of a co-funded PIB service by its code. */
+    String getPublicInvestmentCoFundedServiceNameWithCode(String serviceCode);
+
+    /** Retrieves a service name from any PIB source (National or Co-funded). */
+    default String getPublicInvestmentServiceNameWithCode(String serviceCode) {
+<span class="fc bfc" id="L53" title="All 2 branches covered.">        if (getPublicInvestmentCoFundedServiceNameWithCode(serviceCode) != null) {</span>
+<span class="fc" id="L54">            return getPublicInvestmentCoFundedServiceNameWithCode(serviceCode);</span>
+        }
+<span class="fc" id="L56">        return getPublicInvestmentNationalServiceNameWithCode(serviceCode);</span>
+    }
+
+    /** Retrieves a service name by searching through all available budget types. */
+    default String getServiceNameWithCode(String serviceCode) {
+<span class="fc bfc" id="L61" title="All 2 branches covered.">        if (getPublicInvestmentServiceNameWithCode(serviceCode) != null) {</span>
+<span class="fc" id="L62">            return getPublicInvestmentServiceNameWithCode(serviceCode);</span>
+        }
+<span class="fc" id="L64">        return getRegularServiceNameWithCode(serviceCode);</span>
+    }
+
+    /* --- Service Code Management --- */
+
+    /** Lists all unique service codes within the Regular Budget. */
+    List&lt;String&gt; getAllRegularServiceCodes();
+
+    /** Lists all unique service codes within the National PIB. */
+    List&lt;String&gt; getAllPublicInvestmentNationalServiceCodes();
+
+    /** Lists all unique service codes within the Co-funded PIB. */
+    List&lt;String&gt; getAllPublicInvestmentCoFundedServiceCodes();
+
+    /** Merges and returns all unique service codes from both PIB sectors. */
+    default List&lt;String&gt; getAllPublicInvestmentServiceCodes() {
+<span class="fc" id="L80">        List&lt;String&gt; national = getAllPublicInvestmentNationalServiceCodes();</span>
+<span class="fc" id="L81">        List&lt;String&gt; coFunded = getAllPublicInvestmentCoFundedServiceCodes();</span>
+<span class="fc" id="L82">        return Stream.concat(national.stream(), coFunded.stream()).distinct().sorted().toList();</span>
+    }
+
+    /** Merges and returns all unique service codes across the entire entity. */
+    default List&lt;String&gt; getAllServiceCodes() {
+<span class="fc" id="L87">        List&lt;String&gt; regular = getAllRegularServiceCodes();</span>
+<span class="fc" id="L88">        List&lt;String&gt; publicInvestment = getAllPublicInvestmentServiceCodes();</span>
+<span class="fc" id="L89">        return Stream.concat(regular.stream(), publicInvestment.stream()).distinct().sorted().toList();</span>
+    }
+
+    /* --- Service-Specific Data --- */
+
+    /** Calculates the regular budget sum for a specific service. */
+    long getRegularSumOfServiceWithCode(String serviceCode);
+
+    /** Calculates the national PIB sum for a specific service. */
+    long getPublicInvestmentNationalSumOfServiceWithCode(String serviceCode);
+
+    /** Calculates the co-funded PIB sum for a specific service. */
+    long getPublicInvestmentCoFundedSumOfServiceWithCode(String serviceCode);
+
+    /** Returns the combined PIB sum for a specific service. */
+    default long getPublicInvestmentSumOfServiceWithCode(String serviceCode) {
+<span class="fc" id="L105">        return getPublicInvestmentNationalSumOfServiceWithCode(serviceCode) + getPublicInvestmentCoFundedSumOfServiceWithCode(serviceCode);</span>
+    }
+
+    /** Returns the grand total sum (Regular + PIB) for a specific service. */
+    default long getTotalSumOfServiceWithCode(String serviceCode) {
+<span class="fc" id="L110">        return getPublicInvestmentSumOfServiceWithCode(serviceCode) + getRegularSumOfServiceWithCode(serviceCode);</span>
+    }
+
+    /* --- Expense Collection Methods --- */
+
+    /** Fetches a list of regular budget expenses for a given service. */
+    ArrayList&lt;BudgetExpense&gt; getRegularExpensesOfServiceWithCode(String serviceCode);
+
+    /** Fetches a list of national PIB expenses for a given service. */
+    ArrayList&lt;BudgetExpense&gt; getPublicInvestmentNationalExpensesOfServiceWithCode(String serviceCode);
+
+    /** Fetches a list of co-funded PIB expenses for a given service. */
+    ArrayList&lt;BudgetExpense&gt; getPublicInvestmentCoFundedExpensesOfServiceWithCode(String serviceCode);
+
+    /** Aggregates and sorts all PIB-related expenses for a specific service. */
+    default ArrayList&lt;BudgetExpense&gt; getPublicInvestmentExpensesOfServiceWithCode(String serviceCode) {
+<span class="fc" id="L126">        ArrayList&lt;BudgetExpense&gt; expenses = new ArrayList&lt;&gt;();</span>
+<span class="pc bpc" id="L127" title="1 of 2 branches missed.">        if (getPublicInvestmentNationalExpensesOfServiceWithCode(serviceCode) != null) {</span>
+<span class="fc" id="L128">            expenses.addAll(getPublicInvestmentNationalExpensesOfServiceWithCode(serviceCode));</span>
+        }
+<span class="pc bpc" id="L130" title="1 of 2 branches missed.">        if (getPublicInvestmentCoFundedExpensesOfServiceWithCode(serviceCode) != null) {</span>
+<span class="fc" id="L131">            expenses.addAll(getPublicInvestmentCoFundedExpensesOfServiceWithCode(serviceCode));</span>
+        }
+<span class="fc" id="L133">        expenses.sort(Comparator.comparing(BudgetExpense::getCode));</span>
+<span class="fc" id="L134">        return expenses;</span>
+    }
+
+    /** Aggregates and sorts all expenses from all sources for a specific service. */
+    default ArrayList&lt;BudgetExpense&gt; getBudgetExpensesOfServiceWithCode(String serviceCode) {
+<span class="fc" id="L139">        ArrayList&lt;BudgetExpense&gt; expenses = new ArrayList&lt;&gt;();</span>
+<span class="pc bpc" id="L140" title="1 of 2 branches missed.">        if (getRegularExpensesOfServiceWithCode(serviceCode) != null) {</span>
+<span class="fc" id="L141">            expenses.addAll(getRegularExpensesOfServiceWithCode(serviceCode));</span>
+        }
+<span class="pc bpc" id="L143" title="1 of 2 branches missed.">        if (getPublicInvestmentExpensesOfServiceWithCode(serviceCode) != null) {</span>
+<span class="fc" id="L144">            expenses.addAll(getPublicInvestmentExpensesOfServiceWithCode(serviceCode));</span>
+        }
+<span class="fc" id="L146">        expenses.sort(Comparator.comparing(BudgetExpense::getCode));</span>
+<span class="fc" id="L147">        return expenses;</span>
+    }
+
+    /* --- Bulk Aggregation (Maps) --- */
+
+    /** Generates a map of service codes and their regular budget totals. */
+    Map&lt;String, Long&gt; getRegularSumOfEveryService();
+
+    /** Generates a map of service codes and their national PIB totals. */
+    Map&lt;String, Long&gt; getPublicInvestmentNationalSumOfEveryService();
+
+    /** Generates a map of service codes and their co-funded PIB totals. */
+    Map&lt;String, Long&gt; getPublicInvestmentCoFundedSumOfEveryService();
+
+    /** Creates a merged map of all service totals within the Public Investment Budget. */
+    default Map&lt;String, Long&gt; getPublicInvestmentSumOfEveryService() {
+<span class="fc" id="L163">        Map&lt;String, Long&gt; nationalMap = getPublicInvestmentNationalSumOfEveryService();</span>
+<span class="fc" id="L164">        Map&lt;String, Long&gt; coFundedMap = getPublicInvestmentCoFundedSumOfEveryService();</span>
+
+        // Δημιουργούμε ένα νέο Map ξεκινώντας με τα δεδομένα του Εθνικού σκέλους
+<span class="fc" id="L167">        Map&lt;String, Long&gt; combinedMap = new LinkedHashMap&lt;&gt;(nationalMap);</span>
+
+        // Προσθέτουμε τα δεδομένα του Συγχρηματοδοτούμενου
+<span class="fc" id="L170">        coFundedMap.forEach((serviceCode, amount) -&gt;</span>
+<span class="fc" id="L171">                combinedMap.merge(serviceCode, amount, Long::sum)</span>
+        );
+
+<span class="fc" id="L174">        return combinedMap;</span>
+    }
+
+    /** Creates a grand total map of every service total across all budget types. */
+    default Map&lt;String, Long&gt; getTotalSumOfEveryService() {
+<span class="fc" id="L179">        Map&lt;String, Long&gt; regularMap = getPublicInvestmentSumOfEveryService();</span>
+<span class="fc" id="L180">        Map&lt;String, Long&gt; pibMap = getRegularSumOfEveryService();</span>
+
+        // Δημιουργούμε ένα νέο Map ξεκινώντας με τα δεδομένα του Τακτικού
+<span class="fc" id="L183">        Map&lt;String, Long&gt; combinedMap = new LinkedHashMap&lt;&gt;(regularMap);</span>
+
+        // Προσθέτουμε τα δεδομένα του ΠΔΕ
+<span class="fc" id="L186">        pibMap.forEach((serviceCode, amount) -&gt;</span>
+<span class="fc" id="L187">                combinedMap.merge(serviceCode, amount, Long::sum)</span>
+        );
+
+<span class="fc" id="L190">        return combinedMap;</span>
+    }
+
+    /* --- Category-Specific Aggregation --- */
+
+    /** Returns the regular budget sum for a specific expense category. */
+    long getRegularSumOfExpenseCategoryWithCode(String code);
+
+    /** Returns the national PIB sum for a specific expense category. */
+    long getPublicInvestmentNationalSumOfExpenseCategoryWithCode(String code);
+
+    /** Returns the co-funded PIB sum for a specific expense category. */
+    long getPublicInvestmentCoFundedSumOfExpenseCategoryWithCode(String code);
+
+    /** Returns the merged PIB sum for a specific expense category. */
+    default long getPublicInvestmentSumOfExpenseCategoryWithCode(String code) {
+<span class="fc" id="L206">        return getPublicInvestmentNationalSumOfExpenseCategoryWithCode(code) + getPublicInvestmentCoFundedSumOfExpenseCategoryWithCode(code);</span>
+    }
+
+    /** Returns the grand total sum for a specific expense category across all budgets. */
+    default long getTotalSumOfExpenseCategoryWithCode(String code) {
+<span class="fc" id="L211">        return getRegularSumOfExpenseCategoryWithCode(code) + getPublicInvestmentSumOfExpenseCategoryWithCode(code);</span>
+    }
+
+    /* --- Bulk Category Mapping --- */
+
+    /** Map of category codes to regular budget sums. */
+    Map&lt;String, Long&gt; getRegularSumOfEveryExpenseCategory();
+
+    /** Map of category codes to national PIB sums. */
+    Map&lt;String, Long&gt; getPublicInvestmentNationalSumOfEveryExpenseCategory();
+
+    /** Map of category codes to co-funded PIB sums. */
+    Map&lt;String, Long&gt; getPublicInvestmentCoFundedSumOfEveryExpenseCategory();
+
+    /** Merged map of category codes to total PIB sums. */
+    default Map&lt;String, Long&gt; getPublicInvestmentSumOfEveryExpenseCategory() {
+<span class="fc" id="L227">        Map&lt;String, Long&gt; nationalMap = getPublicInvestmentNationalSumOfEveryExpenseCategory();</span>
+<span class="fc" id="L228">        Map&lt;String, Long&gt; coFundedMap = getPublicInvestmentCoFundedSumOfEveryExpenseCategory();</span>
+
+        // Χρήση LinkedHashMap για διατήρηση της ταξινόμησης
+<span class="fc" id="L231">        Map&lt;String, Long&gt; combinedMap = new LinkedHashMap&lt;&gt;(nationalMap);</span>
+<span class="fc" id="L232">        coFundedMap.forEach((code, amount) -&gt;</span>
+<span class="fc" id="L233">                combinedMap.merge(code, amount, Long::sum)</span>
+        );
+<span class="fc" id="L235">        return combinedMap;</span>
+    }
+
+    /** Merged map of category codes to grand total sums across all budgets. */
+    default Map&lt;String, Long&gt; getTotalSumOfEveryExpenseCategory() {
+<span class="fc" id="L240">        Map&lt;String, Long&gt; regularMap = getRegularSumOfEveryExpenseCategory();</span>
+<span class="fc" id="L241">        Map&lt;String, Long&gt; pibMap = getPublicInvestmentSumOfEveryExpenseCategory();</span>
+
+<span class="fc" id="L243">        Map&lt;String, Long&gt; combinedMap = new LinkedHashMap&lt;&gt;(regularMap);</span>
+<span class="fc" id="L244">        pibMap.forEach((code, amount) -&gt;</span>
+<span class="fc" id="L245">                combinedMap.merge(code, amount, Long::sum)</span>
+        );
+<span class="fc" id="L247">        return combinedMap;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

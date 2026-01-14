@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BudgetEntry.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">FinDet</a> &gt; <a href="index.source.html" class="el_package">com.financial.entries</a> &gt; <span class="el_source">BudgetEntry.java</span></div><h1>BudgetEntry.java</h1><pre class="source lang-java linenums">package com.financial.entries;
+
+/**
+ * Abstract base class representing a generic entry in the financial budget.
+ * &lt;p&gt;
+ * This class provides the fundamental attributes for any budget item, including
+ * its unique code, description, category, and monetary amount. It enforces basic
+ * validation rules for financial values.
+ */
+public abstract class BudgetEntry {
+    /** The unique identification code of the budget entry. */
+    private final String code;
+
+    /** A descriptive name or label for the entry. */
+    private final String description;
+
+    /** The broad financial category the entry belongs to (e.g., &quot;REVENUE&quot;, &quot;EXPENSE&quot;). */
+    private final String category;
+
+    /** The monetary value of the entry, stored as a long to avoid floating-point errors. */
+    protected long amount;
+
+    /**
+     * Constructs a new BudgetEntry with the specified details.
+     *
+     * @param code        the unique string code
+     * @param description the name or description of the entry
+     * @param category    the category classification
+     * @param amount      the initial monetary amount
+     */
+<span class="fc" id="L31">    public BudgetEntry(String code, String description, String category, long amount) {</span>
+<span class="fc" id="L32">        this.code = code;</span>
+<span class="fc" id="L33">        this.description = description;</span>
+<span class="fc" id="L34">        this.category = category;</span>
+<span class="fc" id="L35">        this.amount = amount;</span>
+<span class="fc" id="L36">    }</span>
+
+    /**
+     * Gets the unique code of the entry.
+     * @return the entry code
+     */
+    public String getCode() {
+<span class="fc" id="L43">        return this.code;</span>
+    }
+
+    /**
+     * Gets the description of the entry.
+     * @return the entry description
+     */
+    public String getDescription() {
+<span class="fc" id="L51">        return this.description;</span>
+    }
+
+    /**
+     * Gets the category of the entry.
+     * @return the entry category
+     */
+    public String getCategory() {
+<span class="fc" id="L59">        return this.category;</span>
+    }
+
+    /**
+     * Gets the current monetary amount of the entry.
+     * @return the amount as a long
+     */
+    public long getAmount() {
+<span class="fc" id="L67">        return this.amount;</span>
+    }
+
+    /**
+     * Sets the monetary amount of the entry.
+     * &lt;p&gt;
+     * Validation: The amount must be non-negative.
+     *
+     * @param amount the new amount to set
+     * @throws IllegalArgumentException if the provided amount is negative
+     */
+    public void setAmount(long amount) {
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        if (amount &gt;= 0) {</span>
+<span class="fc" id="L80">            this.amount = amount;</span>
+        } else {
+<span class="fc" id="L82">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L84">    }</span>
+
+    /**
+     * Returns a string representation of the budget entry,
+     * formatting the amount with thousands separators for readability.
+     * * @return a formatted string containing entry details
+     */
+    @Override
+    public String toString() {
+<span class="fc" id="L93">        return &quot;Code: &quot; + code + &quot;, Description: &quot; + description + &quot;, Category: &quot; + category + &quot;, Amount: &quot; + String.format(&quot;%,d&quot;, amount);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

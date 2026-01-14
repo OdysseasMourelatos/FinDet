@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PublicInvestmentBudgetRevenue.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">FinDet</a> &gt; <a href="index.source.html" class="el_package">com.financial.entries</a> &gt; <span class="el_source">PublicInvestmentBudgetRevenue.java</span></div><h1>PublicInvestmentBudgetRevenue.java</h1><pre class="source lang-java linenums">package com.financial.entries;
+
+import com.financial.services.revenues.BudgetRevenueLogicService;
+import com.financial.data.DataInput;
+import com.financial.services.revenues.BudgetRevenueLogic;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Objects;
+
+/**
+ * Intermediate class representing revenues from the Public Investment Budget (ΠΔΕ).
+ * &lt;p&gt;
+ * This class serves as a container for both National and Co-funded amounts,
+ * providing mechanisms to merge duplicate entries and synchronize the total
+ * investment amount with the base {@link BudgetRevenue} class.
+ */
+public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements BudgetRevenueLogic {
+
+    /**
+     * The type of investment (e.g., &quot;ΕΘΝΙΚΟ&quot; or &quot;ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ&quot;).
+     */
+    private final String type;
+
+    /**
+     * Internal registry of all public investment revenue instances.
+     */
+<span class="fc" id="L29">    protected static ArrayList&lt;PublicInvestmentBudgetRevenue&gt; publicInvestmentBudgetRevenues = new ArrayList&lt;&gt;();</span>
+
+    /**
+     * Basic constructor for public investment revenue.
+     *
+     * @param code        the unique financial code
+     * @param description a brief description
+     * @param category    the financial category
+     * @param type        the investment type
+     * @param amount      the total amount
+     */
+    public PublicInvestmentBudgetRevenue(String code, String description, String category, String type, long amount) {
+<span class="fc" id="L41">        super(code, description, category, amount);</span>
+<span class="fc" id="L42">        this.type = type;</span>
+<span class="fc" id="L43">    }</span>
+
+    private long nationalAmount;
+    private long coFundedAmount;
+
+    /**
+     * Detailed constructor used primarily for creating filtered/merged investment objects.
+     * Automatically registers the instance in the static tracking list.
+     *
+     * @param code           the unique financial code
+     * @param description    a brief description
+     * @param category       the financial category
+     * @param type           the investment type
+     * @param nationalAmount the portion from national resources
+     * @param coFundedAmount the portion from co-funded resources
+     * @param amount         the total combined amount
+     */
+    public PublicInvestmentBudgetRevenue(String code, String description, String category, String type, long nationalAmount, long coFundedAmount, long amount) {
+<span class="fc" id="L61">        super(code, description, category, amount);</span>
+<span class="fc" id="L62">        this.type = type;</span>
+<span class="fc" id="L63">        this.nationalAmount = nationalAmount;</span>
+<span class="fc" id="L64">        this.coFundedAmount = coFundedAmount;</span>
+<span class="fc" id="L65">        publicInvestmentBudgetRevenues.add(this);</span>
+<span class="fc" id="L66">    }</span>
+
+    /**
+     * Sorts the public investment revenues list alphabetically by their code.
+     * Essential before performing filtering/merging operations.
+     */
+    public static void sortPublicInvestmentBudgetRevenuesByCode() {
+<span class="fc" id="L73">        Collections.sort(publicInvestmentBudgetRevenues, new Comparator&lt;PublicInvestmentBudgetRevenue&gt;() {</span>
+            @Override
+            public int compare(PublicInvestmentBudgetRevenue b1, PublicInvestmentBudgetRevenue b2) {
+<span class="fc" id="L76">                return b1.getCode().compareTo(b2.getCode());</span>
+            }
+        });
+<span class="fc" id="L79">    }</span>
+
+    /**
+     * Merges entries with identical codes into single objects by summing their components.
+     * After merging, it triggers the creation of filtered budget revenues in {@link DataInput}.
+     */
+    public static void filterPublicInvestmentBudgetRevenues() {
+<span class="fc" id="L86">        ArrayList&lt;Integer&gt; repeatedRevenues = new ArrayList&lt;&gt;();</span>
+
+        // Identify duplicate codes in the sorted list
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        for (int i = 1; i &lt; publicInvestmentBudgetRevenues.size(); i++) {</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">            if (publicInvestmentBudgetRevenues.get(i).getCode().equals(publicInvestmentBudgetRevenues.get(i - 1).getCode())) {</span>
+<span class="fc" id="L91">                repeatedRevenues.add(i);</span>
+            }
+        }
+
+        // Merge duplicates starting from the end of the list
+<span class="fc bfc" id="L96" title="All 2 branches covered.">        for (int j = repeatedRevenues.size() - 1; j &gt;= 0; j--) {</span>
+<span class="fc" id="L97">            Integer i = repeatedRevenues.get(j);</span>
+<span class="fc" id="L98">            PublicInvestmentBudgetRevenue b1 = publicInvestmentBudgetRevenues.get(i);</span>
+<span class="fc" id="L99">            PublicInvestmentBudgetRevenue b2 = publicInvestmentBudgetRevenues.get(i - 1);</span>
+<span class="fc" id="L100">            publicInvestmentBudgetRevenues.remove(b1);</span>
+<span class="fc" id="L101">            b2.setNationalAmount(b2.getNationalAmount() + b1.getNationalAmount(), false);</span>
+<span class="fc" id="L102">            b2.setCoFundedAmount(b2.getCoFundedAmount() + b1.getCoFundedAmount(), false);</span>
+<span class="fc" id="L103">            b2.setAmount(b2.getAmount() + b1.getAmount());</span>
+        }
+<span class="fc" id="L105">        DataInput.createBudgetRevenueFilteredFromPublicInvestmentBudgetRevenue();</span>
+<span class="fc" id="L106">    }</span>
+
+    /**
+     * Returns the full list of public investment revenues.
+     * @return an ArrayList of all instances
+     */
+    public static ArrayList&lt;PublicInvestmentBudgetRevenue&gt; getAllPublicInvestmentBudgetRevenues() {
+<span class="fc" id="L113">        return publicInvestmentBudgetRevenues;</span>
+    }
+
+    /**
+     * Retrieves top-level (2-digit code) investment revenues.
+     * @return an ArrayList of main investment categories
+     */
+    public static ArrayList&lt;PublicInvestmentBudgetRevenue&gt; getMainPublicInvestmentBudgetRevenues() {
+<span class="fc" id="L121">        return BudgetRevenueLogicService.getMainBudgetRevenues(publicInvestmentBudgetRevenues);</span>
+    }
+
+    /**
+     * Finds a specific investment revenue by its code.
+     * @param code the code to look for
+     * @return the matching object or null
+     */
+    public static PublicInvestmentBudgetRevenue findPublicInvestmentBudgetRevenueWithCode(String code) {
+<span class="fc" id="L130">        return BudgetRevenueLogicService.findRevenueWithCode(code, publicInvestmentBudgetRevenues);</span>
+    }
+
+    /**
+     * Retrieves all investment revenues starting with a given prefix.
+     * @param code the code prefix
+     * @return a list of matching BudgetRevenue objects
+     */
+    public static ArrayList&lt;BudgetRevenue&gt; getPublicInvestmentBudgetRevenuesStartingWithCode(String code) {
+<span class="fc" id="L139">        return BudgetRevenueLogicService.getRevenuesStartingWithCode(code, publicInvestmentBudgetRevenues);</span>
+    }
+
+    /**
+     * Calculates the total sum of amounts for all main investment categories.
+     * @return the total sum
+     */
+    public static long calculateSum() {
+<span class="fc" id="L147">        return BudgetRevenueLogicService.calculateSum(publicInvestmentBudgetRevenues);</span>
+    }
+
+    /* Hierarchy Logic Implementation */
+
+    /** @return The parent category immediately above this entry in the investment hierarchy. */
+    @Override
+    public PublicInvestmentBudgetRevenue getAboveLevelSuperCategory() {
+<span class="fc" id="L155">        return BudgetRevenueLogicService.getAboveLevelSuperCategory(this, publicInvestmentBudgetRevenues);</span>
+    }
+
+    /** @return A list of all ancestor categories up to the root of the investment budget. */
+    @Override
+    public ArrayList&lt;BudgetRevenue&gt; getAllSuperCategories() {
+<span class="fc" id="L161">        return BudgetRevenueLogicService.getAllSuperCategories(this, publicInvestmentBudgetRevenues);</span>
+    }
+
+    /** @return A list of immediate sub-categories (children) for this entry. */
+    @Override
+    public ArrayList&lt;BudgetRevenue&gt; getNextLevelSubCategories() {
+<span class="fc" id="L167">        return BudgetRevenueLogicService.getNextLevelSubCategories(this, publicInvestmentBudgetRevenues);</span>
+    }
+
+    /** @return A list of all descendant categories at all lower levels of the investment budget. */
+    @Override
+    public ArrayList&lt;BudgetRevenue&gt; getAllSubCategories() {
+<span class="fc" id="L173">        return BudgetRevenueLogicService.getAllSubCategories(this, publicInvestmentBudgetRevenues);</span>
+    }
+
+    /**
+     * Updates the global {@link BudgetRevenue} registry with changes from this investment entry.
+     * This ensures that the public investment totals are reflected in the overall budget view.
+     *
+     * @param change the new total investment amount for this code
+     */
+    public void updateAmountOfSuperClassFilteredObjects(long change) {
+<span class="fc" id="L183">        BudgetRevenue budgetRevenue = BudgetRevenue.findBudgetRevenueWithCode(this.getCode());</span>
+<span class="fc bfc" id="L184" title="All 2 branches covered.">        if (budgetRevenue != null ) {</span>
+<span class="fc" id="L185">            budgetRevenue.setPublicInvestmentAmount(change, true);</span>
+        }
+<span class="fc" id="L187">    }</span>
+
+    /* Getters and Setters */
+
+    /** @return The investment type string (e.g., &quot;ΕΘΝΙΚΟ&quot;). */
+    public String getType() {
+<span class="fc" id="L193">        return type;</span>
+    }
+
+    /** @return The amount allocated from national resources. */
+    public long getNationalAmount() {
+<span class="fc" id="L198">        return nationalAmount;</span>
+    }
+
+    /** @return The amount allocated from co-funded resources. */
+    public long getCoFundedAmount() {
+<span class="fc" id="L203">        return coFundedAmount;</span>
+    }
+
+    /**
+     * Sets the national portion of the investment.
+     *
+     * @param newNationalAmount the new amount (must be non-negative)
+     * @param update if true, recalculates total amount and notifies the superclass view
+     */
+    public void setNationalAmount(long newNationalAmount, boolean update) {
+<span class="fc bfc" id="L213" title="All 2 branches covered.">        if (newNationalAmount &gt;= 0) {</span>
+<span class="fc" id="L214">            this.nationalAmount = newNationalAmount;</span>
+<span class="fc bfc" id="L215" title="All 2 branches covered.">            if (update) {</span>
+<span class="fc" id="L216">                this.amount = nationalAmount + coFundedAmount;</span>
+<span class="fc" id="L217">                updateAmountOfSuperClassFilteredObjects(amount);</span>
+            }
+        }
+<span class="fc" id="L220">    }</span>
+
+    /**
+     * Sets the co-funded portion of the investment.
+     *
+     * @param newCoFundedAmount the new amount (must be non-negative)
+     * @param update if true, recalculates total amount and notifies the superclass view
+     */
+    public void setCoFundedAmount(long newCoFundedAmount, boolean update) {
+<span class="fc bfc" id="L229" title="All 2 branches covered.">        if (newCoFundedAmount &gt;= 0) {</span>
+<span class="fc" id="L230">            this.coFundedAmount = newCoFundedAmount;</span>
+<span class="fc bfc" id="L231" title="All 2 branches covered.">            if (update) {</span>
+<span class="fc" id="L232">                this.amount = nationalAmount + coFundedAmount;</span>
+<span class="fc" id="L233">                updateAmountOfSuperClassFilteredObjects(amount);</span>
+            }
+        }
+<span class="fc" id="L236">    }</span>
+
+    /**
+     * Compares this investment entry with another for equality.
+     * &lt;p&gt;
+     * Equality is determined by both the financial code and the investment type.
+     * This allows the system to distinguish between a National entry and a Co-funded
+     * entry that share the same budget code.
+     * &lt;/p&gt;
+     * * @param o The object to compare.
+     * @return {@code true} if codes and types match exactly.
+     */
+    @Override
+    public boolean equals(Object o) {
+<span class="fc bfc" id="L250" title="All 2 branches covered.">        if (this == o) {</span>
+<span class="fc" id="L251">            return true;</span>
+        }
+<span class="fc bfc" id="L253" title="All 4 branches covered.">        if (o == null || getClass() != o.getClass()) {</span>
+<span class="fc" id="L254">            return false;</span>
+        }
+
+<span class="fc" id="L257">        PublicInvestmentBudgetRevenue that = (PublicInvestmentBudgetRevenue) o;</span>
+
+<span class="fc bfc" id="L259" title="All 2 branches covered.">        return Objects.equals(getCode(), that.getCode()) &amp;&amp;</span>
+<span class="fc bfc" id="L260" title="All 2 branches covered.">                Objects.equals(type, that.type);</span>
+    }
+
+    /**
+     * Generates a hash code using the class, financial code, and investment type.
+     * @return The calculated hash code.
+     */
+    @Override
+    public int hashCode() {
+<span class="fc" id="L269">        return Objects.hash(getClass(), getCode(), type);</span>
+    }
+
+    /**
+     * Returns a string representation of the investment revenue including the type and formatted amount.
+     * @return A formatted detail string.
+     */
+    @Override
+    public String toString() {
+<span class="fc" id="L278">        return &quot;Code: &quot; + getCode() + &quot;, Description: &quot; + getDescription() + &quot;, Category: &quot; + getCategory() + &quot;, Type: &quot; + type + &quot;, Amount: &quot; + String.format(&quot;%,d&quot;, getAmount());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

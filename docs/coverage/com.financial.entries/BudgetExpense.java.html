@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BudgetExpense.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">FinDet</a> &gt; <a href="index.source.html" class="el_package">com.financial.entries</a> &gt; <span class="el_source">BudgetExpense.java</span></div><h1>BudgetExpense.java</h1><pre class="source lang-java linenums">package com.financial.entries;
+
+import com.financial.services.expenses.BudgetExpenseLogicService;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Objects;
+
+/**
+ * Represents a specific expense entry within the financial system.
+ * &lt;p&gt;
+ * This class extends {@link BudgetEntry} and adds organizational context,
+ * specifically linking expenses to unique Entities and Services. It provides
+ * static methods to aggregate data from both Regular and Public Investment Budgets.
+ * &lt;/p&gt;
+ */
+public class BudgetExpense extends BudgetEntry {
+
+    /** The unique identifier for the government or organizational entity */
+    private final String entityCode;
+
+    /** The descriptive name of the entity */
+    private final String entityName;
+
+    /** The unique identifier for the specific service within the entity */
+    private final String serviceCode;
+
+    /** The name of the service associated with this expense */
+    private final String serviceName;
+
+    /** Global list maintaining all instantiated budget expenses in memory */
+<span class="fc" id="L32">    protected static ArrayList&lt;BudgetExpense&gt; budgetExpenses = new ArrayList&lt;&gt;();</span>
+
+    /**
+     * Constructs a new BudgetExpense with full organizational and financial details.
+     *
+     * @param entityCode   The code of the entity.
+     * @param entityName   The name of the entity.
+     * @param serviceCode  The code of the service.
+     * @param serviceName  The name of the service.
+     * @param code         The specific expense/account code.
+     * @param description  A brief description of the expense.
+     * @param category     The category of the expense (e.g., 21, 24).
+     * @param amount       The monetary value of the expense.
+     */
+    public BudgetExpense(String entityCode, String entityName, String serviceCode, String serviceName, String code, String description, String category, long amount) {
+<span class="fc" id="L47">        super(code, description, category, amount);</span>
+<span class="fc" id="L48">        this.entityCode = entityCode;</span>
+<span class="fc" id="L49">        this.entityName = entityName;</span>
+<span class="fc" id="L50">        this.serviceCode = serviceCode;</span>
+<span class="fc" id="L51">        this.serviceName = serviceName;</span>
+<span class="fc" id="L52">        budgetExpenses.add(this);</span>
+<span class="fc" id="L53">    }</span>
+
+    /**
+     * Aggregates and returns the sum of all expense categories, combining
+     * Regular Budget and Public Investment Budget (PIB) data.
+     *
+     * @return A {@link Map} where the key is the category code and the value is the total sum.
+     */
+    public static Map&lt;String, Long&gt; getSumOfEveryBudgetExpenseCategory() {
+<span class="fc" id="L62">        Map&lt;String, Long&gt; regularMap = RegularBudgetExpense.getSumOfEveryRegularExpenseCategory();</span>
+<span class="fc" id="L63">        Map&lt;String, Long&gt; pibMap = PublicInvestmentBudgetExpense.getSumOfEveryPublicInvestmentExpenseCategory();</span>
+
+        // Create a new map starting with Regular Budget data
+<span class="fc" id="L66">        Map&lt;String, Long&gt; combinedMap = new LinkedHashMap&lt;&gt;(regularMap);</span>
+
+        // Merge PIB data into the combined map
+<span class="fc" id="L69">        pibMap.forEach((serviceCode, amount) -&gt;</span>
+<span class="fc" id="L70">                combinedMap.merge(serviceCode, amount, Long::sum)</span>
+        );
+
+<span class="fc" id="L73">        return combinedMap;</span>
+    }
+
+    /**
+     * Calculates the total sum of all expenses across all budget types.
+     *
+     * @return The total combined sum as a {@code long}.
+     */
+    public static long calculateSum() {
+<span class="fc" id="L82">        return RegularBudgetExpense.calculateSum() + PublicInvestmentBudgetExpense.calculateSum();</span>
+    }
+
+    /**
+     * Retrieves the description for a given expense code by delegating
+     * the search to the logic service.
+     *
+     * @param code The expense code to search for.
+     * @return The description of the code, or an empty string/null if not found.
+     */
+    public static String getDescriptionWithCode(String code) {
+<span class="fc" id="L93">        return BudgetExpenseLogicService.getDescriptionWithCode(code, budgetExpenses);</span>
+    }
+
+    /** @return The entity code of this expense */
+    public String getEntityCode() {
+<span class="fc" id="L98">        return entityCode;</span>
+    }
+
+    /** @return The name of the entity associated with this expense */
+    public String getEntityName() {
+<span class="fc" id="L103">        return entityName;</span>
+    }
+
+    /** @return The service code associated with this expense */
+    public String getServiceCode() {
+<span class="fc" id="L108">        return serviceCode;</span>
+    }
+
+    /** @return The name of the service associated with this expense */
+    public String getServiceName() {
+<span class="fc" id="L113">        return serviceName;</span>
+    }
+
+    /** @return The static list of all registered budget expenses */
+    public static ArrayList&lt;BudgetExpense&gt; getBudgetExpenses() {
+<span class="fc" id="L118">        return budgetExpenses;</span>
+    }
+
+    /**
+     * Compares this expense with another object for equality.
+     * Two expenses are considered equal if they share the same Entity Code,
+     * Service Code, and Expense Code (Composite Key).
+     *
+     * @param o The object to compare with.
+     * @return {@code true} if the objects represent the same expense record.
+     */
+    @Override
+    public boolean equals(Object o) {
+<span class="fc bfc" id="L131" title="All 2 branches covered.">        if (this == o) {</span>
+<span class="fc" id="L132">            return true;</span>
+        }
+<span class="fc bfc" id="L134" title="All 4 branches covered.">        if (o == null || getClass() != o.getClass()) {</span>
+<span class="fc" id="L135">            return false;</span>
+        }
+<span class="fc" id="L137">        BudgetExpense that = (BudgetExpense) o;</span>
+<span class="fc bfc" id="L138" title="All 2 branches covered.">        return Objects.equals(getEntityCode(), that.getEntityCode()) &amp;&amp;</span>
+<span class="fc bfc" id="L139" title="All 2 branches covered.">                Objects.equals(getServiceCode(), that.getServiceCode()) &amp;&amp;</span>
+<span class="fc bfc" id="L140" title="All 2 branches covered.">                Objects.equals(getCode(), that.getCode());</span>
+    }
+
+    /**
+     * Generates a hash code based on the unique composite key of the expense.
+     * * @return The hash code value.
+     */
+    @Override
+    public int hashCode() {
+<span class="fc" id="L149">        return Objects.hash(getClass(), getEntityCode(), getServiceCode(), getCode());</span>
+    }
+
+    /**
+     * Returns a formatted string representation of the budget expense,
+     * including organizational details and the formatted amount.
+     *
+     * @return A string containing all field values.
+     */
+    @Override
+    public String toString() {
+<span class="fc" id="L160">        return &quot;Entity Code: &quot; + getEntityCode() +</span>
+                &quot;, Entity Name: &quot; + entityName +
+                &quot;, Service Code: &quot; + serviceCode +
+                &quot;, Service Name: &quot; + serviceName +
+<span class="fc" id="L164">                &quot;, Expense Code: &quot; + getCode() +</span>
+<span class="fc" id="L165">                &quot;, Description: &quot; + getDescription() +</span>
+<span class="fc" id="L166">                &quot;, Category: &quot; + getCategory() +</span>
+<span class="fc" id="L167">                &quot;, Amount: &quot; + String.format(&quot;%,d&quot;, getAmount());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BudgetRevenue.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">FinDet</a> &gt; <a href="index.source.html" class="el_package">com.financial.entries</a> &gt; <span class="el_source">BudgetRevenue.java</span></div><h1>BudgetRevenue.java</h1><pre class="source lang-java linenums">package com.financial.entries;
+
+import com.financial.services.revenues.BudgetRevenueLogicService;
+import com.financial.services.revenues.BudgetRevenueLogic;
+
+import java.util.*;
+
+/**
+ * The base class for all budget revenue entries in the system.
+ * &lt;p&gt;
+ * This class serves as the central point for aggregating financial data from
+ * multiple sources (Regular and Public Investment). It maintains a global registry
+ * of all revenue entries and provides fundamental logic for hierarchical levels,
+ * code-based sorting, and duplicate merging.
+ */
+public class BudgetRevenue extends BudgetEntry implements BudgetRevenueLogic {
+
+    /**
+     * Global registry of all consolidated budget revenue instances.
+     */
+<span class="fc" id="L21">    protected static ArrayList&lt;BudgetRevenue&gt; budgetRevenues = new ArrayList&lt;&gt;();</span>
+
+    /**
+     * Basic constructor for general budget entries.
+     *
+     * @param code        the unique financial code
+     * @param description a brief description of the entry
+     * @param category    the financial category
+     * @param amount      the total financial amount
+     */
+    public BudgetRevenue(String code, String description, String category, long amount) {
+<span class="fc" id="L32">        super(code, description, category, amount);</span>
+<span class="fc" id="L33">    }</span>
+
+    /** The portion of revenue derived from the regular budget. */
+    private long regularAmount;
+
+    /** The portion of revenue derived from the public investment budget. */
+    private long publicInvestmentAmount;
+
+    /**
+     * Detailed constructor for consolidated budget revenues.
+     * Automatically registers the instance in the global static registry.
+     *
+     * @param code                   the unique financial code
+     * @param description            a brief description
+     * @param category               the financial category
+     * @param regularAmount          the amount from regular resources
+     * @param publicInvestmentAmount the amount from investment resources
+     * @param amount                 the total combined amount
+     */
+    public BudgetRevenue(String code, String description, String category, long regularAmount, long publicInvestmentAmount, long amount) {
+<span class="fc" id="L53">        super(code, description, category, amount);</span>
+<span class="fc" id="L54">        this.regularAmount = regularAmount;</span>
+<span class="fc" id="L55">        this.publicInvestmentAmount = publicInvestmentAmount;</span>
+<span class="fc" id="L56">        budgetRevenues.add(this);</span>
+<span class="fc" id="L57">    }</span>
+
+    /**
+     * Sorts the global revenue list alphabetically by code.
+     * This is a prerequisite for the duplicate filtering process.
+     */
+    public static void sortBudgetRevenuesByCode() {
+<span class="fc" id="L64">        Collections.sort(budgetRevenues, new Comparator&lt;BudgetRevenue&gt;() {</span>
+            @Override
+            public int compare(BudgetRevenue b1, BudgetRevenue b2) {
+<span class="fc" id="L67">                return b1.getCode().compareTo(b2.getCode());</span>
+            }
+        });
+<span class="fc" id="L70">    }</span>
+
+    /**
+     * Merges duplicate revenue entries in the global registry.
+     * &lt;p&gt;
+     * When multiple objects share the same code (e.g., from different data inputs),
+     * their amounts are summed into a single consolidated object to ensure
+     * budget integrity.
+     */
+    public static void filterBudgetRevenues() {
+<span class="fc" id="L80">        ArrayList&lt;Integer&gt; repeatedRevenues = new ArrayList&lt;&gt;();</span>
+        //Finds codes that are repeated in the list
+<span class="fc bfc" id="L82" title="All 2 branches covered.">        for (int i = 1; i &lt; budgetRevenues.size(); i++) {</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">            if (budgetRevenues.get(i).getCode().equals(budgetRevenues.get(i - 1).getCode())) {</span>
+<span class="fc" id="L84">                repeatedRevenues.add(i);</span>
+            }
+        }
+
+        // Merge repeated values into a single object and remove the redundant ones
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        for (int j = repeatedRevenues.size() - 1; j &gt;= 0; j--) {</span>
+<span class="fc" id="L90">            Integer i = repeatedRevenues.get(j);</span>
+<span class="fc" id="L91">            BudgetRevenue b1 = budgetRevenues.get(i);</span>
+<span class="fc" id="L92">            BudgetRevenue b2 = budgetRevenues.get(i - 1);</span>
+<span class="fc" id="L93">            budgetRevenues.remove(b1);</span>
+<span class="fc" id="L94">            b2.setRegularAmount(b2.getRegularAmount() + b1.getRegularAmount(), false);</span>
+<span class="fc" id="L95">            b2.setPublicInvestmentAmount(b2.getPublicInvestmentAmount() + b1.getPublicInvestmentAmount(), false);</span>
+<span class="fc" id="L96">            b2.setAmount(b2.getAmount() + b1.getAmount());</span>
+        }
+<span class="fc" id="L98">    }</span>
+
+    /**
+     * Returns the global list of all consolidated budget revenues.
+     * @return an ArrayList of all instances
+     */
+    public static ArrayList&lt;BudgetRevenue&gt; getAllBudgetRevenues() {
+<span class="fc" id="L105">        return budgetRevenues;</span>
+    }
+
+    /**
+     * Retrieves top-level (2-digit code) revenues.
+     * @return an ArrayList of main budget categories
+     */
+    public static ArrayList&lt;BudgetRevenue&gt; getMainBudgetRevenues() {
+<span class="fc" id="L113">        return BudgetRevenueLogicService.getMainBudgetRevenues(getAllBudgetRevenues());</span>
+    }
+
+    /**
+     * Searches for a consolidated revenue entry by its code.
+     * @param code the code to search for
+     * @return the matching entry or null
+     */
+    public static BudgetRevenue findBudgetRevenueWithCode(String code) {
+<span class="fc" id="L122">        return BudgetRevenueLogicService.findRevenueWithCode(code, budgetRevenues);</span>
+    }
+
+    /**
+     * Retrieves all revenues starting with a specific code prefix.
+     * @param code the code prefix
+     * @return a list of matching entries
+     */
+    public static ArrayList&lt;BudgetRevenue&gt; getBudgetRevenuesStartingWithCode(String code) {
+<span class="fc" id="L131">        return BudgetRevenueLogicService.getRevenuesStartingWithCode(code, budgetRevenues);</span>
+    }
+
+    /**
+     * Calculates the total sum of all main budget categories.
+     * @return the total budget sum
+     */
+    public static long calculateSum() {
+<span class="fc" id="L139">        return BudgetRevenueLogicService.calculateSum(budgetRevenues);</span>
+    }
+
+    /**
+     * Determines the hierarchical level of the entry based on the length of its code.
+     * &lt;ul&gt;
+     * &lt;li&gt;Level 1: 2 digits (e.g., &quot;11&quot;)&lt;/li&gt;
+     * &lt;li&gt;Level 2: 3 digits&lt;/li&gt;
+     * &lt;li&gt;Level 3: 5 digits&lt;/li&gt;
+     * &lt;li&gt;Level 4: 7 digits&lt;/li&gt;
+     * &lt;li&gt;Level 5: 10 digits&lt;/li&gt;
+     * &lt;/ul&gt;
+     *
+     * @return the level index (1-5), or 0 for unknown lengths
+     */
+    public int getLevelOfHierarchy() {
+<span class="fc bfc" id="L155" title="All 6 branches covered.">        return switch (getCode().length()) {</span>
+<span class="fc" id="L156">            case 2 -&gt; 1;</span>
+<span class="fc" id="L157">            case 3 -&gt; 2;</span>
+<span class="fc" id="L158">            case 5 -&gt; 3;</span>
+<span class="fc" id="L159">            case 7 -&gt; 4;</span>
+<span class="fc" id="L160">            case 10 -&gt; 5;</span>
+<span class="fc" id="L161">            default -&gt; 0;</span>
+        };
+    }
+
+    /* Hierarchy Navigation Implementation */
+
+    /** @return The parent category immediately above this entry in the hierarchy. */
+    @Override
+    public BudgetRevenue getAboveLevelSuperCategory() {
+<span class="fc" id="L170">        return BudgetRevenueLogicService.getAboveLevelSuperCategory(this, budgetRevenues);</span>
+    }
+
+    /** @return A list of all ancestor categories reaching up to Level 1. */
+    @Override
+    public ArrayList&lt;BudgetRevenue&gt; getAllSuperCategories() {
+<span class="fc" id="L176">        return BudgetRevenueLogicService.getAllSuperCategories(this, budgetRevenues);</span>
+    }
+
+    /** @return A list of immediate child categories directly below this entry. */
+    @Override
+    public ArrayList&lt;BudgetRevenue&gt; getNextLevelSubCategories() {
+<span class="fc" id="L182">        return BudgetRevenueLogicService.getNextLevelSubCategories(this, budgetRevenues);</span>
+    }
+
+    /** @return A list of all descendant sub-categories at all lower levels. */
+    @Override
+    public ArrayList&lt;BudgetRevenue&gt; getAllSubCategories() {
+<span class="fc" id="L188">        return BudgetRevenueLogicService.getAllSubCategories(this, budgetRevenues);</span>
+    }
+
+    /* Getters &amp; Setters */
+
+    /** @return The amount of revenue from the regular budget. */
+    public long getRegularAmount() {
+<span class="fc" id="L195">        return regularAmount;</span>
+    }
+
+    /** @return The amount of revenue from the public investment budget. */
+    public long getPublicInvestmentAmount() {
+<span class="fc" id="L200">        return publicInvestmentAmount;</span>
+    }
+
+    /**
+     * Sets the public investment portion of the revenue.
+     * @param amount the new amount (non-negative)
+     * @param update if true, synchronizes the total amount field
+     */
+    public void setPublicInvestmentAmount(long amount, boolean update) {
+<span class="fc bfc" id="L209" title="All 2 branches covered.">        if (amount &gt;= 0) {</span>
+<span class="fc" id="L210">            this.publicInvestmentAmount = amount;</span>
+<span class="fc bfc" id="L211" title="All 2 branches covered.">            if (update) {</span>
+<span class="fc" id="L212">                this.amount = regularAmount + publicInvestmentAmount;</span>
+            }
+        }
+<span class="fc" id="L215">    }</span>
+
+    /**
+     * Sets the regular budget portion of the revenue.
+     * @param amount the new amount (non-negative)
+     * @param update if true, synchronizes the total amount field
+     */
+    public void setRegularAmount(long amount, boolean update) {
+<span class="fc bfc" id="L223" title="All 2 branches covered.">        if (amount &gt;= 0) {</span>
+<span class="fc" id="L224">            this.regularAmount = amount;</span>
+<span class="fc bfc" id="L225" title="All 2 branches covered.">            if (update) {</span>
+<span class="fc" id="L226">                this.amount = regularAmount + publicInvestmentAmount;</span>
+            }
+        }
+<span class="fc" id="L229">    }</span>
+
+    /**
+     * Compares this revenue entry with another for equality based on code and component amounts.
+     * @param o The object to compare.
+     * @return {@code true} if codes and amounts match exactly.
+     */
+    @Override
+    public boolean equals(Object o) {
+<span class="fc bfc" id="L238" title="All 2 branches covered.">        if (this == o) {</span>
+<span class="fc" id="L239">            return true;</span>
+        }
+
+<span class="fc bfc" id="L242" title="All 4 branches covered.">        if (o == null || getClass() != o.getClass()) {</span>
+<span class="fc" id="L243">            return false;</span>
+        }
+<span class="fc" id="L245">        BudgetRevenue that = (BudgetRevenue) o;</span>
+<span class="fc bfc" id="L246" title="All 6 branches covered.">        return Objects.equals(getCode(), that.getCode()) &amp;&amp;</span>
+                this.regularAmount == that.regularAmount &amp;&amp;
+                this.publicInvestmentAmount == that.publicInvestmentAmount;
+    }
+
+    /**
+     * Generates a hash code for this entry using its class and unique code.
+     * @return The calculated hash code.
+     */
+    @Override
+    public int hashCode() {
+<span class="fc" id="L257">        return Objects.hash(getClass(), getCode());</span>
+    }
+
+    /** @return A string representation of the entry from the superclass. */
+    @Override
+    public String toString () {
+<span class="fc" id="L263">        return super.toString();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

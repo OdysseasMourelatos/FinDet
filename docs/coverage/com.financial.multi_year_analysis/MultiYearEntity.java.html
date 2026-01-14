@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MultiYearEntity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">FinDet</a> &gt; <a href="index.source.html" class="el_package">com.financial.multi_year_analysis</a> &gt; <span class="el_source">MultiYearEntity.java</span></div><h1>MultiYearEntity.java</h1><pre class="source lang-java linenums">package com.financial.multi_year_analysis;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Represents an organizational entity (such as a government department, agency, or organization)
+ * that has associated budget expenses tracked across multiple years.
+ * This class provides methods to analyze total, regular, and public investment expenses per year.
+ * 
+ * @author Financial Analysis System
+ * @version 1.0
+ */
+public class MultiYearEntity {
+    protected List&lt;MultiYearBudgetExpense&gt; multiYearExpensesOfEntity;
+    private final String entityCode;
+    private final String entityName;
+<span class="fc" id="L20">    protected static List&lt;MultiYearEntity&gt; multiYearEntities = new ArrayList&lt;&gt;();</span>
+
+    /**
+     * Constructs a new MultiYearEntity and automatically links it with its associated expenses.
+     * The entity is registered in the global entities collection for later retrieval.
+     * Note: The multiYearExpensesOfEntity parameter is overridden by expenses loaded
+     * from the expense collection based on entityCode.
+     * 
+     * @param entityCode the unique identifier code for this entity
+     * @param entityName the display name of this entity
+     */
+<span class="fc" id="L31">    public MultiYearEntity(String entityCode, String entityName) {</span>
+<span class="fc" id="L32">        this.entityCode = entityCode;</span>
+<span class="fc" id="L33">        this.entityName = entityName;</span>
+        // Link with expenses from the specific entity
+<span class="fc" id="L35">        this.multiYearExpensesOfEntity = MultiYearBudgetExpense.getMultiYearExpensesOfEntityWithEntityCode(entityCode);</span>
+<span class="fc" id="L36">        multiYearEntities.add(this);</span>
+<span class="fc" id="L37">    }</span>
+
+    /**
+     * Returns the complete list of all multi-year entities.
+     *
+     * @return a list containing all entity entries created
+     */
+    public static List&lt;MultiYearEntity&gt; getMultiYearEntities() {
+<span class="fc" id="L45">        return multiYearEntities;</span>
+    }
+
+    /**
+     * Searches for and returns an entity with the specified entity code.
+     *
+     * @param entityCode the entity code to search for
+     * @return the matching MultiYearEntity, or null if no entity with that code exists
+     */
+    public static MultiYearEntity findMultiYearEntityWithCode(String entityCode) {
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        for (MultiYearEntity multiYearEntity : multiYearEntities) {</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">            if (multiYearEntity.getEntityCode().equals(entityCode)) {</span>
+<span class="fc" id="L57">                return multiYearEntity;</span>
+            }
+<span class="fc" id="L59">        }</span>
+<span class="fc" id="L60">        return null;</span>
+    }
+
+    /**
+     * Calculates the total expenses (regular + public investment) for this entity
+     * broken down by year.
+     * 
+     * @return a map where keys are years and values are total expense amounts for each year
+     */
+    public Map&lt;Integer, Long&gt; getTotalExpensesOfEntityPerYear() {
+<span class="fc" id="L70">        Map&lt;Integer, Long&gt; totalExpensesOfEntity = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">        for (MultiYearBudgetExpense multiYearBudgetExpense : multiYearExpensesOfEntity) {</span>
+<span class="fc" id="L72">            totalExpensesOfEntity.put(multiYearBudgetExpense.getYear(), multiYearBudgetExpense.getAmount());</span>
+<span class="fc" id="L73">        }</span>
+<span class="fc" id="L74">        return totalExpensesOfEntity;</span>
+    }
+
+    /**
+     * Calculates the regular (non-investment) expenses for this entity
+     * broken down by year.
+     * 
+     * @return a map where keys are years and values are regular expense amounts for each year
+     */
+    public Map&lt;Integer, Long&gt; getTotalRegularExpensesOfEntityPerYear() {
+<span class="fc" id="L84">        Map&lt;Integer, Long&gt; totalRegularExpensesOfEntity = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">        for (MultiYearBudgetExpense multiYearBudgetExpense : multiYearExpensesOfEntity) {</span>
+<span class="fc" id="L86">            totalRegularExpensesOfEntity.put(multiYearBudgetExpense.getYear(), multiYearBudgetExpense.getRegularAmount());</span>
+<span class="fc" id="L87">        }</span>
+<span class="fc" id="L88">        return totalRegularExpensesOfEntity;</span>
+    }
+
+    /**
+     * Calculates the public investment expenses for this entity
+     * broken down by year.
+     * 
+     * @return a map where keys are years and values are public investment expense amounts for each year
+     */
+    public Map&lt;Integer, Long&gt; getTotalPublicInvestmentExpensesOfEntityPerYear() {
+<span class="fc" id="L98">        Map&lt;Integer, Long&gt; totalPublicInvestmentExpensesOfEntity = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">        for (MultiYearBudgetExpense multiYearBudgetExpense : multiYearExpensesOfEntity) {</span>
+<span class="fc" id="L100">            totalPublicInvestmentExpensesOfEntity.put(multiYearBudgetExpense.getYear(), multiYearBudgetExpense.getPublicInvestmentAmount());</span>
+<span class="fc" id="L101">        }</span>
+<span class="fc" id="L102">        return totalPublicInvestmentExpensesOfEntity;</span>
+    }
+
+    /**
+     * Returns the unique identifier code for this entity.
+     * 
+     * @return the entity code
+     */
+    public String getEntityCode() {
+<span class="fc" id="L111">        return entityCode;</span>
+    }
+
+    /**
+     * Returns the display name of this entity.
+     * 
+     * @return the entity name
+     */
+    public String getEntityName() {
+<span class="fc" id="L120">        return entityName;</span>
+    }
+
+    /**
+     * Returns the list of all expense entries associated with this entity.
+     * 
+     * @return a list of MultiYearBudgetExpense objects for this entity
+     */
+    public List&lt;MultiYearBudgetExpense&gt; getMultiYearExpensesOfEntity() {
+<span class="fc" id="L129">        return multiYearExpensesOfEntity;</span>
+    }
+
+    /**
+     * Returns a formatted string representation of this entity.
+     * 
+     * @return a string containing the entity code and name
+     */
+    @Override
+    public String toString() {
+<span class="fc" id="L139">        return &quot;EntityCode: &quot; + entityCode + &quot;, EntityName: &quot; + entityName;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

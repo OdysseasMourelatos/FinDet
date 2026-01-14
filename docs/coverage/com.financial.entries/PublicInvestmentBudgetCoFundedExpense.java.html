@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PublicInvestmentBudgetCoFundedExpense.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">FinDet</a> &gt; <a href="index.source.html" class="el_package">com.financial.entries</a> &gt; <span class="el_source">PublicInvestmentBudgetCoFundedExpense.java</span></div><h1>PublicInvestmentBudgetCoFundedExpense.java</h1><pre class="source lang-java linenums">package com.financial.entries;
+
+import com.financial.services.BudgetType;
+import com.financial.services.expenses.BudgetExpenseChangesService;
+import com.financial.services.expenses.BudgetExpenseLogicService;
+import com.financial.services.expenses.ExpensesHistory;
+import java.util.*;
+
+/**
+ * Represents an expenditure within the Co-Funded segment of the Public Investment Budget.
+ * &lt;p&gt;
+ * This class extends {@link PublicInvestmentBudgetExpense} to handle investment projects
+ * that are shared between national and international funding sources. It manages a
+ * localized registry of co-funded entries and provides specialized methods for
+ * history tracking and global budget adjustments.
+ */
+public class PublicInvestmentBudgetCoFundedExpense extends PublicInvestmentBudgetExpense {
+
+    // Static collection maintains all co-funded expense instances
+<span class="fc" id="L20">    protected static ArrayList&lt;PublicInvestmentBudgetCoFundedExpense&gt; pibCoFundedExpenses = new ArrayList&lt;&gt;();</span>
+
+    /**
+     * **Initializes** a new Co-Funded investment expense and **registers** it in the global registry.
+     * &lt;p&gt;
+     * This constructor invokes the superclass constructor to populate core financial fields
+     * and then appends the newly created instance to the static {@code pibCoFundedExpenses}
+     * collection for centralized data management.
+     *
+     * @param entityCode  **Unique identifier** for the Ministry or government Entity.
+     * @param entityName  **Display name** of the Entity.
+     * @param serviceCode **Unique identifier** for the specific Service or Department.
+     * @param serviceName **Display name** of the Service.
+     * @param code        **Budget classification code** assigned to this entry.
+     * @param description **Textual summary** describing the expenditure.
+     * @param type        **Investment segment type** (e.g., &quot;ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ&quot;).
+     * @param category    **Broad classification category** for budget reporting.
+     * @param amount      **Monetary value** of the expense as a long.
+     */
+    public PublicInvestmentBudgetCoFundedExpense(String entityCode, String entityName, String serviceCode, String serviceName, String code, String description, String type, String category, long amount) {
+<span class="fc" id="L40">        super(entityCode, entityName, serviceCode, serviceName, code, description, type, category, amount);</span>
+<span class="fc" id="L41">        pibCoFundedExpenses.add(this);</span>
+<span class="fc" id="L42">    }</span>
+
+    /**
+     * **Returns** the complete static registry of all **co-funded** investment expenses.
+     * @return An {@link ArrayList} containing all instantiated co-funded records.
+     */
+    public static ArrayList&lt;PublicInvestmentBudgetCoFundedExpense&gt; getAllPublicInvestmentBudgetCoFundedExpenses() {
+<span class="fc" id="L49">        return pibCoFundedExpenses;</span>
+    }
+
+    /**
+     * **Retrieves** all co-funded expenses associated with a specific **Entity Code**.
+     * @param entityCode The unique identifier of the Ministry or Agency.
+     * @return A list of matching co-funded expenses.
+     */
+    public static ArrayList&lt;PublicInvestmentBudgetCoFundedExpense&gt; getPublicInvestmentBudgetCoFundedExpensesOfEntityWithCode(String entityCode) {
+<span class="fc" id="L58">        return BudgetExpenseLogicService.getExpensesOfEntityWithCode(entityCode, pibCoFundedExpenses);</span>
+    }
+
+    /**
+     * **Retrieves** all co-funded expenses belonging to a specific **Budget Category**.
+     * @param expenseCode The classification code of the expenditure category.
+     * @return A list of entries within the specified category.
+     */
+    public static ArrayList&lt;PublicInvestmentBudgetCoFundedExpense&gt; getPublicInvestmentBudgetCoFundedExpensesOfCategoryWithCode(String expenseCode) {
+<span class="fc" id="L67">        return BudgetExpenseLogicService.getExpensesOfCategoryWithCode(expenseCode, pibCoFundedExpenses);</span>
+    }
+
+    /**
+     * **Locates** a unique co-funded expense record using a combination of identifying codes.
+     * @param entityCode Unique identifier for the Entity.
+     * @param serviceCode Unique identifier for the Service.
+     * @param expenseCode Unique identifier for the Expense Category.
+     * @return The matching {@link PublicInvestmentBudgetCoFundedExpense} object.
+     */
+    public static PublicInvestmentBudgetCoFundedExpense findPublicInvestmentBudgetCoFundedExpenseWithCodes(String entityCode, String serviceCode, String expenseCode) {
+<span class="fc" id="L78">        return (PublicInvestmentBudgetCoFundedExpense) BudgetExpenseLogicService.findExpenseWithCode(entityCode, serviceCode, expenseCode, pibCoFundedExpenses);</span>
+    }
+
+    /**
+     * **Calculates** the total monetary sum of all entries in the **co-funded registry**.
+     * @return The aggregated total sum as a long.
+     */
+    public static long calculateSum() {
+<span class="fc" id="L86">        return BudgetExpenseLogicService.calculateSum(pibCoFundedExpenses);</span>
+    }
+
+    /**
+     * **Generates** a breakdown of total expenditures grouped by **Category** for the co-funded segment.
+     * @return A {@link Map} with category codes as keys and their total sums as values.
+     */
+    public static Map&lt;String, Long&gt; getSumOfEveryPublicInvestmentCoFundedExpenseCategory() {
+<span class="fc" id="L94">        return BudgetExpenseLogicService.getSumOfEveryExpenseCategory(pibCoFundedExpenses);</span>
+    }
+
+    /**
+     * **Retrieves** the textual description assigned to a specific budget code.
+     * @param code The classification code to look up.
+     * @return The description associated with the code.
+     */
+    public static String getDescriptionWithCode(String code) {
+<span class="fc" id="L103">        return BudgetExpenseLogicService.getDescriptionWithCode(code, pibCoFundedExpenses);</span>
+    }
+
+    /**
+     * **Executes** mass financial changes on a **specific category**.
+     * **Stores** a snapshot of the data in {@link ExpensesHistory} before applying adjustments.
+     * @param code The category code to modify.
+     * @param percentage The percentage increase or decrease.
+     * @param fixedAmount The fixed monetary amount to add or subtract.
+     */
+    public static void implementGlobalChangesInCertainPublicInvestmentBudgetCoFundedCategory(String code, double percentage, long fixedAmount) {
+<span class="fc" id="L114">        ExpensesHistory.keepHistory(getPublicInvestmentBudgetCoFundedExpensesOfCategoryWithCode(code), BudgetType.PUBLIC_INVESTMENT_BUDGET_COFUNDED);</span>
+<span class="fc" id="L115">        BudgetExpenseChangesService.implementGlobalChangesInCertainExpenseCategoryWithPercentageAllocation(code, percentage, fixedAmount, pibCoFundedExpenses);</span>
+<span class="fc" id="L116">    }</span>
+
+    /**
+     * **Applies** mass financial changes to **all co-funded categories**.
+     * **Archives** the current state of all entries in history prior to the update.
+     * @param percentage The percentage adjustment for all entries.
+     * @param fixedAmount The fixed amount adjustment for all entries.
+     */
+    public static void implementGlobalChangesInAllPublicInvestmentBudgetCoFundedCategories(double percentage, long fixedAmount) {
+<span class="fc" id="L125">        ExpensesHistory.keepHistory(pibCoFundedExpenses, BudgetType.PUBLIC_INVESTMENT_BUDGET_COFUNDED);</span>
+<span class="fc" id="L126">        BudgetExpenseChangesService.implementGlobalChangesInAllExpenseCategoriesWithPercentageAllocation(percentage, fixedAmount, pibCoFundedExpenses);</span>
+<span class="fc" id="L127">    }</span>
+
+    /** Returns a string representation of the PIBCoFunded expenditure entry. */
+    @Override
+    public String toString() {
+<span class="fc" id="L132">        return super.toString();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

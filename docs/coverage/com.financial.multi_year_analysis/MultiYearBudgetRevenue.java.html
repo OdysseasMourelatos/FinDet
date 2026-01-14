@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MultiYearBudgetRevenue.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">FinDet</a> &gt; <a href="index.source.html" class="el_package">com.financial.multi_year_analysis</a> &gt; <span class="el_source">MultiYearBudgetRevenue.java</span></div><h1>MultiYearBudgetRevenue.java</h1><pre class="source lang-java linenums">package com.financial.multi_year_analysis;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+/**
+ * Represents a revenue entry in a multi-year budget analysis system.
+ * This class extends MultiYearBudgetEntry and maintains a static collection
+ * of all historical budget revenues for analysis and reporting purposes.
+ * 
+ * @author Financial Analysis System
+ * @version 1.0
+ */
+public class MultiYearBudgetRevenue extends MultiYearBudgetEntry {
+<span class="fc" id="L18">    protected static List&lt;MultiYearBudgetRevenue&gt; multiYearBudgetRevenues = new ArrayList&lt;&gt;();</span>
+
+    /**
+     * Constructs a new MultiYearBudgetRevenue and automatically adds it to the
+     * historical revenues collection for tracking purposes.
+     * 
+     * @param code the unique identifier code for this revenue entry
+     * @param description a textual description of the revenue source
+     * @param category the category this revenue belongs to
+     * @param amount the revenue amount (in minor currency units, e.g., cents)
+     * @param year the fiscal year this revenue applies to
+     */
+    public MultiYearBudgetRevenue(String code, String description, String category, long amount, int year) {
+<span class="fc" id="L31">        super(code, description, category, amount, year);</span>
+<span class="fc" id="L32">        multiYearBudgetRevenues.add(this);</span>
+<span class="fc" id="L33">    }</span>
+
+    /**
+     * Returns the complete list of all historical budget revenues.
+     *
+     * @return a list containing all revenue entries created
+     */
+    public static List&lt;MultiYearBudgetRevenue&gt; getMultiYearBudgetRevenues() {
+<span class="fc" id="L41">        return multiYearBudgetRevenues;</span>
+    }
+
+    /**
+     * Retrieves all revenue entries for a specific fiscal year.
+     * 
+     * @param year the fiscal year to filter by
+     * @return a list of revenue entries matching the specified year
+     */
+    public static List&lt;MultiYearBudgetRevenue&gt; getMultiYearBudgetRevenuesOfSpecificYear(int year) {
+<span class="fc" id="L51">        List&lt;MultiYearBudgetRevenue&gt; historicalBudgetRevenuesOfSpecificYear = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">        for (MultiYearBudgetRevenue hbr : multiYearBudgetRevenues) {</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">            if (hbr.getYear() == year) {</span>
+<span class="fc" id="L54">                historicalBudgetRevenuesOfSpecificYear.add(hbr);</span>
+            }
+<span class="fc" id="L56">        }</span>
+<span class="fc" id="L57">        return historicalBudgetRevenuesOfSpecificYear;</span>
+    }
+
+    /**
+     * Retrieves all revenue entries with a specific code across all years.
+     * This is useful for tracking a particular revenue source over time.
+     * 
+     * @param code the revenue code to filter by
+     * @return a list of revenue entries matching the specified code
+     */
+    public static List&lt;MultiYearBudgetRevenue&gt; getMultiYearBudgetRevenuesOfSpecificCode(String code) {
+<span class="fc" id="L68">        List&lt;MultiYearBudgetRevenue&gt; historicalBudgetRevenuesOfSpecificCode = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        for (MultiYearBudgetRevenue hbr : multiYearBudgetRevenues) {</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">            if (hbr.getCode().equals(code)) {</span>
+<span class="fc" id="L71">                historicalBudgetRevenuesOfSpecificCode.add(hbr);</span>
+            }
+<span class="fc" id="L73">        }</span>
+<span class="fc" id="L74">        return historicalBudgetRevenuesOfSpecificCode;</span>
+    }
+
+    /**
+     * Calculates the total revenue amount for a specific fiscal year
+     * by summing all revenue entries for that year.
+     * 
+     * @param year the fiscal year to calculate the total for
+     * @return the total revenue amount for the specified year
+     */
+    public static long getSumOfSpecificYear(int year) {
+<span class="fc" id="L85">        long sum = 0;</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">        for (MultiYearBudgetRevenue hbr : multiYearBudgetRevenues) {</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">            if (hbr.getYear() == year) {</span>
+<span class="fc" id="L88">                sum += hbr.getAmount();</span>
+            }
+<span class="fc" id="L90">        }</span>
+<span class="fc" id="L91">        return sum;</span>
+    }
+
+    /**
+     * Calculates the total revenue for each year present in the historical data.
+     * Returns a map where keys are years and values are the total revenue amounts.
+     * Years are sorted in ascending order.
+     * 
+     * @return a map of year to total revenue amount for all years with data
+     */
+    public static Map&lt;Integer, Long&gt; getSumOfAllYears() {
+<span class="fc" id="L102">        Map&lt;Integer, Long&gt; sumOfAllYears = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L103">        List&lt;Integer&gt; uniqueYears = multiYearBudgetRevenues.stream().map(MultiYearBudgetRevenue::getYear).distinct().sorted().collect(Collectors.toList());</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">        for (Integer year : uniqueYears) {</span>
+<span class="fc" id="L105">            sumOfAllYears.put(year, getSumOfSpecificYear(year));</span>
+<span class="fc" id="L106">        }</span>
+<span class="fc" id="L107">        return sumOfAllYears;</span>
+    }
+
+    /**
+     * Returns a formatted string representation of this revenue entry.
+     * 
+     * @return a string containing all revenue entry details
+     */
+    @Override
+    public String toString () {
+<span class="fc" id="L117">        return super.toString();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

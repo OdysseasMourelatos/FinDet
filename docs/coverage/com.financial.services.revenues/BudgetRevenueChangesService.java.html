@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BudgetRevenueChangesService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">FinDet</a> &gt; <a href="index.source.html" class="el_package">com.financial.services.revenues</a> &gt; <span class="el_source">BudgetRevenueChangesService.java</span></div><h1>BudgetRevenueChangesService.java</h1><pre class="source lang-java linenums">package com.financial.services.revenues;
+
+import com.financial.entries.BudgetRevenue;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.financial.services.revenues.BudgetRevenueLogicService.getNextLevelSubCategories;
+
+/**
+ * Utility service class that handles modifications to budget revenue amounts.
+ * &lt;p&gt;
+ * This class provides methods for propagating amount changes upward to supercategories
+ * or downward to subcategories using different distribution strategies (Equal Distribution
+ * or Percentage Adjustment).
+ */
+public class BudgetRevenueChangesService {
+
+    /**
+     * Private constructor to prevent instantiation of this utility class.
+     */
+    private BudgetRevenueChangesService() {
+        // utility class – no instances
+    }
+
+    /**
+     * Updates the amounts of all provided supercategories by adding a fixed change value.
+     * This is typically used for upward propagation of financial changes.
+     *
+     * @param &lt;T&gt;             the type of BudgetRevenue
+     * @param superCategories the list of ancestor categories to update
+     * @param change          the amount to add (can be negative for decreases)
+     */
+    public static &lt;T extends BudgetRevenue&gt; void setAmountOfSuperCategories(ArrayList&lt;T&gt; superCategories, long change) {
+<span class="fc bfc" id="L36" title="All 2 branches covered.">        for (BudgetRevenue superCategory : superCategories) {</span>
+<span class="fc" id="L37">            superCategory.setAmount(superCategory.getAmount() + change);</span>
+<span class="fc" id="L38">        }</span>
+<span class="fc" id="L39">    }</span>
+
+    /**
+     * Distributes a fixed amount equally among the immediate (next-level) subcategories of a parent.
+     *
+     * @param &lt;T&gt;      the type of BudgetRevenue
+     * @param parent   the parent category whose children will be updated
+     * @param revenues the list of all available revenues
+     * @param change   the total amount to be divided among the children
+     */
+    public static &lt;T extends BudgetRevenue&gt; void setAmountOfNextLevelSubCategoriesWithEqualDistribution(T parent, ArrayList&lt;T&gt; revenues, long change) {
+<span class="fc" id="L50">        ArrayList&lt;BudgetRevenue&gt; nextLevelSubCategories = getNextLevelSubCategories(parent, revenues);</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">        if (!nextLevelSubCategories.isEmpty()) {</span>
+<span class="fc" id="L52">            long changeOfCategory = change / nextLevelSubCategories.size();</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">            for (BudgetRevenue subCategory : nextLevelSubCategories) {</span>
+<span class="fc" id="L54">                subCategory.setAmount(subCategory.getAmount() + changeOfCategory);</span>
+<span class="fc" id="L55">            }</span>
+        }
+<span class="fc" id="L57">    }</span>
+
+    /**
+     * Recursively distributes a fixed amount across all descendant levels of a parent category.
+     * The change is divided equally among immediate children at each level.
+     *
+     * @param &lt;T&gt;      the type of BudgetRevenue
+     * @param parent   the ancestor category starting the distribution
+     * @param revenues the list of all available revenues
+     * @param change   the total amount to distribute downwards
+     */
+    public static &lt;T extends BudgetRevenue&gt; void setAmountOfAllSubCategoriesWithEqualDistribution(T parent, ArrayList&lt;T&gt; revenues, long change) {
+<span class="fc" id="L69">        ArrayList&lt;BudgetRevenue&gt; nextLevelSubCategories = getNextLevelSubCategories(parent, revenues);</span>
+<span class="fc" id="L70">        long changeOfSubCategory = change;</span>
+
+        try {
+            // Map to store initial amounts to track the actual change applied per child
+<span class="fc" id="L74">            Map&lt;String, Long&gt; map = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">            for (BudgetRevenue subCategory : nextLevelSubCategories) {</span>
+<span class="fc" id="L76">                map.put(subCategory.getCode(), subCategory.getAmount());</span>
+<span class="fc" id="L77">            }</span>
+
+            // Apply change to the immediate next level
+<span class="fc" id="L80">            setAmountOfNextLevelSubCategoriesWithEqualDistribution(parent, revenues, changeOfSubCategory);</span>
+
+            // Termination condition: leaf level reached (code length 10)
+<span class="fc bfc" id="L83" title="All 2 branches covered.">            if (parent.getCode().length() == 10) {</span>
+<span class="fc" id="L84">                return;</span>
+            }
+
+            // Recursive call for each subcategory
+<span class="fc bfc" id="L88" title="All 2 branches covered.">            for (BudgetRevenue subCategory : nextLevelSubCategories) {</span>
+                // Calculate the specific change that was applied to this child
+<span class="fc" id="L90">                changeOfSubCategory = (subCategory.getAmount() - map.get(subCategory.getCode()));</span>
+
+                // Recursively apply to deeper levels
+<span class="fc" id="L93">                setAmountOfAllSubCategoriesWithEqualDistribution((T) subCategory, revenues, changeOfSubCategory);</span>
+<span class="fc" id="L94">            }</span>
+<span class="fc" id="L95">        } catch (IllegalArgumentException e) {</span>
+<span class="fc" id="L96">            return;</span>
+<span class="fc" id="L97">        }</span>
+<span class="fc" id="L98">    }</span>
+
+    /**
+     * Adjusts the amounts of immediate (next-level) subcategories by a specific percentage.
+     *
+     * @param &lt;T&gt;        the type of BudgetRevenue
+     * @param parent     the parent category
+     * @param revenues   the list of all available revenues
+     * @param percentage the percentage to apply (e.g., 0.1 for +10%)
+     */
+    public static &lt;T extends BudgetRevenue&gt; void setAmountOfNextLevelSubCategoriesWithPercentageAdjustment(T parent, ArrayList&lt;T&gt; revenues, double percentage) {
+<span class="fc" id="L109">        ArrayList&lt;BudgetRevenue&gt; nextLevelSubCategories = getNextLevelSubCategories(parent, revenues);</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        if (!nextLevelSubCategories.isEmpty()) {</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">            for (BudgetRevenue subCategory : nextLevelSubCategories) {</span>
+<span class="fc" id="L112">                subCategory.setAmount((long) (subCategory.getAmount() * (1 + percentage)));</span>
+<span class="fc" id="L113">            }</span>
+        }
+<span class="fc" id="L115">    }</span>
+
+    /**
+     * Recursively adjusts the amounts of all descendant categories by a specific percentage.
+     *
+     * @param &lt;T&gt;        the type of BudgetRevenue
+     * @param parent     the ancestor category
+     * @param revenues   the list of all available revenues
+     * @param percentage the percentage to apply across the subtree
+     */
+    public static &lt;T extends BudgetRevenue&gt; void setAmountOfAllSubCategoriesWithPercentageAdjustment(T parent, ArrayList&lt;T&gt; revenues, double percentage) {
+        try {
+            // Apply percentage adjustment to the immediate next level
+<span class="fc" id="L128">            setAmountOfNextLevelSubCategoriesWithPercentageAdjustment(parent, revenues, percentage);</span>
+
+            // Termination condition: leaf level reached (code length 10)
+<span class="fc bfc" id="L131" title="All 2 branches covered.">            if (parent.getCode().length() == 10) {</span>
+<span class="fc" id="L132">                return;</span>
+            }
+
+            // Recursive call for each subcategory
+<span class="fc" id="L136">            ArrayList&lt;BudgetRevenue&gt; nextLevelSubCategories = getNextLevelSubCategories(parent, revenues);</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">            for (BudgetRevenue subCategory : nextLevelSubCategories) {</span>
+<span class="fc" id="L138">                setAmountOfAllSubCategoriesWithPercentageAdjustment((T) subCategory, revenues, percentage);</span>
+<span class="fc" id="L139">            }</span>
+<span class="nc" id="L140">        } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L141">            return;</span>
+<span class="fc" id="L142">        }</span>
+<span class="fc" id="L143">    }</span>
+
+    /**
+     * Helper method to round a financial amount to the nearest hundred.
+     *
+     * @param amount the raw amount to round
+     * @return the rounded amount as a long
+     */
+    public static long roundToNearestHundred(long amount) {
+<span class="fc" id="L152">        return Math.round(amount / 100.0) * 100;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

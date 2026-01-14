@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RegularBudgetExpense.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">FinDet</a> &gt; <a href="index.source.html" class="el_package">com.financial.entries</a> &gt; <span class="el_source">RegularBudgetExpense.java</span></div><h1>RegularBudgetExpense.java</h1><pre class="source lang-java linenums">package com.financial.entries;
+
+import com.financial.services.BudgetType;
+import com.financial.services.expenses.BudgetExpenseChangesService;
+import com.financial.services.expenses.BudgetExpenseLogicService;
+import com.financial.services.expenses.ExpensesHistory;
+
+import java.util.*;
+
+/**
+ * Represents a specialized expense entry specifically for the Regular Budget.
+ * &lt;p&gt;
+ * This class manages the lifecycle and logic for regular budget expenditures,
+ * maintaining an internal static registry for efficient searching and aggregation.
+ * It also provides methods for &quot;Global Changes&quot;—mass financial updates that
+ * affect specific categories across all organizational entities while
+ * automatically maintaining state history.
+ * &lt;/p&gt;
+ */
+public class RegularBudgetExpense extends BudgetExpense {
+
+    /**
+     * Internal registry of all instantiated {@code RegularBudgetExpense} objects.
+     * This list is used for global calculations and data retrieval operations.
+     */
+<span class="fc" id="L26">    protected static ArrayList&lt;RegularBudgetExpense&gt; regularBudgetExpenses = new ArrayList&lt;&gt;();</span>
+
+    /**
+     * Constructs a new RegularBudgetExpense and registers it in the internal registry.
+     *
+     * @param entityCode   The unique identifier for the entity.
+     * @param entityName   The descriptive name of the entity.
+     * @param serviceCode  The identifier for the specific service.
+     * @param serviceName  The name of the associated service.
+     * @param code         The expense/account code.
+     * @param description  A brief description of the expense.
+     * @param category     The expense category classification.
+     * @param amount       The monetary value of the expense.
+     */
+    public RegularBudgetExpense(String entityCode, String entityName, String serviceCode, String serviceName, String code, String description, String category, long amount) {
+<span class="fc" id="L41">        super(entityCode, entityName, serviceCode, serviceName, code, description, category, amount);</span>
+<span class="fc" id="L42">        regularBudgetExpenses.add(this);</span>
+<span class="fc" id="L43">    }</span>
+
+    // Class Methods
+
+    /**
+     * Retrieves the global list of all registered regular budget expenses.
+     * * @return An {@link ArrayList} of all {@code RegularBudgetExpense} instances.
+     */
+    public static ArrayList&lt;RegularBudgetExpense&gt; getAllRegularBudgetExpenses() {
+<span class="fc" id="L52">        return regularBudgetExpenses;</span>
+    }
+
+    /**
+     * Filters and returns regular budget expenses associated with a specific entity.
+     * * @param entityCode The code of the entity to filter by.
+     * @return A list of expenses belonging to the specified entity.
+     */
+    public static ArrayList&lt;RegularBudgetExpense&gt; getRegularBudgetExpensesOfEntityWithCode(String entityCode) {
+<span class="fc" id="L61">        return BudgetExpenseLogicService.getExpensesOfEntityWithCode(entityCode, regularBudgetExpenses);</span>
+    }
+
+    /**
+     * Filters and returns regular budget expenses belonging to a specific category code.
+     * * @param expenseCode The category code (e.g., &quot;21&quot;) to filter by.
+     * @return A list of expenses within that category.
+     */
+    public static ArrayList&lt;RegularBudgetExpense&gt; getRegularBudgetExpensesOfCategoryWithCode(String expenseCode) {
+<span class="fc" id="L70">        return BudgetExpenseLogicService.getExpensesOfCategoryWithCode(expenseCode, regularBudgetExpenses);</span>
+    }
+
+    /**
+     * Searches for a specific regular budget expense using its composite unique key.
+     * * @param entityCode  The code of the entity.
+     * @param serviceCode The code of the service.
+     * @param expenseCode The specific account/expense code.
+     * @return The matching {@code RegularBudgetExpense}, or {@code null} if not found.
+     */
+    public static RegularBudgetExpense findRegularBudgetExpenseWithCodes(String entityCode, String serviceCode, String expenseCode) {
+<span class="fc" id="L81">        return (RegularBudgetExpense) (BudgetExpenseLogicService.findExpenseWithCode(entityCode, serviceCode, expenseCode, regularBudgetExpenses));</span>
+    }
+
+    /**
+     * Calculates the total sum of all regular budget expenses currently in the registry.
+     * * @return The total sum as a {@code long}.
+     */
+    public static long calculateSum() {
+<span class="fc" id="L89">        return BudgetExpenseLogicService.calculateSum(regularBudgetExpenses);</span>
+    }
+
+    /**
+     * Aggregates financial totals for every expense category within the Regular Budget.
+     * * @return A {@link Map} where keys are category codes and values are their respective total sums.
+     */
+    public static Map&lt;String, Long&gt; getSumOfEveryRegularExpenseCategory() {
+<span class="fc" id="L97">        return BudgetExpenseLogicService.getSumOfEveryExpenseCategory(regularBudgetExpenses);</span>
+    }
+
+    /**
+     * Retrieves the description associated with a specific expense code from the regular budget list.
+     * * @param code The expense code to search for.
+     * @return The description string, or an empty string if not found.
+     */
+    public static String getDescriptionWithCode(String code) {
+<span class="fc" id="L106">        return BudgetExpenseLogicService.getDescriptionWithCode(code, regularBudgetExpenses);</span>
+    }
+
+    /**
+     * Implements a global change to a specific expense category across all entities.
+     * &lt;p&gt;
+     * This method captures the current state of affected accounts in the
+     * {@link ExpensesHistory} before applying changes using percentage
+     * allocation and/or a fixed amount.
+     * &lt;/p&gt;
+     * *
+     * * @param code         The expense category code to be modified (e.g., &quot;24&quot;).
+     * @param percentage   The percentage adjustment (e.g., 0.05 for 5% increase).
+     * @param fixedAmount  A fixed monetary amount to be applied.
+     */
+    public static void implementGlobalChangesInCertainRegularExpenseCategoryWithPercentageAllocation(String code, double percentage, long fixedAmount) {
+<span class="fc" id="L122">        ExpensesHistory.keepHistory(getRegularBudgetExpensesOfCategoryWithCode(code), BudgetType.REGULAR_BUDGET);</span>
+<span class="fc" id="L123">        BudgetExpenseChangesService.implementGlobalChangesInCertainExpenseCategoryWithPercentageAllocation(code, percentage, fixedAmount, regularBudgetExpenses);</span>
+<span class="fc" id="L124">    }</span>
+
+    /**
+     * Implements a global change affecting all regular budget expenses across all entities.
+     * &lt;p&gt;
+     * Use this for broad budgetary adjustments. It captures the history of all regular
+     * expenses before the transformation.
+     * &lt;/p&gt;
+     * * @param percentage  The percentage adjustment to apply globally.
+     * @param fixedAmount The fixed amount adjustment to apply globally.
+     */
+    public static void implementGlobalChangesInAllExpenseCategoriesWithPercentageAllocation(double percentage, long fixedAmount) {
+<span class="fc" id="L136">        ExpensesHistory.keepHistory(regularBudgetExpenses, BudgetType.REGULAR_BUDGET);</span>
+<span class="fc" id="L137">        BudgetExpenseChangesService.implementGlobalChangesInAllExpenseCategoriesWithPercentageAllocation(percentage, fixedAmount, regularBudgetExpenses);</span>
+<span class="fc" id="L138">    }</span>
+
+    /**
+     * Returns a string representation of the regular budget expense.
+     * * @return String details from the superclass.
+     */
+    @Override
+    public String toString() {
+<span class="fc" id="L146">        return super.toString();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

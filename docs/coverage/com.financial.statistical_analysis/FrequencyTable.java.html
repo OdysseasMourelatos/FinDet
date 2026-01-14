@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FrequencyTable.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">FinDet</a> &gt; <a href="index.source.html" class="el_package">com.financial.statistical_analysis</a> &gt; <span class="el_source">FrequencyTable.java</span></div><h1>FrequencyTable.java</h1><pre class="source lang-java linenums">package com.financial.statistical_analysis;
+
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+
+/**
+ * Utility class for constructing frequency tables for financial data.
+ * &lt;p&gt;
+ * Categorizes expenditures into &quot;bins&quot; based on a base-10 logarithmic scale,
+ * facilitating the visualization of budget concentrations ranging from $10^6$ to $10^{13}$.
+ */
+public class FrequencyTable {
+
+    private FrequencyTable() {
+        //Utility class - no instances
+    }
+
+    public static List&lt;FrequencyRow&gt; buildFromStat() {
+<span class="nc" id="L21">        Map&lt;String, Long&gt; sums = StatisticalExpenses.getMinistrySums();</span>
+<span class="nc" id="L22">        DescriptiveStatistics stats = StatisticalExpenses.descriptiveStats(sums);</span>
+<span class="nc" id="L23">        List&lt;FrequencyRow&gt; table = buildFrequencyTable(sums, stats);</span>
+<span class="nc" id="L24">        return table;</span>
+    }
+
+    /**
+     * Builds a frequency table based on predefined logarithmic bounds.
+     * &lt;p&gt;
+     * For each interval, it calculates the absolute frequency, the relative percentage,
+     * and the cumulative totals for both.
+     *
+     * @param sums The aggregated expenditure data.
+     * @param stats Descriptive statistics used to determine sample size (n).
+     * @return A List of {@link FrequencyRow} objects representing the table.
+     */
+    public static List&lt;FrequencyRow&gt; buildFrequencyTable(Map&lt;String, Long&gt; sums, DescriptiveStatistics stats) {
+<span class="fc" id="L38">        int n = sums.size();</span>
+<span class="fc" id="L39">        List&lt;FrequencyRow&gt; table = new ArrayList&lt;&gt;();</span>
+
+        // Ορίζουμε τα &quot;στρογγυλά&quot; όρια σε λογαριθμική κλίμακα βάσης 10
+        // Ξεκινάμε από 1.000.000 (10^6) έως 10.000.000.000.000 (10^13)
+<span class="fc" id="L43">        long[] bounds = {1_000_000L, 10_000_000L, 100_000_000L, 1_000_000_000L, 10_000_000_000L, 100_000_000_000L, 1_000_000_000_000L, 10_000_000_000_000L};</span>
+
+<span class="fc" id="L45">        int sumfr = 0;</span>
+<span class="fc" id="L46">        double sump = 0;</span>
+
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        for (int i = 0; i &lt; bounds.length - 1; i++) {</span>
+<span class="fc" id="L49">            long low = bounds[i];</span>
+<span class="fc" id="L50">            long high = bounds[i + 1];</span>
+
+
+<span class="fc bfc" id="L53" title="All 4 branches covered.">            long count = sums.values().stream().filter(v -&gt; v &gt;= low &amp;&amp; v &lt; high).count();</span>
+
+<span class="fc bfc" id="L55" title="All 2 branches covered.">            if (count &gt; 0) {</span>
+<span class="fc" id="L56">                int freq = (int) count;</span>
+<span class="fc" id="L57">                sumfr += freq;</span>
+<span class="fc" id="L58">                double p = (freq * 100.0) / n;</span>
+<span class="fc" id="L59">                sump += p;</span>
+
+<span class="fc" id="L61">                String intervalLabel = low + &quot;-&quot; + high;</span>
+<span class="fc" id="L62">                table.add(new FrequencyRow(intervalLabel, freq, p, sumfr, sump));</span>
+            }
+        }
+<span class="fc" id="L65">        return table;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

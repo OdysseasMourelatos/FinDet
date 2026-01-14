@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BudgetExpenseLogicService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">FinDet</a> &gt; <a href="index.source.html" class="el_package">com.financial.services.expenses</a> &gt; <span class="el_source">BudgetExpenseLogicService.java</span></div><h1>BudgetExpenseLogicService.java</h1><pre class="source lang-java linenums">package com.financial.services.expenses;
+
+import com.financial.entries.BudgetExpense;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Utility service providing stateless logic for filtering, searching, and aggregating {@link BudgetExpense} data.
+ */
+public class BudgetExpenseLogicService {
+
+    private BudgetExpenseLogicService() {
+        // utility class – no instances
+    }
+
+    /** Filters a list of expenses to return only those belonging to a specific entity code. */
+    public static &lt;T extends BudgetExpense&gt; ArrayList&lt;T&gt; getExpensesOfEntityWithCode(String entityCode, ArrayList&lt;T&gt; expenses) {
+<span class="fc" id="L20">        ArrayList&lt;T&gt; expensesOfEntity = new ArrayList&lt;&gt;();</span>
+
+<span class="fc bfc" id="L22" title="All 2 branches covered.">        for (T expense : expenses) {</span>
+<span class="fc bfc" id="L23" title="All 2 branches covered.">            if (expense.getEntityCode().equals(entityCode)) {</span>
+<span class="fc" id="L24">                expensesOfEntity.add(expense);</span>
+            }
+<span class="fc" id="L26">        }</span>
+
+<span class="fc" id="L28">        return expensesOfEntity;</span>
+    }
+
+    /** Filters a list of expenses to return only those belonging to a specific category (account) code. */
+    public static &lt;T extends BudgetExpense&gt; ArrayList&lt;T&gt; getExpensesOfCategoryWithCode(String expenseCode, ArrayList&lt;T&gt; expenses) {
+<span class="fc" id="L33">        ArrayList&lt;T&gt; expensesOfCategory = new ArrayList&lt;&gt;();</span>
+
+<span class="fc bfc" id="L35" title="All 2 branches covered.">        for (T expense : expenses) {</span>
+<span class="fc bfc" id="L36" title="All 2 branches covered.">            if (expense.getCode().equals(expenseCode)) {</span>
+<span class="fc" id="L37">                expensesOfCategory.add(expense);</span>
+            }
+<span class="fc" id="L39">        }</span>
+
+<span class="fc" id="L41">        return expensesOfCategory;</span>
+    }
+
+    /** Locates a unique expense record using its composite primary key: entity, service, and expense codes. */
+    public static BudgetExpense findExpenseWithCode(String entityCode, String serviceCode, String expenseCode, ArrayList&lt;? extends BudgetExpense&gt; expenses) {
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        for (BudgetExpense expense : expenses) {</span>
+<span class="fc bfc" id="L47" title="All 6 branches covered.">            if (expense.getCode().equals(expenseCode) &amp;&amp; expense.getEntityCode().equals(entityCode) &amp;&amp; expense.getServiceCode().equals(serviceCode)) {</span>
+<span class="fc" id="L48">                return expense;</span>
+            }
+<span class="fc" id="L50">        }</span>
+<span class="fc" id="L51">        return null;</span>
+    }
+
+    /** Aggregates the total monetary amount from a collection of budget expenses. */
+    public static long calculateSum(ArrayList&lt;? extends BudgetExpense&gt; expenses) {
+<span class="fc" id="L56">        long totalExpensesSum = 0;</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        for (BudgetExpense expense : expenses) {</span>
+<span class="fc" id="L58">            totalExpensesSum += expense.getAmount();</span>
+<span class="fc" id="L59">        }</span>
+<span class="fc" id="L60">        return totalExpensesSum;</span>
+    }
+
+    /** Generates a map linking unique category codes to their respective total financial sums. */
+    public static Map&lt;String, Long&gt; getSumOfEveryExpenseCategory(ArrayList&lt;? extends BudgetExpense&gt; expenses) {
+<span class="fc" id="L65">        String[] categoryCodes = expenses.stream().map(BudgetExpense::getCode).distinct().sorted().toArray(String[]::new);</span>
+<span class="fc" id="L66">        Map&lt;String, Long&gt; expensesPerCategory = new HashMap&lt;&gt;();</span>
+
+<span class="fc bfc" id="L68" title="All 2 branches covered.">        for (String categoryCode : categoryCodes) {</span>
+<span class="fc" id="L69">            long sum = 0;</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">            for (BudgetExpense expense : expenses) {</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">                if (categoryCode.equals(expense.getCode())) {</span>
+<span class="fc" id="L72">                    sum += expense.getAmount();</span>
+                }
+<span class="fc" id="L74">            }</span>
+<span class="fc" id="L75">            expensesPerCategory.put(categoryCode, sum);</span>
+        }
+<span class="fc" id="L77">        return expensesPerCategory;</span>
+    }
+
+    /** Retrieves the description associated with a specific code, or a default message if not found. */
+    public static String getDescriptionWithCode(String code, ArrayList&lt;? extends BudgetExpense&gt; expenses) {
+<span class="fc" id="L82">        return expenses.stream().filter(e -&gt; e.getCode().equals(code)).findFirst().map(BudgetExpense::getDescription).orElse(&quot;Περιγραφή μη διαθέσιμη&quot;);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

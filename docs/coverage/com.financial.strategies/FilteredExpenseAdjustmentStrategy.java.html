@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FilteredExpenseAdjustmentStrategy.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">FinDet</a> &gt; <a href="index.source.html" class="el_package">com.financial.strategies</a> &gt; <span class="el_source">FilteredExpenseAdjustmentStrategy.java</span></div><h1>FilteredExpenseAdjustmentStrategy.java</h1><pre class="source lang-java linenums">package com.financial.strategies;
+
+import com.financial.services.expenses.ExpensesHistory;
+import com.financial.strategies.filters.ExpenseFilter;
+import com.financial.strategies.operations.AdjustmentOperation;
+import com.financial.entries.BudgetExpense;
+import java.util.ArrayList;
+
+/** Applies adjustments to expenses matching a filter, using a specific operation and enforcing rounding to the nearest hundred. */
+public class FilteredExpenseAdjustmentStrategy implements ExpenseAdjustmentStrategy {
+
+    private final ExpenseFilter filter;
+    private final AdjustmentOperation operation;
+
+<span class="fc" id="L15">    public FilteredExpenseAdjustmentStrategy(ExpenseFilter filter, AdjustmentOperation operation) {</span>
+<span class="fc" id="L16">        this.filter = filter;</span>
+<span class="fc" id="L17">        this.operation = operation;</span>
+<span class="fc" id="L18">    }</span>
+
+    @Override
+    public void applyAdjustment(ArrayList&lt;? extends BudgetExpense&gt; expenses, double percentage, long fixedAmount) {
+        try {
+<span class="fc bfc" id="L23" title="All 2 branches covered.">            for (BudgetExpense expense : expenses) {</span>
+<span class="fc bfc" id="L24" title="All 2 branches covered.">                if (filter.matches(expense)) {</span>
+<span class="fc" id="L25">                    long newAmount = operation.apply(expense.getAmount(), percentage, fixedAmount);</span>
+<span class="fc" id="L26">                    expense.setAmount(roundToNearestHundred(newAmount));</span>
+                }
+<span class="fc" id="L28">            }</span>
+<span class="fc" id="L29">        } catch (IllegalArgumentException e) {</span>
+<span class="fc" id="L30">            ExpensesHistory.returnToPreviousState();</span>
+<span class="fc" id="L31">        }</span>
+
+<span class="fc" id="L33">    }</span>
+
+    private long roundToNearestHundred(long amount) {
+<span class="fc" id="L36">        return Math.round(amount / 100.0) * 100;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

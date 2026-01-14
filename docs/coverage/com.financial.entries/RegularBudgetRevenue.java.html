@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RegularBudgetRevenue.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">FinDet</a> &gt; <a href="index.source.html" class="el_package">com.financial.entries</a> &gt; <span class="el_source">RegularBudgetRevenue.java</span></div><h1>RegularBudgetRevenue.java</h1><pre class="source lang-java linenums">package com.financial.entries;
+
+import com.financial.services.revenues.*;
+import com.financial.services.*;
+import java.util.ArrayList;
+
+/**
+ * Represents a revenue entry in the Regular Budget.
+ * &lt;p&gt;
+ * This class implements both {@link BudgetRevenueLogic} and {@link BudgetRevenueChanges},
+ * providing specialized functionality for hierarchical navigation and automated
+ * amount adjustments specific to regular budget accounts.
+ */
+public class RegularBudgetRevenue extends BudgetRevenue implements BudgetRevenueLogic, BudgetRevenueChanges {
+
+    /**
+     * Internal registry of all instances of RegularBudgetRevenue.
+     */
+<span class="fc" id="L19">    protected static ArrayList&lt;RegularBudgetRevenue&gt; regularBudgetRevenues = new ArrayList&lt;&gt;();</span>
+
+    /**
+     * Constructs a new RegularBudgetRevenue and automatically synchronizes it
+     * with the global {@link BudgetRevenue} filtered list.
+     *
+     * @param code        the unique financial code
+     * @param description a brief description of the revenue
+     * @param category    the financial category (e.g., &quot;ΕΣΟΔΑ&quot;)
+     * @param amount      the initial amount in euros
+     */
+    public RegularBudgetRevenue(String code, String description, String category, long amount) {
+<span class="fc" id="L31">        super(code, description, category, amount);</span>
+<span class="fc" id="L32">        regularBudgetRevenues.add(this);</span>
+
+        // Creates a corresponding filtered object in the SuperClass to maintain consistency
+<span class="fc" id="L35">        new BudgetRevenue(code, description, category, amount, 0, amount);</span>
+<span class="fc" id="L36">    }</span>
+
+    /**
+     * Returns the registry of all regular budget revenue entries.
+     * @return an ArrayList of all instances
+     */
+    public static ArrayList&lt;RegularBudgetRevenue&gt; getAllRegularBudgetRevenues() {
+<span class="fc" id="L43">        return regularBudgetRevenues;</span>
+    }
+
+    /**
+     * Filters and returns only the top-level (2-digit code) regular budget revenues.
+     * @return an ArrayList of main budget entries
+     */
+    public static ArrayList&lt;RegularBudgetRevenue&gt; getMainRegularBudgetRevenues() {
+<span class="fc" id="L51">        return BudgetRevenueLogicService.getMainBudgetRevenues(getAllRegularBudgetRevenues());</span>
+    }
+
+    /**
+     * Searches for a specific regular budget revenue by its code.
+     * @param code the code to search for
+     * @return the matching entry or null if not found
+     */
+    public static RegularBudgetRevenue findRegularBudgetRevenueWithCode(String code) {
+<span class="fc" id="L60">        return BudgetRevenueLogicService.findRevenueWithCode(code, regularBudgetRevenues);</span>
+    }
+
+    /**
+     * Retrieves all regular budget revenues that start with the specified code prefix.
+     * @param code the prefix to match
+     * @return an ArrayList of matching BudgetRevenue objects
+     */
+    public static ArrayList&lt;BudgetRevenue&gt; getRegularBudgetRevenuesStartingWithCode(String code) {
+<span class="fc" id="L69">        return BudgetRevenueLogicService.getRevenuesStartingWithCode(code, regularBudgetRevenues);</span>
+    }
+
+    /**
+     * Calculates the total sum of all main (top-level) regular budget revenues.
+     * @return the total amount sum
+     */
+    public static long calculateSum() {
+<span class="fc" id="L77">        return BudgetRevenueLogicService.calculateSum(regularBudgetRevenues);</span>
+    }
+
+    /* Hierarchy Navigation Implementation */
+
+    /** @return The parent category immediately above this entry in the regular budget. */
+    @Override
+    public RegularBudgetRevenue getAboveLevelSuperCategory() {
+<span class="fc" id="L85">        return BudgetRevenueLogicService.getAboveLevelSuperCategory(this, regularBudgetRevenues);</span>
+    }
+
+    /** @return A list of all ancestor categories in the hierarchy. */
+    @Override
+    public ArrayList&lt;BudgetRevenue&gt; getAllSuperCategories() {
+<span class="fc" id="L91">        return BudgetRevenueLogicService.getAllSuperCategories(this, regularBudgetRevenues);</span>
+    }
+
+    /** @return A list of immediate sub-categories (children) for this entry. */
+    @Override
+    public ArrayList&lt;BudgetRevenue&gt; getNextLevelSubCategories() {
+<span class="fc" id="L97">        return BudgetRevenueLogicService.getNextLevelSubCategories(this, regularBudgetRevenues);</span>
+    }
+
+    /** @return A list of all descendant categories across all lower levels. */
+    @Override
+    public ArrayList&lt;BudgetRevenue&gt; getAllSubCategories() {
+<span class="fc" id="L103">        return BudgetRevenueLogicService.getAllSubCategories(this, regularBudgetRevenues);</span>
+    }
+
+    /* Change Implementation */
+
+    /**
+     * Updates the financial amounts of all parent categories in the hierarchy.
+     * @param change The amount to add to or subtract from the super categories.
+     */
+    @Override
+    public void setAmountOfSuperCategories(long change) {
+<span class="fc" id="L114">        BudgetRevenueChangesService.setAmountOfSuperCategories(getAllSuperCategories(), change);</span>
+<span class="fc" id="L115">    }</span>
+
+    /**
+     * Distributes a total change amount equally among all sub-categories.
+     * @param change The total amount to be divided and distributed.
+     */
+    @Override
+    public void setAmountOfAllSubCategoriesWithEqualDistribution(long change) {
+<span class="fc" id="L123">        BudgetRevenueChangesService.setAmountOfAllSubCategoriesWithEqualDistribution(this, regularBudgetRevenues, change);</span>
+<span class="fc" id="L124">    }</span>
+
+    /**
+     * Applies a percentage-based adjustment to all sub-categories.
+     * @param percentage The percentage to apply (e.g., 0.10 for 10%).
+     */
+    @Override
+    public void setAmountOfAllSubCategoriesWithPercentageAdjustment(double percentage) {
+<span class="fc" id="L132">        BudgetRevenueChangesService.setAmountOfAllSubCategoriesWithPercentageAdjustment(this, regularBudgetRevenues, percentage);</span>
+<span class="fc" id="L133">    }</span>
+
+    /**
+     * Implements a mass change using equal distribution.
+     * Affects the account itself, its parents, and its children.
+     * @param change the fixed amount to distribute
+     */
+    @Override
+    public void implementChangesOfEqualDistribution(long change) {
+<span class="fc" id="L142">        keepAccountsAndBudgetTypeBeforeChange();</span>
+<span class="fc" id="L143">        setAmount(getAmount() + change);</span>
+<span class="fc" id="L144">        setAmountOfSuperCategories(change);</span>
+<span class="fc" id="L145">        setAmountOfAllSubCategoriesWithEqualDistribution(change);</span>
+<span class="fc" id="L146">    }</span>
+
+    /**
+     * Implements a mass change using percentage adjustment.
+     * @param percentage the percentage to apply (e.g. 0.1 for 10%)
+     */
+    @Override
+    public void implementChangesOfPercentageAdjustment(double percentage) {
+<span class="fc" id="L154">        keepAccountsAndBudgetTypeBeforeChange();</span>
+<span class="fc" id="L155">        setAmountOfSuperCategories((long) (getAmount() * (percentage)));</span>
+<span class="fc" id="L156">        setAmountOfAllSubCategoriesWithPercentageAdjustment(percentage);</span>
+<span class="fc" id="L157">        setAmount((long) (getAmount() * (1 + percentage)));</span>
+<span class="fc" id="L158">    }</span>
+
+    /**
+     * Captures the state of the entire hierarchy branch (parents, self, children)
+     * before a change is applied.
+     */
+    @Override
+    public void keepAccountsAndBudgetTypeBeforeChange() {
+<span class="fc" id="L166">        ArrayList&lt;BudgetRevenue&gt; accountsForChange = new ArrayList&lt;&gt;(getAllSuperCategories());</span>
+<span class="fc" id="L167">        accountsForChange.add(this);</span>
+<span class="fc" id="L168">        accountsForChange.addAll(getAllSubCategories());</span>
+<span class="fc" id="L169">        RevenuesHistory.keepHistory(accountsForChange, BudgetType.REGULAR_BUDGET);</span>
+<span class="fc" id="L170">    }</span>
+
+    /**
+     * Updates the corresponding Regular Amount in the base {@link BudgetRevenue}
+     * to maintain data synchronization.
+     * @param change the new amount
+     */
+    @Override
+    public void updateAmountOfSuperClassFilteredObject(long change) {
+<span class="fc" id="L179">        BudgetRevenue budgetRevenue = BudgetRevenue.findBudgetRevenueWithCode(this.getCode());</span>
+<span class="fc bfc" id="L180" title="All 2 branches covered.">        if (budgetRevenue != null) {</span>
+<span class="fc" id="L181">            budgetRevenue.setRegularAmount(amount, true);</span>
+        }
+<span class="fc" id="L183">    }</span>
+
+    /**
+     * Sets the amount for this revenue entry.
+     * &lt;p&gt;
+     * Includes validation to prevent negative amounts by triggering a history reversal
+     * and performs automatic rounding to the nearest hundred.
+     *
+     * @param amount the new amount to set
+     * @throws IllegalArgumentException if the provided amount is negative
+     */
+    @Override
+    public void setAmount(long amount) {
+<span class="fc bfc" id="L196" title="All 2 branches covered.">        if (amount &gt;= 0) {</span>
+<span class="fc" id="L197">            amount = BudgetRevenueChangesService.roundToNearestHundred(amount);</span>
+<span class="fc" id="L198">            this.amount = amount;</span>
+<span class="fc" id="L199">            updateAmountOfSuperClassFilteredObject(amount);</span>
+        } else {
+<span class="fc" id="L201">            RevenuesHistory.returnToPreviousState();</span>
+<span class="fc" id="L202">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L204">    }</span>
+
+    /** @return A string representation of the regular budget revenue. */
+    @Override
+    public String toString () {
+<span class="fc" id="L209">        return super.toString();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FrequencyRow.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">FinDet</a> &gt; <a href="index.source.html" class="el_package">com.financial.statistical_analysis</a> &gt; <span class="el_source">FrequencyRow.java</span></div><h1>FrequencyRow.java</h1><pre class="source lang-java linenums">package com.financial.statistical_analysis;
+
+/**
+ * Represents a single row in a frequency distribution table.
+ * Encapsulates interval labeling, frequency counts, and percentage calculations.
+ */
+public class FrequencyRow {
+
+    /** The label for the financial interval (e.g., &quot;1000000-10000000&quot;). */
+    public String interval;
+
+    /** The number of entities falling within this specific interval. */
+    public int frequency;
+
+    /** The percentage of the total sample represented by this interval. */
+    public double percentage;
+
+    /** The running total of frequency counts up to this interval. */
+    public int cumulativeFrequency;
+
+    /** The running total of percentages up to this interval. */
+    public double cumulativePercentage;
+
+<span class="fc" id="L24">    public FrequencyRow(String interval, int frequency, double percentage, int cumulativeFrequency, double cumulativePercentage) {</span>
+<span class="fc" id="L25">        this.interval = interval;</span>
+<span class="fc" id="L26">        this.frequency = frequency;</span>
+<span class="fc" id="L27">        this.percentage = percentage;</span>
+<span class="fc" id="L28">        this.cumulativeFrequency = cumulativeFrequency;</span>
+<span class="fc" id="L29">        this.cumulativePercentage = cumulativePercentage;</span>
+<span class="fc" id="L30">    }</span>
+
+    public String getInterval() {
+<span class="fc" id="L33">        return interval;</span>
+    }
+
+    public int getFrequency() {
+<span class="fc" id="L37">        return frequency;</span>
+    }
+
+    public double getPercentage() {
+<span class="fc" id="L41">        return percentage;</span>
+    }
+
+    public int getCumulativeFrequency() {
+<span class="fc" id="L45">        return cumulativeFrequency;</span>
+    }
+
+    public double getCumulativePercentage() {
+<span class="fc" id="L49">        return cumulativePercentage;</span>
+    }
+}
+
+    
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

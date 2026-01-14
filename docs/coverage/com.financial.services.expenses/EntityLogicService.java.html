@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EntityLogicService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">FinDet</a> &gt; <a href="index.source.html" class="el_package">com.financial.services.expenses</a> &gt; <span class="el_source">EntityLogicService.java</span></div><h1>EntityLogicService.java</h1><pre class="source lang-java linenums">package com.financial.services.expenses;
+
+import com.financial.entries.BudgetExpense;
+
+import java.util.*;
+
+/**
+ * Utility service that provides stateless logic for grouping, filtering, and
+ * aggregating expenses specifically focused on organizational entities and services.
+ */
+public class EntityLogicService {
+
+    private EntityLogicService() {
+        // utility class – no instances
+    }
+
+    /** Retrieves the descriptive name of a service based on its unique service code from the expense list. */
+    public static String getServiceNameWithCode(String serviceCode, ArrayList&lt;? extends BudgetExpense&gt; expenses) {
+<span class="fc bfc" id="L19" title="All 2 branches covered.">        for (BudgetExpense expense : expenses) {</span>
+<span class="fc bfc" id="L20" title="All 2 branches covered.">            if (expense.getServiceCode().equals(serviceCode)) {</span>
+<span class="fc" id="L21">                return expense.getServiceName();</span>
+            }
+<span class="fc" id="L23">        }</span>
+<span class="fc" id="L24">        return null;</span>
+    }
+
+    /** Returns a distinct and sorted list of all service codes present in the provided expenses. */
+    public static List&lt;String&gt; getAllServiceCodes(ArrayList&lt;? extends BudgetExpense&gt; expenses) {
+<span class="fc" id="L29">        return expenses.stream().map(BudgetExpense::getServiceCode).distinct().sorted().toList();</span>
+    }
+
+    /** Calculates the total monetary sum for a specific service identified by its code. */
+    public static long getSumOfServiceWithCode(String serviceCode, ArrayList&lt;? extends BudgetExpense&gt; expenses) {
+<span class="fc" id="L34">        long sum = 0;</span>
+<span class="fc bfc" id="L35" title="All 2 branches covered.">        for (BudgetExpense expense : expenses) {</span>
+<span class="fc bfc" id="L36" title="All 2 branches covered.">            if (serviceCode.equals(expense.getServiceCode())) {</span>
+<span class="fc" id="L37">                sum += expense.getAmount();</span>
+            }
+<span class="fc" id="L39">        }</span>
+<span class="fc" id="L40">        return sum;</span>
+    }
+
+    /** Filters and returns all expense entries associated with a specific service code. */
+    public static ArrayList&lt;BudgetExpense&gt; getExpensesOfServiceWithCode(String serviceCode, ArrayList&lt;? extends BudgetExpense&gt; expenses) {
+<span class="fc" id="L45">        ArrayList&lt;BudgetExpense&gt; expensesOfService = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        for (BudgetExpense expense : expenses) {</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">            if (serviceCode.equals(expense.getServiceCode())) {</span>
+<span class="fc" id="L48">                expensesOfService.add(expense);</span>
+            }
+<span class="fc" id="L50">        }</span>
+<span class="fc" id="L51">        return expensesOfService;</span>
+    }
+
+    /** Generates a map where each service code is associated with its total financial sum. */
+    public static Map&lt;String, Long&gt; getSumOfEveryService(ArrayList&lt;? extends BudgetExpense&gt; expenses) {
+<span class="fc" id="L56">        List&lt;String&gt; serviceCodes = getAllServiceCodes(expenses);</span>
+<span class="fc" id="L57">        Map&lt;String, Long&gt; serviceSums = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">        for (String serviceCode : serviceCodes) {</span>
+<span class="fc" id="L59">            serviceSums.put(serviceCode, getSumOfServiceWithCode(serviceCode, expenses));</span>
+<span class="fc" id="L60">        }</span>
+<span class="fc" id="L61">        return serviceSums;</span>
+    }
+
+    /** Calculates the total monetary sum for a specific expense category (account code). */
+    public static long getSumOfExpenseCategoryWithCode(String code, ArrayList&lt;? extends BudgetExpense&gt; expenses) {
+<span class="fc" id="L66">        long sum = 0;</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        for (BudgetExpense expense : expenses) {</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">            if (code.equals(expense.getCode())) {</span>
+<span class="fc" id="L69">                sum += expense.getAmount();</span>
+            }
+<span class="fc" id="L71">        }</span>
+<span class="fc" id="L72">        return sum;</span>
+    }
+
+    /** Generates a sorted map linking each unique expense category code to its total financial sum. */
+    public static Map&lt;String, Long&gt; getSumOfEveryExpenseCategory(ArrayList&lt;? extends BudgetExpense&gt; expenses) {
+<span class="fc" id="L77">        String[] expenseCategories = expenses.stream().map(BudgetExpense::getCode).distinct().sorted().toArray(String[]::new);</span>
+<span class="fc" id="L78">        Map&lt;String, Long&gt; expensesSums = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        for (String expenseCategory : expenseCategories) {</span>
+<span class="fc" id="L80">            expensesSums.put(expenseCategory, getSumOfExpenseCategoryWithCode(expenseCategory, expenses));</span>
+        }
+<span class="fc" id="L82">        return expensesSums;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

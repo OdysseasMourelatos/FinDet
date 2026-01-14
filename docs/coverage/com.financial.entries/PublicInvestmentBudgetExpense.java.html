@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PublicInvestmentBudgetExpense.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">FinDet</a> &gt; <a href="index.source.html" class="el_package">com.financial.entries</a> &gt; <span class="el_source">PublicInvestmentBudgetExpense.java</span></div><h1>PublicInvestmentBudgetExpense.java</h1><pre class="source lang-java linenums">package com.financial.entries;
+
+import com.financial.services.expenses.BudgetExpenseLogicService;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+/**
+ * Represents an expenditure within the Public Investment Budget (PIB) framework.
+ * &lt;p&gt;
+ * This class extends {@link BudgetExpense} and serves as the parent for specialized
+ * investment types such as National and Co-funded expenses. It provides
+ * mechanisms for global instance tracking and hierarchical data aggregation.
+ */
+public class PublicInvestmentBudgetExpense extends BudgetExpense {
+    private final String type;
+<span class="fc" id="L18">    protected static ArrayList&lt;PublicInvestmentBudgetExpense&gt; publicInvestmentBudgetExpenses = new ArrayList&lt;&gt;();</span>
+
+    /**
+     * Constructs a new Public Investment Budget (PIB) expense entry and
+     * automatically registers it in the global PIB collection.
+     * * @param entityCode      The unique identifier for the ministry or government entity.
+     * @param entityName      The human-readable name of the ministry.
+     * @param serviceCode     The specific identifier for the department or service.
+     * @param serviceName     The name of the service associated with the expense.
+     * @param code            The budget classification code.
+     * @param description     Textual description of the expenditure.
+     * @param type            The investment segment (e.g., &quot;ΕΘΝΙΚΟ&quot; or &quot;ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ&quot;).
+     * @param category        The broader classification category of the expense.
+     * @param amount          The monetary value of the entry in long format (representing subunits).
+     */
+    public PublicInvestmentBudgetExpense(String entityCode, String entityName, String serviceCode, String serviceName, String code, String description, String type, String category, long amount) {
+<span class="fc" id="L34">        super(entityCode, entityName, serviceCode, serviceName, code, description, category, amount);</span>
+<span class="fc" id="L35">        this.type = type;</span>
+<span class="fc" id="L36">        publicInvestmentBudgetExpenses.add(this);</span>
+<span class="fc" id="L37">    }</span>
+
+    /**
+     * Retrieves the global registry of all PIB expenditure entries.
+     * &lt;p&gt;
+     * This list provides a centralized point of access for all {@code PublicInvestmentBudgetExpense}
+     * instances created during the application session.
+     * * @return An {@link ArrayList} containing all recorded PIB expense objects.
+     */
+    public static ArrayList&lt;PublicInvestmentBudgetExpense&gt; getAllPublicInvestmentBudgetExpenses() {
+<span class="fc" id="L47">        return publicInvestmentBudgetExpenses;</span>
+    }
+
+    /**
+     * Aggregates expenditures across all PIB segments (National and Co-funded) by category.
+     * &lt;p&gt;
+     * This method performs a sophisticated merge of two source maps. It utilizes a
+     * {@link LinkedHashMap} to maintain the order of categories. If a budget category
+     * exists in both the National and Co-funded segments, the amounts are merged
+     * using the {@link Long#sum} function.
+     * * @return A consolidated {@link Map} where keys are category identifiers and
+     * values are the total aggregated sums.
+     */
+    public static Map&lt;String, Long&gt; getSumOfEveryPublicInvestmentExpenseCategory() {
+<span class="fc" id="L61">        Map&lt;String, Long&gt; nationalMap = PublicInvestmentBudgetNationalExpense.getSumOfEveryPublicInvestmentNationalExpenseCategory();</span>
+<span class="fc" id="L62">        Map&lt;String, Long&gt; coFundedMap = PublicInvestmentBudgetCoFundedExpense.getSumOfEveryPublicInvestmentCoFundedExpenseCategory();</span>
+
+        // Δημιουργούμε ένα νέο Map ξεκινώντας με τα δεδομένα του Εθνικού σκέλους
+<span class="fc" id="L65">        Map&lt;String, Long&gt; combinedMap = new LinkedHashMap&lt;&gt;(nationalMap);</span>
+
+        // Προσθέτουμε τα δεδομένα του Συγχρηματοδοτούμενου
+<span class="fc" id="L68">        coFundedMap.forEach((serviceCode, amount) -&gt;</span>
+<span class="fc" id="L69">                combinedMap.merge(serviceCode, amount, Long::sum)</span>
+        );
+
+<span class="fc" id="L72">        return combinedMap;</span>
+    }
+
+    /**
+     * Calculates the grand total of the entire Public Investment Budget.
+     * &lt;p&gt;
+     * This is computed by aggregating the totals from the National and Co-funded
+     * sub-segments. The mathematical logic follows:
+     * $$TotalSum_{PIB} = Sum_{National} + Sum_{CoFunded}$$
+     * * @return The total sum of all PIB expenditures.
+     */
+    public static long calculateSum() {
+<span class="fc" id="L84">        return PublicInvestmentBudgetNationalExpense.calculateSum() + PublicInvestmentBudgetCoFundedExpense.calculateSum();</span>
+    }
+
+    /**
+     * Looks up the description associated with a specific budget code within the PIB list.
+     * &lt;p&gt;
+     * This method delegates the search logic to {@link com.financial.services.expenses.BudgetExpenseLogicService}
+     * to ensure consistent lookup behavior across the system.
+     * * @param code The budget code to search for.
+     * @return The descriptive string assigned to the provided code.
+     */
+    public static String getDescriptionWithCode(String code) {
+<span class="fc" id="L96">        return BudgetExpenseLogicService.getDescriptionWithCode(code, publicInvestmentBudgetExpenses);</span>
+    }
+
+    /**
+     * Retrieves the specific investment segment type of the instance.
+     * * @return A String representing the segment type (e.g., National or Co-funded).
+     */
+    public String getType() {
+<span class="fc" id="L104">        return type;</span>
+    }
+
+    /**
+     * Returns a string representation of the PIB expenditure entry.
+     * &lt;p&gt;
+     * Extends the default {@link BudgetExpense#toString()} output by appending
+     * the specific investment segment (&quot;Σκέλος&quot;) information.
+     * * @return A detailed string including core expense data and the investment type.
+     */
+    @Override
+    public String toString() {
+<span class="fc" id="L116">        return super.toString() + &quot;, Σκέλος : &quot; + type;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

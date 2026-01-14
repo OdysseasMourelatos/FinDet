@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BudgetRevenueLogicService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">FinDet</a> &gt; <a href="index.source.html" class="el_package">com.financial.services.revenues</a> &gt; <span class="el_source">BudgetRevenueLogicService.java</span></div><h1>BudgetRevenueLogicService.java</h1><pre class="source lang-java linenums">package com.financial.services.revenues;
+
+import com.financial.entries.BudgetRevenue;
+import java.util.ArrayList;
+
+/**
+ * Utility service class that provides logic for managing and navigating
+ * the hierarchical structure of budget revenues.
+ * &lt;p&gt;
+ * This class includes methods for filtering main categories, searching by code,
+ * and traversing parent-child relationships within revenue lists.
+ */
+public class BudgetRevenueLogicService {
+
+    /**
+     * Private constructor to prevent instantiation of this utility class.
+     */
+    private BudgetRevenueLogicService() {
+        // utility class – no instances
+    }
+
+    /**
+     * Filters and returns only the top-level (main) budget revenues.
+     * Main revenues are identified by having a code length of exactly 2 digits.
+     *
+     * @param &lt;T&gt;            the type of BudgetRevenue
+     * @param budgetRevenues the list of revenues to filter
+     * @return an ArrayList containing only the top-level revenues
+     */
+    public static &lt;T extends BudgetRevenue&gt; ArrayList&lt;T&gt; getMainBudgetRevenues(ArrayList&lt;T&gt; budgetRevenues) {
+<span class="fc" id="L31">        ArrayList&lt;T&gt; mainBudgetRevenues = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L32" title="All 2 branches covered.">        for (T budgetRevenue : budgetRevenues) {</span>
+<span class="fc bfc" id="L33" title="All 2 branches covered.">            if (budgetRevenue.getCode().length() == 2) {</span>
+<span class="fc" id="L34">                mainBudgetRevenues.add(budgetRevenue);</span>
+            }
+<span class="fc" id="L36">        }</span>
+<span class="fc" id="L37">        return mainBudgetRevenues;</span>
+    }
+
+    /**
+     * Searches for a specific revenue object within a list based on its unique code.
+     *
+     * @param &lt;T&gt;      the type of BudgetRevenue
+     * @param code     the unique string code to search for
+     * @param revenues the list of revenues to search in
+     * @return the matching revenue object, or {@code null} if no match is found
+     */
+    public static &lt;T extends BudgetRevenue&gt; T findRevenueWithCode(String code, ArrayList&lt;T&gt; revenues) {
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        for (T revenue : revenues) {</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">            if (revenue.getCode().equals(code)) {</span>
+<span class="fc" id="L51">                return revenue;</span>
+            }
+<span class="fc" id="L53">        }</span>
+<span class="fc" id="L54">        return null;</span>
+    }
+
+    /**
+     * Retrieves all revenues whose codes start with the specified prefix.
+     *
+     * @param code     the prefix to match
+     * @param revenues the list of revenues to filter
+     * @return an ArrayList of revenues that start with the given code
+     */
+    public static ArrayList&lt;BudgetRevenue&gt; getRevenuesStartingWithCode(String code, ArrayList&lt;? extends BudgetRevenue&gt; revenues) {
+<span class="fc" id="L65">        ArrayList&lt;BudgetRevenue&gt; mainRevenues = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">        for (BudgetRevenue revenue : revenues) {</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">            if (revenue.getCode().startsWith(code)) {</span>
+<span class="fc" id="L68">                mainRevenues.add(revenue);</span>
+            }
+<span class="fc" id="L70">        }</span>
+<span class="fc" id="L71">        return mainRevenues;</span>
+    }
+
+    /**
+     * Calculates the total sum of all top-level (2-digit code) budget revenues.
+     *
+     * @param budgetRevenues the list of revenues to summarize
+     * @return the total sum of amounts for main budget categories
+     */
+    public static long calculateSum(ArrayList&lt;? extends BudgetRevenue&gt; budgetRevenues) {
+<span class="fc" id="L81">        long sum = 0;</span>
+<span class="fc bfc" id="L82" title="All 2 branches covered.">        for (BudgetRevenue budgetRevenue : budgetRevenues) {</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">            if (budgetRevenue.getCode().length() == 2) {</span>
+<span class="fc" id="L84">                sum += budgetRevenue.getAmount();</span>
+            }
+<span class="fc" id="L86">        }</span>
+<span class="fc" id="L87">        return sum;</span>
+    }
+
+    /**
+     * Identifies the immediate parent (supercategory) of the given revenue.
+     * The parent is found by truncating the current code based on the hierarchy level.
+     *
+     * @param &lt;T&gt;            the type of BudgetRevenue
+     * @param currentRevenue the revenue whose parent is sought
+     * @param revenues       the list of available revenues to search within
+     * @return the immediate parent revenue object, or {@code null} if none exists
+     */
+    public static &lt;T extends BudgetRevenue&gt; T getAboveLevelSuperCategory(T currentRevenue, ArrayList&lt;T&gt; revenues) {
+<span class="fc" id="L100">        int level = currentRevenue.getLevelOfHierarchy();</span>
+        String tempCode;
+
+<span class="fc bfc" id="L103" title="All 5 branches covered.">        switch (level) {</span>
+<span class="fc" id="L104">            case 2 -&gt; tempCode = currentRevenue.getCode().substring(0, 2);</span>
+<span class="fc" id="L105">            case 3 -&gt; tempCode = currentRevenue.getCode().substring(0, 3);</span>
+<span class="fc" id="L106">            case 4 -&gt; tempCode = currentRevenue.getCode().substring(0, 5);</span>
+<span class="fc" id="L107">            case 5 -&gt; tempCode = currentRevenue.getCode().substring(0, 7);</span>
+<span class="fc" id="L108">            default -&gt; tempCode = &quot;0&quot;;</span>
+        }
+
+<span class="fc" id="L111">        return findRevenueWithCode(tempCode, revenues);</span>
+    }
+
+    /**
+     * Retrieves the full chain of ancestors (supercategories) for a given revenue.
+     *
+     * @param &lt;T&gt;            the type of BudgetRevenue
+     * @param currentRevenue the revenue to find ancestors for
+     * @param revenues       the list of available revenues
+     * @return an ArrayList of all parent revenues, from immediate parent up to the root
+     */
+    public static &lt;T extends BudgetRevenue&gt; ArrayList&lt;BudgetRevenue&gt; getAllSuperCategories(T currentRevenue, ArrayList&lt;T&gt; revenues) {
+<span class="fc" id="L123">        ArrayList&lt;BudgetRevenue&gt; superCategories = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L124">        T superCategory = getAboveLevelSuperCategory(currentRevenue, revenues);</span>
+<span class="fc bfc" id="L125" title="All 2 branches covered.">        while (superCategory != null) {</span>
+<span class="fc" id="L126">            superCategories.add(superCategory);</span>
+<span class="fc" id="L127">            superCategory = getAboveLevelSuperCategory(superCategory, revenues);</span>
+        }
+<span class="fc" id="L129">        return superCategories;</span>
+    }
+
+    /**
+     * Finds the immediate children (subcategories) of a given parent revenue.
+     * Immediate children are identified by their specific code length relative to the parent.
+     *
+     * @param &lt;T&gt;      the type of BudgetRevenue
+     * @param parent   the parent revenue
+     * @param revenues the list of revenues to search in
+     * @return an ArrayList of immediate subcategories
+     */
+    public static &lt;T extends BudgetRevenue&gt; ArrayList&lt;BudgetRevenue&gt; getNextLevelSubCategories(T parent, ArrayList&lt;T&gt; revenues) {
+<span class="fc" id="L142">        int level = parent.getLevelOfHierarchy();</span>
+        int subCategoryCodeLength;
+<span class="fc bfc" id="L144" title="All 5 branches covered.">        switch (level) {</span>
+<span class="fc" id="L145">            case 1 -&gt; subCategoryCodeLength = 3;</span>
+<span class="fc" id="L146">            case 2 -&gt; subCategoryCodeLength = 5;</span>
+<span class="fc" id="L147">            case 3 -&gt; subCategoryCodeLength = 7;</span>
+<span class="fc" id="L148">            case 4 -&gt; subCategoryCodeLength = 10;</span>
+<span class="fc" id="L149">            default -&gt; subCategoryCodeLength = 0;</span>
+        }
+<span class="fc" id="L151">        ArrayList&lt;BudgetRevenue&gt; subCategories = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L152" title="All 2 branches covered.">        for (T budgetRevenue : revenues) {</span>
+<span class="fc bfc" id="L153" title="All 4 branches covered.">            if (budgetRevenue.getCode().startsWith(parent.getCode()) &amp;&amp; (budgetRevenue.getCode().length() == subCategoryCodeLength)) {</span>
+<span class="fc" id="L154">                subCategories.add(budgetRevenue);</span>
+            }
+<span class="fc" id="L156">        }</span>
+<span class="fc" id="L157">        return subCategories;</span>
+    }
+
+    /**
+     * Retrieves all descendants (subcategories) of a parent revenue across all levels.
+     *
+     * @param &lt;T&gt;      the type of BudgetRevenue
+     * @param parent   the ancestor revenue
+     * @param revenues the list of revenues to search in
+     * @return an ArrayList containing all subcategories that belong to the parent's hierarchy
+     */
+    public static &lt;T extends BudgetRevenue&gt; ArrayList&lt;BudgetRevenue&gt; getAllSubCategories(T parent, ArrayList&lt;T&gt; revenues) {
+<span class="fc" id="L169">        ArrayList&lt;BudgetRevenue&gt; subCategories = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L170" title="All 2 branches covered.">        for (T budgetRevenue : revenues) {</span>
+<span class="fc bfc" id="L171" title="All 4 branches covered.">            if (budgetRevenue.getCode().startsWith(parent.getCode()) &amp;&amp; !(budgetRevenue.equals(parent))) {</span>
+<span class="fc" id="L172">                subCategories.add(budgetRevenue);</span>
+            }
+<span class="fc" id="L174">        }</span>
+<span class="fc" id="L175">        return subCategories;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
