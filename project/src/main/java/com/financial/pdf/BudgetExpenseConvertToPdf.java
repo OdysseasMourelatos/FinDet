@@ -1,4 +1,4 @@
-package com.financial.pdf;    //package org.example;
+package com.financial.pdf;
 
 
 import com.financial.entries.*;

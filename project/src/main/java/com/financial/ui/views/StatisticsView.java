@@ -213,7 +213,7 @@ public class StatisticsView {
 
         // 4. Εύρεση Outliers με δύο μεθόδους
         Map<String, Long> outliersIQR = StatisticalExpenses.findOutliersIQR(sums, stats);
-        Map<String, Long> outliersZ = StatisticalExpenses.findOutliersZscore(sums, stats);
+        Map<String, Long> outliersZ = StatisticalExpenses.findOutliersZScore(sums, stats);
 
         if (!outliersIQR.isEmpty() || !outliersZ.isEmpty()) {
 
