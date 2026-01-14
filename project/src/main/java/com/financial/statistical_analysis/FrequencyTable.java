@@ -5,7 +5,17 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 
+/**
+ * Utility class for constructing frequency tables for financial data.
+ * <p>
+ * Categorizes expenditures into "bins" based on a base-10 logarithmic scale,
+ * facilitating the visualization of budget concentrations ranging from $10^6$ to $10^{13}$.
+ */
 public class FrequencyTable {
+
+    private FrequencyTable() {
+        //Utility class - no instances
+    }
 
     public static List<FrequencyRow> buildFromStat() {
         Map<String, Long> sums = StatisticalExpenses.getMinistrySums();
@@ -14,6 +24,16 @@ public class FrequencyTable {
         return table;
     }
 
+    /**
+     * Builds a frequency table based on predefined logarithmic bounds.
+     * <p>
+     * For each interval, it calculates the absolute frequency, the relative percentage,
+     * and the cumulative totals for both.
+     *
+     * @param sums The aggregated expenditure data.
+     * @param stats Descriptive statistics used to determine sample size (n).
+     * @return A List of {@link FrequencyRow} objects representing the table.
+     */
     public static List<FrequencyRow> buildFrequencyTable(Map<String, Long> sums, DescriptiveStatistics stats) {
         int n = sums.size();
         List<FrequencyRow> table = new ArrayList<>();
