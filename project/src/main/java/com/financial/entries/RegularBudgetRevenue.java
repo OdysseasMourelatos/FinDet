@@ -163,8 +163,7 @@ public class RegularBudgetRevenue extends BudgetRevenue implements BudgetRevenue
      */
     @Override
     public void keepAccountsAndBudgetTypeBeforeChange() {
-        ArrayList<BudgetRevenue> accountsForChange = new ArrayList<>();
-        accountsForChange.addAll(getAllSuperCategories());
+        ArrayList<BudgetRevenue> accountsForChange = new ArrayList<>(getAllSuperCategories());
         accountsForChange.add(this);
         accountsForChange.addAll(getAllSubCategories());
         RevenuesHistory.keepHistory(accountsForChange, BudgetType.REGULAR_BUDGET);

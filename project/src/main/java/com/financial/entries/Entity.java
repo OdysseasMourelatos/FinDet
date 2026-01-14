@@ -213,7 +213,7 @@ public class Entity implements EntityLogic {
 
     public void implementChangesInSpecificExpenseCategoryOfSpecificService(String serviceCode, String categoryCode, double percentage, long fixedAmount, BudgetType budgetType) {
         try {
-            BudgetExpense expense = null;
+            BudgetExpense expense;
             if (budgetType == BudgetType.REGULAR_BUDGET) {
                 expense = RegularBudgetExpense.findRegularBudgetExpenseWithCodes(entityCode, serviceCode, categoryCode);
             } else if (budgetType == BudgetType.PUBLIC_INVESTMENT_BUDGET_NATIONAL) {
@@ -236,9 +236,8 @@ public class Entity implements EntityLogic {
 
         } catch (IllegalArgumentException e) {
             ExpensesHistory.returnToPreviousState();
-            return;
         } catch (NullPointerException e) {
-            return;
+            System.out.println(e.getMessage());
         }
     }
 

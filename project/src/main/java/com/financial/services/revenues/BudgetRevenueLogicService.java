@@ -121,10 +121,10 @@ public class BudgetRevenueLogicService {
      */
     public static <T extends BudgetRevenue> ArrayList<BudgetRevenue> getAllSuperCategories(T currentRevenue, ArrayList<T> revenues) {
         ArrayList<BudgetRevenue> superCategories = new ArrayList<>();
-        BudgetRevenue superCategory = getAboveLevelSuperCategory(currentRevenue, revenues);
+        T superCategory = getAboveLevelSuperCategory(currentRevenue, revenues);
         while (superCategory != null) {
             superCategories.add(superCategory);
-            superCategory = (T) getAboveLevelSuperCategory((T)superCategory, revenues);
+            superCategory = getAboveLevelSuperCategory(superCategory, revenues);
         }
         return superCategories;
     }

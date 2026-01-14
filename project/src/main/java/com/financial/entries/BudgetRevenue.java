@@ -18,7 +18,7 @@ public class BudgetRevenue extends BudgetEntry implements BudgetRevenueLogic {
     /**
      * Global registry of all consolidated budget revenue instances.
      */
-    protected static ArrayList <BudgetRevenue> budgetRevenues = new ArrayList<>();
+    protected static ArrayList<BudgetRevenue> budgetRevenues = new ArrayList<>();
 
     /**
      * Basic constructor for general budget entries.

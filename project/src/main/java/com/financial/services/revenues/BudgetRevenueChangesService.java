@@ -120,7 +120,7 @@ public class BudgetRevenueChangesService {
      * @param <T>        the type of BudgetRevenue
      * @param parent     the ancestor category
      * @param revenues   the list of all available revenues
-     * @param percentage the percentage to apply across the sub-tree
+     * @param percentage the percentage to apply across the subtree
      */
     public static <T extends BudgetRevenue> void setAmountOfAllSubCategoriesWithPercentageAdjustment(T parent, ArrayList<T> revenues, double percentage) {
         try {

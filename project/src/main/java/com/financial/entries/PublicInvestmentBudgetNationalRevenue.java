@@ -163,8 +163,7 @@ public class PublicInvestmentBudgetNationalRevenue extends PublicInvestmentBudge
      */
     @Override
     public void keepAccountsAndBudgetTypeBeforeChange() {
-        ArrayList<BudgetRevenue> accountsForChange = new ArrayList<>();
-        accountsForChange.addAll(this.getAllSuperCategories());
+        ArrayList<BudgetRevenue> accountsForChange = new ArrayList<>(this.getAllSuperCategories());
         accountsForChange.add(this);
         accountsForChange.addAll(getAllSubCategories());
         RevenuesHistory.keepHistory(accountsForChange, BudgetType.PUBLIC_INVESTMENT_BUDGET_NATIONAL);
