@@ -6,9 +6,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import com.financial.entries.*;
-import com.financial.multi_year_analysis.entries.MultiYearBudgetExpense;
-import com.financial.multi_year_analysis.entries.MultiYearBudgetRevenue;
-import com.financial.multi_year_analysis.entries.MultiYearEntity;
+import com.financial.multi_year_analysis.MultiYearBudgetExpense;
+import com.financial.multi_year_analysis.MultiYearBudgetRevenue;
+import com.financial.multi_year_analysis.MultiYearEntity;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 

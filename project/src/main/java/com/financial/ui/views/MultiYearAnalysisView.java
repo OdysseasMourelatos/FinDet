@@ -1,12 +1,10 @@
 package com.financial.ui.views;
 
-import com.financial.entries.*;
-
 import java.util.*;
 
-import com.financial.multi_year_analysis.entries.MultiYearBudgetExpense;
-import com.financial.multi_year_analysis.entries.MultiYearBudgetRevenue;
-import com.financial.multi_year_analysis.entries.MultiYearEntity;
+import com.financial.multi_year_analysis.MultiYearBudgetExpense;
+import com.financial.multi_year_analysis.MultiYearBudgetRevenue;
+import com.financial.multi_year_analysis.MultiYearEntity;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.TranslateTransition;

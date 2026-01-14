@@ -1,4 +1,4 @@
-package com.financial.multi_year_analysis.entries;
+package com.financial.multi_year_analysis;
 
 /**
  * Abstract base class representing a budget entry that spans multiple years.
