@@ -1,0 +1,14 @@
+com.financial
+com.financial.data
+com.financial.entries
+com.financial.multi_year_analysis
+com.financial.pdf
+com.financial.services
+com.financial.services.expenses
+com.financial.services.revenues
+com.financial.statistical_analysis
+com.financial.strategies
+com.financial.strategies.filters
+com.financial.strategies.operations
+com.financial.ui
+com.financial.ui.views
