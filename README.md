@@ -144,3 +144,27 @@ If the executable (**Fat JAR**) has been successfully created:
 java -jar target/FinDet-1.0-SNAPSHOT.jar
 
 ```
+## 9. Useful Interaction with AI
+
+### 9.1 Initial Discussions & Planning
+- https://chatgpt.com/share/6967bf2e-55e0-8000-ab2a-86ee30ef0aa8  
+- https://chat.deepseek.com/share/7d3yxoix41zk7tk5an  
+- https://chat.deepseek.com/share/qa1yxaaw8z6uxusr6u  
+
+### 9.2 CSV Files Handling
+- https://chat.deepseek.com/share/ni82z6yekqqzpx34om  
+
+### 9.3 Strategic Decisions
+- https://chatgpt.com/s/t_6967c05ed994819188529d586e764157  
+- https://chatgpt.com/share/6967c21e-4e4c-800c-9994-29a6431dd52c  
+- https://chatgpt.com/share/6967c0cc-a1cc-8000-971c-17c44b416cec  
+- https://chatgpt.com/share/6967c0f6-b2a4-8000-9437-35fb597871c9  
+- https://gemini.google.com/share/3e53867b0f9c  
+- https://gemini.google.com/share/9c8758ee1ca7  
+
+### 9.4 Frontend Assistance (JavaFX)
+Support related to frontend development, which would have required an additional JavaFX course in order to fully implement the intended architecture:
+- https://gemini.google.com/share/f3a21fad8008  
+- https://gemini.google.com/share/cef5d43694d7  
+- https://gemini.google.com/share/89324454c7fa  
+- https://gemini.google.com/share/c21124405c00  
