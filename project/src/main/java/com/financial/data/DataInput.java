@@ -12,6 +12,15 @@ import com.financial.multi_year_analysis.entries.MultiYearEntity;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 
+/**
+ * The core data ingestion engine responsible for parsing CSV financial reports.
+ * <p>
+ * This class utilizes the {@code opencsv} library to read various budget data formats,
+ * including Regular Budgets, Public Investment Budgets (PIB), and Historical datasets.
+ * It features dynamic header analysis to automatically detect the budget year and
+ * identify which column contains financial amounts based on year-formatted headers.
+ * </p>
+ */
 public class DataInput {
 
     /** * Stores the year detected in the CSV header (e.g., 2025).
@@ -19,54 +28,56 @@ public class DataInput {
      */
     public static int detectedBaseYear = -1;
 
-    /** * Stores the index of the column containing the amounts,
-     * identified by a year-format header.
+    /**
+     * Primary entry point for CSV ingestion.
+     * <p>
+     * Utilizes a try-with-resources block to ensure proper closure of the {@link CSVReader}.
+     * It reads the header row to determine the file schema before iterating through data rows.
+     * </p>
+     *
+     * @param filePath   The system path to the source CSV file.
+     * @param forcedType An optional type override used if the file is flagged as generic historical data.
      */
-    public static int amountColumnIndex = -1;
-
     public static void advancedCSVReader(String filePath, String forcedType) {
-        CSVReader reader = null;
-        try {
-            reader = new CSVReader(new FileReader(filePath));
-            String[] header = reader.readNext();
-            String csvType = determineCSVType(header);
-            if (csvType.equals("HISTORICAL_GENERIC")) {
-                csvType = forcedType;
-            }
-            String[] values;
-            while ((values = reader.readNext()) != null) {
-                processCSVRow(csvType, values);
+        try (CSVReader reader = new CSVReader(new FileReader(filePath))) {
+            try {
+                String[] header = reader.readNext();
+                String csvType = determineCSVType(header);
+                if (csvType.equals("HISTORICAL_GENERIC")) {
+                    csvType = forcedType;
+                }
+                String[] values;
+                while ((values = reader.readNext()) != null) {
+                    processCSVRow(csvType, values);
+                }
+            } catch (IOException | NumberFormatException e) {
+                System.out.println(e.getMessage());
+            } catch (CsvValidationException e) {
+                throw new RuntimeException(e);
             }
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (CsvValidationException e) {
-            throw new RuntimeException(e);
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                reader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            System.out.println(e.getMessage());
         }
     }
 
     /**
-     * Detects the CSV type and dynamically identifies the base year and
-     * amount column index from the headers.
-     * * @param header The array of header strings from the CSV.
-     * @return The determined CSV type string.
+     * Analyzes CSV headers to identify the budget category and extract the base year.
+     * <p>
+     * <b>Year Detection:</b> Scans all header cells for a 4-digit sequence (RegEx: {@code \\d{4}}).
+     * If a year is found, it is stored in {@link #detectedBaseYear} for subsequent analytical merges.
+     * </p>
+     *
+     * @param header The first row of the CSV file.
+     * @return A string identifier for the detected schema type.
      */
     private static String determineCSVType(String[] header) {
         Set<String> headerSet = new HashSet<>(Arrays.asList(header));
 
         // Scan headers for a year (4 consecutive digits)
-        for (int i = 0; i < header.length; i++) {
-            String h = header[i].trim();
+        for (String string : header) {
+            String h = string.trim();
             if (h.matches("\\d{4}")) { // Matches exactly 4 digits like 2025, 2026
                 detectedBaseYear = Integer.parseInt(h);
-                amountColumnIndex = i; // This column now points to the amounts
             }
         }
 
@@ -92,20 +103,30 @@ public class DataInput {
         return "UNKNOWN";
     }
 
+    /**
+     * Routes row data to specialized parser methods based on the identified CSV type.
+     *
+     * @param csvType The identified schema type.
+     * @param values  The string array representing a single row of data.
+     */
     private static void processCSVRow(String csvType, String[] values) {
         switch (csvType) {
             case "REGULAR_REVENUES" -> createRegularBudgetRevenueFromCSV(values);
             case "PUBLIC_INVESTMENT_REVENUES" -> createPublicInvestmentBudgetRevenueFromCSV(values);
             case "REGULAR_EXPENSES_PER_SERVICE" -> createRegularBudgetExpenseFromCSV(values);
             case "PUBLIC_INVESTMENT_EXPENSES_PER_SERVICE" -> createPublicInvestmentBudgetExpenseFromCSV(values);
-            case "HISTORICAL_BUDGET_REVENUES" -> createHistoricalBudgetRevenueFromCSV(values);
-            case "HISTORICAL_BUDGET_EXPENSES" -> createHistoricalBudgetExpenseFromCSV(values);
-            case "HISTORICAL_BUDGET_EXPENSES_PER_ENTITY" -> createHistoricalBudgetExpensePerEntityFromCSV(values);
+            case "HISTORICAL_BUDGET_REVENUES" -> createMultiYearBudgetRevenueFromCSV(values);
+            case "HISTORICAL_BUDGET_EXPENSES" -> createMultiYearBudgetExpenseFromCSV(values);
+            case "HISTORICAL_BUDGET_EXPENSES_PER_ENTITY" -> createMultiYearBudgetExpensePerEntityFromCSV(values);
             case "UNKNOWN" -> System.out.println("Σφάλμα: Άγνωστος τύπος CSV.");
             default -> System.out.println("Σφάλμα στη γραμμή: " + Arrays.toString(values));
         }
     }
 
+    /**
+     * Parses Regular Budget Revenue.
+     * <i>Contract:</i> [0]: Code, [1]: Description, [2]: Amount.
+     */
     private static void createRegularBudgetRevenueFromCSV(String[] values) {
         String code = values[0];
         String description = values[1];
@@ -114,6 +135,11 @@ public class DataInput {
         new RegularBudgetRevenue(code, description, category, amount);
     }
 
+    /**
+     * Finalizes the ingestion of Public Investment Revenues by creating
+     * filtered {@link BudgetRevenue} objects for the primary registry.
+     */
+
     //Activated when all PublicInvestmentBudgetRevenues are filtered
     public static void createBudgetRevenueFilteredFromPublicInvestmentBudgetRevenue() {
         for (PublicInvestmentBudgetRevenue revenue : PublicInvestmentBudgetRevenue.getAllPublicInvestmentBudgetRevenues()) {
@@ -121,6 +147,10 @@ public class DataInput {
         }
     }
 
+    /**
+     * Parses Public Investment Revenues.
+     * <i>Contract:</i> [0]: Code, [1]: Description, [2]: Type (National/Co-funded), [3]: Amount.
+     */
     private static void createPublicInvestmentBudgetRevenueFromCSV(String [] values) {
         String code = values[0];
         String description = values[1];
@@ -134,6 +164,10 @@ public class DataInput {
         }
     }
 
+    /**
+     * Parses Regular Budget Expenses per Service.
+     * <i>Contract:</i> [0]: EntityCode, [1]: EntityName, [2]: ServiceCode, [4]: ExpenseCode, [6]: Amount.
+     */
     private static void createRegularBudgetExpenseFromCSV(String[] values) {
         String entityCode = values[0];
         String entityName = values[1];
@@ -146,6 +180,9 @@ public class DataInput {
         new RegularBudgetExpense(entityCode, entityName, serviceCode, serviceName, expenseCode, description, category, amount);
     }
 
+    /**
+     * Parses Public Investment Expenses per Service.
+     */
     private static void createPublicInvestmentBudgetExpenseFromCSV(String [] values) {
         String entityCode = values[0];
         String entityName = values[1];
@@ -163,17 +200,26 @@ public class DataInput {
         }
     }
 
+    /**
+     * Generates {@link Entity} objects from current session expenses.
+     */
     public static void createEntityFromCSV() {
         Map<String, String> entityMap = BudgetExpense.getBudgetExpenses().stream().collect(Collectors.toMap(BudgetExpense::getEntityCode, BudgetExpense::getEntityName, (existing, replacement) -> existing));
         entityMap.keySet().stream().sorted().forEach(entityCode -> new Entity(entityCode, entityMap.get(entityCode)));
     }
 
+    /**
+     * Generates {@link MultiYearEntity} objects from historical expenses.
+     */
     public static void createMultiYearEntityFromCSV() {
         Map<String, String> entityMap = MultiYearBudgetExpense.getMultiYearBudgetExpensesOfEntities().stream().collect(Collectors.toMap(MultiYearBudgetExpense::getEntityCode, MultiYearBudgetExpense::getEntityName, (existing, replacement) -> existing));
         entityMap.keySet().stream().sorted().forEach(entityCode -> new MultiYearEntity(entityCode, entityMap.get(entityCode)));
     }
 
-    private static void createHistoricalBudgetRevenueFromCSV(String [] values) {
+    /**
+     * Parses a 4-column CSV row (Code, Desc, Amount, Year) into a {@link MultiYearBudgetRevenue}.
+     */
+    private static void createMultiYearBudgetRevenueFromCSV(String [] values) {
         String code = values[0];
         String description = values[1];
         String category = "ΕΣΟΔΑ";
@@ -182,7 +228,10 @@ public class DataInput {
         new MultiYearBudgetRevenue(code, description, category, amount, year);
     }
 
-    private static void createHistoricalBudgetExpenseFromCSV(String [] values) {
+    /**
+     * Parses a 4-column CSV row (Code, Desc, Amount, Year) into a {@link MultiYearBudgetExpense}.
+     */
+    private static void createMultiYearBudgetExpenseFromCSV(String [] values) {
         String code = values[0];
         String description = values[1];
         String category = "ΕΞΟΔΑ";
@@ -191,7 +240,10 @@ public class DataInput {
         new MultiYearBudgetExpense(code, description, category, amount, year);
     }
 
-    private static void createHistoricalBudgetExpensePerEntityFromCSV(String [] values) {
+    /**
+     * Parses a 5-column CSV row (EntityCode, Name, RegAmt, PIBAmt, Year) into a {@link MultiYearBudgetExpense}.
+     */
+    private static void createMultiYearBudgetExpensePerEntityFromCSV(String [] values) {
         String entityCode = values[0];
         String entityName = values[1];
         long regularAmount = Long.parseLong(values[2]);
@@ -200,18 +252,27 @@ public class DataInput {
         new MultiYearBudgetExpense(entityCode, entityName, regularAmount, publicInvestmentAmount, year);
     }
 
+    /**
+     * Synchronizes main budget revenues with the multi-year model using the detected year.
+     */
     public static void mergeBudgetRevenuesOfBaseYearWithMultiYearBudgetRevenues() {
         for (BudgetRevenue br : BudgetRevenue.getMainBudgetRevenues()) {
             new MultiYearBudgetRevenue(br.getCode(), br.getDescription(), br.getCategory(), br.getAmount(), detectedBaseYear);
         }
     }
 
+    /**
+     * Synchronizes aggregated expenses with the multi-year model using the detected year.
+     */
     public static void mergeBudgetExpensesOfBaseYearWithMultiYearBudgetExpenses() {
         for (Map.Entry<String, Long> entry : BudgetExpense.getSumOfEveryBudgetExpenseCategory().entrySet()) {
             new MultiYearBudgetExpense(entry.getKey(), BudgetExpense.getDescriptionWithCode(entry.getKey()), "ΕΞΟΔΑ", entry.getValue(), detectedBaseYear);
         }
     }
 
+    /**
+     * Synchronizes entity-level expenses with the multi-year model using the detected year.
+     */
     public static void mergeBudgetExpensesPerEntityOfBaseYearWithMultiYearBudgetExpensesPerEntity() {
         for (Entity entity : Entity.getEntities()) {
             new MultiYearBudgetExpense(entity.getEntityCode(), entity.getEntityName(), entity.calculateRegularSum(), entity.calculatePublicInvestmentSum(), detectedBaseYear);
