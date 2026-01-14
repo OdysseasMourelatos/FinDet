@@ -36,6 +36,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 
+/**
+ * Statistics view - displays budget distributions based on the ministries
+ */
 public class StatisticsView {
 
     // Use Theme class constants for consistent styling

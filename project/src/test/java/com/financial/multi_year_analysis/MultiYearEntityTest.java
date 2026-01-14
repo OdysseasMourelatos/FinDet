@@ -1,7 +1,5 @@
 package com.financial.multi_year_analysis;
 
-import com.financial.multi_year_analysis.entries.MultiYearBudgetExpense;
-import com.financial.multi_year_analysis.entries.MultiYearEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

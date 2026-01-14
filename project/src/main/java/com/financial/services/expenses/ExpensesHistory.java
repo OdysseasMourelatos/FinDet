@@ -5,22 +5,36 @@ import com.financial.services.BudgetType;
 
 import java.util.*;
 
+/**
+ * Manages the state history of budget expenses, providing undo (revert) capabilities using a LIFO stack mechanism.
+ * <p>
+ * This utility class snapshots expense amounts before modifications and stores them along with their
+ * respective {@link BudgetType} context to allow precise restoration of previous financial states.
+ * </p>
+ */
 public class ExpensesHistory {
+
+    /** Double-ended queue storing snapshots of expense amounts mapped by their composite primary keys. */
     public static Deque<Map<String[], Long>> historyDeque = new ArrayDeque<>();
+
+    /** Double-ended queue tracking the budget type context for each historical snapshot. */
     public static Deque<BudgetType> typeDeque = new ArrayDeque<>();
 
     private ExpensesHistory() {
         // utility class – no instances
     }
 
+    /** @return The collection of all historical snapshots currently in the stack. */
     public static Deque<Map<String[], Long>> getHistoryDeque() {
         return historyDeque;
     }
 
+    /** @return The stack of budget types corresponding to the stored history snapshots. */
     public static Deque<BudgetType> getTypeDeque() {
         return typeDeque;
     }
 
+    /** Captures the current amounts of the provided expenses and pushes them onto the history stack. */
     public static void keepHistory(ArrayList<? extends BudgetExpense> expenses, BudgetType type) {
         Map<String[], Long> modifiedElement = new HashMap<>();
         for (BudgetExpense expense : expenses) {
@@ -34,6 +48,7 @@ public class ExpensesHistory {
         typeDeque.addFirst(type);
     }
 
+    /** Retrieves the budget type of the most recently saved state without removing it from the stack. */
     public static BudgetType getMostRecentBudgetType() {
         try {
             return typeDeque.getFirst();
@@ -43,6 +58,7 @@ public class ExpensesHistory {
         }
     }
 
+    /** Retrieves the map of expense amounts from the most recently saved state. */
     public static Map<String[], Long> getMostRecentExpensesHistory() {
         try {
             return historyDeque.getFirst();
@@ -52,6 +68,7 @@ public class ExpensesHistory {
         }
     }
 
+    /** Pops the latest state from the stack and restores the previous amounts to the corresponding expense objects. */
     public static void returnToPreviousState() {
         try {
             BudgetType type = getMostRecentBudgetType();

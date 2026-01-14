@@ -1,4 +1,4 @@
-package com.financial.multi_year_analysis.entries;
+package com.financial.multi_year_analysis;
 
 import java.util.ArrayList;
 import java.util.HashMap;

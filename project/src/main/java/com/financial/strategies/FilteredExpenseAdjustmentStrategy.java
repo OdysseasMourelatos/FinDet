@@ -6,6 +6,7 @@ import com.financial.strategies.operations.AdjustmentOperation;
 import com.financial.entries.BudgetExpense;
 import java.util.ArrayList;
 
+/** Applies adjustments to expenses matching a filter, using a specific operation and enforcing rounding to the nearest hundred. */
 public class FilteredExpenseAdjustmentStrategy implements ExpenseAdjustmentStrategy {
 
     private final ExpenseFilter filter;

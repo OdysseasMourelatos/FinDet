@@ -7,8 +7,17 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 /**
- * Manages the SQLite database operations for the budget application.
+ * A Singleton utility class that manages all interactions with the SQLite database.
+ * <p>
+ * The {@code SQLiteManager} handles the database lifecycle, including establishing connections,
+ * initializing the relational schema (Tables, Primary Keys, Foreign Keys), and executing
+ * both atomic and batch SQL operations. It acts as the primary persistence bridge between
+ * the application's memory and the physical {@code .db} file.
+ * </p>
+ * * <p><b>Design Pattern:</b> Singleton</p>
+ * <p><b>Database:</b> SQLite 3.x</p>
  */
+
 public class SQLiteManager {
     private static final Logger LOGGER = Logger.getLogger(SQLiteManager.class.getName());
     private static final String DB_URL = "jdbc:sqlite:budget_database.db";

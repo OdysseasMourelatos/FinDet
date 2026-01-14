@@ -10,12 +10,17 @@ import com.financial.strategies.operations.PercentageOperation;
 
 import java.util.ArrayList;
 
+/**
+ * Utility service that orchestrates mass budget adjustments by selecting and
+ * executing the appropriate {@link ExpenseAdjustmentStrategy}.
+ */
 public class BudgetExpenseChangesService {
 
     private BudgetExpenseChangesService() {
         // utility class – no instances
     }
 
+    /** Applies a percentage or fixed amount adjustment to a specific expense category across all entities. */
     public static void implementGlobalChangesInCertainExpenseCategoryWithPercentageAllocation(String code, double percentage, long fixedAmount, ArrayList<? extends BudgetExpense> expenses) {
         ExpenseAdjustmentStrategy strategy;
         if (fixedAmount == 0) {
@@ -26,6 +31,7 @@ public class BudgetExpenseChangesService {
         strategy.applyAdjustment(expenses, percentage, fixedAmount);
     }
 
+    /** Applies a global percentage or fixed amount adjustment to every expense category across all entities. */
     public static void implementGlobalChangesInAllExpenseCategoriesWithPercentageAllocation(double percentage, long fixedAmount, ArrayList<? extends BudgetExpense> expenses) {
         ExpenseAdjustmentStrategy strategy;
         if (fixedAmount == 0) {

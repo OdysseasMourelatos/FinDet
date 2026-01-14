@@ -2,6 +2,7 @@ package com.financial.strategies.filters;
 
 import com.financial.entries.BudgetExpense;
 
+/** Filters expenses based on a specific organizational service code. */
 public class ServiceFilter implements ExpenseFilter {
     private final String targetServiceCode;
 

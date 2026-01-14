@@ -13,4 +13,4 @@
  * @since 1.0
  */
 
-package com.financial.multi_year_analysis.entries;
+package com.financial.multi_year_analysis;
