@@ -37,21 +37,21 @@ public class BudgetChangesView {
     private TabPane tabPane;
 
     // Revenue form components
-    private ComboBox<String> budgetTypeCombo;
-    private TextField accountCodeField;
-    private TextField changeValueField;
-    private ComboBox<String> changeTypeCombo;
-    private ComboBox<String> distributionCombo;
-    private Button executeButton;
-    private Label statusLabel;
+    private ComboBox<String> revenueBudgetTypeCombo;
+    private TextField revenueAccountCodeField;
+    private TextField revenueChangeValueField;
+    private ComboBox<String> revenueChangeTypeCombo;
+    private ComboBox<String> revenueDistributionCombo;
+    private Button revenueExecuteButton;
+    private Label revenueStatusLabel;
     private ComboBox<String> revenueViewScopeCombo;
 
     // Revenue results area
-    private VBox resultsContainer;
-    private TableView<ChangeResult> resultsTable;
-    private ObservableList<ChangeResult> resultsData;
-    private Map<String, Long> lastBeforeValues;
-    private String lastSelectedCode;
+    private VBox revenueResultsContainer;
+    private TableView<RevenueChangeResult> revenueResultsTable;
+    private ObservableList<RevenueChangeResult> revenueResultsData;
+    private Map<String, Long> lastRevenueBeforeValues;
+    private String lastRevenueSelectedCode;
 
     // Expense form components
     private ComboBox<String> expenseBudgetTypeCombo;
@@ -139,13 +139,13 @@ public class BudgetChangesView {
         content.setStyle("-fx-background-color: " + Theme.BG_BASE + ";");
 
         // Form
-        VBox formSection = createFormSection();
+        VBox revenueFormSection = createRevenueFormSection();
 
         // Results
-        resultsContainer = createResultsSection();
-        VBox.setVgrow(resultsContainer, Priority.ALWAYS);
+        revenueResultsContainer = createRevenueResultsSection();
+        VBox.setVgrow(revenueResultsContainer, Priority.ALWAYS);
 
-        content.getChildren().addAll(formSection, resultsContainer);
+        content.getChildren().addAll(revenueFormSection, revenueResultsContainer);
         return content;
     }
 
@@ -222,7 +222,7 @@ public class BudgetChangesView {
         return header;
     }
 
-    private VBox createFormSection() {
+    private VBox createRevenueFormSection() {
         VBox section = new VBox(10);
         section.setPadding(new Insets(15, 24, 10, 24));
 
@@ -238,68 +238,68 @@ public class BudgetChangesView {
         HBox filtersRow = new HBox(12);
         filtersRow.setAlignment(Pos.BOTTOM_LEFT);
 
-        // 1. Τύπος Προϋπολογισμού (Label από 1ο snippet)
+        // 1. Τύπος Προϋπολογισμού
         VBox budgetTypeBox = createFormField("Τύπος Προϋπολογισμού");
-        budgetTypeCombo = new ComboBox<>();
-        budgetTypeCombo.getItems().addAll(
+        revenueBudgetTypeCombo = new ComboBox<>();
+        revenueBudgetTypeCombo.getItems().addAll(
                 "Τακτικός Προϋπολογισμός",
                 "ΠΔΕ Εθνικό",
                 "ΠΔΕ Συγχρηματοδοτούμενο"
         );
-        budgetTypeCombo.setValue("Τακτικός Προϋπολογισμός");
-        budgetTypeCombo.setPrefWidth(200);
-        budgetTypeCombo.setStyle(Theme.comboBox());
-        budgetTypeBox.getChildren().add(budgetTypeCombo);
+        revenueBudgetTypeCombo.setValue("Τακτικός Προϋπολογισμός");
+        revenueBudgetTypeCombo.setPrefWidth(200);
+        revenueBudgetTypeCombo.setStyle(Theme.comboBox());
+        budgetTypeBox.getChildren().add(revenueBudgetTypeCombo);
 
-        // 2. Κωδικός Λογαριασμού (Label & Prompt από 1ο snippet)
+        // 2. Κωδικός Λογαριασμού
         VBox codeBox = createFormField("Κωδικός Λογαριασμού");
-        accountCodeField = new TextField();
-        accountCodeField.setPromptText("π.χ. 11, 111, 11101");
-        accountCodeField.setPrefWidth(160);
-        accountCodeField.setStyle(Theme.textField());
-        accountCodeField.focusedProperty().addListener((obs, old, nv) ->
-                accountCodeField.setStyle(nv ? Theme.textFieldFocused() : Theme.textField()));
-        codeBox.getChildren().add(accountCodeField);
+        revenueAccountCodeField = new TextField();
+        revenueAccountCodeField.setPromptText("π.χ. 11, 111, 11101");
+        revenueAccountCodeField.setPrefWidth(160);
+        revenueAccountCodeField.setStyle(Theme.textField());
+        revenueAccountCodeField.focusedProperty().addListener((obs, old, nv) ->
+                revenueAccountCodeField.setStyle(nv ? Theme.textFieldFocused() : Theme.textField()));
+        codeBox.getChildren().add(revenueAccountCodeField);
 
-        // 3. Τιμή Αλλαγής (Label & Prompt από 1ο snippet)
+        // 3. Τιμή Αλλαγής
         VBox changeBox = createFormField("Τιμή Αλλαγής");
-        changeValueField = new TextField();
-        changeValueField.setPromptText("π.χ. 10000, 10%");
-        changeValueField.setPrefWidth(140);
-        changeValueField.setStyle(Theme.textField());
-        changeValueField.focusedProperty().addListener((obs, old, nv) ->
-                changeValueField.setStyle(nv ? Theme.textFieldFocused() : Theme.textField()));
-        changeBox.getChildren().add(changeValueField);
+        revenueChangeValueField = new TextField();
+        revenueChangeValueField.setPromptText("π.χ. 10000, 10%");
+        revenueChangeValueField.setPrefWidth(140);
+        revenueChangeValueField.setStyle(Theme.textField());
+        revenueChangeValueField.focusedProperty().addListener((obs, old, nv) ->
+                revenueChangeValueField.setStyle(nv ? Theme.textFieldFocused() : Theme.textField()));
+        changeBox.getChildren().add(revenueChangeValueField);
 
-        // 4. Τύπος Αλλαγής (Label από 1ο snippet)
+        // 4. Τύπος Αλλαγής
         VBox changeTypeBox = createFormField("Τύπος Αλλαγής");
-        changeTypeCombo = new ComboBox<>();
-        changeTypeCombo.getItems().addAll(
+        revenueChangeTypeCombo = new ComboBox<>();
+        revenueChangeTypeCombo.getItems().addAll(
                 "Μεταβολή (+/-)",
                 "Ποσοστό (%)",
                 "Τελικό Υπόλοιπο"
         );
-        changeTypeCombo.setValue("Μεταβολή (+/-)");
-        changeTypeCombo.setPrefWidth(150);
-        changeTypeCombo.setStyle(Theme.comboBox());
-        changeTypeBox.getChildren().add(changeTypeCombo);
+        revenueChangeTypeCombo.setValue("Μεταβολή (+/-)");
+        revenueChangeTypeCombo.setPrefWidth(150);
+        revenueChangeTypeCombo.setStyle(Theme.comboBox());
+        changeTypeBox.getChildren().add(revenueChangeTypeCombo);
 
-        // 5. Κατανομή (Label από 1ο snippet)
+        // 5. Κατανομή
         VBox distBox = createFormField("Κατανομή σε Υποκατηγορίες");
-        distributionCombo = new ComboBox<>();
-        distributionCombo.getItems().addAll("Ισόποσα", "Ποσοστιαία");
-        distributionCombo.setValue("Ποσοστιαία");
-        distributionCombo.setPrefWidth(160);
-        distributionCombo.setStyle(Theme.comboBox());
-        distBox.getChildren().add(distributionCombo);
+        revenueDistributionCombo = new ComboBox<>();
+        revenueDistributionCombo.getItems().addAll("Ισόποσα", "Ποσοστιαία");
+        revenueDistributionCombo.setValue("Ποσοστιαία");
+        revenueDistributionCombo.setPrefWidth(160);
+        revenueDistributionCombo.setStyle(Theme.comboBox());
+        distBox.getChildren().add(revenueDistributionCombo);
 
-        // 6. Το Κουμπί (Κείμενο από 1ο snippet)
-        executeButton = new Button("Εκτέλεση Αλλαγής");
-        executeButton.setStyle(Theme.buttonPrimary());
-        executeButton.setPrefHeight(35);
-        executeButton.setOnAction(e -> executeChange());
-        executeButton.setOnMouseEntered(e -> executeButton.setStyle(Theme.buttonPrimaryHover()));
-        executeButton.setOnMouseExited(e -> executeButton.setStyle(Theme.buttonPrimary()));
+        // 6. Το Κουμπί
+        revenueExecuteButton = new Button("Εκτέλεση Αλλαγής");
+        revenueExecuteButton.setStyle(Theme.buttonPrimary());
+        revenueExecuteButton.setPrefHeight(35);
+        revenueExecuteButton.setOnAction(e -> executeRevenueChange());
+        revenueExecuteButton.setOnMouseEntered(e -> revenueExecuteButton.setStyle(Theme.buttonPrimaryHover()));
+        revenueExecuteButton.setOnMouseExited(e -> revenueExecuteButton.setStyle(Theme.buttonPrimary()));
 
         // Προσθήκη όλων στη σειρά
         filtersRow.getChildren().addAll(
@@ -308,13 +308,13 @@ public class BudgetChangesView {
                 changeBox,
                 changeTypeBox,
                 distBox,
-                executeButton
+                revenueExecuteButton
         );
 
-        statusLabel = new Label("");
-        statusLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + Theme.TEXT_SECONDARY + ";");
+        revenueStatusLabel = new Label("");
+        revenueStatusLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + Theme.TEXT_SECONDARY + ";");
 
-        formCard.getChildren().addAll(formTitle, filtersRow, statusLabel);
+        formCard.getChildren().addAll(formTitle, filtersRow, revenueStatusLabel);
         section.getChildren().add(formCard);
 
         return section;
@@ -328,7 +328,7 @@ public class BudgetChangesView {
         return field;
     }
 
-    private VBox createResultsSection() {
+    private VBox createRevenueResultsSection() {
         VBox section = new VBox(0);
         section.setPadding(new Insets(0, 24, 24, 24));
         VBox.setVgrow(section, Priority.ALWAYS);
@@ -353,28 +353,28 @@ public class BudgetChangesView {
         revenueViewScopeCombo = new ComboBox<>();
         revenueViewScopeCombo.setStyle(Theme.comboBox());
         revenueViewScopeCombo.setPrefWidth(180);
-        revenueViewScopeCombo.setOnAction(this::handleScopeChange);
+        revenueViewScopeCombo.setOnAction(this::handleRevenueScopeChange);
 
 
         resultsHeader.getChildren().addAll(resultsTitle, spacer, scopeLabel, revenueViewScopeCombo);
 
-        resultsData = FXCollections.observableArrayList();
-        resultsTable = createResultsTable();
-        VBox.setVgrow(resultsTable, Priority.ALWAYS);
+        revenueResultsData = FXCollections.observableArrayList();
+        revenueResultsTable = createRevenueResultsTable();
+        VBox.setVgrow(revenueResultsTable, Priority.ALWAYS);
 
-        resultsCard.getChildren().addAll(resultsHeader, resultsTable);
+        resultsCard.getChildren().addAll(resultsHeader, revenueResultsTable);
         section.getChildren().add(resultsCard);
         return section;
     }
 
-    private void handleScopeChange(javafx.event.ActionEvent event) {
+    private void handleRevenueScopeChange(javafx.event.ActionEvent event) {
         if (!isUpdatingScope) {
             refreshRevenueResults();
         }
     }
 
-    private TableView<ChangeResult> createResultsTable() {
-        TableView<ChangeResult> table = new TableView<>(resultsData);
+    private TableView<RevenueChangeResult> createRevenueResultsTable() {
+        TableView<RevenueChangeResult> table = new TableView<>(revenueResultsData);
         table.setStyle(Theme.table());
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
@@ -382,30 +382,30 @@ public class BudgetChangesView {
         placeholder.setStyle("-fx-text-fill: " + Theme.TEXT_MUTED + ";");
         table.setPlaceholder(placeholder);
 
-        TableColumn<ChangeResult, String> codeCol = new TableColumn<>("Κωδικός");
+        TableColumn<RevenueChangeResult, String> codeCol = new TableColumn<>("Κωδικός");
         codeCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().code));
         codeCol.setPrefWidth(90);
 
-        TableColumn<ChangeResult, String> descCol = new TableColumn<>("Περιγραφή");
+        TableColumn<RevenueChangeResult, String> descCol = new TableColumn<>("Περιγραφή");
         descCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().description));
         descCol.setPrefWidth(220);
 
-        TableColumn<ChangeResult, String> levelCol = new TableColumn<>("Επ.");
+        TableColumn<RevenueChangeResult, String> levelCol = new TableColumn<>("Επ.");
         levelCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().level));
         levelCol.setPrefWidth(40);
         levelCol.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<ChangeResult, String> beforeCol = new TableColumn<>("Πριν");
+        TableColumn<RevenueChangeResult, String> beforeCol = new TableColumn<>("Πριν");
         beforeCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().before));
         beforeCol.setPrefWidth(100);
         beforeCol.setStyle("-fx-alignment: CENTER-RIGHT;");
 
-        TableColumn<ChangeResult, String> afterCol = new TableColumn<>("Μετά");
+        TableColumn<RevenueChangeResult, String> afterCol = new TableColumn<>("Μετά");
         afterCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().after));
         afterCol.setPrefWidth(100);
         afterCol.setStyle("-fx-alignment: CENTER-RIGHT;");
 
-        TableColumn<ChangeResult, String> changeCol = new TableColumn<>("Μεταβολή");
+        TableColumn<RevenueChangeResult, String> changeCol = new TableColumn<>("Μεταβολή");
         changeCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().change));
         changeCol.setPrefWidth(130);
         changeCol.setStyle("-fx-alignment: CENTER-RIGHT;");
@@ -430,7 +430,7 @@ public class BudgetChangesView {
             }
         });
 
-        TableColumn<ChangeResult, String> roleCol = new TableColumn<>("Ρόλος");
+        TableColumn<RevenueChangeResult, String> roleCol = new TableColumn<>("Ρόλος");
         roleCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().role));
         roleCol.setPrefWidth(110);
 
@@ -453,12 +453,12 @@ public class BudgetChangesView {
         return table;
     }
 
-    private void executeChange() {
-        String code = accountCodeField.getText().trim();
-        String changeValue = changeValueField.getText().trim();
-        String budgetType = budgetTypeCombo.getValue();
-        String changeType = changeTypeCombo.getValue();
-        String distribution = distributionCombo.getValue();
+    private void executeRevenueChange() {
+        String code = revenueAccountCodeField.getText().trim();
+        String changeValue = revenueChangeValueField.getText().trim();
+        String budgetType = revenueBudgetTypeCombo.getValue();
+        String changeType = revenueChangeTypeCombo.getValue();
+        String distribution = revenueDistributionCombo.getValue();
 
         if (code.isEmpty()) {
             showRevenueError("Παρακαλώ εισάγετε κωδικό λογαριασμού");
@@ -476,12 +476,12 @@ public class BudgetChangesView {
         }
 
         try {
-            lastSelectedCode = code;
+            lastRevenueSelectedCode = code;
 
-            lastBeforeValues = new HashMap<>();
-            lastBeforeValues.putAll(captureAllLevels(code));
+            lastRevenueBeforeValues = new HashMap<>();
+            lastRevenueBeforeValues.putAll(captureRevenueAllLevels(code));
 
-            applyChange(targetRevenue, changeValue, changeType, distribution, budgetType);
+            applyRevenueChange(targetRevenue, changeValue, changeType, distribution, budgetType);
 
             updateRevenueViewScopeOptions(budgetType);
             refreshRevenueResults();
@@ -501,19 +501,19 @@ public class BudgetChangesView {
         }
     }
 
-    private Map<String, Long> captureAllLevels(String code) {
+    private Map<String, Long> captureRevenueAllLevels(String code) {
         Map<String, Long> allValues = new HashMap<>();
 
-        captureScopeToMap(allValues, "Τακτικός Προϋπολογισμός", RegularBudgetRevenue.findRegularBudgetRevenueWithCode(code));
-        captureScopeToMap(allValues, "ΠΔΕ Εθνικό", PublicInvestmentBudgetNationalRevenue.findPublicInvestmentBudgetNationalRevenueWithCode(code));
-        captureScopeToMap(allValues, "ΠΔΕ Συγχρηματοδοτούμενο", PublicInvestmentBudgetCoFundedRevenue.findPublicInvestmentBudgetCoFundedRevenueWithCode(code));
-        captureScopeToMap(allValues, "ΠΔΕ (Σύνολο)", PublicInvestmentBudgetRevenue.findPublicInvestmentBudgetRevenueWithCode(code));
-        captureScopeToMap(allValues, "Κρατικός Προϋπολογισμός", BudgetRevenue.findBudgetRevenueWithCode(code));
+        captureRevenueScopeToMap(allValues, "Τακτικός Προϋπολογισμός", RegularBudgetRevenue.findRegularBudgetRevenueWithCode(code));
+        captureRevenueScopeToMap(allValues, "ΠΔΕ Εθνικό", PublicInvestmentBudgetNationalRevenue.findPublicInvestmentBudgetNationalRevenueWithCode(code));
+        captureRevenueScopeToMap(allValues, "ΠΔΕ Συγχρηματοδοτούμενο", PublicInvestmentBudgetCoFundedRevenue.findPublicInvestmentBudgetCoFundedRevenueWithCode(code));
+        captureRevenueScopeToMap(allValues, "ΠΔΕ (Σύνολο)", PublicInvestmentBudgetRevenue.findPublicInvestmentBudgetRevenueWithCode(code));
+        captureRevenueScopeToMap(allValues, "Κρατικός Προϋπολογισμός", BudgetRevenue.findBudgetRevenueWithCode(code));
 
         return allValues;
     }
 
-    private void captureScopeToMap(Map<String, Long> map, String scope, BudgetRevenue revenue) {
+    private void captureRevenueScopeToMap(Map<String, Long> map, String scope, BudgetRevenue revenue) {
         if (revenue == null) {
             return;
         }
@@ -537,7 +537,7 @@ public class BudgetChangesView {
         };
     }
 
-    private Map<String, Long> captureValues(BudgetRevenue revenue, String budgetType) {
+    private Map<String, Long> captureRevenueValues(BudgetRevenue revenue, String budgetType) {
         Map<String, Long> values = new HashMap<>();
         values.put(revenue.getCode(), revenue.getAmount());
 
@@ -558,7 +558,7 @@ public class BudgetChangesView {
         return values;
     }
 
-    private void applyChange(BudgetRevenue revenue, String changeValue, String changeType, String distribution, String budgetType) {
+    private void applyRevenueChange(BudgetRevenue revenue, String changeValue, String changeType, String distribution, String budgetType) {
         double numericValue;
         boolean isPercentage = changeValue.contains("%");
 
@@ -584,13 +584,13 @@ public class BudgetChangesView {
         }
 
         if (distribution.equals("Ισόποσα")) {
-            applyEqualDistribution(revenue, changeAmount, budgetType);
+            applyRevenueEqualDistribution(revenue, changeAmount, budgetType);
         } else {
-            applyPercentageDistribution(revenue, percentage, budgetType);
+            applyRevenuePercentageDistribution(revenue, percentage, budgetType);
         }
     }
 
-    private void applyEqualDistribution(BudgetRevenue revenue, long changeAmount, String budgetType) {
+    private void applyRevenueEqualDistribution(BudgetRevenue revenue, long changeAmount, String budgetType) {
         if (revenue instanceof RegularBudgetRevenue rbr) {
             rbr.implementChangesOfEqualDistribution(changeAmount);
         } else if (revenue instanceof PublicInvestmentBudgetNationalRevenue pibnr) {
@@ -600,7 +600,7 @@ public class BudgetChangesView {
         }
     }
 
-    private void applyPercentageDistribution(BudgetRevenue revenue, double percentage, String budgetType) {
+    private void applyRevenuePercentageDistribution(BudgetRevenue revenue, double percentage, String budgetType) {
         if (revenue instanceof RegularBudgetRevenue rbr) {
             rbr.implementChangesOfPercentageAdjustment(percentage);
         } else if (revenue instanceof PublicInvestmentBudgetNationalRevenue pibnr) {
@@ -610,26 +610,26 @@ public class BudgetChangesView {
         }
     }
 
-    private void displayResults(BudgetRevenue targetRevenue, Map<String, Long> before, Map<String, Long> after, String scope) {
-        resultsData.clear();
+    private void displayRevenueResults(BudgetRevenue targetRevenue, Map<String, Long> before, Map<String, Long> after, String scope) {
+        revenueResultsData.clear();
 
         ArrayList<BudgetRevenue> superCats = targetRevenue.getAllSuperCategories();
         if (superCats != null) {
             for (int i = superCats.size() - 1; i >= 0; i--) {
                 BudgetRevenue sup = superCats.get(i);
-                addResultRow(sup, before, after, "Ανώτερη", scope);
+                addRevenueResultRow(sup, before, after, "Ανώτερη", scope);
             }
         }
 
-        addResultRow(targetRevenue, before, after, "* Στόχος", scope);
+        addRevenueResultRow(targetRevenue, before, after, "* Στόχος", scope);
 
         ArrayList<BudgetRevenue> subCats = targetRevenue.getAllSubCategories();
         if (subCats != null) {
             for (BudgetRevenue sub : subCats) {
-                addResultRow(sub, before, after, "Υποκατηγορία", scope);
+                addRevenueResultRow(sub, before, after, "Υποκατηγορία", scope);
             }
         }
-        animateResults();
+        animateRevenueResults();
     }
 
     private void updateRevenueViewScopeOptions(String budgetType) {
@@ -652,7 +652,7 @@ public class BudgetChangesView {
             revenueViewScopeCombo.setValue(budgetType);
         }
 
-        revenueViewScopeCombo.setOnAction(this::handleScopeChange);
+        revenueViewScopeCombo.setOnAction(this::handleRevenueScopeChange);
         isUpdatingScope = false;
     }
 
@@ -662,26 +662,26 @@ public class BudgetChangesView {
         }
 
         String viewScope = revenueViewScopeCombo.getValue();
-        if (lastSelectedCode == null || viewScope == null) {
+        if (lastRevenueSelectedCode == null || viewScope == null) {
             return;
         }
 
         BudgetRevenue currentTarget = switch (viewScope) {
-            case "Τακτικός Προϋπολογισμός" -> RegularBudgetRevenue.findRegularBudgetRevenueWithCode(lastSelectedCode);
-            case "ΠΔΕ Εθνικό" -> PublicInvestmentBudgetNationalRevenue.findPublicInvestmentBudgetNationalRevenueWithCode(lastSelectedCode);
-            case "ΠΔΕ Συγχρηματοδοτούμενο" -> PublicInvestmentBudgetCoFundedRevenue.findPublicInvestmentBudgetCoFundedRevenueWithCode(lastSelectedCode);
-            case "ΠΔΕ (Σύνολο)" -> PublicInvestmentBudgetRevenue.findPublicInvestmentBudgetRevenueWithCode(lastSelectedCode);
-            case "Κρατικός Προϋπολογισμός" -> BudgetRevenue.findBudgetRevenueWithCode(lastSelectedCode);
+            case "Τακτικός Προϋπολογισμός" -> RegularBudgetRevenue.findRegularBudgetRevenueWithCode(lastRevenueSelectedCode);
+            case "ΠΔΕ Εθνικό" -> PublicInvestmentBudgetNationalRevenue.findPublicInvestmentBudgetNationalRevenueWithCode(lastRevenueSelectedCode);
+            case "ΠΔΕ Συγχρηματοδοτούμενο" -> PublicInvestmentBudgetCoFundedRevenue.findPublicInvestmentBudgetCoFundedRevenueWithCode(lastRevenueSelectedCode);
+            case "ΠΔΕ (Σύνολο)" -> PublicInvestmentBudgetRevenue.findPublicInvestmentBudgetRevenueWithCode(lastRevenueSelectedCode);
+            case "Κρατικός Προϋπολογισμός" -> BudgetRevenue.findBudgetRevenueWithCode(lastRevenueSelectedCode);
             default -> null;
         };
 
         if (currentTarget != null) {
-            Map<String, Long> currentAfterValues = captureValues(currentTarget, viewScope);
-            displayResults(currentTarget, lastBeforeValues, currentAfterValues, viewScope);
+            Map<String, Long> currentAfterValues = captureRevenueValues(currentTarget, viewScope);
+            displayRevenueResults(currentTarget, lastRevenueBeforeValues, currentAfterValues, viewScope);
         }
     }
 
-    private void addResultRow(BudgetRevenue revenue, Map<String, Long> before, Map<String, Long> after, String role, String scope) {
+    private void addRevenueResultRow(BudgetRevenue revenue, Map<String, Long> before, Map<String, Long> after, String role, String scope) {
         String code = revenue.getCode();
         String key = scope + "|" + code;
 
@@ -694,7 +694,7 @@ public class BudgetChangesView {
         String changeStr = (change == 0) ? "0 (0.0%)" :
                 String.format("%s%,d (%.1f%%)", (change > 0 ? "+" : ""), change, percentChange);
 
-        resultsData.add(new ChangeResult(
+        revenueResultsData.add(new RevenueChangeResult(
                 code,
                 truncateDescription(revenue.getDescription(), 50),
                 String.valueOf(revenue.getLevelOfHierarchy()),
@@ -715,14 +715,14 @@ public class BudgetChangesView {
         return desc.substring(0, maxLength - 3) + "...";
     }
 
-    private void animateResults() {
-        resultsTable.setOpacity(0);
+    private void animateRevenueResults() {
+        revenueResultsTable.setOpacity(0);
 
-        FadeTransition fadeIn = new FadeTransition(Duration.millis(250), resultsTable);
+        FadeTransition fadeIn = new FadeTransition(Duration.millis(250), revenueResultsTable);
         fadeIn.setFromValue(0);
         fadeIn.setToValue(1);
 
-        ScaleTransition scale = new ScaleTransition(Duration.millis(250), resultsTable);
+        ScaleTransition scale = new ScaleTransition(Duration.millis(250), revenueResultsTable);
         scale.setFromX(0.98);
         scale.setFromY(0.98);
         scale.setToX(1);
@@ -733,20 +733,20 @@ public class BudgetChangesView {
     }
 
     private void showRevenueError(String message) {
-        statusLabel.setText("! " + message);
-        statusLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + Theme.ERROR_LIGHT + "; -fx-font-weight: 500;");
+        revenueStatusLabel.setText("! " + message);
+        revenueStatusLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + Theme.ERROR_LIGHT + "; -fx-font-weight: 500;");
     }
 
     private void showRevenueSuccess(String message) {
-        statusLabel.setText("+ " + message);
-        statusLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + Theme.SUCCESS_LIGHT + "; -fx-font-weight: 500;");
+        revenueStatusLabel.setText("+ " + message);
+        revenueStatusLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + Theme.SUCCESS_LIGHT + "; -fx-font-weight: 500;");
     }
 
     public Region getView() {
         return scrollPane;
     }
 
-    public static class ChangeResult {
+    public static class RevenueChangeResult {
         public final String code;
         public final String description;
         public final String level;
@@ -755,7 +755,7 @@ public class BudgetChangesView {
         public final String change;
         public final String role;
 
-        public ChangeResult(String code, String description, String level, String before, String after, String change, String role) {
+        public RevenueChangeResult(String code, String description, String level, String before, String after, String change, String role) {
             this.code = code;
             this.description = description;
             this.level = level;
@@ -1725,13 +1725,13 @@ public class BudgetChangesView {
             }
         }
 
-        resultsData.clear();
+        revenueResultsData.clear();
         expenseResultsData.clear();
-        statusLabel.setText("");
+        revenueStatusLabel.setText("");
         expenseStatusLabel.setText("");
-        lastSelectedCode = null;
+        lastRevenueSelectedCode = null;
         lastExpenseBeforeValues = null;
-        lastBeforeValues = null;
+        lastRevenueBeforeValues = null;
 
         if (ExpensesHistory.getHistoryDeque().isEmpty() && RevenuesHistory.getHistoryDeque().isEmpty()) {
             pendingChanges.clear();
