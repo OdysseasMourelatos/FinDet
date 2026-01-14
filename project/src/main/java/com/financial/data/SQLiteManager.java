@@ -1,4 +1,4 @@
-package com.financial.database;
+package com.financial.data;
 
 import com.financial.entries.*;
 

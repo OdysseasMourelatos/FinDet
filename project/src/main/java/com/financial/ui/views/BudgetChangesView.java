@@ -1,6 +1,6 @@
 package com.financial.ui.views;
 
-import com.financial.database.SQLiteManager;
+import com.financial.data.SQLiteManager;
 import com.financial.entries.*;
 import com.financial.services.BudgetType;
 import com.financial.services.expenses.ExpensesHistory;

@@ -1,6 +1,6 @@
 package com.financial.entries;
 
-import com.financial.services.data.DataInput;
+import com.financial.data.DataInput;
 import com.financial.services.revenues.RevenuesHistory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

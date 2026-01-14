@@ -1,4 +1,4 @@
-package com.financial.services.data;
+package com.financial.data;
 
 import java.io.FileReader;
 import java.io.IOException;

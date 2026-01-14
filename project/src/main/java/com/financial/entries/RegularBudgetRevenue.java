@@ -79,21 +79,25 @@ public class RegularBudgetRevenue extends BudgetRevenue implements BudgetRevenue
 
     /* Hierarchy Navigation Implementation */
 
+    /** @return The parent category immediately above this entry in the regular budget. */
     @Override
     public RegularBudgetRevenue getAboveLevelSuperCategory() {
         return BudgetRevenueLogicService.getAboveLevelSuperCategory(this, regularBudgetRevenues);
     }
 
+    /** @return A list of all ancestor categories in the hierarchy. */
     @Override
     public ArrayList<BudgetRevenue> getAllSuperCategories() {
         return BudgetRevenueLogicService.getAllSuperCategories(this, regularBudgetRevenues);
     }
 
+    /** @return A list of immediate sub-categories (children) for this entry. */
     @Override
     public ArrayList<BudgetRevenue> getNextLevelSubCategories() {
         return BudgetRevenueLogicService.getNextLevelSubCategories(this, regularBudgetRevenues);
     }
 
+    /** @return A list of all descendant categories across all lower levels. */
     @Override
     public ArrayList<BudgetRevenue> getAllSubCategories() {
         return BudgetRevenueLogicService.getAllSubCategories(this, regularBudgetRevenues);
@@ -101,16 +105,28 @@ public class RegularBudgetRevenue extends BudgetRevenue implements BudgetRevenue
 
     /* Change Implementation */
 
+    /**
+     * Updates the financial amounts of all parent categories in the hierarchy.
+     * @param change The amount to add to or subtract from the super categories.
+     */
     @Override
     public void setAmountOfSuperCategories(long change) {
         BudgetRevenueChangesService.setAmountOfSuperCategories(getAllSuperCategories(), change);
     }
 
+    /**
+     * Distributes a total change amount equally among all sub-categories.
+     * @param change The total amount to be divided and distributed.
+     */
     @Override
     public void setAmountOfAllSubCategoriesWithEqualDistribution(long change) {
         BudgetRevenueChangesService.setAmountOfAllSubCategoriesWithEqualDistribution(this, regularBudgetRevenues, change);
     }
 
+    /**
+     * Applies a percentage-based adjustment to all sub-categories.
+     * @param percentage The percentage to apply (e.g., 0.10 for 10%).
+     */
     @Override
     public void setAmountOfAllSubCategoriesWithPercentageAdjustment(double percentage) {
         BudgetRevenueChangesService.setAmountOfAllSubCategoriesWithPercentageAdjustment(this, regularBudgetRevenues, percentage);
@@ -188,6 +204,7 @@ public class RegularBudgetRevenue extends BudgetRevenue implements BudgetRevenue
         }
     }
 
+    /** @return A string representation of the regular budget revenue. */
     @Override
     public String toString () {
         return super.toString();
