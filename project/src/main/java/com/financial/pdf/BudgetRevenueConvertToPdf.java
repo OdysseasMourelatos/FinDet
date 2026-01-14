@@ -8,9 +8,13 @@ import com.itextpdf.text.pdf.*;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 
+/**
+ * Class responsible for exporting Greek State Budget revenue data into PDF format.
+ * Generates reports for main revenue categories, detailed accounts, and
+ * Public Investment Budget (PIB) revenues.
+ */
 public class BudgetRevenueConvertToPdf {
-    
- 
+
     public static void createPdf(String filename) {
         try {
             ArrayList<BudgetRevenue> br = BudgetRevenue.getAllBudgetRevenues();
@@ -18,95 +22,102 @@ public class BudgetRevenueConvertToPdf {
             ArrayList<PublicInvestmentBudgetCoFundedRevenue> brcf = PublicInvestmentBudgetCoFundedRevenue.getAllPublicInvestmentBudgetCoFundedRevenues();
             ArrayList<PublicInvestmentBudgetNationalRevenue> brn = PublicInvestmentBudgetNationalRevenue.getAllPublicInvestmentBudgetNationalRevenues();
 
-
-            Document document = new Document();
+            Document document = new Document(PageSize.A4);
             PdfWriter.getInstance(document, new FileOutputStream(filename));
             document.open();
 
-           
-            //BaseFont bf = BaseFont.createFont("C:/Windows/Fonts/arial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-            BaseFont bf = BaseFont.createFont("/usr/share/fonts/truetype/freefont/FreeSans.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-            Font font = new Font(bf, 12);
+            String os = System.getProperty("os.name").toLowerCase();
+            String fontPath;
 
-            Paragraph title0 = new Paragraph("ΚΡΑΤΙΚΟΣ ΠΡΟΥΠΟΛΟΓΙΣΜΟΣ:ΚΥΡΙΑ ΕΣΟΔΑ", font); 
-            title0.setAlignment(Element.ALIGN_CENTER); 
-            title0.setSpacingAfter(20); 
-            document.add(title0);
-
-            PdfPTable table0 = new PdfPTable(3);
-            table0.addCell(PdfFormat.createCenteredCell("Κωδικός Ταξινόμησης", font));
-            table0.addCell(PdfFormat.createCenteredCell("Ονομασία", font));
-            table0.addCell(PdfFormat.createCenteredCell("Ποσό", font)); 
-
-            for (BudgetRevenue budgetrevenuemain : brm) {
-                table0.addCell(PdfFormat.createCenteredCell(String.valueOf(budgetrevenuemain.getCode()), font));
-                table0.addCell(PdfFormat.createCenteredCell(budgetrevenuemain.getDescription(), font));
-                table0.addCell(PdfFormat.createCenteredCell(String.format("%,d", budgetrevenuemain.getAmount()), font));
-
+            if (os.contains("win")) {
+                fontPath = "C:/Windows/Fonts/arial.ttf";
+            } else {
+                fontPath = "/usr/share/fonts/truetype/freefont/FreeSans.ttf";
             }
 
+            BaseFont bf = BaseFont.createFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+
+
+            BaseColor govBlue = new BaseColor(153, 204, 255);
+            Font titleFont = new Font(bf, 14, Font.BOLD);
+            Font headerFont = new Font(bf, 11, Font.BOLD);
+            Font tableFont = new Font(bf, 10, Font.NORMAL);
+            Font categoryFont = new Font(bf, 10, Font.BOLD);
+
+            addSectionTitle(document, "ΚΡΑΤΙΚΟΣ ΠΡΟΥΠΟΛΟΓΙΣΜΟΣ: ΚΥΡΙΑ ΕΣΟΔΑ", titleFont, govBlue);
+            PdfPTable table0 = createBaseTable();
+            addTableHeader(table0, headerFont);
+            fillRevenueTable(table0, brm, tableFont, categoryFont, govBlue);
             document.add(table0);
+            document.newPage();
 
-            Paragraph title1 = new Paragraph("ΚΡΑΤΙΚΟΣ ΠΡΟΥΠΟΛΟΓΙΣΜΟΣ:ΕΠΙΜΕΡΟΥΣ ΕΣΟΔΑ", font); 
-            title1.setAlignment(Element.ALIGN_CENTER); 
-            title1.setSpacingAfter(20); 
-            document.add(title1);
-
-            PdfPTable table1 = new PdfPTable(3);
-            table1.addCell(PdfFormat.createCenteredCell("Κωδικός Ταξινόμησης", font));
-            table1.addCell(PdfFormat.createCenteredCell("Ονομασία", font));
-            table1.addCell(PdfFormat.createCenteredCell("Ποσό", font)); 
-
-            for (BudgetRevenue budgetrevenue : br) {
-                table1.addCell(PdfFormat.createCenteredCell(String.valueOf(budgetrevenue.getCode()), font)); 
-                table1.addCell(PdfFormat.createCenteredCell(budgetrevenue.getDescription(), font)); 
-                table1.addCell(PdfFormat.createCenteredCell(String.format("%,d", budgetrevenue.getAmount()), font));
-                
-            }
-
+            addSectionTitle(document, "ΚΡΑΤΙΚΟΣ ΠΡΟΥΠΟΛΟΓΙΣΜΟΣ: ΕΠΙΜΕΡΟΥΣ ΕΣΟΔΑ", titleFont, govBlue);
+            PdfPTable table1 = createBaseTable();
+            addTableHeader(table1, headerFont);
+            fillRevenueTable(table1, br, tableFont, categoryFont, govBlue);
             document.add(table1);
+            document.newPage();
 
-            Paragraph title2 = new Paragraph("ΚΡΑΤΙΚΟΣ ΠΡΟΥΠΟΛΟΓΙΣΜΟΣ:ΕΣΟΔΑ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟΥ ΣΚΕΛΟΥΣ", font); 
-            title2.setAlignment(Element.ALIGN_CENTER); 
-            title2.setSpacingAfter(20); 
-            document.add(title2);
-
-            PdfPTable table2 = new PdfPTable(3);
-            table2.addCell(PdfFormat.createCenteredCell("Κωδικός Ταξινόμησης", font));
-            table2.addCell(PdfFormat.createCenteredCell("Ονομασία", font));
-            table2.addCell(PdfFormat.createCenteredCell("Ποσό", font)); 
-
-            for (PublicInvestmentBudgetCoFundedRevenue budgetrevenuecof : brcf) {
-                table2.addCell(PdfFormat.createCenteredCell(String.valueOf(budgetrevenuecof.getCode()), font));
-                table2.addCell(PdfFormat.createCenteredCell(budgetrevenuecof.getDescription(), font));
-                table2.addCell(PdfFormat.createCenteredCell(String.format("%,d", budgetrevenuecof.getAmount()), font));
-
-            }
-            document.add(table2);
-
-            Paragraph title3 = new Paragraph("ΚΡΑΤΙΚΟΣ ΠΡΟΥΠΟΛΟΓΙΣΜΟΣ:ΕΣΟΔΑ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ ΕΘΝΙΚΟΥ ΣΚΕΛΟΥΣ", font); 
-            title3.setAlignment(Element.ALIGN_CENTER); 
-            title3.setSpacingAfter(20); 
-            document.add(title3);
-
-            PdfPTable table3 = new PdfPTable(3);
-            table3.addCell(PdfFormat.createCenteredCell("Κωδικός Ταξινόμησης", font));
-            table3.addCell(PdfFormat.createCenteredCell("Ονομασία", font));
-            table3.addCell(PdfFormat.createCenteredCell("Ποσό", font)); 
-
-            for (PublicInvestmentBudgetNationalRevenue budgetrevenuenat : brn) {
-                table3.addCell(PdfFormat.createCenteredCell(String.valueOf(budgetrevenuenat.getCode()), font));
-                table3.addCell(PdfFormat.createCenteredCell(budgetrevenuenat.getDescription(), font));
-                table3.addCell(PdfFormat.createCenteredCell(String.format("%,d", budgetrevenuenat.getAmount()), font));
-
-            }
+            addSectionTitle(document, "ΕΣΟΔΑ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ: ΕΘΝΙΚΟ ΣΚΕΛΟΣ", titleFont, govBlue);
+            PdfPTable table3 = createBaseTable();
+            addTableHeader(table3, headerFont);
+            fillRevenueTable(table3, brn, tableFont, categoryFont, govBlue);
             document.add(table3);
+
+
+            addSectionTitle(document, "ΕΣΟΔΑ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΔΗΜΟΣΙΩΝ ΕΠΕΝΔΥΣΕΩΝ: ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ ΣΚΕΛΟΣ", titleFont, govBlue);
+            PdfPTable table2 = createBaseTable();
+            addTableHeader(table2, headerFont);
+            fillRevenueTable(table2, brcf, tableFont, categoryFont, govBlue);
+            document.add(table2);
+            document.newPage();
 
 
             document.close();
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private static void addSectionTitle(Document doc, String title, Font font, BaseColor color) throws DocumentException {
+        PdfPTable titleTable = new PdfPTable(1);
+        titleTable.setWidthPercentage(100);
+        PdfPCell cell = new PdfPCell(new Phrase(title, font));
+        cell.setBackgroundColor(color);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setPadding(10);
+        cell.setBorder(Rectangle.NO_BORDER);
+        titleTable.addCell(cell);
+        doc.add(titleTable);
+        doc.add(new Paragraph(" "));
+    }
+
+    private static PdfPTable createBaseTable() throws DocumentException {
+        PdfPTable table = new PdfPTable(3);
+        table.setWidthPercentage(100);
+        table.setWidths(new float[]{20, 60, 20});
+        table.setHeaderRows(1);
+        return table;
+    }
+
+    private static void addTableHeader(PdfPTable table, Font font) {
+        table.addCell(PdfFormat.createCenteredCell("Κωδικός", font, true));
+        table.addCell(PdfFormat.createCenteredCell("Ονομασία Λογαριασμού", font, true));
+        table.addCell(PdfFormat.createCenteredCell("Ποσό (€)", font, true));
+    }
+
+    private static void fillRevenueTable(PdfPTable table, ArrayList<? extends BudgetRevenue> data, Font normal, Font bold, BaseColor zebraColor) {
+        boolean isBlueRow = false;
+        for (BudgetRevenue r : data) {
+            BaseColor rowColor = isBlueRow ? zebraColor : BaseColor.WHITE;
+            Font currentFont = (r.getLevelOfHierarchy() <= 2) ? bold : normal;
+
+            table.addCell(PdfFormat.createZebraCell(String.valueOf(r.getCode()), currentFont, rowColor));
+            table.addCell(PdfFormat.createZebraCell(r.getDescription(), currentFont, rowColor));
+            table.addCell(PdfFormat.createZebraCell(String.format("%,d", r.getAmount()), currentFont, rowColor));
+
+            isBlueRow = !isBlueRow;
         }
     }
 }
