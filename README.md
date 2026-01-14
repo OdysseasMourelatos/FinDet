@@ -160,7 +160,9 @@ java -jar target/FinDet-1.0-SNAPSHOT.jar
 - https://chatgpt.com/share/6967c0cc-a1cc-8000-971c-17c44b416cec  
 - https://chatgpt.com/share/6967c0f6-b2a4-8000-9437-35fb597871c9  
 - https://gemini.google.com/share/3e53867b0f9c  
-- https://gemini.google.com/share/9c8758ee1ca7  
+- https://gemini.google.com/share/9c8758ee1ca7
+- https://claude.ai/share/df928bf3-892d-4e43-8e93-b2b11740fab9
+- https://claude.ai/share/d5233aa9-9cd7-4690-9058-c3eac31785dd
 
 ### 9.4 Frontend Assistance (JavaFX)
 Support related to frontend development, which would have required an additional JavaFX course in order to fully implement the intended architecture:
@@ -168,6 +170,9 @@ Support related to frontend development, which would have required an additional
 - https://gemini.google.com/share/cef5d43694d7  
 - https://gemini.google.com/share/89324454c7fa  
 - https://gemini.google.com/share/c21124405c00
+
+### 9.5 javadoc comments
+- https://claude.ai/share/e3fecfc9-6d1d-45d6-9598-b9e2b8b361ec
 
 ---
 
