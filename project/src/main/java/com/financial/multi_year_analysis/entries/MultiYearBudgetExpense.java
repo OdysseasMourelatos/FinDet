@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Represents an expense entry in a multi-year budget analysis system.
@@ -149,7 +148,7 @@ public class MultiYearBudgetExpense extends MultiYearBudgetEntry {
      */
     public static Map<Integer, Long> getSumOfAllYears() {
         Map<Integer, Long> sumOfAllYears = new HashMap<>();
-        List<Integer> uniqueYears = multiYearBudgetExpenses.stream().map(MultiYearBudgetExpense::getYear).distinct().sorted().collect(Collectors.toList());
+        List<Integer> uniqueYears = multiYearBudgetExpenses.stream().map(MultiYearBudgetExpense::getYear).distinct().sorted().toList();
         for (Integer year : uniqueYears) {
             sumOfAllYears.put(year, getSumOfSpecificYear(year));
         }

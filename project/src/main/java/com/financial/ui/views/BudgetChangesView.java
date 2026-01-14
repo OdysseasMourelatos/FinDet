@@ -1,6 +1,6 @@
 package com.financial.ui.views;
 
-import com.financial.database.SQLiteManager;
+import com.financial.data.SQLiteManager;
 import com.financial.entries.*;
 import com.financial.services.BudgetType;
 import com.financial.services.expenses.ExpensesHistory;
@@ -409,6 +409,26 @@ public class BudgetChangesView {
         changeCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().change));
         changeCol.setPrefWidth(130);
         changeCol.setStyle("-fx-alignment: CENTER-RIGHT;");
+
+        changeCol.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    setText(item);
+                    if (item.startsWith("+")) {
+                        setStyle("-fx-text-fill: " + Theme.SUCCESS + "; -fx-font-weight: bold; -fx-alignment: CENTER-RIGHT;");
+                    } else if (item.startsWith("-")) {
+                        setStyle("-fx-text-fill: " + Theme.ERROR + "; -fx-font-weight: bold; -fx-alignment: CENTER-RIGHT;");
+                    } else {
+                        setStyle("-fx-text-fill: " + Theme.TEXT_MUTED + "; -fx-alignment: CENTER-RIGHT;");
+                    }
+                }
+            }
+        });
 
         TableColumn<ChangeResult, String> roleCol = new TableColumn<>("Ρόλος");
         roleCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().role));
@@ -1061,6 +1081,26 @@ public class BudgetChangesView {
         changeCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().change));
         changeCol.setPrefWidth(180);
         changeCol.setStyle("-fx-alignment: CENTER-RIGHT;");
+
+        changeCol.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    setText(item);
+                    if (item.contains("+")) {
+                        setStyle("-fx-text-fill: " + Theme.SUCCESS + "; -fx-font-weight: bold; -fx-alignment: CENTER-RIGHT;");
+                    } else if (item.contains("-")) {
+                        setStyle("-fx-text-fill: " + Theme.ERROR + "; -fx-font-weight: bold; -fx-alignment: CENTER-RIGHT;");
+                    } else {
+                        setStyle("-fx-text-fill: " + Theme.TEXT_MUTED + "; -fx-alignment: CENTER-RIGHT;");
+                    }
+                }
+            }
+        });
 
         entityCol.setMaxWidth(1f * Integer.MAX_VALUE * 6);
         serviceCol.setMaxWidth(1f * Integer.MAX_VALUE * 40);

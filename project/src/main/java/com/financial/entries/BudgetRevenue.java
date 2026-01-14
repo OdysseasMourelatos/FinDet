@@ -18,7 +18,7 @@ public class BudgetRevenue extends BudgetEntry implements BudgetRevenueLogic {
     /**
      * Global registry of all consolidated budget revenue instances.
      */
-    protected static ArrayList <BudgetRevenue> budgetRevenues = new ArrayList<>();
+    protected static ArrayList<BudgetRevenue> budgetRevenues = new ArrayList<>();
 
     /**
      * Basic constructor for general budget entries.
@@ -164,21 +164,25 @@ public class BudgetRevenue extends BudgetEntry implements BudgetRevenueLogic {
 
     /* Hierarchy Navigation Implementation */
 
+    /** @return The parent category immediately above this entry in the hierarchy. */
     @Override
     public BudgetRevenue getAboveLevelSuperCategory() {
         return BudgetRevenueLogicService.getAboveLevelSuperCategory(this, budgetRevenues);
     }
 
+    /** @return A list of all ancestor categories reaching up to Level 1. */
     @Override
     public ArrayList<BudgetRevenue> getAllSuperCategories() {
         return BudgetRevenueLogicService.getAllSuperCategories(this, budgetRevenues);
     }
 
+    /** @return A list of immediate child categories directly below this entry. */
     @Override
     public ArrayList<BudgetRevenue> getNextLevelSubCategories() {
         return BudgetRevenueLogicService.getNextLevelSubCategories(this, budgetRevenues);
     }
 
+    /** @return A list of all descendant sub-categories at all lower levels. */
     @Override
     public ArrayList<BudgetRevenue> getAllSubCategories() {
         return BudgetRevenueLogicService.getAllSubCategories(this, budgetRevenues);
@@ -186,10 +190,12 @@ public class BudgetRevenue extends BudgetEntry implements BudgetRevenueLogic {
 
     /* Getters & Setters */
 
+    /** @return The amount of revenue from the regular budget. */
     public long getRegularAmount() {
         return regularAmount;
     }
 
+    /** @return The amount of revenue from the public investment budget. */
     public long getPublicInvestmentAmount() {
         return publicInvestmentAmount;
     }
@@ -222,6 +228,11 @@ public class BudgetRevenue extends BudgetEntry implements BudgetRevenueLogic {
         }
     }
 
+    /**
+     * Compares this revenue entry with another for equality based on code and component amounts.
+     * @param o The object to compare.
+     * @return {@code true} if codes and amounts match exactly.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -237,11 +248,16 @@ public class BudgetRevenue extends BudgetEntry implements BudgetRevenueLogic {
                 this.publicInvestmentAmount == that.publicInvestmentAmount;
     }
 
+    /**
+     * Generates a hash code for this entry using its class and unique code.
+     * @return The calculated hash code.
+     */
     @Override
     public int hashCode() {
         return Objects.hash(getClass(), getCode());
     }
 
+    /** @return A string representation of the entry from the superclass. */
     @Override
     public String toString () {
         return super.toString();

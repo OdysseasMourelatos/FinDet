@@ -14,7 +14,7 @@ import java.util.Map;
  * @version 1.0
  */
 public class MultiYearEntity {
-    protected List<MultiYearBudgetExpense> multiYearExpensesOfEntity = new ArrayList<>();
+    protected List<MultiYearBudgetExpense> multiYearExpensesOfEntity;
     private final String entityCode;
     private final String entityName;
     protected static List<MultiYearEntity> multiYearEntities = new ArrayList<>();

@@ -55,9 +55,9 @@ public class ExpensesHistory {
     public static void returnToPreviousState() {
         try {
             BudgetType type = getMostRecentBudgetType();
-            for (Map.Entry<String[], Long> entry : getMostRecentExpensesHistory().entrySet()) {
+            for (Map.Entry<String[], Long> entry : Objects.requireNonNull(getMostRecentExpensesHistory()).entrySet()) {
                 String[] primaryKey = entry.getKey();
-                if (type.equals(BudgetType.REGULAR_BUDGET)) {
+                if (Objects.requireNonNull(type).equals(BudgetType.REGULAR_BUDGET)) {
                     RegularBudgetExpense expense = RegularBudgetExpense.findRegularBudgetExpenseWithCodes(primaryKey[0], primaryKey[1], primaryKey[2]);
                     expense.setAmount(entry.getValue());
                 } else if (type.equals(BudgetType.PUBLIC_INVESTMENT_BUDGET_NATIONAL)) {

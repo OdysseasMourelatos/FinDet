@@ -1,7 +1,7 @@
 package com.financial.entries;
 
 import com.financial.services.revenues.BudgetRevenueLogicService;
-import com.financial.services.data.DataInput;
+import com.financial.data.DataInput;
 import com.financial.services.revenues.BudgetRevenueLogic;
 
 import java.util.ArrayList;
@@ -149,21 +149,25 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements Budg
 
     /* Hierarchy Logic Implementation */
 
+    /** @return The parent category immediately above this entry in the investment hierarchy. */
     @Override
     public PublicInvestmentBudgetRevenue getAboveLevelSuperCategory() {
         return BudgetRevenueLogicService.getAboveLevelSuperCategory(this, publicInvestmentBudgetRevenues);
     }
 
+    /** @return A list of all ancestor categories up to the root of the investment budget. */
     @Override
     public ArrayList<BudgetRevenue> getAllSuperCategories() {
         return BudgetRevenueLogicService.getAllSuperCategories(this, publicInvestmentBudgetRevenues);
     }
 
+    /** @return A list of immediate sub-categories (children) for this entry. */
     @Override
     public ArrayList<BudgetRevenue> getNextLevelSubCategories() {
         return BudgetRevenueLogicService.getNextLevelSubCategories(this, publicInvestmentBudgetRevenues);
     }
 
+    /** @return A list of all descendant categories at all lower levels of the investment budget. */
     @Override
     public ArrayList<BudgetRevenue> getAllSubCategories() {
         return BudgetRevenueLogicService.getAllSubCategories(this, publicInvestmentBudgetRevenues);
@@ -184,14 +188,17 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements Budg
 
     /* Getters and Setters */
 
+    /** @return The investment type string (e.g., "ΕΘΝΙΚΟ"). */
     public String getType() {
         return type;
     }
 
+    /** @return The amount allocated from national resources. */
     public long getNationalAmount() {
         return nationalAmount;
     }
 
+    /** @return The amount allocated from co-funded resources. */
     public long getCoFundedAmount() {
         return coFundedAmount;
     }
@@ -228,6 +235,16 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements Budg
         }
     }
 
+    /**
+     * Compares this investment entry with another for equality.
+     * <p>
+     * Equality is determined by both the financial code and the investment type.
+     * This allows the system to distinguish between a National entry and a Co-funded
+     * entry that share the same budget code.
+     * </p>
+     * * @param o The object to compare.
+     * @return {@code true} if codes and types match exactly.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -240,14 +257,22 @@ public class PublicInvestmentBudgetRevenue extends BudgetRevenue implements Budg
         PublicInvestmentBudgetRevenue that = (PublicInvestmentBudgetRevenue) o;
 
         return Objects.equals(getCode(), that.getCode()) &&
-                Objects.equals(type, that.type); // Διάκριση ΕΘΝΙΚΟ vs ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ
+                Objects.equals(type, that.type);
     }
 
+    /**
+     * Generates a hash code using the class, financial code, and investment type.
+     * @return The calculated hash code.
+     */
     @Override
     public int hashCode() {
         return Objects.hash(getClass(), getCode(), type);
     }
 
+    /**
+     * Returns a string representation of the investment revenue including the type and formatted amount.
+     * @return A formatted detail string.
+     */
     @Override
     public String toString() {
         return "Code: " + getCode() + ", Description: " + getDescription() + ", Category: " + getCategory() + ", Type: " + type + ", Amount: " + String.format("%,d", getAmount());

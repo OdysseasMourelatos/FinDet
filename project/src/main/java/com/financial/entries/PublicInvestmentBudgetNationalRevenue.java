@@ -81,21 +81,25 @@ public class PublicInvestmentBudgetNationalRevenue extends PublicInvestmentBudge
 
     /* Hierarchy Navigation Implementation */
 
+    /** @return The parent category immediately above this entry in the national hierarchy. */
     @Override
     public PublicInvestmentBudgetNationalRevenue getAboveLevelSuperCategory() {
         return BudgetRevenueLogicService.getAboveLevelSuperCategory(this, publicInvestmentBudgetNationalRevenues);
     }
 
+    /** @return A list of all ancestor categories in the national budget hierarchy. */
     @Override
     public ArrayList<BudgetRevenue> getAllSuperCategories() {
         return BudgetRevenueLogicService.getAllSuperCategories(this, publicInvestmentBudgetNationalRevenues);
     }
 
+    /** @return A list of immediate sub-categories (children) for this entry. */
     @Override
     public ArrayList<BudgetRevenue> getNextLevelSubCategories() {
         return BudgetRevenueLogicService.getNextLevelSubCategories(this, publicInvestmentBudgetNationalRevenues);
     }
 
+    /** @return A list of all descendant categories across all lower hierarchical levels. */
     @Override
     public ArrayList<BudgetRevenue> getAllSubCategories() {
         return BudgetRevenueLogicService.getAllSubCategories(this, publicInvestmentBudgetNationalRevenues);
@@ -103,16 +107,28 @@ public class PublicInvestmentBudgetNationalRevenue extends PublicInvestmentBudge
 
     /* Change Implementation */
 
+    /**
+     * Propagates financial changes to all parent categories in the hierarchy.
+     * @param change The amount to adjust for all super categories.
+     */
     @Override
     public void setAmountOfSuperCategories(long change) {
         BudgetRevenueChangesService.setAmountOfSuperCategories(this.getAllSuperCategories(), change);
     }
 
+    /**
+     * Distributes a fixed amount change equally among all sub-categories.
+     * @param change The total amount to distribute equally.
+     */
     @Override
     public void setAmountOfAllSubCategoriesWithEqualDistribution(long change) {
         BudgetRevenueChangesService.setAmountOfAllSubCategoriesWithEqualDistribution(this, publicInvestmentBudgetNationalRevenues, change);
     }
 
+    /**
+     * Applies a percentage-based adjustment factor to all sub-categories.
+     * @param percentage The percentage to apply (e.g., 0.10 for 10%).
+     */
     @Override
     public void setAmountOfAllSubCategoriesWithPercentageAdjustment(double percentage) {
         BudgetRevenueChangesService.setAmountOfAllSubCategoriesWithPercentageAdjustment(this, publicInvestmentBudgetNationalRevenues, percentage);
@@ -147,8 +163,7 @@ public class PublicInvestmentBudgetNationalRevenue extends PublicInvestmentBudge
      */
     @Override
     public void keepAccountsAndBudgetTypeBeforeChange() {
-        ArrayList<BudgetRevenue> accountsForChange = new ArrayList<>();
-        accountsForChange.addAll(this.getAllSuperCategories());
+        ArrayList<BudgetRevenue> accountsForChange = new ArrayList<>(this.getAllSuperCategories());
         accountsForChange.add(this);
         accountsForChange.addAll(getAllSubCategories());
         RevenuesHistory.keepHistory(accountsForChange, BudgetType.PUBLIC_INVESTMENT_BUDGET_NATIONAL);
@@ -188,6 +203,7 @@ public class PublicInvestmentBudgetNationalRevenue extends PublicInvestmentBudge
         }
     }
 
+    /** @return A string representation of the national investment revenue entry. */
     @Override
     public String toString() {
         return super.toString();

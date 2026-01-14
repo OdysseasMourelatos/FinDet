@@ -34,9 +34,9 @@ public interface BudgetRevenueLogic {
     ArrayList<BudgetRevenue> getNextLevelSubCategories();
 
     /**
-     * Retrieves all descendant categories of the current revenue entry across all sub-levels.
+     * Retrieves all descendant categories of the current revenue entry across all sublevels.
      *
-     * @return an {@link ArrayList} containing all subcategories within this entry's sub-tree.
+     * @return an {@link ArrayList} containing all subcategories within this entry's subtree.
      */
     ArrayList<BudgetRevenue> getAllSubCategories();
 }
