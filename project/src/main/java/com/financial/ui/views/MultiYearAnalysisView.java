@@ -29,7 +29,7 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 /**
- * Charts view - displays budget visualizations.
+ * Multi Year Analysis view - displays budget visualizations over the years
  */
 public class MultiYearAnalysisView {
 

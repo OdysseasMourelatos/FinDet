@@ -6,13 +6,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Utility service providing stateless logic for filtering, searching, and aggregating {@link BudgetExpense} data.
+ */
 public class BudgetExpenseLogicService {
 
     private BudgetExpenseLogicService() {
         // utility class – no instances
     }
 
-    //Filters expenses based on the entity code
+    /** Filters a list of expenses to return only those belonging to a specific entity code. */
     public static <T extends BudgetExpense> ArrayList<T> getExpensesOfEntityWithCode(String entityCode, ArrayList<T> expenses) {
         ArrayList<T> expensesOfEntity = new ArrayList<>();
 
@@ -25,7 +28,7 @@ public class BudgetExpenseLogicService {
         return expensesOfEntity;
     }
 
-    //Filters expenses based on the expenseCode
+    /** Filters a list of expenses to return only those belonging to a specific category (account) code. */
     public static <T extends BudgetExpense> ArrayList<T> getExpensesOfCategoryWithCode(String expenseCode, ArrayList<T> expenses) {
         ArrayList<T> expensesOfCategory = new ArrayList<>();
 
@@ -38,7 +41,7 @@ public class BudgetExpenseLogicService {
         return expensesOfCategory;
     }
 
-    //Finds specific expense based on the primary key (entityCode, serviceCode, expenseCode)
+    /** Locates a unique expense record using its composite primary key: entity, service, and expense codes. */
     public static BudgetExpense findExpenseWithCode(String entityCode, String serviceCode, String expenseCode, ArrayList<? extends BudgetExpense> expenses) {
         for (BudgetExpense expense : expenses) {
             if (expense.getCode().equals(expenseCode) && expense.getEntityCode().equals(entityCode) && expense.getServiceCode().equals(serviceCode)) {
@@ -48,7 +51,7 @@ public class BudgetExpenseLogicService {
         return null;
     }
 
-    //Calculates sum of expenses
+    /** Aggregates the total monetary amount from a collection of budget expenses. */
     public static long calculateSum(ArrayList<? extends BudgetExpense> expenses) {
         long totalExpensesSum = 0;
         for (BudgetExpense expense : expenses) {
@@ -57,7 +60,7 @@ public class BudgetExpenseLogicService {
         return totalExpensesSum;
     }
 
-    //Sums Of Every Expense Category
+    /** Generates a map linking unique category codes to their respective total financial sums. */
     public static Map<String, Long> getSumOfEveryExpenseCategory(ArrayList<? extends BudgetExpense> expenses) {
         String[] categoryCodes = expenses.stream().map(BudgetExpense::getCode).distinct().sorted().toArray(String[]::new);
         Map<String, Long> expensesPerCategory = new HashMap<>();
@@ -74,7 +77,7 @@ public class BudgetExpenseLogicService {
         return expensesPerCategory;
     }
 
-
+    /** Retrieves the description associated with a specific code, or a default message if not found. */
     public static String getDescriptionWithCode(String code, ArrayList<? extends BudgetExpense> expenses) {
         return expenses.stream().filter(e -> e.getCode().equals(code)).findFirst().map(BudgetExpense::getDescription).orElse("Περιγραφή μη διαθέσιμη");
     }
