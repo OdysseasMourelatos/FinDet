@@ -14,6 +14,16 @@ import com.opencsv.exceptions.CsvValidationException;
 
 public class DataInput {
 
+    /** * Stores the year detected in the CSV header (e.g., 2025).
+     * Defaults to -1 if no year is found.
+     */
+    public static int detectedBaseYear = -1;
+
+    /** * Stores the index of the column containing the amounts,
+     * identified by a year-format header.
+     */
+    public static int amountColumnIndex = -1;
+
     public static void advancedCSVReader(String filePath, String forcedType) {
         CSVReader reader = null;
         try {
@@ -42,8 +52,23 @@ public class DataInput {
         }
     }
 
+    /**
+     * Detects the CSV type and dynamically identifies the base year and
+     * amount column index from the headers.
+     * * @param header The array of header strings from the CSV.
+     * @return The determined CSV type string.
+     */
     private static String determineCSVType(String[] header) {
         Set<String> headerSet = new HashSet<>(Arrays.asList(header));
+
+        // Scan headers for a year (4 consecutive digits)
+        for (int i = 0; i < header.length; i++) {
+            String h = header[i].trim();
+            if (h.matches("\\d{4}")) { // Matches exactly 4 digits like 2025, 2026
+                detectedBaseYear = Integer.parseInt(h);
+                amountColumnIndex = i; // This column now points to the amounts
+            }
+        }
 
         if (headerSet.contains("Σκέλος")) {
 
@@ -86,13 +111,13 @@ public class DataInput {
         String description = values[1];
         String category = "ΕΣΟΔΑ";
         long amount = Long.parseLong(values[2]);
-        RegularBudgetRevenue regularBudgetRevenue = new RegularBudgetRevenue(code, description, category, amount);
+        new RegularBudgetRevenue(code, description, category, amount);
     }
 
     //Activated when all PublicInvestmentBudgetRevenues are filtered
     public static void createBudgetRevenueFilteredFromPublicInvestmentBudgetRevenue() {
         for (PublicInvestmentBudgetRevenue revenue : PublicInvestmentBudgetRevenue.getAllPublicInvestmentBudgetRevenues()) {
-            BudgetRevenue budgetRevenue = new BudgetRevenue(revenue.getCode(), revenue.getDescription(), revenue.getCategory(), 0, revenue.getAmount(), revenue.getAmount());
+            new BudgetRevenue(revenue.getCode(), revenue.getDescription(), revenue.getCategory(), 0, revenue.getAmount(), revenue.getAmount());
         }
     }
 
@@ -103,9 +128,9 @@ public class DataInput {
         String type = values[2];
         long amount = Long.parseLong(values[3]);
         if (type.equals("ΕΘΝΙΚΟ") || type.equals("ΕΘΝΙΚΟ ΣΚΕΛΟΣ")) {
-            PublicInvestmentBudgetRevenue publicInvestmentBudgetRevenue = new PublicInvestmentBudgetNationalRevenue(code, description, category, type, amount);
+            new PublicInvestmentBudgetNationalRevenue(code, description, category, type, amount);
         } else if (type.equals("ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ") || type.equals("ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ ΣΚΕΛΟΣ") ) {
-            PublicInvestmentBudgetRevenue publicInvestmentBudgetRevenue = new PublicInvestmentBudgetCoFundedRevenue(code, description, category, type, amount);
+            new PublicInvestmentBudgetCoFundedRevenue(code, description, category, type, amount);
         }
     }
 
@@ -118,7 +143,7 @@ public class DataInput {
         String description = values[5];
         String category = "ΕΞΟΔΑ";
         long amount = Long.parseLong(values[6]);
-        RegularBudgetExpense regularBudgetExpense = new RegularBudgetExpense(entityCode, entityName, serviceCode, serviceName, expenseCode, description, category, amount);
+        new RegularBudgetExpense(entityCode, entityName, serviceCode, serviceName, expenseCode, description, category, amount);
     }
 
     private static void createPublicInvestmentBudgetExpenseFromCSV(String [] values) {
@@ -132,9 +157,9 @@ public class DataInput {
         long amount = Long.parseLong(values[7]);
         String category = "ΕΞΟΔΑ";
         if (type.equals("ΕΘΝΙΚΟ") || type.equals("ΕΘΝΙΚΟ ΣΚΕΛΟΣ")) {
-            PublicInvestmentBudgetExpense publicInvestmentBudgetExpense = new PublicInvestmentBudgetNationalExpense(entityCode, entityName, serviceCode, serviceName, expenseCode, description, type, category, amount);
+            new PublicInvestmentBudgetNationalExpense(entityCode, entityName, serviceCode, serviceName, expenseCode, description, type, category, amount);
         } else if (type.equals("ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ") || type.equals("ΣΥΓΧΡΗΜΑΤΟΔΟΤΟΥΜΕΝΟ ΣΚΕΛΟΣ") ) {
-            PublicInvestmentBudgetExpense publicInvestmentBudgetExpense = new PublicInvestmentBudgetCoFundedExpense(entityCode, entityName, serviceCode, serviceName, expenseCode, description, type, category, amount);
+            new PublicInvestmentBudgetCoFundedExpense(entityCode, entityName, serviceCode, serviceName, expenseCode, description, type, category, amount);
         }
     }
 
@@ -154,7 +179,7 @@ public class DataInput {
         String category = "ΕΣΟΔΑ";
         long amount = Long.parseLong(values[2]);
         int year = Integer.parseInt(values[3]);
-        MultiYearBudgetRevenue multiYearBudgetRevenue = new MultiYearBudgetRevenue(code, description, category, amount, year);
+        new MultiYearBudgetRevenue(code, description, category, amount, year);
     }
 
     private static void createHistoricalBudgetExpenseFromCSV(String [] values) {
@@ -163,7 +188,7 @@ public class DataInput {
         String category = "ΕΞΟΔΑ";
         long amount = Long.parseLong(values[2]);
         int year = Integer.parseInt(values[3]);
-        MultiYearBudgetExpense multiYearBudgetExpense = new MultiYearBudgetExpense(code, description, category, amount, year);
+        new MultiYearBudgetExpense(code, description, category, amount, year);
     }
 
     private static void createHistoricalBudgetExpensePerEntityFromCSV(String [] values) {
@@ -172,24 +197,24 @@ public class DataInput {
         long regularAmount = Long.parseLong(values[2]);
         long publicInvestmentAmount = Long.parseLong(values[3]);
         int year = Integer.parseInt(values[4]);
-        MultiYearBudgetExpense multiYearBudgetExpense = new MultiYearBudgetExpense(entityCode, entityName, regularAmount, publicInvestmentAmount, year);
+        new MultiYearBudgetExpense(entityCode, entityName, regularAmount, publicInvestmentAmount, year);
     }
 
-    public static void mergeBudgetRevenuesOfBaseYearWithMultiYearBudgetRevenues(int baseYear) {
+    public static void mergeBudgetRevenuesOfBaseYearWithMultiYearBudgetRevenues() {
         for (BudgetRevenue br : BudgetRevenue.getMainBudgetRevenues()) {
-            MultiYearBudgetRevenue multiYearBudgetRevenue = new MultiYearBudgetRevenue(br.getCode(), br.getDescription(), br.getCategory(), br.getAmount(), baseYear);
+            new MultiYearBudgetRevenue(br.getCode(), br.getDescription(), br.getCategory(), br.getAmount(), detectedBaseYear);
         }
     }
 
-    public static void mergeBudgetExpensesOfBaseYearWithMultiYearBudgetExpenses(int baseYear) {
+    public static void mergeBudgetExpensesOfBaseYearWithMultiYearBudgetExpenses() {
         for (Map.Entry<String, Long> entry : BudgetExpense.getSumOfEveryBudgetExpenseCategory().entrySet()) {
-            MultiYearBudgetExpense multiYearBudgetExpense = new MultiYearBudgetExpense(entry.getKey(), BudgetExpense.getDescriptionWithCode(entry.getKey()), "ΕΞΟΔΑ", entry.getValue(), baseYear);
+            new MultiYearBudgetExpense(entry.getKey(), BudgetExpense.getDescriptionWithCode(entry.getKey()), "ΕΞΟΔΑ", entry.getValue(), detectedBaseYear);
         }
     }
 
-    public static void mergeBudgetExpensesPerEntityOfBaseYearWithMultiYearBudgetExpensesPerEntity(int baseYear) {
+    public static void mergeBudgetExpensesPerEntityOfBaseYearWithMultiYearBudgetExpensesPerEntity() {
         for (Entity entity : Entity.getEntities()) {
-            MultiYearBudgetExpense multiYearBudgetExpense = new MultiYearBudgetExpense(entity.getEntityCode(), entity.getEntityName(), entity.calculateRegularSum(), entity.calculatePublicInvestmentSum(), baseYear);
+            new MultiYearBudgetExpense(entity.getEntityCode(), entity.getEntityName(), entity.calculateRegularSum(), entity.calculatePublicInvestmentSum(), detectedBaseYear);
         }
     }
 }
