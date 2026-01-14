@@ -1,10 +1,111 @@
 # FinDet: Financial Data & Analytics Tool
 
-**FinDet** is a specialized, high-performance Java application designed for the visualization, hierarchical analysis, and strategic modification of the **Greek State Budget**. Built to simulate real-world fiscal scenarios, it provides a robust platform for financial officers and researchers to explore revenue/expense structures and perform complex, safe budget adjustments.
+**FinDet** is a specialized, high-performance Java application designed for the visualization, hierarchical analysis, and strategic modification of the Greek State Budget. Built to simulate real-world fiscal scenarios, it provides a robust platform for financial officers and researchers to explore revenue/expense structures and perform complex, safe budget adjustments.
 
 ---
 
-## 1. Build & Run Instructions
+## 1. Intended Use & Target Audience
+The application is designed for **single-user operation**, tailored specifically for high-level decision-makers such as the **Prime Minister**, the **Minister of Finance**, or specialized **Ministry of Finance staff**.
+
+Once an initial draft of the next year's budget is formed, the user can:
+* **Import raw data** via CSV files to initialize the system.
+* **Uncover hidden insights** and aggregate figures not visible to the naked eye.
+* **Visualize trends** and the evolution of fiscal magnitudes over time.
+* **Execute "What-if" scenarios** by performing real-time budget modifications and observing their impact on the total balance.
+
+---
+
+## 2. Data Specifications & Requirements
+
+### 2.1 Mandatory Input Files
+For the program to function correctly, **4 specific CSV files** must be provided in the `input` folder:
+1.  **Regular Budget Revenue** (Έσοδα Τακτικού Προϋπολογισμού)
+2.  **Public Investment Budget (PIB) Revenue** (Έσοδα ΠΔΕ)
+3.  **Regular Budget Expenses** (Έξοδα Τακτικού Προϋπολογισμού)
+4.  **Public Investment Budget (PIB) Expenses** (Έξοδα ΠΔΕ)
+
+### 2.2 Strict Formatting Rules
+To ensure system integrity, users must adhere to the following:
+* **Template Consistency:** Files must strictly match the structure of the templates found in the `input` folder (identical columns, specific order, no additions).
+* **Year-Based Column Headers:** In the amount column, the header must state the specific year (e.g., **"2025"**) instead of a generic term like "Amount".
+* **File Maintenance:** When importing new data, the old CSV files in the `input` folder must be deleted to ensure the program reads the current year's data correctly.
+
+### 2.3 Multi-Year Evolution
+To analyze budget trends over time, the user can:
+* Provide **3 additional CSV files** following the same strict templates.
+* **Alternatively**, enrich the existing CSV files with data columns for as many years as desired, without adding new files.
+
+---
+
+## 3. Usage Risks & Limitations
+* **Single User Restriction:** The application does **not** support concurrent multi-user access. Since the system writes directly to the database, the last user to save will overwrite previous changes.
+* **Data Overwrite Warning:** If a user chooses to start the program by loading from **CSV files** while the **SQLite Database** already contains modified data, the database changes will be permanently overwritten.
+* **Strategic Focus:** To prioritize complex financial logic and hierarchical propagation over database concurrency management (which would fall under a Database course scope), the current version is optimized for single-user analytical depth.
+
+---
+
+## 4. Comprehensive User Guide
+
+### 4.1 Startup & Data Loading
+Upon launching FinDet, you are presented with a crucial choice:
+* **Load from CSV:** Import fresh data from the original fiscal CSV files.
+* **Load from Database:** Resume from the last saved state in the **SQLite** database, preserving all previous modifications.
+
+### 4.2 Navigation & Exploration
+* **Revenues Menu:** Navigate through all budget types (State, Regular, PIB). Includes filtering by account depth and searching by code/description.
+* **Expenses Menu:** Detailed analytical views by Ministry, Category, or Entity.
+* **Explorer Menu:** Visualize the revenue hierarchy (e.g., searching for code 111 displays parent category 11 "Taxes" and its children like 11101 "VAT").
+
+### 4.3 The Fiscal Adjustment Engine (Changes)
+* **Safety Mechanism (Rollback):** If any modification results in a negative balance for any account in the hierarchy, the entire transaction is aborted and a warning is displayed.
+* **Revenue Adjustments:** Supports Fixed amounts, Percentages, or Target Balances with hierarchical distribution (Percentage Adjustment or Equal Distribution).
+* **Expense Adjustments:** Apply changes horizontally across all accounts in scope or distribute a total sum across categories.
+
+---
+
+## 5. Visualizations & Analytics
+* **Dynamic Charts:** Pie and Bar charts for State Budget categories and Expenses per Ministry.
+* **Multi-Year Analysis:** Line and Bar charts for comparing Revenue, Expense, and Deficit/Surplus evolution across different years.
+* **Statistical Analysis:** Descriptive stats (Mean, Median, Skewness, Kurtosis) and Outlier detection. Includes Histograms and Boxplots for Ministry expenses.
+
+---
+
+## 6. Technical Implementation & Quality
+
+### 6.1 System Documentation (UML Diagrams)
+The system's architecture is documented via three specialized diagrams in the `docs/` folder:
+* **`generalUML.png`**: Provides a clear view of the core hierarchy and the fundamental structure of the program.
+* **`detailedUML.png`**: Displays the basic hierarchy along with complex class relationships, interfaces, and logic flows.
+* **`MultiYearAnalysisUML.png`**: Illustrates the specific hierarchy and logic used for processing and comparing data across multiple fiscal years.
+
+### 6.2 Technologies & Quality Assurance
+* **Java 21:** Utilizing modern features like Enhanced Switch.
+* **SQLite Persistence:** Integrated database for local data persistence and session recovery.
+* **99% Backend Test Coverage:** High quality-assurance with a comprehensive JUnit test suite covering all core financial logic.
+* **Design Patterns:** Implementation of the **Strategy Pattern** for budget adjustment algorithms and a **Service Layer** for recursive calculations.
+
+---
+
+## 7. Repository Structure
+```text
+src/main/java/com/financial/
+    entries/        # Models (BudgetEntry, Entity, Revenue/Expense subtypes)
+    services/       # Recursive logic and hierarchical calculations
+    ui/views/       # JavaFX views and UI controllers
+    strategies/     # Strategy Pattern for budget modifications
+    database/       # SQLite persistence management
+
+src/test/java/      # JUnit test suite (99% Backend Coverage)
+docs/               
+    generalUML.png              # Basic program hierarchy
+    detailedUML.png             # Complex relationships & interfaces
+    MultiYearAnalysisUML.png    # Multi-year analysis logic
+input/              # Folder for CSV templates and data import
+pom.xml             # Maven configuration
+
+---
+
+## 8 . Build & Run Instructions
 
 The application uses **Maven** for dependency management and for building the executable artifact.
 
@@ -43,148 +144,3 @@ If the executable (**Fat JAR**) has been successfully created:
 java -jar target/FinDet-1.0-SNAPSHOT.jar
 
 ```
-
----
-
-## 2. Comprehensive User Guide
-
-### 2.1 Startup & Data Loading
-
-Upon launching **FinDet**, you are presented with a crucial choice:
-
-* **Load from CSV:** Import fresh data from the original fiscal CSV files.
-* **Load from Database:** Resume from the last saved state in the **SQLite** database, preserving all previous modifications.
-
-The **Home Screen** greets you with an overview of the budget's current state, featuring professional CSS styling and high-level summaries.
-
-### 2.2 Navigation & Exploration
-
-* **Revenues Menu:** Navigate through all budget types (**State, Regular, PIB, National PIB, and Co-funded PIB**).
-* *Filtering:* Filter by account depth (e.g., 2-digit roots, 3-digit categories, etc.).
-* *Search:* Search any account by code or description.
-
-
-* **Expenses Menu:** Detailed analytical and consolidated views.
-* *Filtering:* Search by Ministry code, description, or specific Entity.
-
-
-* **Entities (Ministries) Menu:** View aggregated data for all ministries. Clicking **"More"** on a specific Ministry opens a submenu showing:
-1. Credits by **Major Expense Category**.
-2. Credits by **Special Entity**.
-3. Combined view (Category & Special Entity).
-
-
-* **Explorer Menu:** Visualize the revenue hierarchy clearly.
-* *Example:* Searching for code `111` displays the parent category `11` (Taxes) and its children, such as `11101` (VAT).
-
-
-
-### 2.3 The Fiscal Adjustment Engine (Changes)
-
-This is the core of the application, designed to simulate real-world fiscal scenarios with high integrity.
-
-#### General Rules
-
-* Changes are permitted only for **Regular Budget, National PIB, and Co-funded PIB**.
-* Impact can be monitored at the **State Budget** level.
-* **Safety Mechanism (Rollback):** If any modification results in a **negative balance** for any account in the hierarchy, the entire transaction is aborted, a warning message is displayed, and the accounts revert to their previous state.
-
-#### Revenue Adjustments
-
-Controlled via 5 primary filters:
-
-1. **Budget Type** (Regular, National, Co-funded).
-2. **Account Code**.
-3. **Change Value** (Fixed amount or Percentage).
-4. **Change Type** (Adjustment, Percentage, or Target Balance).
-5. **Distribution:** **Percentage Adjustment** or **Equal Distribution** to subcategories.
-
-#### Expense Adjustments
-
-Simulates granular budget allocations:
-
-* **Scope:** Global (all entities), per Entity, or per Service.
-* **Category:** Focus on a specific category (e.g., "Employee Benefits") or apply to all.
-* **Calculation Mode:** * *Horizontal:* Every account in the scope is modified by the set value.
-* *Distributed:* The total sum is modified, and the value is apportioned across the scope's categories.
-
-
-
-### 2.4 History & Persistence
-
-* **Undo System:** Multiple levels of Undo are supported. Users receive notifications upon successful reversal.
-* **Database Sync:** Before closing, the system detects unsaved changes and prompts the user to save the session to the **SQLite** database.
-
----
-
-## 3. Visualizations & Analytics
-
-### 3.1 Dynamic Charts
-
-* **Overview:** Pie and Bar charts for State Budget categories and Expenses per Ministry.
-* **Custom Revenue Charts:** Input a code (e.g., `11`) to see the distribution of Income Taxes, VAT, and Customs.
-* **Ministry Analytics:** Break down expenses by category or by sub-entities (Special Entities).
-
-### 3.2 Multi-Year Analysis
-
-Compare fiscal data over time using Line and Bar charts by importing up to three additional CSV files for different years.
-
-* **Trends:** Visualize Revenue, Expense, and Deficit/Surplus evolution.
-* **Custom Tracking:** Track specific codes (e.g., code `21` for payroll) across years.
-* **Smoothing:** Toggle "Normalization" to remove outliers for clearer trend analysis.
-
-### 3.3 Statistical Analysis
-
-* **Descriptive Stats:** Mean, Median, Skewness, Kurtosis, and Outlier detection.
-* **Frequency Tables:** Histograms and polygon lines based on logarithmic scales.
-* **Visuals:** Boxplots and Distribution charts for Ministry expenses.
-
----
-
-## 4. Technical Implementation
-
-### 4.1 Architecture & OOP
-
-FinDet follows strict Object-Oriented principles:
-
-* **Inheritance:** `BudgetEntry` (abstract) is the foundation for `BudgetRevenue` and `BudgetExpense`.
-* **Interfaces:** `BudgetRevenueLogic`, `BudgetRevenueChanges`, and `EntityLogic` separate business rules from data models.
-* **Aggregation:** The `Entity` class manages collections of different expense types (Regular, National PIB, Co-funded PIB).
-
-### 4.2 Design Patterns
-
-* **Strategy Pattern:** Used for budget adjustment algorithms (`PercentageAdjustment`, `EqualDistribution`), allowing the application to switch calculation logic at runtime.
-* **Service Layer:** `BudgetRevenueLogicService` and `BudgetRevenueChangesService` handle complex recursive calculations and hierarchical propagation.
-
-### 4.3 Technologies & Quality
-
-* **JavaFX:** Modern, responsive UI with CSS styling.
-* **OpenCSV:** Robust parsing of complex financial CSV files.
-* **iTextPDF:** Professional PDF report generation for budget exports.
-* **Apache Commons Math:** Advanced statistical computations.
-* **JUnit & Checkstyle:** High quality-assurance with **87% test coverage**.
-
----
-
-## 5. Repository Structure
-
-```text
-src/main/java/com/financial/
-    entries/        # Models (BudgetEntry, Entity, Revenue/Expense subtypes)
-    services/       # Recursive logic and hierarchical calculations
-    ui/views/       # JavaFX views and UI controllers
-    strategies/     # Implementation of the Strategy Pattern for modifications
-    database/       # SQLite persistence management
-
-src/test/java/      # Comprehensive JUnit test suite
-docs/               # UML Diagrams, User Documentation, and Reports
-pom.xml             # Maven configuration
-README.md           # This file
-
-```
-
----
-
-*Developed as part of the Semester Project for Programming II(2025-2026).*
-
----
